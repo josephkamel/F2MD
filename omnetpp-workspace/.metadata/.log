@@ -1,0 +1,1344 @@
+!SESSION 2018-04-03 10:41:03.323 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_151
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+This is a continuation of log file /home/joseph/Projects/ConfidenceRange/omnetpp-workspace/.metadata/.bak_0.log
+Created Time: 2018-04-03 12:46:39.350
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:46:39.350
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:47:21.004
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:47:24.596
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:47:29.800
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:47:40.089
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:47:49.545
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:48:43.344
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:48:47.734
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:48:57.072
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:49:20.993
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:49:39.409
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:49:53.544
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:50:48.939
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:50:51.793
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:50:59.633
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:52:30.155
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:52:32.647
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:53:13.983
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:53:17.093
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:54:06.156
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:54:21.730
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:54:53.669
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:56:37.415
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:56:39.521
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:56:47.312
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:57:06.159
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:57:20.198
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:57:43.028
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:57:44.230
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:57:47.990
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:58:06.483
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:58:32.797
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:58:54.855
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:59:11.546
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:59:33.755
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:59:39.261
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 12:59:43.196
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:00:04.197
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:01:27.424
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:01:55.243
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:02:52.962
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:02:57.277
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:02:58.317
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:03:08.366
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:03:22.538
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:03:24.780
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:04:01.366
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:04:05.106
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:05:21.974
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:05:26.505
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:05:30.092
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:06:04.551
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:06:22.301
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:06:47.411
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:07:03.584
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:07:31.444
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:07:35.119
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:07:39.404
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:08:04.746
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:08:30.378
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:10:27.667
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:10:40.991
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:10:50.578
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:10:57.794
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:11:10.069
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:11:17.511
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:11:34.142
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:11:48.558
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:12:09.697
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:12:11.519
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:12:29.629
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:12:36.019
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:12:41.288
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:14:24.034
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:23:34.342
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:23:37.308
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:23:44.867
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:24:17.191
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:25:55.869
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:27:30.980
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:28:05.126
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:28:07.942
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:28:27.320
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:28:47.958
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:28:53.441
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:29:22.557
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:30:51.895
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:31:01.469
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:31:07.971
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:31:14.225
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException: 23
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:232)
+	at org.eclipse.cdt.internal.core.dom.parser.CompositeValue.create(CompositeValue.java:179)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.computeForFunctionCall(EvalConstructor.java:144)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalConstructor.getValue(EvalConstructor.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.computeInitialValue(CPPVariable.java:265)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable.getInitialValue(CPPVariable.java:245)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.resolveNames(PDOMWriter.java:432)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:280)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:31:39.147
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:31:48.466
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:31:55.184
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-04-03 13:32:07.475
+!MESSAGE Error while parsing /veins-veins-4.6/src/veins/modules/application/misbehaviorDetection/MDModuleV2.cc.
+!STACK 0
+java.lang.ArrayIndexOutOfBoundsException
+!SESSION 2018-04-03 17:59:26.408 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-04-03 17:59:33.738
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-04-03 17:59:39.148
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-04-03 18:15:31.673 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-04-03 18:15:38.000
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-04-03 18:15:42.492
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-04-09 23:44:23.615 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-04-09 23:44:30.005
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-04-09 23:44:37.450
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-09 23:50:01.123
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-09 23:50:01.125
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.omnetpp.launch 4 1 2018-04-10 12:26:47.660
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.omnetpp.launch 4 1 2018-04-10 12:27:03.321
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+!SESSION 2018-04-10 15:07:49.363 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-04-10 15:07:54.189
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-04-10 15:07:58.058
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.omnetpp.launch 4 1 2018-04-10 16:58:42.190
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-10 16:59:55.065
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-10 16:59:55.066
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.omnetpp.launch 4 139 2018-04-10 17:00:26.077
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.core.expressions 4 201 2018-04-10 17:00:33.868
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!STACK 1
+org.eclipse.core.runtime.CoreException: No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+	at org.eclipse.core.internal.expressions.TypeExtensionManager.getProperty(TypeExtensionManager.java:127)
+	at org.eclipse.core.internal.expressions.TestExpression.evaluate(TestExpression.java:97)
+	at org.eclipse.core.internal.expressions.CompositeExpression.evaluateAnd(CompositeExpression.java:51)
+	at org.eclipse.core.internal.expressions.AndExpression.evaluate(AndExpression.java:31)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.failsEnablement(RegistryPageContributor.java:306)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.isApplicableTo(RegistryPageContributor.java:248)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:215)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:234)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.hasPropertyPagesFor(PropertyDialogAction.java:106)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:148)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:128)
+	at org.eclipse.ui.internal.navigator.resources.actions.PropertiesActionProvider.fillContextMenu(PropertiesActionProvider.java:63)
+	at org.eclipse.ui.navigator.NavigatorActionService$2.run(NavigatorActionService.java:225)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.navigator.NavigatorActionService.addCommonActionProviderMenu(NavigatorActionService.java:219)
+	at org.eclipse.ui.navigator.NavigatorActionService.fillContextMenu(NavigatorActionService.java:174)
+	at org.eclipse.ui.navigator.CommonNavigatorManager.fillContextMenu(CommonNavigatorManager.java:267)
+	at org.eclipse.ui.navigator.CommonNavigatorManager$3.menuAboutToShow(CommonNavigatorManager.java:283)
+	at org.eclipse.jface.action.MenuManager.fireAboutToShow(MenuManager.java:339)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:470)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:465)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:497)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:256)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:86)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:5268)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1348)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1374)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1353)
+	at org.eclipse.swt.widgets.Menu._setVisible(Menu.java:198)
+	at org.eclipse.swt.widgets.Display.runPopups(Display.java:4564)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4097)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1150)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1039)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:680)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:594)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:151)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:653)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SUBENTRY 1 org.eclipse.core.expressions 4 201 2018-04-10 17:00:33.869
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!SESSION 2018-04-10 17:03:30.250 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-04-10 17:03:39.930
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.omnetpp.launch 4 1 2018-04-10 17:03:59.027
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-10 17:06:25.526
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-10 17:06:25.527
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.omnetpp.launch 4 139 2018-04-10 17:12:16.866
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.omnetpp.launch 4 139 2018-04-10 17:13:44.507
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.omnetpp.launch 4 134 2018-04-10 17:14:34.525
+!MESSAGE Finished with Error
+!STACK 0
+java.lang.RuntimeException: 
+	at org.omnetpp.launch.SimulationLauncherJob.run(SimulationLauncherJob.java:153)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.core.expressions 4 201 2018-04-10 17:17:41.260
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!STACK 1
+org.eclipse.core.runtime.CoreException: No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+	at org.eclipse.core.internal.expressions.TypeExtensionManager.getProperty(TypeExtensionManager.java:127)
+	at org.eclipse.core.internal.expressions.TestExpression.evaluate(TestExpression.java:97)
+	at org.eclipse.core.internal.expressions.CompositeExpression.evaluateAnd(CompositeExpression.java:51)
+	at org.eclipse.core.internal.expressions.AndExpression.evaluate(AndExpression.java:31)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.failsEnablement(RegistryPageContributor.java:306)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.isApplicableTo(RegistryPageContributor.java:248)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:215)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:234)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.hasPropertyPagesFor(PropertyDialogAction.java:106)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:148)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:128)
+	at org.eclipse.ui.internal.navigator.resources.actions.PropertiesActionProvider.fillContextMenu(PropertiesActionProvider.java:63)
+	at org.eclipse.ui.navigator.NavigatorActionService$2.run(NavigatorActionService.java:225)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.navigator.NavigatorActionService.addCommonActionProviderMenu(NavigatorActionService.java:219)
+	at org.eclipse.ui.navigator.NavigatorActionService.fillContextMenu(NavigatorActionService.java:174)
+	at org.eclipse.ui.navigator.CommonNavigatorManager.fillContextMenu(CommonNavigatorManager.java:267)
+	at org.eclipse.ui.navigator.CommonNavigatorManager$3.menuAboutToShow(CommonNavigatorManager.java:283)
+	at org.eclipse.jface.action.MenuManager.fireAboutToShow(MenuManager.java:339)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:470)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:465)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:497)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:256)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:86)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:5268)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1348)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1374)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1353)
+	at org.eclipse.swt.widgets.Menu._setVisible(Menu.java:198)
+	at org.eclipse.swt.widgets.Display.runPopups(Display.java:4564)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4097)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1150)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1039)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:680)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:594)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:151)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:653)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SUBENTRY 1 org.eclipse.core.expressions 4 201 2018-04-10 17:17:41.261
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+
+!ENTRY org.eclipse.core.expressions 4 201 2018-04-10 17:17:42.221
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!STACK 1
+org.eclipse.core.runtime.CoreException: No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+	at org.eclipse.core.internal.expressions.TypeExtensionManager.getProperty(TypeExtensionManager.java:127)
+	at org.eclipse.core.internal.expressions.TestExpression.evaluate(TestExpression.java:97)
+	at org.eclipse.core.internal.expressions.CompositeExpression.evaluateAnd(CompositeExpression.java:51)
+	at org.eclipse.core.internal.expressions.AndExpression.evaluate(AndExpression.java:31)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.failsEnablement(RegistryPageContributor.java:306)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.isApplicableTo(RegistryPageContributor.java:248)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:215)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:234)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.hasPropertyPagesFor(PropertyDialogAction.java:106)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:148)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:128)
+	at org.eclipse.ui.internal.navigator.resources.actions.PropertiesActionProvider.fillContextMenu(PropertiesActionProvider.java:63)
+	at org.eclipse.ui.navigator.NavigatorActionService$2.run(NavigatorActionService.java:225)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.navigator.NavigatorActionService.addCommonActionProviderMenu(NavigatorActionService.java:219)
+	at org.eclipse.ui.navigator.NavigatorActionService.fillContextMenu(NavigatorActionService.java:174)
+	at org.eclipse.ui.navigator.CommonNavigatorManager.fillContextMenu(CommonNavigatorManager.java:267)
+	at org.eclipse.ui.navigator.CommonNavigatorManager$3.menuAboutToShow(CommonNavigatorManager.java:283)
+	at org.eclipse.jface.action.MenuManager.fireAboutToShow(MenuManager.java:339)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:470)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:465)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:497)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:256)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:86)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:5268)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1348)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1374)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1353)
+	at org.eclipse.swt.widgets.Menu._setVisible(Menu.java:198)
+	at org.eclipse.swt.widgets.Display.runPopups(Display.java:4564)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4097)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1150)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1039)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:680)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:594)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:151)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:653)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SUBENTRY 1 org.eclipse.core.expressions 4 201 2018-04-10 17:17:42.222
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+
+!ENTRY org.eclipse.core.expressions 4 201 2018-04-10 17:17:42.320
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!STACK 1
+org.eclipse.core.runtime.CoreException: No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+	at org.eclipse.core.internal.expressions.TypeExtensionManager.getProperty(TypeExtensionManager.java:127)
+	at org.eclipse.core.internal.expressions.TestExpression.evaluate(TestExpression.java:97)
+	at org.eclipse.core.internal.expressions.CompositeExpression.evaluateAnd(CompositeExpression.java:51)
+	at org.eclipse.core.internal.expressions.AndExpression.evaluate(AndExpression.java:31)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.failsEnablement(RegistryPageContributor.java:306)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.isApplicableTo(RegistryPageContributor.java:248)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:215)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:234)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.hasPropertyPagesFor(PropertyDialogAction.java:106)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:148)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:128)
+	at org.eclipse.ui.internal.navigator.resources.actions.PropertiesActionProvider.fillContextMenu(PropertiesActionProvider.java:63)
+	at org.eclipse.ui.navigator.NavigatorActionService$2.run(NavigatorActionService.java:225)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.navigator.NavigatorActionService.addCommonActionProviderMenu(NavigatorActionService.java:219)
+	at org.eclipse.ui.navigator.NavigatorActionService.fillContextMenu(NavigatorActionService.java:174)
+	at org.eclipse.ui.navigator.CommonNavigatorManager.fillContextMenu(CommonNavigatorManager.java:267)
+	at org.eclipse.ui.navigator.CommonNavigatorManager$3.menuAboutToShow(CommonNavigatorManager.java:283)
+	at org.eclipse.jface.action.MenuManager.fireAboutToShow(MenuManager.java:339)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:470)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:465)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:497)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:256)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:86)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:5268)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1348)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1374)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1353)
+	at org.eclipse.swt.widgets.Menu._setVisible(Menu.java:198)
+	at org.eclipse.swt.widgets.Display.runPopups(Display.java:4564)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4097)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1150)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1039)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:680)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:594)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:151)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:653)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SUBENTRY 1 org.eclipse.core.expressions 4 201 2018-04-10 17:17:42.320
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+
+!ENTRY org.eclipse.core.expressions 4 201 2018-04-10 17:17:43.593
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!STACK 1
+org.eclipse.core.runtime.CoreException: No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+	at org.eclipse.core.internal.expressions.TypeExtensionManager.getProperty(TypeExtensionManager.java:127)
+	at org.eclipse.core.internal.expressions.TestExpression.evaluate(TestExpression.java:97)
+	at org.eclipse.core.internal.expressions.CompositeExpression.evaluateAnd(CompositeExpression.java:51)
+	at org.eclipse.core.internal.expressions.AndExpression.evaluate(AndExpression.java:31)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.failsEnablement(RegistryPageContributor.java:306)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.isApplicableTo(RegistryPageContributor.java:248)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.contribute(PropertyPageContributorManager.java:111)
+	at org.eclipse.ui.internal.dialogs.PropertyDialog.createDialogOn(PropertyDialog.java:62)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.createDialog(PropertyDialogAction.java:174)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.run(PropertyDialogAction.java:155)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:473)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:565)
+	at org.eclipse.jface.action.ActionContributionItem.lambda$4(ActionContributionItem.java:397)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:86)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:5268)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1348)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4522)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4107)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1150)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1039)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:680)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:594)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:151)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:653)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SUBENTRY 1 org.eclipse.core.expressions 4 201 2018-04-10 17:17:43.593
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!SESSION 2018-04-10 18:31:34.124 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-04-10 18:31:38.375
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-04-10 18:31:42.719
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.eclipse.core.expressions 4 201 2018-04-10 19:48:24.251
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!STACK 1
+org.eclipse.core.runtime.CoreException: No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+	at org.eclipse.core.internal.expressions.TypeExtensionManager.getProperty(TypeExtensionManager.java:127)
+	at org.eclipse.core.internal.expressions.TestExpression.evaluate(TestExpression.java:97)
+	at org.eclipse.core.internal.expressions.CompositeExpression.evaluateAnd(CompositeExpression.java:51)
+	at org.eclipse.core.internal.expressions.AndExpression.evaluate(AndExpression.java:31)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.failsEnablement(RegistryPageContributor.java:306)
+	at org.eclipse.ui.internal.dialogs.RegistryPageContributor.isApplicableTo(RegistryPageContributor.java:248)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:215)
+	at org.eclipse.ui.internal.dialogs.PropertyPageContributorManager.getApplicableContributors(PropertyPageContributorManager.java:234)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.hasPropertyPagesFor(PropertyDialogAction.java:106)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:148)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.isApplicableForSelection(PropertyDialogAction.java:128)
+	at org.eclipse.ui.internal.navigator.resources.actions.PropertiesActionProvider.fillContextMenu(PropertiesActionProvider.java:63)
+	at org.eclipse.ui.navigator.NavigatorActionService$2.run(NavigatorActionService.java:225)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.navigator.NavigatorActionService.addCommonActionProviderMenu(NavigatorActionService.java:219)
+	at org.eclipse.ui.navigator.NavigatorActionService.fillContextMenu(NavigatorActionService.java:174)
+	at org.eclipse.ui.navigator.CommonNavigatorManager.fillContextMenu(CommonNavigatorManager.java:267)
+	at org.eclipse.ui.navigator.CommonNavigatorManager$3.menuAboutToShow(CommonNavigatorManager.java:283)
+	at org.eclipse.jface.action.MenuManager.fireAboutToShow(MenuManager.java:339)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:470)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:465)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:497)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:256)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:86)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:5268)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1348)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1374)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1353)
+	at org.eclipse.swt.widgets.Menu._setVisible(Menu.java:198)
+	at org.eclipse.swt.widgets.Display.runPopups(Display.java:4564)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4097)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1150)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1039)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:680)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:594)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:151)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:653)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SUBENTRY 1 org.eclipse.core.expressions 4 201 2018-04-10 19:48:24.252
+!MESSAGE No property tester contributes a property org.eclipse.core.resources.projectNature to type class org.eclipse.cdt.internal.core.model.CContainer
+!SESSION 2018-04-10 20:09:09.919 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-04-10 20:09:19.476
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-11 01:21:20.019
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-11 01:21:20.021
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType

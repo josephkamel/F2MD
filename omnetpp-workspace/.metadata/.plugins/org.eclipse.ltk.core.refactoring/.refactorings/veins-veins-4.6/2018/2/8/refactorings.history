@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;veins-veins-4.6/examples/veins-LuST/erlangen.launchd.xml&apos; to &apos;LuST.launchd.xml&apos;" description="Rename resource &apos;erlangen.launchd.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="examples/veins-LuST/erlangen.launchd.xml" name="LuST.launchd.xml" stamp="1519306775358" updateReferences="true"/>
+</session>

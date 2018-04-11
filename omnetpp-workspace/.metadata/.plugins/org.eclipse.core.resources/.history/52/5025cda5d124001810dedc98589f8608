@@ -1,0 +1,29 @@
+
+#ifndef __VEINS_MDMHistory_H_
+#define __VEINS_MDMHistory_H_
+
+#include <omnetpp.h>
+#include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
+
+using namespace omnetpp;
+
+#define MAXMDMLENGTH 10
+
+class MDMHistory {
+    private:
+        int nodeId;
+        int MDMNum;
+        BsmCheck bsmCheckList[MAXMDMLENGTH];
+
+    public:
+        MDMHistory();
+        MDMHistory(int);
+        int getMDMNum();
+        BsmCheck getBsmCheck(int);
+
+        void addMDMNode(BsmCheck bsmCheck);
+
+
+    };
+
+#endif

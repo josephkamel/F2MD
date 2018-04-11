@@ -1,0 +1,79 @@
+#include "JosephVeinsApp.h"
+
+Define_Module(JosephVeinsApp);
+
+void JosephVeinsApp::initialize(int stage) {
+    BaseWaveApplLayer::initialize(stage);
+    if (stage == 0) {
+        //joseph
+        //Initializing members and pointers of your application goes here
+        EV << "Initializing " << par("appName").stringValue() << std::endl;
+    } else if (stage == 1) {
+
+        //Initializing members that require initialized other modules goes here
+    }
+}
+
+void JosephVeinsApp::finish() {
+    BaseWaveApplLayer::finish();
+    //statistics recording goes here
+}
+
+void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
+
+    int senderID = bsm->getSenderAddress();
+
+    MDModule mdm(myId, curPosition);
+    MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence);
+
+    BsmCheck bsmCheck = mdmV2.CheckBSM(*bsm,detectedNodes);
+
+    if (!detectedNodes.includes(senderID)) {
+        NodeHistory newNode(senderID);
+        newNode.addBSM(*bsm);
+        MDMHistory newMDM(senderID);
+        newMDM.addBsmCheck(bsmCheck);
+        detectedNodes.put(senderID, newNode, newMDM);
+    } else {
+        NodeHistory existingNode = detectedNodes.getNodeHistory(senderID);
+        existingNode.addBSM(*bsm);
+        MDMHistory existingMDM = detectedNodes.getMDMHistory(senderID);
+        existingMDM.addBsmCheck(bsmCheck);
+        detectedNodes.put(senderID, existingNode, existingMDM);
+    }
+
+    mdm.reportMB(mdm.CheckBSM(detectedNodes, senderID), senderID);
+
+//    recordScalar("getSenderAddress", senderID);
+
+
+//Your application has received a beacon message from another car or RSU
+//code for handling the message goes here
+
+}
+
+void JosephVeinsApp::onWSM(WaveShortMessage* wsm) {
+//Your application has received a data message from another car or RSU
+//code for handling the message goes here, see TraciDemo11p.cc for examples
+
+}
+
+void JosephVeinsApp::onWSA(WaveServiceAdvertisment* wsa) {
+//Your application has received a service advertisement from another car or RSU
+//code for handling the message goes here, see TraciDemo11p.cc for examples
+
+}
+
+void JosephVeinsApp::handleSelfMsg(cMessage* msg) {
+    BaseWaveApplLayer::handleSelfMsg(msg);
+//this method is for self messages (mostly timers)
+//it is important to call the BaseWaveApplLayer function for BSM and WSM transmission
+
+}
+
+void JosephVeinsApp::handlePositionUpdate(cObject* obj) {
+    BaseWaveApplLayer::handlePositionUpdate(obj);
+//the vehicle has moved. Code that reacts to new positions goes here.
+//member variables such as currentPosition and currentSpeed are updated in the parent class
+
+}

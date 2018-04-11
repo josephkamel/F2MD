@@ -1,0 +1,63 @@
+#include "MDMHistory.h"
+
+MDMHistory::MDMHistory(int id) {
+    nodeId = id;
+    MDMNum = 0;
+}
+
+double MDMHistory::getART(int index) {
+    return artList[index];
+}
+
+double MDMHistory::getMGTDistance(int index) {
+    return mgtDistanceList[index];
+}
+
+double MDMHistory::getMGTSpeed(int index) {
+    return mgtSpeedList[index];
+}
+
+double MDMHistory::getMAXSpeed(int index) {
+    return maxSpeedList[index];
+}
+
+double MDMHistory::getINT(int index) {
+    return intList[index];
+}
+
+double MDMHistory::getSAW(int index) {
+    return sawList[index];
+}
+
+double MDMHistory::getMBF(int index) {
+    return mbfList[index];
+}
+
+double MDMHistory::getMAP(int index) {
+    return mapList[index];
+}
+
+void MDMHistory::addMDMNode(BsmCheck bsmCheck) {
+    if (MDMNum < MAXMDMLENGTH) {
+        MDMNum++;
+    }
+    for (int var = MDMNum - 1; var > 0; --var) {
+        artList[var] = artList[var - 1];
+        mgtSpeedList[var] = mgtSpeedList[var - 1];
+        mgtDistanceList[var] = mgtDistanceList[var - 1];
+        maxSpeedList[var] = maxSpeedList[var - 1];
+        intList[var] = intList[var - 1];
+        sawList[var] = sawList[var - 1];
+        mbfList[var] = mbfList[var - 1];
+        mapList[var] = mapList[var - 1];
+    }
+    artList[0] = art;
+    mgtSpeedList[0] = mgtSpeed;
+    mgtDistanceList[0] = mgtDistance;
+    maxSpeedList[0] = maxSpeed;
+    intList[0] = inter;
+    sawList[0] = saw;
+    mbfList[0] = mbf;
+    mapList[0] = map;
+
+}

@@ -1,0 +1,653 @@
+#include "MDModuleV2.h"
+
+#include <stdio.h>
+#include <stdlib.h>     /* atof */
+#include <boost/algorithm/string.hpp>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "supportClasses/Printable.h"
+
+using namespace std;
+using namespace boost;
+
+static char const *name = "cumulV2";
+static char const *nametemp = "tempV2";
+
+static Printable prntLong(name);
+static Printable prntTemp(nametemp);
+
+MDModuleV2::MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence) {
+    this->myId = myId;
+    this->myPosition = myPosition;
+    this->myPositionConfidence = myPositionConfidence;
+}
+
+double MDModuleV2::RangePlausibilityCheck(Coord senderPosition,
+        Coord senderPositionConfidence, Coord receiverPosition,
+        Coord receiverPositionConfidence) {
+    double distance = mdmLib.calculateDistance(senderPosition,
+            receiverPosition);
+    double senderR = senderPositionConfidence.x;
+    double receiverR = receiverPositionConfidence.x;
+    double factor = mdmLib.CircleCircleFactor(distance, senderR, receiverR,
+    MAX_PLAUSIBLE_RANGE);
+    return factor;
+}
+
+double MDModuleV2::PositionConsistancyCheck(Coord curPosition,
+        Coord curPositionConfidence, Coord oldPosition,
+        Coord oldPositionConfidence, double time) {
+    double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+    double curR = curPositionConfidence.x;
+    double oldR = oldPositionConfidence.x;
+
+    double factor = mdmLib.CircleCircleFactor(distance, curR, oldR,
+    MAX_CONSISTANT_DISTANCE * time);
+    return factor;
+}
+
+double MDModuleV2::SpeedConsistancyCheck(double curSpeed,
+        double curSpeedConfidence, double oldspeed, double oldSpeedConfidence,
+        double time) {
+    double speedDelta = curSpeed - oldspeed;
+    double factor = 1;
+    if(speedDelta>0){
+        factor = mdmLib.SegmentSegmentFactor(speedDelta, curSpeedConfidence,
+                oldSpeedConfidence,
+                MAX_PLAUSIBLE_ACCEL * time);
+    }else{
+        factor = mdmLib.SegmentSegmentFactor(speedDelta, curSpeedConfidence,
+                oldSpeedConfidence,
+                MAX_PLAUSIBLE_DECEL * time);
+    }
+
+
+    return factor;
+}
+
+double MDModuleV2::SpeedPlausibilityCheck(double speed,
+        double speedConfidence) {
+    if ((fabs(speed) + fabs(speedConfidence) / 2) < MAX_PLAUSIBLE_SPEED) {
+        return 1;
+    } else if ((fabs(speed) - fabs(speedConfidence) / 2) > MAX_PLAUSIBLE_SPEED) {
+        return 0;
+    } else {
+        return (fabs(speedConfidence) / 2 + (MAX_PLAUSIBLE_SPEED - fabs(speed)))
+                / fabs(speedConfidence);
+    }
+}
+
+double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
+        Coord curPositionConfidence, Coord oldPosition,
+        Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
+        double oldspeed, double oldSpeedConfidence, double time) {
+
+        MDMLib mdmLib;
+
+    if (time < MAX_TIME_DELTA) {
+
+        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+        double theoreticalSpeed = distance / time;
+        double maxspeed = std::max(curSpeed, oldspeed);
+        double minspeed = std::min(curSpeed, oldspeed);
+
+        double curR = curPositionConfidence.x / time + curSpeedConfidence;
+        double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
+
+        double minfactor;
+
+        minfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed, curR,
+                    oldR, maxspeed - MIN_PSS);
+//        std::cout << " theoreticalSpeed:" << theoreticalSpeed << " curR:" << curR
+//                << " oldR:" << oldR << " maxspeed - MIN_SPEED_DELTA:" << maxspeed - MIN_SPEED_DELTA
+//                << '\n';
+
+        double maxfactor;
+
+        if(minspeed - MAX_PSS<0){
+            maxfactor = 1;
+        }else{
+            maxfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed, curR,
+                            oldR, minspeed - MAX_PSS);
+            maxfactor = 1 - maxfactor;
+        }
+
+//        std::cout << " minfactor:" << minfactor << " maxfactor:" << maxfactor
+//                << " theoreticalSpeed:" << theoreticalSpeed << " maxspeed:" << maxspeed
+//                << " minspeed:" << minspeed << '\n';
+
+        if (minfactor < maxfactor) {
+            return minfactor;
+        } else {
+            return maxfactor;
+        }
+
+    } else {
+        return 1;
+    }
+}
+
+
+double MDModuleV2::IntersectionCheck(Coord nodePosition1,
+        Coord nodePositionConfidence1, Coord nodePosition2,
+        Coord nodePositionConfidence2) {
+
+    double distance = mdmLib.calculateDistance(nodePosition1, nodePosition2);
+    double intFactor = mdmLib.intersectionFactor(nodePositionConfidence1.x,
+            nodePositionConfidence2.x, distance, CAR_LENGTH);
+
+    intFactor = 1 - intFactor;
+
+//    if(distance < 4){
+//        std::cout << "V2 intFactor:" << intFactor << " distance:"
+//                << distance <<'\n';
+//    }
+
+    return intFactor;
+}
+
+InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
+        BasicSafetyMessage bsm) {
+    int senderId = bsm.getSenderAddress();
+    Coord senderPos = bsm.getSenderPos();
+    Coord senderPosConfidence = bsm.getSenderPosConfidence();
+
+    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
+    NodeHistory varNode;
+
+    std::map<std::string, double> result;
+    double INTScore = 0;
+    int INTNum = 0;
+
+    INTScore = IntersectionCheck(myPosition, myPositionConfidence, senderPos,
+            senderPosConfidence);
+    if (INTScore < 1) {
+        result["INTId_0"] = myId;
+        result["INTCheck_0"] = INTScore;
+        INTNum++;
+    }
+
+    char num_string[32];
+    char INTId_string[64] = "INTId_";
+    char INTCheck_string[64] = "INTCheck_";
+
+    for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
+        if (detectedNodes.getNodeId(var) != senderId) {
+            varNode = detectedNodes.getNodeHistory(
+                    detectedNodes.getNodeId(var));
+
+            if (mdmLib.calculateDeltaTime(varNode.getLatestBSM(), bsm) < MAX_DELTA_INTER) {
+
+                INTScore = IntersectionCheck(
+                        varNode.getLatestBSM().getSenderPos(),
+                        varNode.getLatestBSM().getSenderPosConfidence(),
+                        senderPos, senderPosConfidence);
+                if (INTScore < 1) {
+
+                    sprintf(num_string, "%d", INTNum);
+                    strcat(INTId_string, num_string);
+                    strcat(INTCheck_string, num_string);
+                    result[INTId_string] = detectedNodes.getNodeId(var);
+                    result[INTCheck_string] = INTScore;
+
+                    strncpy(INTId_string, "INTId_", sizeof(INTId_string));
+                    strncpy(INTCheck_string, "INTCheck_",
+                            sizeof(INTCheck_string));
+
+                    INTNum++;
+                }
+            }
+        }
+    }
+
+    result["INTNum"] = INTNum;
+
+    InterTest intertTest = InterTest(INTNum);
+
+    for (int var = 0; var < INTNum; ++var) {
+        sprintf(num_string, "%d", var);
+        strcat(INTId_string, num_string);
+        strcat(INTCheck_string, num_string);
+
+        intertTest.addInterValue(result.find(INTId_string)->second,
+                result.find(INTCheck_string)->second);
+
+        strncpy(INTId_string, "INTId_", sizeof(INTId_string));
+        strncpy(INTCheck_string, "INTCheck_", sizeof(INTCheck_string));
+    }
+
+    return intertTest;
+}
+
+double MDModuleV2::SuddenAppearenceCheck(Coord receiverPosition,
+        Coord receiverPositionConfidence, Coord senderPosition,
+        Coord senderPositionConfidence) {
+    double distance = mdmLib.calculateDistance(senderPosition,
+            receiverPosition);
+    double r1 = senderPositionConfidence.x;
+    double r2 = SUDDEN_APPEARENCE_RANGE +  receiverPositionConfidence.x;
+
+    double factor = 0;
+    if(r1 <= 0){
+        if(distance < (SUDDEN_APPEARENCE_RANGE +  receiverPositionConfidence.x)){
+            factor = 0;
+        }else{
+            factor = 1;
+        }
+    }else{
+        double area = mdmLib.calculateCircleCircleIntersection(r1, r2, distance);
+        factor = area / (PI * r1 * r1);
+
+        factor = 1 - factor;
+    }
+
+    return factor;
+}
+
+double MDModuleV2::PositionPlausibilityCheck(Coord senderPosition,
+        Coord senderPositionConfidence, double senderSpeed, double senderSpeedConfidence) {
+    if(senderSpeed - senderSpeedConfidence <= MAX_NON_ROUTE_SPEED){
+        return 1;
+    }
+
+    ObstacleControl* obstacles = ObstacleControlAccess().getIfExists();
+
+    double resolution = senderPositionConfidence.x / 10;
+    if (resolution < 1) {
+        resolution = 1;
+    }
+    double resolutionDelta = resolution / 10;
+
+    double Intersection = 0;
+    int count = 5;
+
+    Intersection = obstacles->calculateInsersion(senderPosition, resolution / 2,
+            resolution / 2);
+
+    for (double r = resolution; r < senderPositionConfidence.x;
+            r = r + resolution) {
+        int resolutionTheta = (int) (2 * PI * r / (resolution));
+        //std::cout << r<< "#" << resolution << "^" << resolutionTheta<<"-";
+        Coord pList[resolutionTheta];
+        for (int t = 0; t < resolutionTheta; ++t) {
+            Coord p(senderPosition.x + r * cos(2 * PI * t / resolutionTheta),
+                    senderPosition.y + r * sin(2 * PI * t / resolutionTheta));
+            pList[t] = p;
+            count++;
+        }
+
+        double IntersectionTemp = obstacles->calculateInsersionList(
+                senderPosition, r, r, pList, resolutionTheta);
+
+        Intersection = Intersection + IntersectionTemp;
+
+        resolution = resolution + resolutionDelta;
+    }
+    //return Intersection;
+
+    if ((1 - (Intersection / count)) < 0.1) {
+        std::cout
+                << "*******************************************************************************"
+                << '\n';
+        std::cout
+                << "*******************************************************************************Intersection: "
+                << Intersection << " count:" << count << '\n';
+        std::cout
+                << "*******************************************************************************"
+                << '\n';
+    }
+
+    return (1 - (Intersection / count));
+}
+
+double MDModuleV2::BeaconFrequencyCheck(double timeNew, double timeOld) {
+    double timeDelta = timeNew - timeOld;
+    if (timeDelta < MAX_BEACON_FREQUENCY) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
+
+    BsmCheck bsmCheck = BsmCheck();
+
+    int senderId = bsm.getSenderAddress();
+    Coord senderPos = bsm.getSenderPos();
+    Coord senderPosConfidence = bsm.getSenderPosConfidence();
+
+    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
+
+    bsmCheck.setRangePlausibility(
+            RangePlausibilityCheck(myPosition, myPositionConfidence, senderPos,
+                    senderPosConfidence));
+
+    bsmCheck.setSpeedPlausibility(
+            SpeedPlausibilityCheck(mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                    mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
+
+    if (detectedNodes.getNodeHistory(senderId).getBSMNum() > 0) {
+        bsmCheck.setPositionConsistancy(
+                PositionConsistancyCheck(senderPos, senderPosConfidence,
+                        senderNode.getLatestBSM().getSenderPos(),
+                        senderNode.getLatestBSM().getSenderPosConfidence(),
+                        mdmLib.calculateDeltaTime(bsm,
+                                senderNode.getLatestBSM())));
+
+        bsmCheck.setSpeedConsistancy(
+                SpeedConsistancyCheck(
+                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence()),
+                        mdmLib.calculateSpeed(
+                                senderNode.getLatestBSM().getSenderSpeed()),
+                        mdmLib.calculateSpeed(
+                                senderNode.getLatestBSM().getSenderSpeedConfidence()),
+                        mdmLib.calculateDeltaTime(bsm,
+                                senderNode.getLatestBSM())));
+
+        bsmCheck.setPositionSpeedConsistancy(
+                PositionSpeedConsistancyCheck(senderPos, senderPosConfidence,
+                        senderNode.getLatestBSM().getSenderPos(),
+                        senderNode.getLatestBSM().getSenderPosConfidence(),
+                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence()),
+                        mdmLib.calculateSpeed(
+                                senderNode.getLatestBSM().getSenderSpeed()),
+                        mdmLib.calculateSpeed(
+                                senderNode.getLatestBSM().getSenderSpeedConfidence()),
+                        mdmLib.calculateDeltaTime(bsm,
+                                senderNode.getLatestBSM())));
+
+        bsmCheck.setBeaconFrequency(
+                BeaconFrequencyCheck(bsm.getArrivalTime().dbl(),
+                        senderNode.getLatestBSM().getArrivalTime().dbl()));
+
+    } else {
+        bsmCheck.setSuddenAppearence(
+                SuddenAppearenceCheck(myPosition, myPositionConfidence, senderPos,
+                        senderPosConfidence));
+    }
+
+    bsmCheck.setPositionPlausibility(
+            PositionPlausibilityCheck(senderPos, senderPosConfidence, mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                    mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
+    bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
+
+    PrintBsmCheck(senderId, bsmCheck);
+
+    //CheckNodeForReport(bsm, bsmCheck, detectedNodes);
+
+    return bsmCheck;
+}
+
+void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
+
+//    if (bsmCheck.getRangePlausibility() < 0.5) {
+//        std::cout << "##########V2 " << "ART FAILED => "
+//                << bsmCheck.getRangePlausibility() << " A:" << myId << " B:"
+//                << senderId << '\n';
+//    }
+//    if (bsmCheck.getPositionConsistancy() < 0.5) {
+//        std::cout << "##########V2 " << "MGTD FAILED => "
+//                << bsmCheck.getPositionConsistancy() << " A:" << myId << " B:"
+//                << senderId << '\n';
+//    }
+//    if (bsmCheck.getSpeedConsistancy() < 0.5) {
+//        std::cout << "##########V2 " << "MGTS FAILED => "
+//                << bsmCheck.getSpeedConsistancy() << " A:" << myId << " B:"
+//                << senderId << '\n';
+//    }
+
+//    if (bsmCheck.getPositionSpeedConsistancy() < 0.5) {
+//        std::cout << "##########V2 " << "MGTSV FAILED => "
+//                << bsmCheck.getPositionSpeedConsistancy() << " A:" << myId
+//                << " B:" << senderId << '\n';
+//    }
+//
+//    if (bsmCheck.getSpeedPlausibility() < 0.5) {
+//        std::cout << "##########V2 " << "MAXS FAILED => "
+//                << bsmCheck.getSpeedPlausibility() << " A:" << myId << " B:"
+//                << senderId << '\n';
+//    }
+//    if (bsmCheck.getPositionPlausibility() < 0.5) {
+//        std::cout << "##########V2 " << "MAP FAILED => "
+//                << bsmCheck.getPositionPlausibility() << " A:" << myId << " B:"
+//                << senderId << '\n';
+//    }
+
+    if (bsmCheck.getSuddenAppearence() < 0.5) {
+        std::cout << "##########V2 " << "SAW FAILED => " << bsmCheck.getSuddenAppearence()
+                << " A:" << myId << " B:" << senderId << '\n';
+    }
+
+//    InterTest inter = bsmCheck.getIntersection();
+//    for (int var = 0; var < inter.getInterNum(); ++var) {
+//        if (inter.getInterValue(var) < 0.5) {
+//            std::cout << "##########V2 " << "INT FAILED => "
+//                    << inter.getInterValue(var) << " A:" << myId << " B:"
+//                    << senderId << " C:" << inter.getInterId(var) << '\n';
+//        }
+//    }
+
+}
+
+void MDModuleV2::CheckNodeForReport(BasicSafetyMessage bsm, BsmCheck bsmCheck,
+        NodeTable detectedNodes) {
+
+    bool checkFailed = false;
+
+    prntLong.incAll();
+    prntTemp.incAll();
+
+    int senderId = bsm.getSenderAddress();
+
+    MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
+    NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
+
+    BsmCheck bsmCheck0 = BsmCheck();
+    BsmCheck bsmCheck1 = BsmCheck();
+
+    if (nodeHist.getBSMNum() > 0) {
+        if (mdmLib.calculateDeltaTime(bsm,
+                nodeHist.getLatestBSM())>DELTA_BSM_TIME) {
+            bsmCheck0 = mdmHist.getBsmCheck(0);
+            if (nodeHist.getBSMNum() > 1) {
+                if (mdmLib.calculateDeltaTime(bsm,
+                        nodeHist.getSecondLatestBSM()) > DELTA_BSM_TIME) {
+                    bsmCheck1 = mdmHist.getBsmCheck(1);
+                }
+            }
+        }
+    }
+
+    if (AggregateFactors(bsmCheck.getRangePlausibility(),
+            bsmCheck0.getRangePlausibility(),
+            bsmCheck1.getRangePlausibility())) {
+        std::cout << "$$$$$$$$$$V2 " << "RangePlausibility FAILED => "
+                << bsmCheck.getRangePlausibility() << "|"
+                << bsmCheck0.getRangePlausibility() << "|"
+                << bsmCheck1.getRangePlausibility() << " A:" << myId << " B:"
+                << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("RangePlausibility");
+        prntTemp.incFlags("RangePlausibility");
+    }
+
+    if (AggregateFactors(bsmCheck.getPositionConsistancy(),
+            bsmCheck0.getPositionConsistancy(),
+            bsmCheck1.getPositionConsistancy())) {
+        std::cout << "$$$$$$$$$$V2 " << "PositionConsistancy FAILED => "
+                << bsmCheck.getPositionConsistancy() << "|"
+                << bsmCheck0.getPositionConsistancy() << "|"
+                << bsmCheck1.getPositionConsistancy() << " A:" << myId << " B:"
+                << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("PositionConsistancy");
+        prntTemp.incFlags("PositionConsistancy");
+    }
+
+    if (AggregateFactors(bsmCheck.getPositionSpeedConsistancy(),
+            bsmCheck0.getPositionSpeedConsistancy(),
+            bsmCheck1.getPositionSpeedConsistancy())) {
+        std::cout << "$$$$$$$$$$V2 " << "PositionSpeedConsistancy FAILED => "
+                << bsmCheck.getPositionSpeedConsistancy() << "|"
+                << bsmCheck0.getPositionSpeedConsistancy() << "|"
+                << bsmCheck1.getPositionSpeedConsistancy() << " A:" << myId
+                << " B:" << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("PositionSpeedConsistancy");
+        prntTemp.incFlags("PositionSpeedConsistancy");
+    }
+
+    if (AggregateFactors(bsmCheck.getSpeedConsistancy(),
+            bsmCheck0.getSpeedConsistancy(), bsmCheck1.getSpeedConsistancy())) {
+        std::cout << "$$$$$$$$$$V2 " << "SpeedConsistancy FAILED => "
+                << bsmCheck.getSpeedConsistancy() << "|"
+                << bsmCheck0.getSpeedConsistancy() << "|"
+                << bsmCheck1.getSpeedConsistancy() << " A:" << myId << " B:"
+                << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("SpeedConsistancy");
+        prntTemp.incFlags("SpeedConsistancy");
+    }
+    if (AggregateFactors(bsmCheck.getSpeedPlausibility(),
+            bsmCheck0.getSpeedPlausibility(),
+            bsmCheck1.getSpeedPlausibility())) {
+        std::cout << "$$$$$$$$$$V2 " << "SpeedPlausibility FAILED => "
+                << bsmCheck.getSpeedPlausibility() << "|"
+                << bsmCheck0.getSpeedPlausibility() << "|"
+                << bsmCheck1.getSpeedPlausibility() << " A:" << myId << " B:"
+                << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("SpeedPlausibility");
+        prntTemp.incFlags("SpeedPlausibility");
+    }
+
+    if (AggregateFactors(bsmCheck.getPositionPlausibility(),
+            bsmCheck0.getPositionPlausibility(),
+            bsmCheck1.getPositionPlausibility())) {
+        std::cout << "$$$$$$$$$$V2 " << "PositionPlausibility FAILED => "
+                << bsmCheck.getPositionPlausibility() << "|"
+                << bsmCheck0.getPositionPlausibility() << "|"
+                << bsmCheck1.getPositionPlausibility() << " A:" << myId << " B:"
+                << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("PositionPlausibility");
+        prntTemp.incFlags("PositionPlausibility");
+    }
+
+    if (AggregateFactors(bsmCheck.getBeaconFrequency(),
+            bsmCheck0.getBeaconFrequency(), bsmCheck1.getBeaconFrequency())) {
+        std::cout << "$$$$$$$$$$V2 " << "BeaconFrequency FAILED => "
+                << bsmCheck.getBeaconFrequency() << "|"
+                << bsmCheck0.getBeaconFrequency() << "|"
+                << bsmCheck1.getBeaconFrequency() << " A:" << myId << " B:"
+                << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("BeaconFrequency");
+        prntTemp.incFlags("BeaconFrequency");
+    }
+
+//    if (SingleCheck(bsmCheck.getSAW(), bsmCheck0.getSAW(),
+//            bsmCheck1.getSAW())) {
+//        std::cout << "$$$$$$$$$$V2 " << "SAW FAILED => " << bsmCheck.getSAW()
+//                << "|" << bsmCheck0.getSAW() << "|" << bsmCheck1.getSAW()
+//                << " A:" << myId << " B:" << senderId << '\n';
+//    }
+
+    InterTest inter = bsmCheck.getIntersection();
+    InterTest inter0 = bsmCheck.getIntersection();
+    InterTest inter1 = bsmCheck.getIntersection();
+    for (int var = 0; var < inter.getInterNum(); ++var) {
+
+        double IT = inter.getInterValue(var);
+
+        double IT0 = inter0.getIdIndex(inter.getInterId(var));
+        double IT1 = inter1.getIdIndex(inter.getInterId(var));
+
+        if (IT0 != -1) {
+            IT0 = inter0.getInterValue(IT0);
+        } else {
+            IT0 = 1;
+        }
+
+        if (IT1 != -1) {
+            IT1 = inter0.getInterValue(IT1);
+        } else {
+            IT1 = 1;
+        }
+
+        if (AggregateFactors(IT, IT0, IT1)) {
+            std::cout << "$$$$$$$$$$V2 " << "Intersection FAILED => " << IT << "|" << IT0
+                    << "|" << IT1 << " A:" << myId << " B:" << senderId << " C:"
+                    << inter.getInterId(var) << '\n';
+            checkFailed = true;
+            prntLong.incFlags("Intersection");
+            prntTemp.incFlags("Intersection");
+        }
+    }
+
+    if (checkFailed) {
+        prntLong.incCumulFlags();
+        prntTemp.incCumulFlags();
+    }
+}
+
+bool MDModuleV2::AggregateFactors(double curFactor, double factor0,
+        double factor1) {
+    if (curFactor < 0.1) {
+        return true;
+    } else if (curFactor > 0.9) {
+        return false;
+    } else {
+        if ((curFactor + factor0 + factor1) / 3 < 0.5) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+void MDModuleV2::saveLine(std::string path, std::string serial, double density, double deltaT)  {
+    char fileNameCumul[] = "mdmResultV2Cumul.txt";
+    char fileNameTemp[] = "mdmResultV2Temp.txt";
+
+    char outChar[512];
+    char directoryPathGen[512]= "";
+    char filePathGen[512]= "";
+    const char * pathChar = path.c_str();
+    const char * serialChar = serial.c_str();
+    strcat(directoryPathGen, pathChar);
+    strcat(directoryPathGen, serialChar);
+
+    struct stat info;
+
+    if( stat( directoryPathGen, &info ) != 0 ){
+        mkdir(directoryPathGen, 0777);
+    }else if( info.st_mode & S_IFDIR ){
+    }else{
+        mkdir(directoryPathGen, 0777);
+    }
+
+    strcpy(filePathGen, directoryPathGen);
+    strcat(filePathGen, "/");
+    strcat(filePathGen, fileNameCumul);
+
+    prntLong.getPrintable(outChar, density, deltaT);
+    prntLong.writeFile(filePathGen, outChar);
+
+    strcpy(filePathGen, directoryPathGen);
+    strcat(filePathGen, "/");
+    strcat(filePathGen, fileNameTemp);
+
+    prntTemp.getPrintable(outChar, density, deltaT);
+    prntTemp.writeFile(filePathGen, outChar);
+
+
+    prntTemp.resetAll();
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
+	</section>
+	<section name="PDOMSearchPage">
+		<item value="false" key="caseSensitive"/>
+		<item value="227191" key="searchFlags"/>
+		<list key="previousPatterns">
+			<item value="PositionSpeedConsistancyCheck"/>
+			<item value="MisbehaviorDetectionModule"/>
+		</list>
+	</section>
+	<section name="NewClassWizardPage">
+		<item value="true" key="stubSelected1"/>
+		<item value="true" key="stubVirtual1"/>
+		<item value="false" key="namespaceSelected"/>
+		<item value="false" key="stubInline0"/>
+		<item value="false" key="stubInline1"/>
+		<item value="" key="namespace"/>
+		<item value="false" key="testFileSelected"/>
+		<item value="true" key="stubSelected0"/>
+	</section>
+	<section name="RenameInformationPopup">
+	</section>
+	<section name="CRenameRefactoringInputPage">
+	</section>
+	<section name="completion_proposal_size">
+	</section>
+</section>

@@ -1,0 +1,138 @@
+#include "JosephVeinsApp.h"
+
+Define_Module(JosephVeinsApp);
+
+void JosephVeinsApp::initialize(int stage) {
+    BaseWaveApplLayer::initialize(stage);
+    if (stage == 0) {
+        //Initializing members and pointers of your application goes here
+        EV << "Initializing " << par("appName").stringValue() << std::endl;
+    } else if (stage == 1) {
+
+        //Initializing members that require initialized other modules goes here
+    }
+}
+
+void JosephVeinsApp::finish() {
+    BaseWaveApplLayer::finish();
+    //statistics recording goes here
+}
+
+static int firstId = -1;
+static bool firstTime = true;
+
+void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
+
+    if (firstTime) {
+        firstTime = false;
+        recordScalar("traci->getPolygonIds().size();",
+                traci->getPolygonIds().size());
+
+        // get list of polygons
+        std::list<std::string> ids = traci->getPolygonIds();
+        for (std::list<std::string>::iterator i = ids.begin(); i != ids.end();
+                ++i) {
+            std::string id = *i;
+            std::string typeId = traci->polygon(id).getTypeId();
+            std::list<Coord> coords = traci->polygon(id).getShape();
+            std::vector<Coord> shape;
+            std::copy(coords.begin(), coords.end(), std::back_inserter(shape));
+
+            recordScalar("=================", shape.size());
+            recordScalar("x", shape.front().x);
+            recordScalar("y", shape.front().y);
+            recordScalar("z", shape.front().z);
+        }
+    }
+
+    ObstacleControl* obstacles = ObstacleControlAccess().getIfExists();
+
+
+    for (int var = 0; var < 50; ++var) {
+        recordScalar("-----------------------------var", var);
+
+        Coord curPositionP1(1010+var, 1000+var, curPosition.z);
+        Coord curPositionP2(1010+var, curPosition.y-var, curPosition.z);
+        Coord curPositionP3(1010-var, curPosition.y+var, curPosition.z);
+        Coord curPositionP4(1010-var, curPosition.y-var, curPosition.z);
+        double scale = 0;
+        scale = obstacles->calculateInsersion(curPositionP1, 1, 1);
+        recordScalar("-----------------------------curPositionP", scale);
+        scale = obstacles->calculateInsersion(curPositionP2, 1, 1);
+        recordScalar("-----------------------------curPositionP", scale);
+        scale = obstacles->calculateInsersion(curPositionP3, 1, 1);
+        recordScalar("-----------------------------curPositionP", scale);
+        scale = obstacles->calculateInsersion(curPositionP4, 1, 1);
+        recordScalar("-----------------------------curPositionP", scale);
+    }
+
+    int senderID = bsm->getSenderAddress();
+
+    if (!detectedNodes.includes(senderID)) {
+        NodeHistory newNode(senderID);
+        newNode.addBSM(*bsm);
+        detectedNodes.put(senderID, newNode);
+    } else {
+        NodeHistory existingNode = detectedNodes.get(senderID);
+        existingNode.addBSM(*bsm);
+        detectedNodes.put(senderID, existingNode);
+    }
+
+    MDModule mdm;
+
+    double myDistance = mdm.calculateDistance(bsm->getSenderPos(), curPosition);
+
+    if (firstId == -1) {
+        firstId = myId;
+    }
+
+    if (myId == firstId) {
+        recordScalar("BasicSafetyMessage", myId);
+        recordScalar("getSenderAddress", senderID);
+        recordScalar("myDistance", myDistance);
+        recordScalar("getNodesNum", detectedNodes.getNodesNum());
+
+        for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
+            recordScalar("getBSMNum",
+                    detectedNodes.getNodeHistoryList()[var].getBSMNum());
+        }
+
+//        NodeHistory existingNode = detectedNodes.get(senderID);
+//        BasicSafetyMessage *bsmList = existingNode.getBSMList();
+//
+//        for (int var = 0; var < existingNode.getBSMNum(); ++var) {
+//            //double tempDist = calculateDistance(bsmList[var]);
+//            recordScalar("getTimestamp", bsmList[var].getTimestamp().dbl());
+//        }
+    }
+
+//Your application has received a beacon message from another car or RSU
+//code for handling the message goes here
+
+}
+
+void JosephVeinsApp::onWSM(WaveShortMessage* wsm) {
+//Your application has received a data message from another car or RSU
+//code for handling the message goes here, see TraciDemo11p.cc for examples
+
+}
+
+void JosephVeinsApp::onWSA(WaveServiceAdvertisment* wsa) {
+//Your application has received a service advertisement from another car or RSU
+//code for handling the message goes here, see TraciDemo11p.cc for examples
+
+}
+
+void JosephVeinsApp::handleSelfMsg(cMessage* msg) {
+    BaseWaveApplLayer::handleSelfMsg(msg);
+//this method is for self messages (mostly timers)
+//it is important to call the BaseWaveApplLayer function for BSM and WSM transmission
+
+}
+
+void JosephVeinsApp::handlePositionUpdate(cObject* obj) {
+    BaseWaveApplLayer::handlePositionUpdate(obj);
+//the vehicle has moved. Code that reacts to new positions goes here.
+//member variables such as currentPosition and currentSpeed are updated in the parent class
+
+}

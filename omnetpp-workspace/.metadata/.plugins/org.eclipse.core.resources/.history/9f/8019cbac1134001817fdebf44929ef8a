@@ -1,0 +1,133 @@
+#include "JosephVeinsApp.h"
+
+Define_Module(JosephVeinsApp);
+
+#define serialNumber "P3S0"
+#define savePath "/home/joseph/Projects/ConfidenceRange/mdmSave/"
+
+#define confPos 3
+#define confSpd 0
+#define confHea 0
+
+#define FAULTY 1
+#define ATTACKERS 0
+
+
+void JosephVeinsApp::initialize(int stage) {
+    BaseWaveApplLayer::initialize(stage);
+
+    Coord vehSize = genLib.TypeToSize(traciVehicle->getTypeId());
+    myWidth = vehSize.x;
+    myLength = vehSize.y;
+
+    myMdType = induceMisbehavior(FAULTY, ATTACKERS);
+
+    if(myMdType == 1){
+        curPositionConfidence = Coord(confPos, confPos, 0);
+        curSpeedConfidence = Coord(confSpd, confSpd, 0);
+        curHeadingConfidence = confHea;
+    }
+
+    if (stage == 0) {
+        //joseph
+        //Initializing members and pointers of your application goes here
+        EV << "Initializing " << par("appName").stringValue() << std::endl;
+    } else if (stage == 1) {
+
+        //Initializing members that require initialized other modules goes here
+    }
+}
+
+void JosephVeinsApp::finish() {
+    BaseWaveApplLayer::finish();
+    //statistics recording goes here
+}
+
+
+double JosephVeinsApp::induceMisbehavior(double faulty, double attackers) {
+    double randVal = 0;
+    if((faulty + attackers) < 1){
+        randVal  = genLib.RandomDouble(0, 1);
+    }else{
+        randVal  = genLib.RandomDouble(0, faulty + attackers);
+    }
+
+    if(randVal<faulty){
+        return 1;
+    }
+
+    if(randVal>=faulty && randVal<(attackers +faulty)){
+        return 2;
+    }
+
+    return 0;
+}
+
+static double deltaT = 0;
+
+void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
+
+    int senderID = bsm->getSenderAddress();
+
+    MDModule mdm(myId, curPosition, curSpeed, Coord(myWidth, myLength), curHeading);
+    MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence);
+
+    BsmCheck bsmCheck = mdmV2.CheckBSM(*bsm,detectedNodes);
+
+    if (!detectedNodes.includes(senderID)) {
+        NodeHistory newNode(senderID);
+        newNode.addBSM(*bsm);
+        MDMHistory newMDM(senderID);
+        newMDM.addBsmCheck(bsmCheck);
+        detectedNodes.put(senderID, newNode, newMDM);
+    } else {
+        NodeHistory existingNode = detectedNodes.getNodeHistory(senderID);
+        existingNode.addBSM(*bsm);
+        MDMHistory existingMDM = detectedNodes.getMDMHistory(senderID);
+        existingMDM.addBsmCheck(bsmCheck);
+        detectedNodes.put(senderID, existingNode, existingMDM);
+    }
+
+    mdm.reportMB(mdm.CheckBSM(detectedNodes, senderID), senderID);
+
+    if ((simTime().dbl() - deltaT) > 60) {
+        deltaT = simTime().dbl();
+
+        mdm.saveLine(savePath, serialNumber,mobility->getManager()->getManagedHosts().size(),deltaT);
+        mdmV2.saveLine(savePath, serialNumber,mobility->getManager()->getManagedHosts().size(),deltaT);
+    }
+
+    if(myMdType == 2){
+        attackBsm = detectedNodes.getRandomBSM();
+    }
+
+//Your application has received a beacon message from another car or RSU
+//code for handling the message goes here
+
+}
+
+void JosephVeinsApp::onWSM(WaveShortMessage* wsm) {
+//Your application has received a data message from another car or RSU
+//code for handling the message goes here, see TraciDemo11p.cc for examples
+
+}
+
+void JosephVeinsApp::onWSA(WaveServiceAdvertisment* wsa) {
+//Your application has received a service advertisement from another car or RSU
+//code for handling the message goes here, see TraciDemo11p.cc for examples
+
+}
+
+void JosephVeinsApp::handleSelfMsg(cMessage* msg) {
+    BaseWaveApplLayer::handleSelfMsg(msg);
+//this method is for self messages (mostly timers)
+//it is important to call the BaseWaveApplLayer function for BSM and WSM transmission
+
+}
+
+void JosephVeinsApp::handlePositionUpdate(cObject* obj) {
+    BaseWaveApplLayer::handlePositionUpdate(obj);
+//the vehicle has moved. Code that reacts to new positions goes here.
+//member variables such as currentPosition and currentSpeed are updated in the parent class
+
+}

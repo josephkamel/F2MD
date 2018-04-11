@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;veins-veins-4.6/networks/IRTSystemXScenario/RSUExampleScenario.ned&apos; to &apos;IRTSystemXScenario.ned&apos;" description="Rename resource &apos;RSUExampleScenario.ned&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="networks/IRTSystemXScenario/RSUExampleScenario.ned" name="IRTSystemXScenario.ned" stamp="1523372702677" updateReferences="true"/>
+</session>

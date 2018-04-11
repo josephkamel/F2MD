@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <!--debug config-->
+    <copy file="48.712766_2.192927.net.xml"/>
+    <copy file="48.712766_2.192927.rou.xml"/>
+    <copy file="48.712766_2.192927.poly.xml"/>
+    <copy file="48.712766_2.192927.sumo.cfg" type="config"/>
+</launch>
