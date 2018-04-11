@@ -1,4 +1,14 @@
-#include <veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/Rectangle.h>
+/*******************************************************************************
+* @author  Joseph Kamel
+* @date    11/04/2014
+* @version 1.0
+*
+* SCA (Secure Cooperative Autonomous systems)
+* Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+* All rights reserved.
+*******************************************************************************/
+
+#include "Rectangle.h"
 
 Rectangle::Rectangle(double cx, double cy, double w, double h, double r){
     this->cx = cx;

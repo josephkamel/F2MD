@@ -32820,3 +32820,46 @@ make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnet
 veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
 Creating shared library: ../out/gcc-release/src/libveins.so
 make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+14:01:37 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+In file included from ./veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/RectIntLib.h:14:0,
+                 from ./veins/modules/application/ieee80211p/../misbehaviorDetection/supportClasses/MDMLib.h:15,
+                 from ./veins/modules/application/ieee80211p/BaseWaveApplLayer.h:36,
+                 from veins/modules/application/ieee80211p/BaseWaveApplLayer.cc:20:
+./veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/Line.h:17:21: fatal error: Vector.h>: No such file or directory
+Makefile:210: recipe for target '../out/gcc-release/src/veins/modules/application/ieee80211p/BaseWaveApplLayer.o' failed
+compilation terminated.
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+Makefile:12: recipe for target 'all' failed
+make[1]: *** [../out/gcc-release/src/veins/modules/application/ieee80211p/BaseWaveApplLayer.o] Error 1
+make: *** [all] Error 2
+14:01:47 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+veins/modules/application/misbehaviorDetection/MDModule.cc
+veins/modules/application/misbehaviorDetection/MDModuleV2.cc
+veins/modules/application/misbehaviorDetection/baseClasses/BsmCheck.cc
+veins/modules/application/misbehaviorDetection/baseClasses/InterTest.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeTable.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MBReport.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDAuthority.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GaussianRandom.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GeneralLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/Printable.cc
+veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/Line.cc
+veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/Rectangle.cc
+veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/RectIntLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/Vector.cc
+veins/modules/application/traci/MyVeinsApp.cc
+veins/modules/application/traci/TraCIDemo11p.cc
+veins/modules/application/traci/TraCIDemoRSU11p.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'

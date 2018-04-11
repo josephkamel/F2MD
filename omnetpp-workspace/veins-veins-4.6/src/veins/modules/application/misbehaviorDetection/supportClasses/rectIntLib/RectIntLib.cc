@@ -1,4 +1,14 @@
-#include <veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/RectIntLib.h>
+/*******************************************************************************
+* @author  Joseph Kamel
+* @date    11/04/2014
+* @version 1.0
+*
+* SCA (Secure Cooperative Autonomous systems)
+* Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+* All rights reserved.
+*******************************************************************************/
+
+#include "RectIntLib.h"
 
 #define PI 3.14159265358979323846264338327950288419716939937510  /* pi */
 
