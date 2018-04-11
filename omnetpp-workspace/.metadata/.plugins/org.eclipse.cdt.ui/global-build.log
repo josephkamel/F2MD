@@ -32814,3 +32814,9 @@ make MODE=release all
 make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
 make[1]: Nothing to be done for 'all'.
 make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+13:50:54 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'

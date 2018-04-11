@@ -6,7 +6,7 @@ Define_Module(JosephVeinsApp);
 #define savePath "/home/joseph/Projects/ConfidenceRange/mdmSave/"
 
 #define confPos 10
-#define confSpd 0
+#define confSpd 1
 #define confHea 0
 
 #define FAULTY 1
