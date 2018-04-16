@@ -196,83 +196,37 @@ double MDModule::BeaconFrequencyCheck(double timeNew, double timeOld) {
     }
 }
 
-static double maxAngle[50];
-static bool maxAngleInit = false;
 
-double MDModule::HeadingPlausibilityCheck(Coord heading1, double speed1,
-        Coord pos1, Coord pos2, double deltaTime, Coord speed) {
-    if (deltaTime < 1.1) {
+double MDModule::PositionHeadingConsistancyCheck(Coord curHeading,
+        Coord curPosition, Coord oldPosition, double deltaTime) {
+    if(deltaTime<1.1){
+        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+        if(distance<0.1){
+            return 0;
+        }
 
-        double distance = mdmLib.calculateDistance(pos1, pos2);
-
-        double headingAngle = mdmLib.calculateHeadingAngle(heading1);
-        Coord relativePos = Coord(pos2.x - pos1.x, pos2.y - pos1.y,
-                pos2.z - pos1.z);
+        double curHeadingAngle = mdmLib.calculateHeadingAngle(curHeading);
+        Coord relativePos = Coord(curPosition.x - oldPosition.x, curPosition.y - oldPosition.y,
+                curPosition.z - oldPosition.z);
         double positionAngle = mdmLib.calculateHeadingAngle(relativePos);
-        double angleDelta = fabs(headingAngle - positionAngle);
+        double angleDelta = fabs(curHeadingAngle - positionAngle);
         if(angleDelta > 180){
             angleDelta = 360 - angleDelta;
         }
 
-
-        if (maxAngleInit == false) {
-            for (int var = 0; var < 50; ++var) {
-                maxAngle[var] = 0;
-            }
-            maxAngleInit = true;
+        if(MAX_HEADING_CHANGE < angleDelta){
+            return angleDelta - MAX_HEADING_CHANGE;
+        }else{
+            return 0;
         }
-
-        int intSpeed = speed1;
-
-        if (maxAngle[intSpeed] < angleDelta) {
-            maxAngle[intSpeed] = angleDelta;
-            std::cout << '\n';
-            for (int var = 0; var < 50; ++var) {
-                std::cout << var << " " << maxAngle[var] << '\n';
-            }
-
-            std::cout <<intSpeed <<" heading:" << heading1 << " speed:" <<  speed<<" relativePos:"<< relativePos << '\n';
-            std::cout <<" pos1:" << pos1 << " pos2:" <<  pos2<<'\n';
-            std::cout << " distance:" <<  distance<<'\n';
-        }
-    }
-}
-
-
-double MDModule::HeadingPlausibilityCheck_2(Coord heading1, Coord heading2,
-        double speed,  double deltaTime) {
-    if (deltaTime < 1.1) {
-
-        double headingAngle1 = mdmLib.calculateHeadingAngle(heading1);
-        double headingAngle2 = mdmLib.calculateHeadingAngle(heading2);
-        double angleDelta = fabs(headingAngle1 - headingAngle2);
-
-        if(angleDelta > 180){
-            angleDelta = 360 - angleDelta;
-        }
-
-        if (maxAngleInit == false) {
-            for (int var = 0; var < 50; ++var) {
-                maxAngle[var] = 0;
-            }
-            maxAngleInit = true;
-        }
-
-        int intSpeed = speed;
-
-        if (maxAngle[intSpeed] < angleDelta) {
-            maxAngle[intSpeed] = angleDelta;
-            std::cout << '\n';
-            for (int var = 0; var < 50; ++var) {
-                std::cout << var << " " << maxAngle[var] << '\n';
-            }
-            std::cout <<intSpeed <<" heading1:" << heading1 << " heading2:" <<  heading2 << '\n';
-        }
+    }else{
+        return 0;
     }
 }
 
 std::map<std::string, double> MDModule::CheckBSM(NodeTable detectedNodes,
         int senderId) {
+
     std::map<std::string, double> result;
 
     NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
@@ -301,16 +255,12 @@ std::map<std::string, double> MDModule::CheckBSM(NodeTable detectedNodes,
         result["BeaconFrequency"] = BeaconFrequencyCheck(
                 senderNode.getArrivalTime(0), senderNode.getArrivalTime(1));
 
-//        HeadingPlausibilityCheck(senderNode.getSenderHeading(1),
-//                senderNode.getSenderSpeed(0), senderNode.getSenderPos(1),
-//                senderNode.getSenderPos(0),
-//                mdmLib.calculateDeltaTime(senderNode.getBSM(0),
-//                        senderNode.getBSM(1)), senderNode.getBSM(0).getSenderSpeed());
 
-//        HeadingPlausibilityCheck_2(senderNode.getSenderHeading(1),
-//                senderNode.getSenderHeading(0), senderNode.getSenderSpeed(1),
-//                mdmLib.calculateDeltaTime(senderNode.getBSM(0),
-//                        senderNode.getBSM(1)));
+        result["PositionHeadingConsistancy"] = PositionHeadingConsistancyCheck(senderNode.getSenderHeading(0),
+                senderNode.getSenderPos(0),                senderNode.getSenderPos(1),
+                mdmLib.calculateDeltaTime(senderNode.getBSM(0),
+                        senderNode.getBSM(1)));
+
 
     } else {
         result["SuddenAppearence"] = SuddenAppearenceCheck(myPosition,

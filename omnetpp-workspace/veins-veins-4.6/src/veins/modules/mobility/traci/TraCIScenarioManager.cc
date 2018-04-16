@@ -964,4 +964,3 @@ void TraCIScenarioManager::processSubcriptionResult(TraCIBuffer& buf) {
 		error("Received unhandled subscription result");
 	}
 }
-

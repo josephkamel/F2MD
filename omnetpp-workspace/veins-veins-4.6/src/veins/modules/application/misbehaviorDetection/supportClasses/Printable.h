@@ -36,6 +36,7 @@ private:
     double flagsBeaconFrequency_1 = 0;
     double flagsIntersection_1 = 0;
     double flagsSuddenAppearence_1 = 0;
+    double flagsPositionHeadingConsistancy_1 = 0;
 
     double flagsRangePlausibility_2 = 0;
     double flagsPositionPlausibility_2 = 0;
@@ -46,6 +47,7 @@ private:
     double flagsBeaconFrequency_2 = 0;
     double flagsIntersection_2 = 0;
     double flagsSuddenAppearence_2 = 0;
+    double flagsPositionHeadingConsistancy_2 = 0;
 
     double cumulFlags_1 = 0;
     double cumulFlags_2 = 0;

@@ -22,7 +22,7 @@ using namespace Veins;
 
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
-
+#include "veins/modules/mobility/traci/TraCIColor.h"
 
 #include "supportClasses/GeneralLib.h"
 #include "mdAuthority/MDAuthority.h"

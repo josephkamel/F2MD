@@ -10,9 +10,10 @@
 
 #include "GaussianRandom.h"
 
-GaussianRandom::GaussianRandom(double confidenceRadius, Coord curSpeedConfidence) {
-    this->confidenceRadius = confidenceRadius;
+GaussianRandom::GaussianRandom(double curPosConfidence, Coord curSpeedConfidence, Coord curHeadingConfidence) {
+    this->curPosConfidence = curPosConfidence;
     this->curSpeedConfidence = curSpeedConfidence;
+    this->curHeadingConfidence = curHeadingConfidence;
 }
 
 double GaussianRandom::getRand(double mean, double stddev) {
@@ -25,15 +26,15 @@ double GaussianRandom::getRand(double mean, double stddev) {
 
 Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
-    double r =  getRand(0, confidenceRadius/3);
+    double r =  getRand(0, curPosConfidence/3);
     double theta = ((double) rand() / RAND_MAX) * 2 * PI;
 
-//    if(r>confidenceRadius ){
-//        r = confidenceRadius;
-//    }
-//    if(r<-confidenceRadius){
-//        r = -confidenceRadius;
-//    }
+    if(r>curPosConfidence ){
+        r = curPosConfidence - 0.0001;
+    }
+    if(r<-curPosConfidence){
+        r = -curPosConfidence + 0.0001;
+    }
 
     double deltaX = r * cos(theta);
     double deltaY = r * sin(theta);
@@ -77,6 +78,24 @@ Coord GaussianRandom::OffsetSpeed(Coord curSpeed) {
 //    std::cout<< "deltaVy:" << deltaVy  << '\n';
 
     return Coord(curSpeed.x + deltaVx, curSpeed.y + deltaVy, 0);
+
+}
+
+Coord GaussianRandom::OffsetHeading(Coord curHeading) {
+
+    MDMLib mdmLib = MDMLib();
+
+    double headingAngle = mdmLib.calculateHeadingAngle(curHeading);
+
+    double angle =  getRand(0, curHeadingConfidence.x/3);
+
+    headingAngle = headingAngle + angle;
+
+    double x = cos(headingAngle*PI/180);
+    double y = sin(headingAngle*PI/180);
+
+
+    return Coord(x,-y,curHeading.z);
 
 }
 

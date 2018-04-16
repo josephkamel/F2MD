@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="maxs" key="selection"/>
+		<item value="getAng" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="getang"/>
+			<item value="getan"/>
+			<item value="Move"/>
+			<item value="orient"/>
+			<item value="ori"/>
+			<item value="angle"/>
+			<item value="get"/>
+			<item value="TraCIMobility"/>
+			<item value="getAngleRad"/>
+			<item value="PositionHeadingConsistancy"/>
+			<item value="positi"/>
+			<item value="head"/>
 			<item value="maxs"/>
 			<item value="positionPl"/>
 			<item value="PositionPlausibilityCheck"/>
-			<item value="size"/>
-			<item value="positionP"/>
-			<item value="positionpl"/>
-			<item value="position"/>
-			<item value="positionPlpositionposition"/>
-			<item value="positionPlposition"/>
-			<item value="positi"/>
-			<item value="faultyposi"/>
-			<item value="faulty"/>
-			<item value="NodeTable"/>
-			<item value="detectedNodes"/>
-			<item value="NodeHistory"/>
 		</list>
 		<list key="replacehistory">
 			<item value="9"/>
@@ -46,7 +46,7 @@
 		<item value="322" key="DIALOG_WIDTH"/>
 		<item value="1|Open Sans|9.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="424" key="DIALOG_HEIGHT"/>
-		<item value="1180" key="DIALOG_X_ORIGIN"/>
-		<item value="285" key="DIALOG_Y_ORIGIN"/>
+		<item value="1482" key="DIALOG_X_ORIGIN"/>
+		<item value="579" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

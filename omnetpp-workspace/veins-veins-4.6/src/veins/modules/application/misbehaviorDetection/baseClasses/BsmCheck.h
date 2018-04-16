@@ -40,6 +40,7 @@ class BsmCheck {
         double suddenAppearence;
         double beaconFrequency;
         double positionPlausibility;
+        double positionHeadingConsistancy;
 
         bool reported;
 
@@ -55,6 +56,7 @@ class BsmCheck {
         InterTest getIntersection();
         double getSuddenAppearence();
         double getBeaconFrequency();
+        double getPositionHeadingConsistancy();
 
         bool getReported();
 
@@ -67,9 +69,9 @@ class BsmCheck {
         void setIntersection(InterTest);
         void setSuddenAppearence(double);
         void setBeaconFrequency(double);
+        void setPositionHeadingConsistancy(double);
 
         void setReported(bool);
-
 
     };
 

@@ -1,12 +1,12 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
-* @version 1.0
-*
-* SCA (Secure Cooperative Autonomous systems)
-* Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
-* All rights reserved.
-*******************************************************************************/
+ * @author  Joseph Kamel
+ * @date    11/04/2014
+ * @version 1.0
+ *
+ * SCA (Secure Cooperative Autonomous systems)
+ * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+ * All rights reserved.
+ *******************************************************************************/
 
 #ifndef __VEINS_MDModuleV2_H_
 #define __VEINS_MDModuleV2_H_
@@ -23,7 +23,6 @@
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
-
 
 #include "mdAuthority/MBReport.h"
 #include "mdAuthority/MDAuthority.h"
@@ -42,18 +41,24 @@ private:
     double RangePlausibilityCheck(Coord, Coord, Coord, Coord);
     double PositionPlausibilityCheck(Coord, Coord, double, double);
     double SpeedPlausibilityCheck(double, double);
-    double PositionConsistancyCheck(Coord curPosition, Coord curPositionConfidence,
-            Coord oldPosition, Coord oldPositionConfidence, double time);
+    double PositionConsistancyCheck(Coord curPosition,
+            Coord curPositionConfidence, Coord oldPosition,
+            Coord oldPositionConfidence, double time);
     double SpeedConsistancyCheck(double, double, double, double, double);
-    double IntersectionCheck(Coord, Coord,Coord,Coord);
-    InterTest MultipleIntersectionCheck(NodeTable detectedNodes, BasicSafetyMessage bsm);
+    double IntersectionCheck(Coord, Coord, Coord, Coord);
+    InterTest MultipleIntersectionCheck(NodeTable detectedNodes,
+            BasicSafetyMessage bsm);
 
     double PositionSpeedConsistancyCheck(Coord curPosition,
             Coord curPositionConfidence, Coord oldPosition,
-            Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
-            double oldspeed, double oldSpeedConfidence, double time);
+            Coord oldPositionConfidence, double curSpeed,
+            double curSpeedConfidence, double oldspeed,
+            double oldSpeedConfidence, double time);
 
-
+    double PositionHeadingConsistancyCheck(Coord curHeading,
+            Coord curHeadingConfidence, Coord oldPosition,
+            Coord oldPositionConfidence, Coord curPositionConfidence,
+            Coord curPosition, double deltaTime);
 
     double BeaconFrequencyCheck(double, double);
     double SuddenAppearenceCheck(Coord, Coord, Coord, Coord);
@@ -64,17 +69,15 @@ private:
     BsmCheck CheckNodeForReport(BasicSafetyMessage bsm, BsmCheck bsmCheck,
             NodeTable detectedNodes, double mbType);
 
-
-
     void SendReport(MBReport mbReport);
-
 
 public:
     MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
     void CheckNodesHistoryForReport(NodeTable*);
 
-    void saveLine(std::string path, std::string serial, double density, double deltaT);
+    void saveLine(std::string path, std::string serial, double density,
+            double deltaT);
 };
 
 #endif

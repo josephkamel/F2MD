@@ -1,12 +1,12 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
-* @version 1.0
-*
-* SCA (Secure Cooperative Autonomous systems)
-* Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
-* All rights reserved.
-*******************************************************************************/
+ * @author  Joseph Kamel
+ * @date    11/04/2014
+ * @version 1.0
+ *
+ * SCA (Secure Cooperative Autonomous systems)
+ * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+ * All rights reserved.
+ *******************************************************************************/
 
 #include "MDMLib.h"
 
@@ -26,10 +26,23 @@ double MDMLib::calculateDeltaTime(BasicSafetyMessage bsm1,
     return fabs(bsm1.getArrivalTime().dbl() - bsm2.getArrivalTime().dbl());
 }
 
+double MDMLib::calculatePolynom(long double coof[], const int coofNum,
+        double x) {
+    double y = 0;
+    for (int var = 0; var < coofNum; ++var) {
+        y = y + coof[var] * pow(x, var);
+    }
+    return y;
+}
+
 double MDMLib::calculateCircleSegment(double radius, double intDistance) {
     double area = 0;
 
-    if (radius == 0) {
+    if (radius <= 0) {
+        return 0;
+    }
+
+    if (intDistance <= 0) {
         return 0;
     }
 
@@ -95,15 +108,20 @@ double MDMLib::calculateCircleCircleIntersection(double r0, double r1,
 }
 
 double MDMLib::calculateHeadingAngle(Coord heading) {
-    double curHeading = atan(heading.y / heading.x) * 180 / PI;
-    if (heading.x < 0 && heading.y > 0) {
-        curHeading = curHeading + 180;
-    } else if (heading.x < 0 && heading.y < 0) {
-        curHeading = curHeading + 180;
-    } else if (heading.x > 0 && heading.y < 0) {
-        curHeading = curHeading + 360;
+    double x2 = 1;
+    double y2 = 0;
+
+    double dot = heading.x * x2 + heading.y * y2; // dot product between [x1, y1] and [x2, y2]
+    double det = heading.x * y2 - heading.y * x2;      // determinant
+    double angle = atan2(det, dot) * 180 / PI; // atan2(y, x) or atan2(sin, cos);
+
+    if (heading.x >= 0 && heading.y > 0) {
+        angle = 360 + angle;
+    } else if (heading.x <0 && heading.y >= 0) {
+        angle = 360 + angle;
     }
-    return curHeading;
+
+    return angle;
 }
 
 double MDMLib::CircleCircleFactor(double d, double r1, double r2,

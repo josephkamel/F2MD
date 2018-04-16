@@ -187,7 +187,7 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
         //joseph
         if(myMdType != 2){
-            GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence);
+            GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence, curHeadingConfidence);
 
             Coord forgedPos = gaussian.OffsetPosition(curPosition);
             bsm->setSenderPos(forgedPos);
@@ -197,14 +197,15 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
             bsm->setSenderSpeed(forgedSpeed);
             bsm->setSenderSpeedConfidence(curSpeedConfidence);
 
-            bsm->setSenderHeading(curHeading);
+            Coord forgedHeading = gaussian.OffsetHeading(curHeading);
+            bsm->setSenderHeading(forgedHeading);
             bsm->setSenderHeadingConfidence(curHeadingConfidence);
 
             bsm->setSenderWidth(myWidth);
             bsm->setSenderLength(myLength);
         }else if(myMdType == 2){
             if(attackBsm.getSenderAddress() == 0){
-                GaussianRandom gaussian = GaussianRandom(100.0, Coord(10,10,0));
+                GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence, curHeadingConfidence);
 
                 Coord forgedPos = gaussian.OffsetPosition(curPosition);
                 bsm->setSenderPos(forgedPos);
@@ -214,7 +215,8 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
                 bsm->setSenderSpeed(forgedSpeed);
                 bsm->setSenderSpeedConfidence(curSpeedConfidence);
 
-                bsm->setSenderHeading(curHeading);
+                Coord forgedHeading = gaussian.OffsetHeading(curHeading);
+                bsm->setSenderHeading(forgedHeading);
                 bsm->setSenderHeadingConfidence(curHeadingConfidence);
 
                 bsm->setSenderWidth(myWidth);

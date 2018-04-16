@@ -1,12 +1,12 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
-* @version 1.0
-*
-* SCA (Secure Cooperative Autonomous systems)
-* Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
-* All rights reserved.
-*******************************************************************************/
+ * @author  Joseph Kamel
+ * @date    11/04/2014
+ * @version 1.0
+ *
+ * SCA (Secure Cooperative Autonomous systems)
+ * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+ * All rights reserved.
+ *******************************************************************************/
 
 #include "MDModuleV2.h"
 
@@ -69,6 +69,7 @@ double MDModuleV2::PositionConsistancyCheck(Coord curPosition,
 double MDModuleV2::SpeedConsistancyCheck(double curSpeed,
         double curSpeedConfidence, double oldspeed, double oldSpeedConfidence,
         double time) {
+
     double speedDelta = curSpeed - oldspeed;
     double factor = 1;
     if (speedDelta > 0) {
@@ -332,6 +333,90 @@ double MDModuleV2::BeaconFrequencyCheck(double timeNew, double timeOld) {
     }
 }
 
+double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
+        Coord curHeadingConfidence, Coord oldPosition,
+        Coord oldPositionConfidence, Coord curPosition,
+        Coord curPositionConfidence, double deltaTime) {
+    if (deltaTime < 1.1) {
+        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+        if (distance < 0.1) {
+            return 1;
+        }
+
+        double curHeadingAngle = mdmLib.calculateHeadingAngle(curHeading);
+
+        Coord relativePos = Coord(curPosition.x - oldPosition.x,
+                curPosition.y - oldPosition.y, curPosition.z - oldPosition.z);
+        double positionAngle = mdmLib.calculateHeadingAngle(relativePos);
+        double angleDelta = fabs(curHeadingAngle - positionAngle);
+        if (angleDelta > 180) {
+            angleDelta = 360 - angleDelta;
+        }
+
+        double angleLow = angleDelta - curHeadingConfidence.x;
+        if (angleLow < 0) {
+            angleLow = 0;
+        }
+
+        double angleHigh = angleDelta + curHeadingConfidence.x;
+        if (angleHigh > 180) {
+            angleHigh = 180;
+        }
+
+        double xLow = distance * cos(angleLow *PI/180);
+
+        double curFactorLow = mdmLib.calculateCircleSegment(
+                curPositionConfidence.x, curPositionConfidence.x + xLow)
+                / (PI * curPositionConfidence.x * curPositionConfidence.x);
+        double oldFactorLow = 1
+                - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
+                        oldPositionConfidence.x - xLow)
+                        / (PI * oldPositionConfidence.x
+                                * oldPositionConfidence.x);
+
+        double xHigh = distance * cos(angleHigh*PI/180);
+
+        double curFactorHigh = mdmLib.calculateCircleSegment(
+                curPositionConfidence.x, curPositionConfidence.x + xHigh)
+                / (PI * curPositionConfidence.x * curPositionConfidence.x);
+        double oldFactorHigh = 1
+                - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
+                        oldPositionConfidence.x - xHigh)
+                        / (PI * oldPositionConfidence.x
+                                * oldPositionConfidence.x);
+
+        double factor = (curFactorLow + oldFactorLow + curFactorHigh
+                + oldFactorHigh) / 4;
+
+
+//    if(factor<=0.001){
+//
+//        std::cout<<"relativePos: "<<relativePos<<'\n';
+//
+//        std::cout<<"curFactorLow: "<<curFactorLow<<'\n';
+//        std::cout<<"oldFactorLow: "<<oldFactorLow<<'\n';
+//        std::cout<<"positionAngle: "<<positionAngle<<'\n';
+//        std::cout<<"curHeadingAngle: "<<curHeadingAngle<<'\n';
+//        std::cout<<"angleDelta: "<<angleDelta<<'\n';
+//        std::cout<<"distance: "<<distance<<'\n';
+//        std::cout<<"distance: "<<distance<<'\n';
+//        std::cout<<"xLow: "<<xLow<<'\n';
+//        if(factor == 0){
+//            std::cout<<"ZERO: "<<factor<<'\n';
+//        }else{
+//            std::cout<<"NONZ: "<<factor<<'\n';
+//        }
+//    }
+
+
+
+
+        return factor;
+    } else {
+        return 1;
+    }
+}
+
 BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     BsmCheck bsmCheck = BsmCheck();
@@ -385,6 +470,15 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
         bsmCheck.setBeaconFrequency(
                 BeaconFrequencyCheck(bsm.getArrivalTime().dbl(),
                         senderNode.getLatestBSM().getArrivalTime().dbl()));
+
+        bsmCheck.setPositionHeadingConsistancy(
+                PositionHeadingConsistancyCheck(bsm.getSenderHeading(),
+                        bsm.getSenderHeadingConfidence(),
+                        senderNode.getLatestBSM().getSenderPos(),
+                        senderNode.getLatestBSM().getSenderPosConfidence(),
+                        bsm.getSenderPos(), bsm.getSenderPosConfidence(),
+                        mdmLib.calculateDeltaTime(bsm,
+                                senderNode.getLatestBSM())));
 
     } else {
         bsmCheck.setSuddenAppearence(
@@ -448,6 +542,12 @@ void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
                 << senderId << '\n';
     }
 
+    if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
+        std::cout << "^^^^^^^^^^^V2 " << "PHC FAILED => "
+                << bsmCheck.getPositionHeadingConsistancy() << " A:" << myId
+                << " B:" << senderId << '\n';
+    }
+
     InterTest inter = bsmCheck.getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
         if (inter.getInterValue(var) < 0.5) {
@@ -472,20 +572,21 @@ void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
         BasicSafetyMessage bsm = nodeHist.getBSM(0);
         double mbType = bsm.getSenderMbType();
 
-        if(mbType!=0){
+        if (mbType != 0) {
 //            std::cout << "OK " << myId << " " << senderId << " " << mbType << '\n';
 //            std::cout << bsmCheck.getPositionSpeedConsistancy() << '\n';
 
             if (bsmCheck.getReported() == false) {
-                if (simTime().dbl() - bsm.getArrivalTime().dbl() > DELTA_REPORT_TIME) {
+                if (simTime().dbl()
+                        - bsm.getArrivalTime().dbl() > DELTA_REPORT_TIME) {
 
                     bool checkFailed = false;
                     MBReport mbReport;
 
                     if (bsmCheck.getRangePlausibility() < 0.5) {
                         std::cout << "##########V2 " << "ART FAILED => "
-                                << bsmCheck.getRangePlausibility() << " A:" << myId
-                                << " B:" << senderId << '\n';
+                                << bsmCheck.getRangePlausibility() << " A:"
+                                << myId << " B:" << senderId << '\n';
                         checkFailed = true;
                         prntLong.incFlags("RangePlausibility", mbType);
                         prntTemp.incFlags("RangePlausibility", mbType);
@@ -500,8 +601,8 @@ void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
                     }
                     if (bsmCheck.getSpeedConsistancy() < 0.5) {
                         std::cout << "##########V2 " << "MGTS FAILED => "
-                                << bsmCheck.getSpeedConsistancy() << " A:" << myId
-                                << " B:" << senderId << '\n';
+                                << bsmCheck.getSpeedConsistancy() << " A:"
+                                << myId << " B:" << senderId << '\n';
                         checkFailed = true;
                         prntLong.incFlags("SpeedConsistancy", mbType);
                         prntTemp.incFlags("SpeedConsistancy", mbType);
@@ -509,8 +610,8 @@ void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
 
                     if (bsmCheck.getPositionSpeedConsistancy() < 0.5) {
                         std::cout << "##########V2 " << "MGTSV FAILED => "
-                                << bsmCheck.getPositionSpeedConsistancy() << " A:"
-                                << myId << " B:" << senderId << '\n';
+                                << bsmCheck.getPositionSpeedConsistancy()
+                                << " A:" << myId << " B:" << senderId << '\n';
                         checkFailed = true;
                         prntLong.incFlags("PositionSpeedConsistancy", mbType);
                         prntTemp.incFlags("PositionSpeedConsistancy", mbType);
@@ -518,8 +619,8 @@ void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
 
                     if (bsmCheck.getSpeedPlausibility() < 0.5) {
                         std::cout << "##########V2 " << "MAXS FAILED => "
-                                << bsmCheck.getSpeedPlausibility() << " A:" << myId
-                                << " B:" << senderId << '\n';
+                                << bsmCheck.getSpeedPlausibility() << " A:"
+                                << myId << " B:" << senderId << '\n';
                         checkFailed = true;
                         prntLong.incFlags("SpeedPlausibility", mbType);
                         prntTemp.incFlags("SpeedPlausibility", mbType);
@@ -535,11 +636,20 @@ void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
 
                     if (bsmCheck.getSuddenAppearence() < 0.5) {
                         std::cout << "##########V2 " << "SAW FAILED => "
-                                << bsmCheck.getSuddenAppearence() << " A:" << myId
-                                << " B:" << senderId << '\n';
+                                << bsmCheck.getSuddenAppearence() << " A:"
+                                << myId << " B:" << senderId << '\n';
 
                         prntLong.incFlags("SuddenAppearence", mbType);
                         prntTemp.incFlags("SuddenAppearence", mbType);
+                    }
+
+                    if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
+                        std::cout << "##########V2 " << "PHC FAILED => "
+                                << bsmCheck.getPositionHeadingConsistancy()
+                                << " A:" << myId << " B:" << senderId << '\n';
+
+                        prntLong.incFlags("PositionHeadingConsistancy", mbType);
+                        prntTemp.incFlags("PositionHeadingConsistancy", mbType);
                     }
 
                     InterTest inter = bsmCheck.getIntersection();
@@ -706,6 +816,19 @@ BsmCheck MDModuleV2::CheckNodeForReport(BasicSafetyMessage bsm,
         prntTemp.incFlags("SuddenAppearence", mbType);
     }
 
+    if (AggregateFactors(bsmCheck.getPositionHeadingConsistancy(),
+            bsmCheck0.getPositionHeadingConsistancy(),
+            bsmCheck1.getPositionHeadingConsistancy())) {
+        std::cout << "$$$$$$$$$$V2 " << "PositionHeadingConsistancy FAILED => "
+                << bsmCheck.getPositionHeadingConsistancy() << "|"
+                << bsmCheck0.getPositionHeadingConsistancy() << "|"
+                << bsmCheck1.getPositionHeadingConsistancy() << " A:" << myId
+                << " B:" << senderId << '\n';
+        checkFailed = true;
+        prntLong.incFlags("PositionHeadingConsistancy", mbType);
+        prntTemp.incFlags("PositionHeadingConsistancy", mbType);
+    }
+
     InterTest inter = bsmCheck.getIntersection();
     InterTest inter0 = bsmCheck.getIntersection();
     InterTest inter1 = bsmCheck.getIntersection();
@@ -761,9 +884,9 @@ void MDModuleV2::SendReport(MBReport mbReport) {
 
 bool MDModuleV2::AggregateFactors(double curFactor, double factor0,
         double factor1) {
-    if (curFactor < 0.1) {
+    if (curFactor <= 0) {
         return true;
-    } else if (curFactor > 0.9) {
+    } else if (curFactor >= 1) {
         return false;
     } else {
         if ((curFactor + factor0 + factor1) / 3 < 0.5) {

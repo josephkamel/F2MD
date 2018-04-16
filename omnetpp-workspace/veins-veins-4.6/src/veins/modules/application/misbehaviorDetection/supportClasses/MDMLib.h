@@ -17,8 +17,8 @@
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #define MAX_CONFIDENCE_RANGE 10 //3
-#define MAX_PLAUSIBLE_RANGE 416 // 415
-#define CAR_LENGTH 3.1 // 3.292091
+#define MAX_PLAUSIBLE_RANGE 417 // 415
+#define CAR_LENGTH 1.8 // 3.292091
 
 #define MIN_PSS -5.1 // -5.0377 position speed shift
 #define MAX_PSS 5.8 // 5.73402
@@ -38,6 +38,8 @@
 
 #define MAX_NON_ROUTE_SPEED 6 //3
 
+#define MAX_HEADING_CHANGE 90 //90
+
 #define DELTA_BSM_TIME 5 // 10 seconds till irrelevent
 
 #define DELTA_REPORT_TIME 5 // 10 seconds till report
@@ -53,6 +55,8 @@ private:
 public:
     double calculateDistance(Coord, Coord);
     double calculateSpeed(Coord Speed);
+
+    double calculatePolynom(long double coof[],const int coofNum, double x);
     double calculateHeadingAngle(Coord heading);
     double calculateDeltaTime(BasicSafetyMessage bsm1, BasicSafetyMessage bsm2);
     double calculateCircleSegment(double radius, double intDistance);

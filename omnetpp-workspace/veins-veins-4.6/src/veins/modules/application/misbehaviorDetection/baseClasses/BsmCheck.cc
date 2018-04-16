@@ -20,6 +20,7 @@ BsmCheck::BsmCheck() {
      suddenAppearence = 1;
      beaconFrequency = 1;
      positionPlausibility = 1;
+     positionHeadingConsistancy = 1;
 
      reported = false;
 }
@@ -60,6 +61,10 @@ double BsmCheck::getPositionPlausibility() {
     return positionPlausibility;
 }
 
+double BsmCheck::getPositionHeadingConsistancy() {
+    return positionHeadingConsistancy;
+}
+
 bool BsmCheck::getReported() {
     return reported;
 }
@@ -98,6 +103,10 @@ void BsmCheck::setPositionPlausibility(double positionPlausibility) {
 
 void BsmCheck::setPositionSpeedConsistancy(double positionSpeedConsistancy) {
     this->positionSpeedConsistancy = positionSpeedConsistancy;
+}
+
+void BsmCheck::setPositionHeadingConsistancy(double positionHeadingConsistancy) {
+    this->positionHeadingConsistancy = positionHeadingConsistancy;
 }
 
 void BsmCheck::setReported(bool reported) {

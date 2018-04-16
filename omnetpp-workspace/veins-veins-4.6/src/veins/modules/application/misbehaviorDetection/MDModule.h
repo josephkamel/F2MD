@@ -49,12 +49,9 @@ private:
             Coord head2);
     double SuddenAppearenceCheck(Coord, Coord);
     double BeaconFrequencyCheck(double, double);
-
     double PositionPlausibilityCheck(Coord, double);
-    double HeadingPlausibilityCheck(Coord heading1,double speed1, Coord pos1, Coord pos2, double deltaTime, Coord speed);
-
-    double HeadingPlausibilityCheck_2(Coord heading1, Coord heading2,
-            double speed,  double deltaTime);
+    double PositionHeadingConsistancyCheck(Coord curHeading,
+            Coord curPosition, Coord oldPosition, double deltaTime);
 
     void SendReport(MBReport mbReport);
 

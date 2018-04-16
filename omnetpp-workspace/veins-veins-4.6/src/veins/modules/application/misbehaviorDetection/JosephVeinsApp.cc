@@ -15,12 +15,14 @@ Define_Module(JosephVeinsApp);
 #define serialNumber "P0S0-test"
 #define savePath "/home/joseph/Projects/ConfidenceRange/mdmSave/"
 
-#define confPos 10
-#define confSpd 1
+#define confPos 1
+#define confSpd 0
 #define confHea 0
 
-#define FAULTY 1
-#define ATTACKERS 0
+#define FAULTY 0.99
+#define ATTACKERS 0.01
+
+#define SAVE_PERIOD 10 //60 seconds
 
 void JosephVeinsApp::initialize(int stage) {
 
@@ -38,10 +40,20 @@ void JosephVeinsApp::initialize(int stage) {
 
         mdAuthority.addNewNode(myId, myMdType, simTime().dbl());
 
+        std::string stringId = std::to_string(myId);
+
         if (myMdType == 1) {
             curPositionConfidence = Coord(confPos, confPos, 0);
             curSpeedConfidence = Coord(confSpd, confSpd, 0);
             curHeadingConfidence = Coord(confHea, confHea, 0);
+            TraCIColor color = TraCIColor(255,255,0,0);
+            traciVehicle->setColor(color);
+        }else if(myMdType == 2){
+            TraCIColor color = TraCIColor(255,0,0,0);
+            traciVehicle->setColor(color);
+        }else{
+            TraCIColor color = TraCIColor(0,255,0,0);
+            traciVehicle->setColor(color);
         }
 
     } else if (stage == 1) {
@@ -129,7 +141,7 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         mdm.reportMB(mdm.CheckBSM(detectedNodes, senderID), senderID,
                 bsm->getSenderMbType());
 
-        if ((simTime().dbl() - deltaT) > 1) {
+        if ((simTime().dbl() - deltaT) > SAVE_PERIOD) {
             deltaT = simTime().dbl();
             mdm.saveLine(savePath, serialNumber,
                     mobility->getManager()->getManagedHosts().size(), deltaT);
@@ -179,5 +191,4 @@ void JosephVeinsApp::handlePositionUpdate(cObject* obj) {
 
 //the vehicle has moved. Code that reacts to new positions goes here.
 //member variables such as currentPosition and currentSpeed are updated in the parent class
-
 }

@@ -22,6 +22,9 @@ Printable::Printable(const char* name) {
     flagsBeaconFrequency_1 = 0;
     flagsIntersection_1 = 0;
     flagsSuddenAppearence_1 = 0;
+    flagsSuddenAppearence_1 = 0;
+    flagsPositionHeadingConsistancy_1 = 0;
+
 
     flagsRangePlausibility_2 = 0;
     flagsPositionPlausibility_2 = 0;
@@ -32,6 +35,7 @@ Printable::Printable(const char* name) {
     flagsBeaconFrequency_2 = 0;
     flagsIntersection_2 = 0;
     flagsSuddenAppearence_2 = 0;
+    flagsPositionHeadingConsistancy_2 = 0;
 
     cumulFlags_1 = 0;
     cumulFlags_2 = 0;
@@ -80,6 +84,8 @@ void Printable::incFlags(std::string inString, double mbType) {
             flagsIntersection_1++;
         if (inString == "SuddenAppearence")
             flagsSuddenAppearence_1++;
+        if (inString == "PositionHeadingConsistancy")
+            flagsPositionHeadingConsistancy_1++;
     }
 
     if(mbType == 2){
@@ -101,6 +107,8 @@ void Printable::incFlags(std::string inString, double mbType) {
             flagsIntersection_2++;
         if (inString == "SuddenAppearence")
             flagsSuddenAppearence_2++;
+        if (inString == "PositionHeadingConsistancy")
+            flagsPositionHeadingConsistancy_2++;
     }
 
 
@@ -116,6 +124,7 @@ void Printable::resetAll() {
     flagsBeaconFrequency_1 = 0;
     flagsIntersection_1 = 0;
     flagsSuddenAppearence_1 = 0;
+    flagsPositionHeadingConsistancy_1 = 0;
 
     flagsRangePlausibility_2 = 0;
     flagsPositionPlausibility_2 = 0;
@@ -126,6 +135,7 @@ void Printable::resetAll() {
     flagsBeaconFrequency_2 = 0;
     flagsIntersection_2 = 0;
     flagsSuddenAppearence_2 = 0;
+    flagsPositionHeadingConsistancy_2 = 0;
 
     cumulFlags_1 = 0;
     allTests_1 = 0;
@@ -186,6 +196,9 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
     sprintf(data, "%f", flagsSuddenAppearence_1);
     strcat(line, data);
     strcat(line, " ");
+    sprintf(data, "%f", flagsPositionHeadingConsistancy_1);
+    strcat(line, data);
+    strcat(line, " ");
     sprintf(data, "%f", cumulFlags_1);
     strcat(line, data);
     strcat(line, " ");
@@ -219,6 +232,9 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
     sprintf(data, "%f", flagsSuddenAppearence_2);
     strcat(line, data);
     strcat(line, " ");
+    sprintf(data, "%f", flagsPositionHeadingConsistancy_2);
+    strcat(line, data);
+    strcat(line, " ");
     sprintf(data, "%f", cumulFlags_2);
     strcat(line, data);
     strcat(line, " ");
@@ -246,6 +262,9 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
     std::cout << "++++++++++ " << name << " ++++++++++"
             << " flagsPositionSpeedConsistancy_1:"
             << flagsPositionSpeedConsistancy_1 / allTests_1 * 100 << "%" << '\n';
+    std::cout << "++++++++++ " << name << " ++++++++++"
+            << " flagsPositionHeadingConsistancy_1:"
+            << flagsPositionHeadingConsistancy_1 / allTests_1 * 100 << "%" << '\n';
     std::cout << "++++++++++ " << name << " ++++++++++"
             << " flagsSpeedConsistancy_1:"
             << flagsSpeedConsistancy_1 / allTests_1 * 100 << "%" << '\n';

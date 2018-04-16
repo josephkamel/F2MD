@@ -26,15 +26,17 @@ using namespace omnetpp;
 class GaussianRandom {
     private:
 
-    double confidenceRadius;
+    double curPosConfidence;
     Coord curSpeedConfidence;
+    Coord curHeadingConfidence;
 
     double getRand(double mean, double stddev);
 
     public:
-        GaussianRandom(double confidenceRadius, Coord curSpeedConfidence);
+        GaussianRandom(double curPosConfidence, Coord curSpeedConfidence, Coord curHeadingConfidence);
         Coord OffsetPosition(Coord curPosition);
         Coord OffsetSpeed(Coord curSpeed);
+        Coord OffsetHeading(Coord curHeading);
 
     };
 
