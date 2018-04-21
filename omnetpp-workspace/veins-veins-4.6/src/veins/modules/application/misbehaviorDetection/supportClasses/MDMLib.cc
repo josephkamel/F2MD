@@ -227,6 +227,14 @@ double MDMLib::SegmentSegmentFactor(double d, double r1, double r2,
         }
     }
 
+    if(r1==0 && r1 == 0){
+        if(d>range){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
     double factor = (overlap1 + overlap2) / (2 * r1 + 2 * r2);
     return factor;
 }
@@ -473,11 +481,10 @@ double MDMLib::boundedGaussianSum(double x1, double x2, double sig) {
 }
 
 double MDMLib::intersectionFactor(double conf1, double conf2, double d,
-        double initRadius) {
-    double interDistance = 3.1;
+        double interDistance) {
 
-    double r1 = conf1 + interDistance * 0.5;
-    double r2 = conf2 + interDistance * 0.5;
+    double r1 = conf1 + interDistance;
+    double r2 = conf2 + interDistance;
 
     double s1 = 0;
     double e1 = 0;
@@ -544,22 +551,51 @@ double MDMLib::intersectionFactor(double conf1, double conf2, double d,
         factor2 = boundedGaussianSum(s2, e2, sig2);
     }
 
-    factor1 = (factor1) / ((e1 - s1) / (2 * r1));
-    factor2 = (factor2) / ((e2 - s2) / (2 * r2));
+//    factor1 = (factor1) / ((e1 - s1) / (2 * r1));
+//    factor2 = (factor2) / ((e2 - s2) / (2 * r2));
 
     double areaIntersection = calculateCircleCircleIntersection(r1, r2, d);
-
-    double nbrCirles1 = calculateCircles(r1 * 2, interDistance);
-    double nbrCirles2 = calculateCircles(r2 * 2, interDistance);
-    double circleInt1 = (areaIntersection / (PI * r1 * r1)) * nbrCirles1;
-    double circleInt2 = (areaIntersection / (PI * r2 * r2)) * nbrCirles2;
-    double intCircles = (circleInt1 + circleInt2) / 2;
 
     double areaFactor1 = areaIntersection / (PI * r1 * r1);
     double areaFactor2 = areaIntersection / (PI * r2 * r2);
 
-    double factor = factor1 * areaFactor1 * factor2 * areaFactor2
-            / (intCircles);
+    double areaFactor = areaIntersection / ((PI * r1 * r1)+(PI * r2 * r2)-areaIntersection);
+
+//    double nbrCirles1 = calculateCircles(r1 * 2, interDistance* 2);
+//    double nbrCirles2 = calculateCircles(r2 * 2, interDistance* 2);
+//
+//    double circleFactor1 = (PI*interDistance*interDistance)*nbrCirles1/(PI*r1*r1);
+//    double circleFactor2 = (PI*interDistance*interDistance)*nbrCirles2/(PI*r2*r2);
+//
+//    double circleFator = (circleFactor1+circleFactor2)/2;
+
+//    double circleInt1 = (areaIntersection / (PI * r1 * r1)) * nbrCirles1;
+//    double circleInt2 = (areaIntersection / (PI * r2 * r2)) * nbrCirles2;
+//    double intCircles = (circleInt1 + circleInt2) / 2;
+
+//    double factor = factor1 * areaFactor1 * factor2 * areaFactor2
+//            / (circleFator);
+
+//    double factor = (factor1 * areaFactor1 + factor2 * areaFactor2)/2;
+
+    double maxFactor = 1 -  ((interDistance*interDistance*PI) /(r1*r1*2));
+
+    //double factor = (factor1 * areaFactor1 * factor2 * areaFactor2);
+    double factor = areaFactor*factor1*factor2;
+
+//    if(factor >0.1){
+//        std::cout<<"factor:" << factor<<'\n';
+//        std::cout<<"factor1:" << factor1<<'\n';
+//        std::cout<<"factor2:" << factor2<<'\n';
+//        std::cout<<"areaFactor:" << areaFactor<<'\n';
+//        std::cout<<"areaFactor1:" << areaFactor1<<'\n';
+//        std::cout<<"areaFactor2:" << areaFactor2<<'\n';
+//        exit(0);
+//    }
+
+    if(factor>maxFactor){
+        factor = 1;
+    }
 
     return factor;
 }

@@ -35,6 +35,9 @@ public:
     void sendReportV2(MBReport report);
 
     void saveLine(std::string path, std::string serial,double time);
+
+    void resetAll();
+
 };
 
 #endif

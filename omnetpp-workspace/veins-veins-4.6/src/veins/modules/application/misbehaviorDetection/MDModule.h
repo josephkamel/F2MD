@@ -51,7 +51,7 @@ private:
     double BeaconFrequencyCheck(double, double);
     double PositionPlausibilityCheck(Coord, double);
     double PositionHeadingConsistancyCheck(Coord curHeading,
-            Coord curPosition, Coord oldPosition, double deltaTime);
+            Coord curPosition, Coord oldPosition, double deltaTime, double curSpeed);
 
     void SendReport(MBReport mbReport);
 
@@ -62,6 +62,9 @@ public:
     void reportMB(std::map<std::string, double> result, int senderId , double mbType);
 
     void saveLine(std::string path, std::string serial, double density, double deltaT) ;
+
+    void resetTempFlags();
+    void resetAllFlags();
 
 };
 

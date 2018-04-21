@@ -12,17 +12,20 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "P0S0-test"
+#define serialNumber "IRT-DEMO"
 #define savePath "/home/joseph/Projects/ConfidenceRange/mdmSave/"
 
-#define confPos 1
+#define confPos 5
 #define confSpd 0
 #define confHea 0
 
-#define FAULTY 0.99
-#define ATTACKERS 0.01
+#define FAULTY 0.95
+#define ATTACKERS 0.05
 
-#define SAVE_PERIOD 10 //60 seconds
+#define SAVE_PERIOD 1 //60 seconds
+
+#define START_SAVE 60 //60 seconds
+#define START_ATTACK 0 //60 seconds
 
 void JosephVeinsApp::initialize(int stage) {
 
@@ -36,8 +39,7 @@ void JosephVeinsApp::initialize(int stage) {
         myWidth = vehSize.x;
         myLength = vehSize.y;
 
-        myMdType = induceMisbehavior(FAULTY, ATTACKERS);
-
+        myMdType = induceMisbehaviorFixed(FAULTY, ATTACKERS);
         mdAuthority.addNewNode(myId, myMdType, simTime().dbl());
 
         std::string stringId = std::to_string(myId);
@@ -49,6 +51,9 @@ void JosephVeinsApp::initialize(int stage) {
             TraCIColor color = TraCIColor(255,255,0,0);
             traciVehicle->setColor(color);
         }else if(myMdType == 2){
+            curPositionConfidence = Coord(confPos, confPos, 0);
+            curSpeedConfidence = Coord(confSpd, confSpd, 0);
+            curHeadingConfidence = Coord(confHea, confHea, 0);
             TraCIColor color = TraCIColor(255,0,0,0);
             traciVehicle->setColor(color);
         }else{
@@ -67,7 +72,34 @@ void JosephVeinsApp::finish() {
     //statistics recording goes here
 }
 
-double JosephVeinsApp::induceMisbehavior(double faulty, double attackers) {
+
+static double totalFaulty = 0;
+static double totalAttacker = 0;
+double JosephVeinsApp::induceMisbehaviorFixed(double faulty, double attackers) {
+
+    if(simTime().dbl() < START_ATTACK){
+        return 1;
+    }
+
+    if((totalAttacker + totalFaulty) == 0){
+        totalFaulty++;
+        return 1;
+    }
+
+    double realFactor = totalAttacker / (totalFaulty+totalAttacker);
+    double theoFactor = attackers / (faulty+attackers);
+
+    if(theoFactor > realFactor){
+        totalAttacker++;
+        return 2;
+    }else{
+        totalFaulty++;
+        return 1;
+    }
+
+}
+
+double JosephVeinsApp::induceMisbehaviorProb(double faulty, double attackers) {
     double randVal = 0;
     double randInt = genLib.RandomInt(0, 1);
 
@@ -99,7 +131,7 @@ double JosephVeinsApp::induceMisbehavior(double faulty, double attackers) {
 }
 
 static double deltaT = 0;
-
+static bool init = false;
 void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
     int senderID = bsm->getSenderAddress();
     if (bsm->getSenderMbType() == 0) {
@@ -141,15 +173,29 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         mdm.reportMB(mdm.CheckBSM(detectedNodes, senderID), senderID,
                 bsm->getSenderMbType());
 
-        if ((simTime().dbl() - deltaT) > SAVE_PERIOD) {
-            deltaT = simTime().dbl();
-            mdm.saveLine(savePath, serialNumber,
-                    mobility->getManager()->getManagedHosts().size(), deltaT);
-            mdmV2.saveLine(savePath, serialNumber,
-                    mobility->getManager()->getManagedHosts().size(), deltaT);
 
-            mdAuthority.saveLine(savePath, serialNumber, deltaT);
-        }
+            if(!init){
+                mdm.resetAllFlags();
+                mdmV2.resetAllFlags();
+                //mdAuthority.resetAll();
+                init = true;
+            }
+
+            if ((simTime().dbl() - deltaT) > SAVE_PERIOD) {
+                deltaT = simTime().dbl();
+
+                if(simTime().dbl() > START_SAVE){
+                    mdm.saveLine(savePath, serialNumber,
+                            mobility->getManager()->getManagedHosts().size(), deltaT);
+                    mdmV2.saveLine(savePath, serialNumber,
+                            mobility->getManager()->getManagedHosts().size(), deltaT);
+                    mdAuthority.saveLine(savePath, serialNumber, deltaT);
+                }
+                mdm.resetTempFlags();
+                mdmV2.resetTempFlags();
+            }
+
+
 
         if (myMdType == 2) {
             if (detectedNodes.getNodesNum() > 0) {

@@ -65,6 +65,9 @@ public:
     void getPrintable(char* outStr, double time);
     void writeFile(std::string path, char* printStr, bool init);
 
+    void resetAll();
+
+
 
 };
 

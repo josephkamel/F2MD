@@ -49,7 +49,7 @@ double MDModule::RangePlausibilityCheck(Coord senderPosition,
     if (distance < MAX_PLAUSIBLE_RANGE) {
         return 0;
     } else {
-        return distance;
+        return 1; //distance
     }
 }
 
@@ -60,7 +60,7 @@ double MDModule::PositionConsistancyCheck(Coord curPosition, Coord oldPosition,
     if (distance < MAX_CONSISTANT_DISTANCE * time) {
         return 0;
     } else {
-        return distance;
+        return 1; //distance
     }
 }
 
@@ -72,13 +72,13 @@ double MDModule::SpeedConsistancyCheck(double curSpeed, double oldspeed,
         if (speedDelta < MAX_PLAUSIBLE_ACCEL * time) {
             return 0;
         } else {
-            return speedDelta;
+            return 1; //distance
         }
     } else {
         if (speedDelta < MAX_PLAUSIBLE_DECEL * time) {
             return 0;
         } else {
-            return speedDelta;
+            return 1; //distance
         }
     }
 
@@ -110,10 +110,10 @@ double MDModule::PositionSpeedConsistancyCheck(Coord curPosition,
 //        std::cout<<"maxDeltaMin:"<<maxDeltaMin<<'\n';
 
         if (deltaMax < MIN_PSS) {
-            return deltaMax - MIN_PSS;
+            return 1; // deltaMax - MIN_PSS
         } else {
             if (deltaMin > MAX_PSS) {
-                return deltaMin - MAX_PSS;
+                return 1; // deltaMin - MAX_PSS
             } else {
                 return 0;
             }
@@ -128,7 +128,7 @@ double MDModule::SpeedPlausibilityCheck(double speed) {
     if (fabs(speed) < MAX_PLAUSIBLE_SPEED) {
         return 0;
     } else {
-        return fabs(speed);
+        return 1; // fabs(speed)
     }
 }
 
@@ -145,13 +145,7 @@ double MDModule::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
             heading2, nodeSize1, nodeSize2);
 
     if (inter > 0) {
-
-//        std::cout << " nodePosition1:" << nodePosition1 << " heading1:"
-//                << heading1 <<  " nodeSize1:"<< nodeSize1<< " nodePosition2:" << nodePosition2
-//                << " heading2:" << heading2 <<  " nodeSize2:"<< nodeSize2<< '\n';
-//        std::cout << " inter:" << inter << " distance:" << distance << '\n';
-
-        return inter;
+        return 1; //inter
     } else {
         return 0;
     }
@@ -163,7 +157,7 @@ double MDModule::SuddenAppearenceCheck(Coord senderPosition,
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
     if (distance < SUDDEN_APPEARENCE_RANGE) {
-        return distance;
+        return 1; //distance
     } else {
         return 0;
     }
@@ -181,7 +175,7 @@ double MDModule::PositionPlausibilityCheck(Coord senderPosition,
                 + obstacles->calculateInsersion(senderPosition, var, var);
     }
     if (Intersection >= 5*2) {
-        return Intersection;
+        return 1; //Intersection
     } else {
         return 0;
     }
@@ -198,10 +192,14 @@ double MDModule::BeaconFrequencyCheck(double timeNew, double timeOld) {
 
 
 double MDModule::PositionHeadingConsistancyCheck(Coord curHeading,
-        Coord curPosition, Coord oldPosition, double deltaTime) {
+        Coord curPosition, Coord oldPosition, double deltaTime, double curSpeed) {
     if(deltaTime<1.1){
         double distance = mdmLib.calculateDistance(curPosition, oldPosition);
-        if(distance<0.1){
+        if(distance<1){
+            return 0;
+        }
+
+        if(curSpeed<1){
             return 0;
         }
 
@@ -215,7 +213,7 @@ double MDModule::PositionHeadingConsistancyCheck(Coord curHeading,
         }
 
         if(MAX_HEADING_CHANGE < angleDelta){
-            return angleDelta - MAX_HEADING_CHANGE;
+            return 1; //  angleDelta - MAX_HEADING_CHANGE
         }else{
             return 0;
         }
@@ -259,7 +257,7 @@ std::map<std::string, double> MDModule::CheckBSM(NodeTable detectedNodes,
         result["PositionHeadingConsistancy"] = PositionHeadingConsistancyCheck(senderNode.getSenderHeading(0),
                 senderNode.getSenderPos(0),                senderNode.getSenderPos(1),
                 mdmLib.calculateDeltaTime(senderNode.getBSM(0),
-                        senderNode.getBSM(1)));
+                        senderNode.getBSM(1)), senderNode.getSenderSpeed(0));
 
 
     } else {
@@ -273,7 +271,7 @@ std::map<std::string, double> MDModule::CheckBSM(NodeTable detectedNodes,
             senderNode.getSenderHeading(0));
 
     NodeHistory varNode;
-    int INTScore = 0;
+    double INTScore = 0;
     int INTNum = 1;
 
     char num_string[32];
@@ -290,8 +288,7 @@ std::map<std::string, double> MDModule::CheckBSM(NodeTable detectedNodes,
                         varNode.getSenderSize(0), varNode.getSenderHeading(0),
                         senderNode.getSenderPos(0), senderNode.getSenderSize(0),
                         senderNode.getSenderHeading(0));
-                if (INTScore < 1) {
-
+                if (INTScore > 0) {
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
                     strcat(INTCheck_string, num_string);
@@ -333,10 +330,11 @@ void MDModule::reportMB(std::map<std::string, double> result, int senderId,
                 && it->first.compare(0, 6, "INTNum") != 0) {
             if (it->second != 0) {
                 if (it->first.compare("SuddenAppearence") != 0) {
-                    std::cout << "########## " << it->first << " => " << it->second
-                            << " A:" << myId << " B:" << senderId << '\n';
+//                    std::cout << "########## " << it->first << " => " << it->second
+//                            << " A:" << myId << " B:" << senderId << '\n';
                     checkFailed = true;
                 }
+
                 prntLong.incFlags(it->first, mbType);
                 prntTemp.incFlags(it->first, mbType);
             }
@@ -354,9 +352,9 @@ void MDModule::reportMB(std::map<std::string, double> result, int senderId,
                     prntLong.incFlags("Intersection", mbType);
                     prntTemp.incFlags("Intersection", mbType);
 
-                    std::cout << "########## " << "Intersection " << " => "
-                            << it->second << " A:" << myId << " B:" << senderId
-                            << " C:" << result[INTId_string] << '\n';
+//                    std::cout << "########## " << "Intersection " << " => "
+//                            << it->second << " A:" << myId << " B:" << senderId
+//                            << " C:" << result[INTId_string] << '\n';
                 }
             }
         }
@@ -431,6 +429,13 @@ void MDModule::saveLine(std::string path, std::string serial, double density,
     if (init) {
         init = false;
     }
+}
 
+void MDModule::resetTempFlags(){
+    prntTemp.resetAll();
+}
+
+void MDModule::resetAllFlags(){
+    prntLong.resetAll();
     prntTemp.resetAll();
 }

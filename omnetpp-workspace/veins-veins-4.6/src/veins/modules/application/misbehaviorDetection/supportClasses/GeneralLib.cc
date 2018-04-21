@@ -45,13 +45,24 @@ Coord GeneralLib::TypeToSize(std::string type){
 
 double GeneralLib::RandomDouble(double fMin, double fMax)
 {
-    double f = (double)rand() / RAND_MAX;
-    return fMin + f * (fMax - fMin);
+    struct timespec tm;
+    clock_gettime(CLOCK_REALTIME, &tm);
+
+    random::mt19937 rng(tm.tv_nsec);
+    std::uniform_real_distribution<> one(fMin,fMax);
+
+    double f = one(rng);
+    return f;
 }
 
 int GeneralLib::RandomInt(int min, int max)
 {
-    int guess;
-    guess = (rand() % (max - min + 1)) + min;
+    struct timespec tm;
+    clock_gettime(CLOCK_REALTIME, &tm);
+
+    random::mt19937 rng(tm.tv_nsec);
+    std::uniform_int_distribution<> one(min,max);
+
+    int guess = one(rng);
     return guess;
 }

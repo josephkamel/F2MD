@@ -16,6 +16,17 @@ MDABase::MDABase(const char * name) {
     totalAttackerNum = 0;
     reportedFaultyNum = 0;
     reportedAttackerNum = 0;
+    faultyAverageReportDelay = 0;
+    attackerAverageReportDelay = 0;
+}
+
+void MDABase::resetAll(){
+    totalFaultyNum = 0;
+    totalAttackerNum = 0;
+    reportedFaultyNum = 0;
+    reportedAttackerNum = 0;
+    faultyAverageReportDelay = 0;
+    attackerAverageReportDelay = 0;
 }
 
 void MDABase::addTotalFaulty(int id, double time) {

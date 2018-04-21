@@ -18,7 +18,7 @@
 
 #define MAX_CONFIDENCE_RANGE 10 //3
 #define MAX_PLAUSIBLE_RANGE 417 // 415
-#define CAR_LENGTH 1.8 // 3.292091
+#define MIN_INT_DIST 0.9 // 3.292091
 
 #define MIN_PSS -5.1 // -5.0377 position speed shift
 #define MAX_PSS 5.8 // 5.73402
@@ -40,9 +40,20 @@
 
 #define MAX_HEADING_CHANGE 90 //90
 
-#define DELTA_BSM_TIME 5 // 10 seconds till irrelevent
+#define DELTA_BSM_TIME 5 // application
+#define DELTA_TRUST_TIME 5 // application 2
+#define MAXBSM_TRUST_LENGTH 5
 
-#define DELTA_REPORT_TIME 5 // 10 seconds till report
+#define DELTA_REPORT_TIME 5 // history report
+
+#define POS_HEADING_TIME 1.1
+
+
+
+#define MAXBSMLENGTH 10
+#define MAXMDMLENGTH 10
+#define MAXNODESLENGTH 100
+
 
 class MDMLib {
 

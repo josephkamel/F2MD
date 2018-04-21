@@ -55,7 +55,8 @@ class JosephVeinsApp : public BaseWaveApplLayer {
         virtual void handleSelfMsg(cMessage* msg);
         virtual void handlePositionUpdate(cObject* obj);
 
-        double induceMisbehavior(double faulty, double attackers);
+        double induceMisbehaviorProb(double faulty, double attackers);
+        double induceMisbehaviorFixed(double faulty, double attackers);
 
         typedef std::list<Obstacle*> ObstacleGridCell;
         typedef std::vector<ObstacleGridCell> ObstacleGridRow;

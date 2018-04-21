@@ -185,43 +185,20 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
         bsm->setSenderMbType(myMdType);
 
+        bsm->setSenderPos(curPosition);
+        bsm->setSenderPosConfidence(curPositionConfidence);
+
+        bsm->setSenderSpeed(curSpeed);
+        bsm->setSenderSpeedConfidence(curSpeedConfidence);
+
+        bsm->setSenderHeading(curHeading);
+        bsm->setSenderHeadingConfidence(curHeadingConfidence);
+
+        bsm->setSenderWidth(myWidth);
+        bsm->setSenderLength(myLength);
         //joseph
-        if(myMdType != 2){
-            GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence, curHeadingConfidence);
-
-            Coord forgedPos = gaussian.OffsetPosition(curPosition);
-            bsm->setSenderPos(forgedPos);
-            bsm->setSenderPosConfidence(curPositionConfidence);
-
-            Coord forgedSpeed = gaussian.OffsetSpeed(curSpeed);
-            bsm->setSenderSpeed(forgedSpeed);
-            bsm->setSenderSpeedConfidence(curSpeedConfidence);
-
-            Coord forgedHeading = gaussian.OffsetHeading(curHeading);
-            bsm->setSenderHeading(forgedHeading);
-            bsm->setSenderHeadingConfidence(curHeadingConfidence);
-
-            bsm->setSenderWidth(myWidth);
-            bsm->setSenderLength(myLength);
-        }else if(myMdType == 2){
-            if(attackBsm.getSenderAddress() == 0){
-                GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence, curHeadingConfidence);
-
-                Coord forgedPos = gaussian.OffsetPosition(curPosition);
-                bsm->setSenderPos(forgedPos);
-                bsm->setSenderPosConfidence(curPositionConfidence);
-
-                Coord forgedSpeed = gaussian.OffsetSpeed(curSpeed);
-                bsm->setSenderSpeed(forgedSpeed);
-                bsm->setSenderSpeedConfidence(curSpeedConfidence);
-
-                Coord forgedHeading = gaussian.OffsetHeading(curHeading);
-                bsm->setSenderHeading(forgedHeading);
-                bsm->setSenderHeadingConfidence(curHeadingConfidence);
-
-                bsm->setSenderWidth(myWidth);
-                bsm->setSenderLength(myLength);
-            }else{
+        if(myMdType == 2){
+            if(attackBsm.getSenderAddress() != 0){
                 bsm->setSenderPos(attackBsm.getSenderPos());
                 bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
 
@@ -272,10 +249,12 @@ void BaseWaveApplLayer::receiveSignal(cComponent* source, simsignal_t signalID,
 void BaseWaveApplLayer::handlePositionUpdate(cObject* obj) {
     ChannelMobilityPtrType const mobility = check_and_cast<
             ChannelMobilityPtrType>(obj);
-    curPosition = mobility->getCurrentPosition();
-    curSpeed = mobility->getCurrentSpeed();
-    curHeading = mobility->getCurrentDirection();
 
+    GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence, curHeadingConfidence);
+
+    curPosition = gaussian.OffsetPosition(mobility->getCurrentPosition());
+    curSpeed = gaussian.OffsetSpeed(mobility->getCurrentSpeed());
+    curHeading = gaussian.OffsetHeading(mobility->getCurrentDirection());
 }
 
 void BaseWaveApplLayer::handleParkingUpdate(cObject* obj) {

@@ -24,11 +24,23 @@
 using namespace std;
 using namespace boost;
 
-static char const *name = "cumulV2";
-static char const *nametemp = "tempV2";
+static char const *nameMin = "cumulV2Min";
+static char const *nametempMin = "tempV2Min";
 
-static Printable prntLong(name);
-static Printable prntTemp(nametemp);
+static char const *nameMax = "cumulV2Max";
+static char const *nametempMax = "tempV2Max";
+
+static char const *nameApp = "cumulV2App";
+static char const *nametempApp = "tempV2App";
+
+static Printable prntMin(nameMin);
+static Printable prntMinTemp(nametempMin);
+
+static Printable prntMax(nameMax);
+static Printable prntMaxTemp(nametempMax);
+
+static Printable prntApp(nameApp);
+static Printable prntAppTemp(nametempApp);
 
 MDModuleV2::MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence) {
     this->myId = myId;
@@ -153,16 +165,11 @@ double MDModuleV2::IntersectionCheck(Coord nodePosition1,
 
     double distance = mdmLib.calculateDistance(nodePosition1, nodePosition2);
     double intFactor = mdmLib.intersectionFactor(nodePositionConfidence1.x,
-            nodePositionConfidence2.x, distance, CAR_LENGTH);
+            nodePositionConfidence2.x, distance, MIN_INT_DIST);
 
     intFactor = 1 - intFactor;
-
-//    if(distance < 4){
-//        std::cout << "V2 intFactor:" << intFactor << " distance:"
-//                << distance <<'\n';
-//    }
-
     return intFactor;
+
 }
 
 InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
@@ -203,7 +210,6 @@ InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
                         varNode.getLatestBSM().getSenderPosConfidence(),
                         senderPos, senderPosConfidence);
                 if (INTScore < 1) {
-
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
                     strcat(INTCheck_string, num_string);
@@ -336,10 +342,15 @@ double MDModuleV2::BeaconFrequencyCheck(double timeNew, double timeOld) {
 double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
         Coord curHeadingConfidence, Coord oldPosition,
         Coord oldPositionConfidence, Coord curPosition,
-        Coord curPositionConfidence, double deltaTime) {
-    if (deltaTime < 1.1) {
+        Coord curPositionConfidence, double deltaTime, double curSpeed,
+        double curSpeedConfidence) {
+    if (deltaTime < POS_HEADING_TIME) {
         double distance = mdmLib.calculateDistance(curPosition, oldPosition);
-        if (distance < 0.1) {
+        if (distance < 1) {
+            return 1;
+        }
+
+        if (curSpeed - curSpeedConfidence < 1) {
             return 1;
         }
 
@@ -363,7 +374,7 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
             angleHigh = 180;
         }
 
-        double xLow = distance * cos(angleLow *PI/180);
+        double xLow = distance * cos(angleLow * PI / 180);
 
         double curFactorLow = mdmLib.calculateCircleSegment(
                 curPositionConfidence.x, curPositionConfidence.x + xLow)
@@ -374,7 +385,7 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
                         / (PI * oldPositionConfidence.x
                                 * oldPositionConfidence.x);
 
-        double xHigh = distance * cos(angleHigh*PI/180);
+        double xHigh = distance * cos(angleHigh * PI / 180);
 
         double curFactorHigh = mdmLib.calculateCircleSegment(
                 curPositionConfidence.x, curPositionConfidence.x + xHigh)
@@ -387,7 +398,6 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
 
         double factor = (curFactorLow + oldFactorLow + curFactorHigh
                 + oldFactorHigh) / 4;
-
 
 //    if(factor<=0.001){
 //
@@ -407,9 +417,6 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
 //            std::cout<<"NONZ: "<<factor<<'\n';
 //        }
 //    }
-
-
-
 
         return factor;
     } else {
@@ -478,12 +485,14 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
                         senderNode.getLatestBSM().getSenderPosConfidence(),
                         bsm.getSenderPos(), bsm.getSenderPosConfidence(),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode.getLatestBSM()),
+                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
 
     } else {
         bsmCheck.setSuddenAppearence(
-                SuddenAppearenceCheck(myPosition, myPositionConfidence,
-                        senderPos, senderPosConfidence));
+                SuddenAppearenceCheck(senderPos, senderPosConfidence,
+                        myPosition, myPositionConfidence));
     }
 
     bsmCheck.setPositionPlausibility(
@@ -495,7 +504,9 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     //PrintBsmCheck(senderId, bsmCheck);
 
-    bsmCheck = CheckNodeForReport(bsm, bsmCheck, detectedNodes,
+    CheckNodeByThreshold(bsm, bsmCheck, detectedNodes, bsm.getSenderMbType());
+
+    bsmCheck = CheckNodeByApplication(bsm, bsmCheck, detectedNodes,
             bsm.getSenderMbType());
 
     return bsmCheck;
@@ -558,143 +569,14 @@ void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
     }
 
 }
-
-void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
-
-    for (int var = 0; var < detectedNodes->getNodesNum(); ++var) {
-
-        int senderId = detectedNodes->getNodeId(var);
-
-        MDMHistory mdmHist = detectedNodes->getMDMHistory(senderId);
-        NodeHistory nodeHist = detectedNodes->getNodeHistory(senderId);
-
-        BsmCheck bsmCheck = mdmHist.getBsmCheck(0);
-        BasicSafetyMessage bsm = nodeHist.getBSM(0);
-        double mbType = bsm.getSenderMbType();
-
-        if (mbType != 0) {
-//            std::cout << "OK " << myId << " " << senderId << " " << mbType << '\n';
-//            std::cout << bsmCheck.getPositionSpeedConsistancy() << '\n';
-
-            if (bsmCheck.getReported() == false) {
-                if (simTime().dbl()
-                        - bsm.getArrivalTime().dbl() > DELTA_REPORT_TIME) {
-
-                    bool checkFailed = false;
-                    MBReport mbReport;
-
-                    if (bsmCheck.getRangePlausibility() < 0.5) {
-                        std::cout << "##########V2 " << "ART FAILED => "
-                                << bsmCheck.getRangePlausibility() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntLong.incFlags("RangePlausibility", mbType);
-                        prntTemp.incFlags("RangePlausibility", mbType);
-                    }
-                    if (bsmCheck.getPositionConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "MGTD FAILED => "
-                                << bsmCheck.getPositionConsistancy() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntLong.incFlags("PositionConsistancy", mbType);
-                        prntTemp.incFlags("PositionConsistancy", mbType);
-                    }
-                    if (bsmCheck.getSpeedConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "MGTS FAILED => "
-                                << bsmCheck.getSpeedConsistancy() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntLong.incFlags("SpeedConsistancy", mbType);
-                        prntTemp.incFlags("SpeedConsistancy", mbType);
-                    }
-
-                    if (bsmCheck.getPositionSpeedConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "MGTSV FAILED => "
-                                << bsmCheck.getPositionSpeedConsistancy()
-                                << " A:" << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntLong.incFlags("PositionSpeedConsistancy", mbType);
-                        prntTemp.incFlags("PositionSpeedConsistancy", mbType);
-                    }
-
-                    if (bsmCheck.getSpeedPlausibility() < 0.5) {
-                        std::cout << "##########V2 " << "MAXS FAILED => "
-                                << bsmCheck.getSpeedPlausibility() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntLong.incFlags("SpeedPlausibility", mbType);
-                        prntTemp.incFlags("SpeedPlausibility", mbType);
-                    }
-                    if (bsmCheck.getPositionPlausibility() < 0.5) {
-                        std::cout << "##########V2 " << "MAP FAILED => "
-                                << bsmCheck.getPositionPlausibility() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntLong.incFlags("PositionConsistancy", mbType);
-                        prntTemp.incFlags("PositionConsistancy", mbType);
-                    }
-
-                    if (bsmCheck.getSuddenAppearence() < 0.5) {
-                        std::cout << "##########V2 " << "SAW FAILED => "
-                                << bsmCheck.getSuddenAppearence() << " A:"
-                                << myId << " B:" << senderId << '\n';
-
-                        prntLong.incFlags("SuddenAppearence", mbType);
-                        prntTemp.incFlags("SuddenAppearence", mbType);
-                    }
-
-                    if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "PHC FAILED => "
-                                << bsmCheck.getPositionHeadingConsistancy()
-                                << " A:" << myId << " B:" << senderId << '\n';
-
-                        prntLong.incFlags("PositionHeadingConsistancy", mbType);
-                        prntTemp.incFlags("PositionHeadingConsistancy", mbType);
-                    }
-
-                    InterTest inter = bsmCheck.getIntersection();
-                    for (int var = 0; var < inter.getInterNum(); ++var) {
-                        if (inter.getInterValue(var) < 0.5) {
-                            std::cout << "##########V2 " << "INT FAILED => "
-                                    << inter.getInterValue(var) << " A:" << myId
-                                    << " B:" << senderId << " C:"
-                                    << inter.getInterId(var) << '\n';
-                            checkFailed = true;
-
-                            prntLong.incFlags("Intersection", mbType);
-                            prntTemp.incFlags("Intersection", mbType);
-                        }
-                    }
-
-                    if (checkFailed) {
-                        mbReport.setGenerationTime(simTime().dbl());
-                        mbReport.setSenderId(myId);
-                        mbReport.setReportedId(senderId);
-                        mbReport.setMbType(mbType);
-                        SendReport(mbReport);
-
-                        prntLong.incCumulFlags(mbType);
-                        prntTemp.incCumulFlags(mbType);
-
-                        bsmCheck.setReported(true);
-                        mdmHist.setBsmCheck(0, bsmCheck);
-                        detectedNodes->setMDMHistory(senderId, mdmHist);
-                    }
-                }
-            }
-        }
-    }
-
-}
-
-BsmCheck MDModuleV2::CheckNodeForReport(BasicSafetyMessage bsm,
+BsmCheck MDModuleV2::CheckNodeByApplication(BasicSafetyMessage bsm,
         BsmCheck bsmCheck, NodeTable detectedNodes, double mbType) {
 
     bool checkFailed = false;
     MBReport mbReport;
 
-    prntLong.incAll(mbType);
-    prntTemp.incAll(mbType);
+    prntApp.incAll(mbType);
+    prntAppTemp.incAll(mbType);
 
     int senderId = bsm.getSenderAddress();
 
@@ -704,134 +586,104 @@ BsmCheck MDModuleV2::CheckNodeForReport(BasicSafetyMessage bsm,
     BsmCheck bsmCheck0 = BsmCheck();
     BsmCheck bsmCheck1 = BsmCheck();
 
+    bool bsmCheckNew0 = true;
+    bool bsmCheckNew1 = true;
+
     if (nodeHist.getBSMNum() > 0) {
         if (mdmLib.calculateDeltaTime(bsm,
-                nodeHist.getLatestBSM())>DELTA_BSM_TIME) {
+                nodeHist.getLatestBSM())<DELTA_BSM_TIME) {
             bsmCheck0 = mdmHist.getBsmCheck(0);
+            bsmCheckNew0 = false;
             if (nodeHist.getBSMNum() > 1) {
                 if (mdmLib.calculateDeltaTime(bsm,
-                        nodeHist.getSecondLatestBSM()) > DELTA_BSM_TIME) {
+                        nodeHist.getSecondLatestBSM())<DELTA_BSM_TIME) {
                     bsmCheck1 = mdmHist.getBsmCheck(1);
+                    bsmCheckNew1 = false;
                 }
             }
         }
     }
 
+    //std::cout<< "RangePlausibility" << '\n';
     if (AggregateFactors(bsmCheck.getRangePlausibility(),
             bsmCheck0.getRangePlausibility(),
             bsmCheck1.getRangePlausibility())) {
-        std::cout << "$$$$$$$$$$V2 " << "RangePlausibility FAILED => "
-                << bsmCheck.getRangePlausibility() << "|"
-                << bsmCheck0.getRangePlausibility() << "|"
-                << bsmCheck1.getRangePlausibility() << " A:" << myId << " B:"
-                << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("RangePlausibility", mbType);
-        prntTemp.incFlags("RangePlausibility", mbType);
+        prntApp.incFlags("RangePlausibility", mbType);
+        prntAppTemp.incFlags("RangePlausibility", mbType);
     }
 
+    //std::cout<< "PositionConsistancy" << '\n';
     if (AggregateFactors(bsmCheck.getPositionConsistancy(),
             bsmCheck0.getPositionConsistancy(),
             bsmCheck1.getPositionConsistancy())) {
-        std::cout << "$$$$$$$$$$V2 " << "PositionConsistancy FAILED => "
-                << bsmCheck.getPositionConsistancy() << "|"
-                << bsmCheck0.getPositionConsistancy() << "|"
-                << bsmCheck1.getPositionConsistancy() << " A:" << myId << " B:"
-                << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("PositionConsistancy", mbType);
-        prntTemp.incFlags("PositionConsistancy", mbType);
+        prntApp.incFlags("PositionConsistancy", mbType);
+        prntAppTemp.incFlags("PositionConsistancy", mbType);
     }
 
+    //std::cout<< "PositionSpeedConsistancy" << '\n';
     if (AggregateFactors(bsmCheck.getPositionSpeedConsistancy(),
             bsmCheck0.getPositionSpeedConsistancy(),
             bsmCheck1.getPositionSpeedConsistancy())) {
-        std::cout << "$$$$$$$$$$V2 " << "PositionSpeedConsistancy FAILED => "
-                << bsmCheck.getPositionSpeedConsistancy() << "|"
-                << bsmCheck0.getPositionSpeedConsistancy() << "|"
-                << bsmCheck1.getPositionSpeedConsistancy() << " A:" << myId
-                << " B:" << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("PositionSpeedConsistancy", mbType);
-        prntTemp.incFlags("PositionSpeedConsistancy", mbType);
+        prntApp.incFlags("PositionSpeedConsistancy", mbType);
+        prntAppTemp.incFlags("PositionSpeedConsistancy", mbType);
     }
 
+    //std::cout<< "SpeedConsistancy" << '\n';
     if (AggregateFactors(bsmCheck.getSpeedConsistancy(),
             bsmCheck0.getSpeedConsistancy(), bsmCheck1.getSpeedConsistancy())) {
-        std::cout << "$$$$$$$$$$V2 " << "SpeedConsistancy FAILED => "
-                << bsmCheck.getSpeedConsistancy() << "|"
-                << bsmCheck0.getSpeedConsistancy() << "|"
-                << bsmCheck1.getSpeedConsistancy() << " A:" << myId << " B:"
-                << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("SpeedConsistancy", mbType);
-        prntTemp.incFlags("SpeedConsistancy", mbType);
+        prntApp.incFlags("SpeedConsistancy", mbType);
+        prntAppTemp.incFlags("SpeedConsistancy", mbType);
     }
+
+    //std::cout<< "SpeedPlausibility" << '\n';
     if (AggregateFactors(bsmCheck.getSpeedPlausibility(),
             bsmCheck0.getSpeedPlausibility(),
             bsmCheck1.getSpeedPlausibility())) {
-        std::cout << "$$$$$$$$$$V2 " << "SpeedPlausibility FAILED => "
-                << bsmCheck.getSpeedPlausibility() << "|"
-                << bsmCheck0.getSpeedPlausibility() << "|"
-                << bsmCheck1.getSpeedPlausibility() << " A:" << myId << " B:"
-                << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("SpeedPlausibility", mbType);
-        prntTemp.incFlags("SpeedPlausibility", mbType);
+        prntApp.incFlags("SpeedPlausibility", mbType);
+        prntAppTemp.incFlags("SpeedPlausibility", mbType);
     }
 
+    //std::cout<< "PositionPlausibility" << '\n';
     if (AggregateFactors(bsmCheck.getPositionPlausibility(),
             bsmCheck0.getPositionPlausibility(),
             bsmCheck1.getPositionPlausibility())) {
-        std::cout << "$$$$$$$$$$V2 " << "PositionPlausibility FAILED => "
-                << bsmCheck.getPositionPlausibility() << "|"
-                << bsmCheck0.getPositionPlausibility() << "|"
-                << bsmCheck1.getPositionPlausibility() << " A:" << myId << " B:"
-                << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("PositionPlausibility", mbType);
-        prntTemp.incFlags("PositionPlausibility", mbType);
+        prntApp.incFlags("PositionPlausibility", mbType);
+        prntAppTemp.incFlags("PositionPlausibility", mbType);
     }
 
+    //std::cout<< "BeaconFrequency" << '\n';
     if (AggregateFactors(bsmCheck.getBeaconFrequency(),
             bsmCheck0.getBeaconFrequency(), bsmCheck1.getBeaconFrequency())) {
-        std::cout << "$$$$$$$$$$V2 " << "BeaconFrequency FAILED => "
-                << bsmCheck.getBeaconFrequency() << "|"
-                << bsmCheck0.getBeaconFrequency() << "|"
-                << bsmCheck1.getBeaconFrequency() << " A:" << myId << " B:"
-                << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("BeaconFrequency", mbType);
-        prntTemp.incFlags("BeaconFrequency", mbType);
+        prntApp.incFlags("BeaconFrequency", mbType);
+        prntAppTemp.incFlags("BeaconFrequency", mbType);
     }
 
+    //std::cout<< "SuddenAppearence" << '\n';
     if (AggregateFactors(bsmCheck.getSuddenAppearence(),
             bsmCheck0.getSuddenAppearence(), bsmCheck1.getSuddenAppearence())) {
-//        std::cout << "$$$$$$$$$$V2 " << "SuddenAppearence FAILED => "
-//                << bsmCheck.getSuddenAppearence() << "|"
-//                << bsmCheck0.getSuddenAppearence() << "|"
-//                << bsmCheck1.getSuddenAppearence() << " A:" << myId << " B:"
-//                << senderId << '\n';
-        prntLong.incFlags("SuddenAppearence", mbType);
-        prntTemp.incFlags("SuddenAppearence", mbType);
+        prntApp.incFlags("SuddenAppearence", mbType);
+        prntAppTemp.incFlags("SuddenAppearence", mbType);
     }
 
+    //std::cout<< "PositionHeadingConsistancy" << '\n';
     if (AggregateFactors(bsmCheck.getPositionHeadingConsistancy(),
             bsmCheck0.getPositionHeadingConsistancy(),
             bsmCheck1.getPositionHeadingConsistancy())) {
-        std::cout << "$$$$$$$$$$V2 " << "PositionHeadingConsistancy FAILED => "
-                << bsmCheck.getPositionHeadingConsistancy() << "|"
-                << bsmCheck0.getPositionHeadingConsistancy() << "|"
-                << bsmCheck1.getPositionHeadingConsistancy() << " A:" << myId
-                << " B:" << senderId << '\n';
         checkFailed = true;
-        prntLong.incFlags("PositionHeadingConsistancy", mbType);
-        prntTemp.incFlags("PositionHeadingConsistancy", mbType);
+        prntApp.incFlags("PositionHeadingConsistancy", mbType);
+        prntAppTemp.incFlags("PositionHeadingConsistancy", mbType);
     }
 
     InterTest inter = bsmCheck.getIntersection();
-    InterTest inter0 = bsmCheck.getIntersection();
-    InterTest inter1 = bsmCheck.getIntersection();
+    InterTest inter0 = bsmCheck0.getIntersection();
+    InterTest inter1 = bsmCheck1.getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
 
         double IT = inter.getInterValue(var);
@@ -851,13 +703,11 @@ BsmCheck MDModuleV2::CheckNodeForReport(BasicSafetyMessage bsm,
             IT1 = 1;
         }
 
+        //std::cout<< "Intersection" << '\n';
         if (AggregateFactors(IT, IT0, IT1)) {
-            std::cout << "$$$$$$$$$$V2 " << "Intersection FAILED => " << IT
-                    << "|" << IT0 << "|" << IT1 << " A:" << myId << " B:"
-                    << senderId << " C:" << inter.getInterId(var) << '\n';
             checkFailed = true;
-            prntLong.incFlags("Intersection", mbType);
-            prntTemp.incFlags("Intersection", mbType);
+            prntApp.incFlags("Intersection", mbType);
+            prntAppTemp.incFlags("Intersection", mbType);
         }
     }
 
@@ -868,22 +718,27 @@ BsmCheck MDModuleV2::CheckNodeForReport(BasicSafetyMessage bsm,
         mbReport.setMbType(mbType);
         SendReport(mbReport);
 
-        prntLong.incCumulFlags(mbType);
-        prntTemp.incCumulFlags(mbType);
+        prntApp.incCumulFlags(mbType);
+        prntAppTemp.incCumulFlags(mbType);
 
         bsmCheck.setReported(true);
+
+//        if (!bsmCheckNew0 && !bsmCheck0.getReported()) {
+//            prntApp.incCumulFlags(mbType);
+//            prntAppTemp.incCumulFlags(mbType);
+//        }
+//
+//        if (!bsmCheckNew1 && !bsmCheck1.getReported()) {
+//            prntApp.incCumulFlags(mbType);
+//            prntAppTemp.incCumulFlags(mbType);
+//        }
     }
-
     return bsmCheck;
-}
-
-void MDModuleV2::SendReport(MBReport mbReport) {
-    MDAuthority mdAuthority;
-    mdAuthority.sendReportV2(mbReport);
 }
 
 bool MDModuleV2::AggregateFactors(double curFactor, double factor0,
         double factor1) {
+
     if (curFactor <= 0) {
         return true;
     } else if (curFactor >= 1) {
@@ -897,12 +752,523 @@ bool MDModuleV2::AggregateFactors(double curFactor, double factor0,
     }
 }
 
+BsmCheck MDModuleV2::CheckNodeByApplication2(BasicSafetyMessage bsm,
+        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType) {
+
+    bool checkFailed = false;
+    MBReport mbReport;
+
+    prntApp.incAll(mbType);
+    prntAppTemp.incAll(mbType);
+
+    int senderId = bsm.getSenderAddress();
+
+    MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
+    NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
+
+    BsmCheck bsmCheckList[MAXBSM_TRUST_LENGTH];
+    int bsmCheckListSize = 0;
+
+
+    for (int var = 0; var < nodeHist.getBSMNum(); ++var) {
+        if (bsmCheckListSize < MAXBSM_TRUST_LENGTH) {
+            if (mdmLib.calculateDeltaTime(bsm,
+                    nodeHist.getBSM(var))<DELTA_TRUST_TIME) {
+                bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var);
+                bsmCheckListSize++;
+            }
+        }
+    }
+
+    double factorList[bsmCheckListSize];
+
+    //std::cout<< "RangePlausibility" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getRangePlausibility();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getRangePlausibility(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("RangePlausibility", mbType);
+        prntAppTemp.incFlags("RangePlausibility", mbType);
+    }
+
+
+    //std::cout<< "PositionConsistancy" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getPositionConsistancy();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getPositionConsistancy(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("PositionConsistancy", mbType);
+        prntAppTemp.incFlags("PositionConsistancy", mbType);
+    }
+
+
+    //std::cout<< "PositionSpeedConsistancy" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getPositionSpeedConsistancy();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getPositionSpeedConsistancy(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("PositionSpeedConsistancy", mbType);
+        prntAppTemp.incFlags("PositionSpeedConsistancy", mbType);
+    }
+
+    //std::cout<< "SpeedConsistancy" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getSpeedConsistancy();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getSpeedConsistancy(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("SpeedConsistancy", mbType);
+        prntAppTemp.incFlags("SpeedConsistancy", mbType);
+    }
+
+    //std::cout<< "SpeedPlausibility" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getSpeedPlausibility();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getSpeedPlausibility(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("SpeedPlausibility", mbType);
+        prntAppTemp.incFlags("SpeedPlausibility", mbType);
+    }
+
+    //std::cout<< "PositionPlausibility" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getPositionPlausibility();
+    }
+    if (AggregateFactorsList(bsmCheck.getPositionPlausibility(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("PositionPlausibility", mbType);
+        prntAppTemp.incFlags("PositionPlausibility", mbType);
+    }
+
+    //std::cout<< "BeaconFrequency" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getBeaconFrequency();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getBeaconFrequency(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("BeaconFrequency", mbType);
+        prntAppTemp.incFlags("BeaconFrequency", mbType);
+    }
+
+    //std::cout<< "SuddenAppearence" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getSuddenAppearence();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getSuddenAppearence(), factorList,
+            bsmCheckListSize)) {
+        prntApp.incFlags("SuddenAppearence", mbType);
+        prntAppTemp.incFlags("SuddenAppearence", mbType);
+    }
+
+    //std::cout<< "PositionHeadingConsistancy" << '\n';
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        factorList[var] = bsmCheckList[var].getPositionHeadingConsistancy();
+    }
+
+    if (AggregateFactorsList(bsmCheck.getPositionHeadingConsistancy(), factorList,
+            bsmCheckListSize)) {
+        checkFailed = true;
+        prntApp.incFlags("PositionHeadingConsistancy", mbType);
+        prntAppTemp.incFlags("PositionHeadingConsistancy", mbType);
+    }
+
+
+    for (int var = 0; var < bsmCheckListSize; ++var) {
+        bsmCheckList[var].getIntersection();
+    }
+
+
+    InterTest inter = bsmCheck.getIntersection();
+    for (int var = 0; var < inter.getInterNum(); ++var) {
+        double curInferFactor = inter.getInterValue(var);
+
+        for (int i = 0; i < bsmCheckListSize; ++i) {
+            double IdIndex = bsmCheckList[i].getIntersection().getIdIndex(inter.getInterId(var));
+                if (IdIndex != -1) {
+                    factorList[i] = bsmCheckList[i].getIntersection().getInterValue(IdIndex);
+                } else {
+                    factorList[i] = 1;
+                }
+        }
+
+        //std::cout<< "Intersection" << '\n';
+        if (AggregateFactorsList(curInferFactor, factorList, bsmCheckListSize)) {
+            checkFailed = true;
+            prntApp.incFlags("Intersection", mbType);
+            prntAppTemp.incFlags("Intersection", mbType);
+        }
+    }
+
+    return bsmCheck;
+
+    if (checkFailed) {
+        mbReport.setGenerationTime(simTime().dbl());
+        mbReport.setSenderId(myId);
+        mbReport.setReportedId(senderId);
+        mbReport.setMbType(mbType);
+        SendReport(mbReport);
+
+        prntApp.incCumulFlags(mbType);
+        prntAppTemp.incCumulFlags(mbType);
+
+        bsmCheck.setReported(true);
+    }
+    return bsmCheck;
+}
+
+bool MDModuleV2::AggregateFactorsList(double curFactor, double *factorList,
+        int factorListSize) {
+    if (curFactor <= 0) {
+        return true;
+    } else if (curFactor >= 1) {
+        return false;
+    } else {
+        double worseFactor = 1;
+        for (int var = 0; var < factorListSize; ++var) {
+            if (worseFactor > factorList[var]) {
+                worseFactor = factorList[var];
+            }
+        }
+        if ((curFactor * worseFactor) < 0.5) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+BsmCheck MDModuleV2::CheckNodeByThreshold(BasicSafetyMessage bsm,
+        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType) {
+
+    bool checkFailedMin = false;
+    bool checkFailedMax = false;
+
+    MBReport mbReportMin;
+    MBReport mbReportMax;
+
+    prntMin.incAll(mbType);
+    prntMinTemp.incAll(mbType);
+    prntMax.incAll(mbType);
+    prntMaxTemp.incAll(mbType);
+
+    int senderId = bsm.getSenderAddress();
+
+    MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
+    NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
+
+    if (bsmCheck.getRangePlausibility() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("RangePlausibility", mbType);
+        prntMaxTemp.incFlags("RangePlausibility", mbType);
+
+        if (bsmCheck.getRangePlausibility() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("RangePlausibility", mbType);
+            prntMinTemp.incFlags("RangePlausibility", mbType);
+        }
+    }
+    if (bsmCheck.getPositionConsistancy() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("PositionConsistancy", mbType);
+        prntMaxTemp.incFlags("PositionConsistancy", mbType);
+
+        if (bsmCheck.getPositionConsistancy() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("PositionConsistancy", mbType);
+            prntMinTemp.incFlags("PositionConsistancy", mbType);
+        }
+
+    }
+
+    if (bsmCheck.getPositionSpeedConsistancy() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("PositionSpeedConsistancy", mbType);
+        prntMaxTemp.incFlags("PositionSpeedConsistancy", mbType);
+
+        if (bsmCheck.getPositionSpeedConsistancy() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("PositionSpeedConsistancy", mbType);
+            prntMinTemp.incFlags("PositionSpeedConsistancy", mbType);
+        }
+    }
+
+    if (bsmCheck.getSpeedConsistancy() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("SpeedConsistancy", mbType);
+        prntMaxTemp.incFlags("SpeedConsistancy", mbType);
+
+        if (bsmCheck.getSpeedConsistancy() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("SpeedConsistancy", mbType);
+            prntMinTemp.incFlags("SpeedConsistancy", mbType);
+        }
+
+    }
+
+    if (bsmCheck.getSpeedPlausibility() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("SpeedPlausibility", mbType);
+        prntMaxTemp.incFlags("SpeedPlausibility", mbType);
+
+        if (bsmCheck.getSpeedPlausibility() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("SpeedPlausibility", mbType);
+            prntMinTemp.incFlags("SpeedPlausibility", mbType);
+        }
+    }
+
+    if (bsmCheck.getPositionPlausibility() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("PositionPlausibility", mbType);
+        prntMaxTemp.incFlags("PositionPlausibility", mbType);
+
+        if (bsmCheck.getPositionPlausibility() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("PositionPlausibility", mbType);
+            prntMinTemp.incFlags("PositionPlausibility", mbType);
+        }
+
+    }
+
+    if (bsmCheck.getBeaconFrequency() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("BeaconFrequency", mbType);
+        prntMaxTemp.incFlags("BeaconFrequency", mbType);
+
+        if (bsmCheck.getBeaconFrequency() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("BeaconFrequency", mbType);
+            prntMinTemp.incFlags("BeaconFrequency", mbType);
+        }
+    }
+
+    if (bsmCheck.getSuddenAppearence() < 1) {
+        prntMax.incFlags("SuddenAppearence", mbType);
+        prntMaxTemp.incFlags("SuddenAppearence", mbType);
+
+        if (bsmCheck.getSuddenAppearence() <= 0) {
+            prntMin.incFlags("SuddenAppearence", mbType);
+            prntMinTemp.incFlags("SuddenAppearence", mbType);
+        }
+    }
+
+    if (bsmCheck.getPositionHeadingConsistancy() < 1) {
+        checkFailedMax = true;
+        prntMax.incFlags("PositionHeadingConsistancy", mbType);
+        prntMaxTemp.incFlags("PositionHeadingConsistancy", mbType);
+
+        if (bsmCheck.getPositionHeadingConsistancy() <= 0) {
+            checkFailedMin = true;
+            prntMin.incFlags("PositionHeadingConsistancy", mbType);
+            prntMinTemp.incFlags("PositionHeadingConsistancy", mbType);
+        }
+    }
+
+    bool maxInterFound = false;
+    bool minInterFound = false;
+
+    InterTest inter = bsmCheck.getIntersection();
+    for (int var = 0; var < inter.getInterNum(); ++var) {
+
+        double IT = inter.getInterValue(var);
+
+        if (IT < 1) {
+            checkFailedMax = true;
+            if (!maxInterFound) {
+                prntMax.incFlags("Intersection", mbType);
+                prntMaxTemp.incFlags("Intersection", mbType);
+                maxInterFound = true;
+            }
+            if (IT <= 0) {
+                checkFailedMin = true;
+                if (!minInterFound) {
+                    prntMin.incFlags("Intersection", mbType);
+                    prntMinTemp.incFlags("Intersection", mbType);
+                    minInterFound = true;
+                }
+            }
+        }
+    }
+
+    if (checkFailedMax) {
+        prntMax.incCumulFlags(mbType);
+        prntMaxTemp.incCumulFlags(mbType);
+        if (checkFailedMin) {
+            prntMin.incCumulFlags(mbType);
+            prntMinTemp.incCumulFlags(mbType);
+        }
+    }
+
+    return bsmCheck;
+}
+
+void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
+
+    for (int var = 0; var < detectedNodes->getNodesNum(); ++var) {
+
+        int senderId = detectedNodes->getNodeId(var);
+
+        MDMHistory mdmHist = detectedNodes->getMDMHistory(senderId);
+        NodeHistory nodeHist = detectedNodes->getNodeHistory(senderId);
+
+        BsmCheck bsmCheck = mdmHist.getBsmCheck(0);
+        BasicSafetyMessage bsm = nodeHist.getBSM(0);
+        double mbType = bsm.getSenderMbType();
+
+        if (mbType != 0) {
+            std::cout << "OK " << myId << " " << senderId << " " << mbType
+                    << '\n';
+            std::cout << bsmCheck.getPositionSpeedConsistancy() << '\n';
+
+            if (bsmCheck.getReported() == false) {
+                if (simTime().dbl()
+                        - bsm.getArrivalTime().dbl() > DELTA_REPORT_TIME) {
+
+                    bool checkFailed = false;
+                    MBReport mbReport;
+
+                    if (bsmCheck.getRangePlausibility() < 0.5) {
+                        std::cout << "##########V2 " << "ART FAILED => "
+                                << bsmCheck.getRangePlausibility() << " A:"
+                                << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+                        prntApp.incFlags("RangePlausibility", mbType);
+                        prntAppTemp.incFlags("RangePlausibility", mbType);
+                    }
+                    if (bsmCheck.getPositionConsistancy() < 0.5) {
+                        std::cout << "##########V2 " << "MGTD FAILED => "
+                                << bsmCheck.getPositionConsistancy() << " A:"
+                                << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+                        prntApp.incFlags("PositionConsistancy", mbType);
+                        prntAppTemp.incFlags("PositionConsistancy", mbType);
+                    }
+                    if (bsmCheck.getSpeedConsistancy() < 0.5) {
+                        std::cout << "##########V2 " << "MGTS FAILED => "
+                                << bsmCheck.getSpeedConsistancy() << " A:"
+                                << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+                        prntApp.incFlags("SpeedConsistancy", mbType);
+                        prntAppTemp.incFlags("SpeedConsistancy", mbType);
+                    }
+
+                    if (bsmCheck.getPositionSpeedConsistancy() < 0.5) {
+                        std::cout << "##########V2 " << "MGTSV FAILED => "
+                                << bsmCheck.getPositionSpeedConsistancy()
+                                << " A:" << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+                        prntApp.incFlags("PositionSpeedConsistancy", mbType);
+                        prntAppTemp.incFlags("PositionSpeedConsistancy",
+                                mbType);
+                    }
+
+                    if (bsmCheck.getSpeedPlausibility() < 0.5) {
+                        std::cout << "##########V2 " << "MAXS FAILED => "
+                                << bsmCheck.getSpeedPlausibility() << " A:"
+                                << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+                        prntApp.incFlags("SpeedPlausibility", mbType);
+                        prntAppTemp.incFlags("SpeedPlausibility", mbType);
+                    }
+                    if (bsmCheck.getPositionPlausibility() < 0.5) {
+                        std::cout << "##########V2 " << "MAP FAILED => "
+                                << bsmCheck.getPositionPlausibility() << " A:"
+                                << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+                        prntApp.incFlags("PositionConsistancy", mbType);
+                        prntAppTemp.incFlags("PositionConsistancy", mbType);
+                    }
+
+                    if (bsmCheck.getSuddenAppearence() < 0.5) {
+                        std::cout << "##########V2 " << "SAW FAILED => "
+                                << bsmCheck.getSuddenAppearence() << " A:"
+                                << myId << " B:" << senderId << '\n';
+
+                        prntApp.incFlags("SuddenAppearence", mbType);
+                        prntAppTemp.incFlags("SuddenAppearence", mbType);
+                    }
+
+                    if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
+                        std::cout << "##########V2 " << "PHC FAILED => "
+                                << bsmCheck.getPositionHeadingConsistancy()
+                                << " A:" << myId << " B:" << senderId << '\n';
+                        checkFailed = true;
+
+                        prntApp.incFlags("PositionHeadingConsistancy", mbType);
+                        prntAppTemp.incFlags("PositionHeadingConsistancy",
+                                mbType);
+                    }
+
+                    InterTest inter = bsmCheck.getIntersection();
+                    for (int var = 0; var < inter.getInterNum(); ++var) {
+                        if (inter.getInterValue(var) < 0.5) {
+                            std::cout << "##########V2 " << "INT FAILED => "
+                                    << inter.getInterValue(var) << " A:" << myId
+                                    << " B:" << senderId << " C:"
+                                    << inter.getInterId(var) << '\n';
+                            checkFailed = true;
+
+                            prntApp.incFlags("Intersection", mbType);
+                            prntAppTemp.incFlags("Intersection", mbType);
+                        }
+                    }
+
+                    if (checkFailed) {
+                        mbReport.setGenerationTime(simTime().dbl());
+                        mbReport.setSenderId(myId);
+                        mbReport.setReportedId(senderId);
+                        mbReport.setMbType(mbType);
+                        SendReport(mbReport);
+
+                        prntApp.incCumulFlags(mbType);
+                        prntAppTemp.incCumulFlags(mbType);
+
+                        bsmCheck.setReported(true);
+                        mdmHist.setBsmCheck(0, bsmCheck);
+                        detectedNodes->setMDMHistory(senderId, mdmHist);
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+void MDModuleV2::SendReport(MBReport mbReport) {
+    MDAuthority mdAuthority;
+    mdAuthority.sendReportV2(mbReport);
+}
+
 static bool init = true;
 
 void MDModuleV2::saveLine(std::string path, std::string serial, double density,
         double deltaT) {
-    char fileNameCumul[] = "mdmResultV2Cumul.txt";
-    char fileNameTemp[] = "mdmResultV2Temp.txt";
+    char fileNameMinCumul[] = "mdmResultV2MinCumul.txt";
+    char fileNameMinTemp[] = "mdmResultV2MinTemp.txt";
+
+    char fileNameMaxCumul[] = "mdmResultV2MaxCumul.txt";
+    char fileNameMaxTemp[] = "mdmResultV2MaxTemp.txt";
+
+    char fileNameAppCumul[] = "mdmResultV2AppCumul.txt";
+    char fileNameAppTemp[] = "mdmResultV2AppTemp.txt";
 
     char outChar[1024];
     char directoryPathGen[1024] = "";
@@ -923,21 +1289,62 @@ void MDModuleV2::saveLine(std::string path, std::string serial, double density,
 
     strcpy(filePathGen, directoryPathGen);
     strcat(filePathGen, "/");
-    strcat(filePathGen, fileNameCumul);
+    strcat(filePathGen, fileNameMinCumul);
 
-    prntLong.getPrintable(outChar, density, deltaT);
-    prntLong.writeFile(filePathGen, outChar, init);
+    prntMin.getPrintable(outChar, density, deltaT);
+    prntMin.writeFile(filePathGen, outChar, init);
 
     strcpy(filePathGen, directoryPathGen);
     strcat(filePathGen, "/");
-    strcat(filePathGen, fileNameTemp);
+    strcat(filePathGen, fileNameMinTemp);
 
-    prntTemp.getPrintable(outChar, density, deltaT);
-    prntTemp.writeFile(filePathGen, outChar, init);
+    prntMinTemp.getPrintable(outChar, density, deltaT);
+    prntMinTemp.writeFile(filePathGen, outChar, init);
+
+    strcpy(filePathGen, directoryPathGen);
+    strcat(filePathGen, "/");
+    strcat(filePathGen, fileNameMaxCumul);
+
+    prntMax.getPrintable(outChar, density, deltaT);
+    prntMax.writeFile(filePathGen, outChar, init);
+
+    strcpy(filePathGen, directoryPathGen);
+    strcat(filePathGen, "/");
+    strcat(filePathGen, fileNameMaxTemp);
+
+    prntMaxTemp.getPrintable(outChar, density, deltaT);
+    prntMaxTemp.writeFile(filePathGen, outChar, init);
+
+    strcpy(filePathGen, directoryPathGen);
+    strcat(filePathGen, "/");
+    strcat(filePathGen, fileNameAppCumul);
+
+    prntApp.getPrintable(outChar, density, deltaT);
+    prntApp.writeFile(filePathGen, outChar, init);
+
+    strcpy(filePathGen, directoryPathGen);
+    strcat(filePathGen, "/");
+    strcat(filePathGen, fileNameAppTemp);
+
+    prntAppTemp.getPrintable(outChar, density, deltaT);
+    prntAppTemp.writeFile(filePathGen, outChar, init);
 
     if (init) {
         init = false;
     }
+}
 
-    prntTemp.resetAll();
+void MDModuleV2::resetTempFlags() {
+    prntMinTemp.resetAll();
+    prntMaxTemp.resetAll();
+    prntAppTemp.resetAll();
+}
+
+void MDModuleV2::resetAllFlags() {
+    prntMin.resetAll();
+    prntMax.resetAll();
+    prntApp.resetAll();
+    prntMinTemp.resetAll();
+    prntMaxTemp.resetAll();
+    prntAppTemp.resetAll();
 }

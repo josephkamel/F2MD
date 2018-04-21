@@ -14,9 +14,9 @@
 #include <omnetpp.h>
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
-using namespace omnetpp;
+#include "../supportClasses/MDMLib.h"
 
-#define MAXBSMLENGTH 3
+using namespace omnetpp;
 
 class NodeHistory {
     private:

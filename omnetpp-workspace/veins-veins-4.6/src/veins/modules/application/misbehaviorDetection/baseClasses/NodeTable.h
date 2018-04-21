@@ -15,8 +15,7 @@
 #include "NodeHistory.h"
 
 #include "../supportClasses/GeneralLib.h"
-
-#define MAXNODESLENGTH 10
+#include "../supportClasses/MDMLib.h"
 
 class NodeTable {
 

@@ -58,7 +58,7 @@ private:
     double PositionHeadingConsistancyCheck(Coord curHeading,
             Coord curHeadingConfidence, Coord oldPosition,
             Coord oldPositionConfidence, Coord curPositionConfidence,
-            Coord curPosition, double deltaTime);
+            Coord curPosition, double deltaTime, double curSpeed, double curSpeedConfidence);
 
     double BeaconFrequencyCheck(double, double);
     double SuddenAppearenceCheck(Coord, Coord, Coord, Coord);
@@ -66,18 +66,35 @@ private:
     void PrintBsmCheck(int senderId, BsmCheck bsmCheck);
 
     bool AggregateFactors(double curFactor, double factor0, double factor1);
-    BsmCheck CheckNodeForReport(BasicSafetyMessage bsm, BsmCheck bsmCheck,
+    bool AggregateFactorsList(double curFactor, double *factorList,
+            int factorListSize);
+
+    BsmCheck CheckNodeByThreshold( BasicSafetyMessage bsm, BsmCheck bsmCheck,
             NodeTable detectedNodes, double mbType);
 
+    BsmCheck CheckNodeByApplication(BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+
+    BsmCheck CheckNodeByApplication2(BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+
+
+
     void SendReport(MBReport mbReport);
+
+    void resetAll();
 
 public:
     MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
-    void CheckNodesHistoryForReport(NodeTable*);
+
+    void CheckNodesHistoryForReport(NodeTable* detectedNodes);
 
     void saveLine(std::string path, std::string serial, double density,
             double deltaT);
+
+    void resetTempFlags();
+    void resetAllFlags();
 };
 
 #endif

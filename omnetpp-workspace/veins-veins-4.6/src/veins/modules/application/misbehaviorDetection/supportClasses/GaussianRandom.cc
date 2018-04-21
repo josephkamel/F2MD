@@ -16,18 +16,27 @@ GaussianRandom::GaussianRandom(double curPosConfidence, Coord curSpeedConfidence
     this->curHeadingConfidence = curHeadingConfidence;
 }
 
-double GaussianRandom::getRand(double mean, double stddev) {
-    std::random_device rd{};
-       std::mt19937 gen{rd()};
+double GaussianRandom::getGaussianRand(double mean, double stddev) {
 
-       std::normal_distribution<> d{mean,stddev};
-    return d(gen);
+    struct timespec tm;
+    clock_gettime(CLOCK_REALTIME, &tm);
+
+    random::mt19937 rng(tm.tv_nsec);
+
+    std::normal_distribution<> d{mean,stddev};
+    return d(rng);
 }
 
 Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
-    double r =  getRand(0, curPosConfidence/3);
-    double theta = ((double) rand() / RAND_MAX) * 2 * PI;
+    double r =  getGaussianRand(0, curPosConfidence/3);
+
+    GeneralLib genLib = GeneralLib();
+
+    //non gaussian
+    //r = genLib.RandomDouble(-curPosConfidence, curPosConfidence);
+
+    double theta = genLib.RandomDouble(0, 2 * PI);
 
     if(r>curPosConfidence ){
         r = curPosConfidence - 0.0001;
@@ -48,9 +57,9 @@ Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
 Coord GaussianRandom::OffsetSpeed(Coord curSpeed) {
 
-    double deltaVx =  getRand(0, curSpeedConfidence.x/3);
-    double deltaVy =  getRand(0, curSpeedConfidence.y/3);
-    double deltaVz =  getRand(0, curSpeedConfidence.z/3);
+    double deltaVx =  getGaussianRand(0, curSpeedConfidence.x/3);
+    double deltaVy =  getGaussianRand(0, curSpeedConfidence.y/3);
+    double deltaVz =  getGaussianRand(0, curSpeedConfidence.z/3);
 
 //    if(deltaVx>curSpeedConfidence.x ){
 //        deltaVx = curSpeedConfidence.x;
@@ -87,7 +96,7 @@ Coord GaussianRandom::OffsetHeading(Coord curHeading) {
 
     double headingAngle = mdmLib.calculateHeadingAngle(curHeading);
 
-    double angle =  getRand(0, curHeadingConfidence.x/3);
+    double angle =  getGaussianRand(0, curHeadingConfidence.x/3);
 
     headingAngle = headingAngle + angle;
 

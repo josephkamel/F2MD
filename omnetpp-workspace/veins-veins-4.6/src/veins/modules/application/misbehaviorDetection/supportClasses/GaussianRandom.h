@@ -13,6 +13,7 @@
 
 #include <omnetpp.h>
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
+#include "GeneralLib.h"
 
 #include <iostream>
 #include <iomanip>
@@ -20,6 +21,13 @@
 #include <map>
 #include <random>
 #include <cmath>
+
+#include <ctime>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random/variate_generator.hpp>
+using namespace std;
+using namespace boost;
 
 using namespace omnetpp;
 
@@ -30,7 +38,7 @@ class GaussianRandom {
     Coord curSpeedConfidence;
     Coord curHeadingConfidence;
 
-    double getRand(double mean, double stddev);
+    double getGaussianRand(double mean, double stddev);
 
     public:
         GaussianRandom(double curPosConfidence, Coord curSpeedConfidence, Coord curHeadingConfidence);

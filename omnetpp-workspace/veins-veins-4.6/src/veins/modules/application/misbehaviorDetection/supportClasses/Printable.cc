@@ -161,124 +161,123 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
     char line[1024] = "";
     char data[64] = "";
 
-    strcat(line, name);
+    strcat(line, name);//1
     strcat(line, " ");
     sprintf(data, "%f", deltaT);
-    strcat(line, data);
+    strcat(line, data);//2
     strcat(line, " ");
     sprintf(data, "%f", density);
+    strcat(line, data);//3
+    strcat(line, " ");
+    sprintf(data, "%f", flagsRangePlausibility_1);//4
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsRangePlausibility_1);
+    sprintf(data, "%f", flagsPositionPlausibility_1);//5
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionPlausibility_1);
+    sprintf(data, "%f", flagsSpeedPlausibility_1);//6
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedPlausibility_1);
+    sprintf(data, "%f", flagsPositionConsistancy_1);//7
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionConsistancy_1);
+    sprintf(data, "%f", flagsPositionSpeedConsistancy_1);//8
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionSpeedConsistancy_1);
+    sprintf(data, "%f", flagsSpeedConsistancy_1);//9
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedConsistancy_1);
+    sprintf(data, "%f", flagsBeaconFrequency_1);//10
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsBeaconFrequency_1);
+    sprintf(data, "%f", flagsIntersection_1);//11
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsIntersection_1);
+    sprintf(data, "%f", flagsSuddenAppearence_1);//12
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSuddenAppearence_1);
+    sprintf(data, "%f", flagsPositionHeadingConsistancy_1);//13
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionHeadingConsistancy_1);
+    sprintf(data, "%f", cumulFlags_1);//14
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", cumulFlags_1);
+    sprintf(data, "%f", allTests_1);//15
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", allTests_1);
+    sprintf(data, "%f", flagsRangePlausibility_2);//16
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsRangePlausibility_2);
+    sprintf(data, "%f", flagsPositionPlausibility_2);//17
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionPlausibility_2);
+    sprintf(data, "%f", flagsSpeedPlausibility_2);//18
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedPlausibility_2);
+    sprintf(data, "%f", flagsPositionConsistancy_2);//19
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionConsistancy_2);
+    sprintf(data, "%f", flagsPositionSpeedConsistancy_2);//20
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionSpeedConsistancy_2);
+    sprintf(data, "%f", flagsSpeedConsistancy_2);//21
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedConsistancy_2);
+    sprintf(data, "%f", flagsBeaconFrequency_2);//22
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsBeaconFrequency_2);
+    sprintf(data, "%f", flagsIntersection_2);//23
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsIntersection_2);
+    sprintf(data, "%f", flagsSuddenAppearence_2);//24
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSuddenAppearence_2);
+    sprintf(data, "%f", flagsPositionHeadingConsistancy_2);//25
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionHeadingConsistancy_2);
+    sprintf(data, "%f", cumulFlags_2);//26
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", cumulFlags_2);
-    strcat(line, data);
-    strcat(line, " ");
-    sprintf(data, "%f", allTests_2);
+    sprintf(data, "%f", allTests_2);//27
     strcat(line, data);
     for (int i = 0; i < 1024; ++i) {
         outStr[i] = line[i];
     }
 
-
-    std::cout << "++++++++++ " << name << " ++++++++++" << " Factor_1:"
+    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_1:"
             << cumulFlags_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsRangePlausibility_1:"
-            << flagsRangePlausibility_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsPositionPlausibility_1:"
-            << flagsPositionPlausibility_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsSpeedPlausibility_1:"
-            << flagsSpeedPlausibility_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsPositionConsistancy_1:"
-            << flagsPositionConsistancy_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsPositionSpeedConsistancy_1:"
-            << flagsPositionSpeedConsistancy_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsPositionHeadingConsistancy_1:"
-            << flagsPositionHeadingConsistancy_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsSpeedConsistancy_1:"
-            << flagsSpeedConsistancy_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++"
-            << " flagsBeaconFrequency_1:" << flagsBeaconFrequency_1 / allTests_1 * 100
-            << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++" << " flagsIntersection_1:"
-            << flagsIntersection_1 / allTests_1 * 100 << "%" << '\n';
-    std::cout << "++++++++++ " << name << " ++++++++++" << " flagsSuddenAppearence_1:"
-            << flagsSuddenAppearence_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsRangePlausibility_1:"
+//            << flagsRangePlausibility_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsPositionPlausibility_1:"
+//            << flagsPositionPlausibility_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsSpeedPlausibility_1:"
+//            << flagsSpeedPlausibility_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsPositionConsistancy_1:"
+//            << flagsPositionConsistancy_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsPositionSpeedConsistancy_1:"
+//            << flagsPositionSpeedConsistancy_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsPositionHeadingConsistancy_1:"
+//            << flagsPositionHeadingConsistancy_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsSpeedConsistancy_1:"
+//            << flagsSpeedConsistancy_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsBeaconFrequency_1:" << flagsBeaconFrequency_1 / allTests_1 * 100
+//            << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++" << " flagsIntersection_1:"
+//            << flagsIntersection_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++" << " flagsSuddenAppearence_1:"
+//            << flagsSuddenAppearence_1 / allTests_1 * 100 << "%" << '\n';
 
 
-//    std::cout << "++++++++++ " << name << " ++++++++++" << " Factor_2:"
-//            << cumulFlags_2 / allTests_2 * 100 << "%" << '\n';
+    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_2:"
+            << cumulFlags_2 / allTests_2 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++"
 //            << " flagsRangePlausibility_2:"
 //            << flagsRangePlausibility_2 / allTests_2 * 100 << "%" << '\n';
@@ -297,6 +296,9 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
 //    std::cout << "++++++++++ " << name << " ++++++++++"
 //            << " flagsSpeedConsistancy_2:"
 //            << flagsSpeedConsistancy_2 / allTests_2 * 100 << "%" << '\n';
+//    std::cout << "++++++++++ " << name << " ++++++++++"
+//            << " flagsPositionHeadingConsistancy_2:"
+//            << flagsPositionHeadingConsistancy_2 / allTests_2 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++"
 //            << " flagsBeaconFrequency_2:" << flagsBeaconFrequency_2 / allTests_2 * 100
 //            << "%" << '\n';

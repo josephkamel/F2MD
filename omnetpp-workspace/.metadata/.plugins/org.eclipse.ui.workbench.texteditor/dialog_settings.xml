@@ -2,29 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="getAng" key="selection"/>
+		<item value="tApp" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="getang"/>
-			<item value="getan"/>
-			<item value="Move"/>
-			<item value="orient"/>
-			<item value="ori"/>
-			<item value="angle"/>
-			<item value="get"/>
-			<item value="TraCIMobility"/>
-			<item value="getAngleRad"/>
-			<item value="PositionHeadingConsistancy"/>
-			<item value="positi"/>
-			<item value="head"/>
-			<item value="maxs"/>
-			<item value="positionPl"/>
-			<item value="PositionPlausibilityCheck"/>
+			<item value="tapp"/>
+			<item value="app"/>
+			<item value="    prntMaxTemp.incAll(mbType);"/>
+			<item value="InterTest"/>
+			<item value="conf2"/>
+			<item value="calculateCircleCircleIntersection"/>
+			<item value="calculateCircleCircleIntersection\"/>
+			<item value="IntersectionCheck"/>
+			<item value="intertTest"/>
+			<item value="&lt;1"/>
+			<item value="baseV1"/>
+			<item value="AggregateFactors"/>
+			<item value="CheckNodeForReport"/>
+			<item value="init"/>
+			<item value="getTotalFaulty"/>
 		</list>
 		<list key="replacehistory">
+			<item value="&lt;0.9"/>
 			<item value="9"/>
 			<item value="8"/>
 			<item value="AggregateFactors"/>
@@ -39,7 +40,6 @@
 			<item value="BaseWaveApplLayerV2"/>
 			<item value="MDModuleV2"/>
 			<item value="NodeHistory"/>
-			<item value="nodeHistory"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

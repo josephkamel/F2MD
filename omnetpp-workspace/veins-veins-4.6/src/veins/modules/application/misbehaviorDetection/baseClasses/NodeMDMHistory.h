@@ -16,8 +16,7 @@
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 using namespace omnetpp;
-
-#define MAXMDMLENGTH 3
+#include "../supportClasses/MDMLib.h"
 
 class MDMHistory {
     private:

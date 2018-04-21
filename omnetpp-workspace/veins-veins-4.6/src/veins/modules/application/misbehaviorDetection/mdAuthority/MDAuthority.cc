@@ -108,5 +108,10 @@ void MDAuthority::saveLine(std::string path, std::string serial, double time) {
     if(init){
         init = false;
     }
+}
 
+
+void MDAuthority::resetAll(){
+    baseV1.resetAll();
+    baseV2.resetAll();
 }
