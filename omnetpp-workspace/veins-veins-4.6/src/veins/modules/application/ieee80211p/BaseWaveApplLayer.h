@@ -191,6 +191,7 @@ class BaseWaveApplLayer : public BaseApplLayer {
         double myMdType;
 
         BasicSafetyMessage attackBsm = BasicSafetyMessage();
+        BasicSafetyMessage nextAttackBsm = BasicSafetyMessage();
 
         int myId;
         int mySCH;

@@ -506,7 +506,7 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     CheckNodeByThreshold(bsm, bsmCheck, detectedNodes, bsm.getSenderMbType());
 
-    bsmCheck = CheckNodeByApplication(bsm, bsmCheck, detectedNodes,
+    bsmCheck = CheckNodeByApplication2(bsm, bsmCheck, detectedNodes,
             bsm.getSenderMbType());
 
     return bsmCheck;
@@ -738,7 +738,6 @@ BsmCheck MDModuleV2::CheckNodeByApplication(BasicSafetyMessage bsm,
 
 bool MDModuleV2::AggregateFactors(double curFactor, double factor0,
         double factor1) {
-
     if (curFactor <= 0) {
         return true;
     } else if (curFactor >= 1) {
@@ -917,7 +916,6 @@ BsmCheck MDModuleV2::CheckNodeByApplication2(BasicSafetyMessage bsm,
         }
     }
 
-    return bsmCheck;
 
     if (checkFailed) {
         mbReport.setGenerationTime(simTime().dbl());
@@ -936,18 +934,22 @@ BsmCheck MDModuleV2::CheckNodeByApplication2(BasicSafetyMessage bsm,
 
 bool MDModuleV2::AggregateFactorsList(double curFactor, double *factorList,
         int factorListSize) {
+
     if (curFactor <= 0) {
         return true;
     } else if (curFactor >= 1) {
         return false;
     } else {
-        double worseFactor = 1;
+        double averageFactor = curFactor;
         for (int var = 0; var < factorListSize; ++var) {
-            if (worseFactor > factorList[var]) {
-                worseFactor = factorList[var];
-            }
+            averageFactor = averageFactor + factorList[var];
         }
-        if ((curFactor * worseFactor) < 0.5) {
+        if(factorListSize > 0){
+            averageFactor = averageFactor / (factorListSize+1);
+        }else{
+            averageFactor = 1;
+        }
+        if ((averageFactor) < 0.5) {
             return true;
         } else {
             return false;

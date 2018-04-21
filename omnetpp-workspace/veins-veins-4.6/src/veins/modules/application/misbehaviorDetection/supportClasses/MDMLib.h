@@ -24,7 +24,7 @@
 #define MAX_PSS 5.8 // 5.73402
 #define MAX_TIME_DELTA 1.1
 
-#define MAX_DELTA_INTER 0.1
+#define MAX_DELTA_INTER 1.001
 
 #define SUDDEN_APPEARENCE_RANGE 210 // 420/2
 
@@ -41,18 +41,19 @@
 #define MAX_HEADING_CHANGE 90 //90
 
 #define DELTA_BSM_TIME 5 // application
-#define DELTA_TRUST_TIME 5 // application 2
+#define DELTA_TRUST_TIME 10 // application 2
 #define MAXBSM_TRUST_LENGTH 5
 
 #define DELTA_REPORT_TIME 5 // history report
 
 #define POS_HEADING_TIME 1.1
 
-
-
 #define MAXBSMLENGTH 10
 #define MAXMDMLENGTH 10
 #define MAXNODESLENGTH 100
+
+#define MAXTARGETLENGTH 1000
+#define MAXTARGETTIME 2
 
 
 class MDMLib {

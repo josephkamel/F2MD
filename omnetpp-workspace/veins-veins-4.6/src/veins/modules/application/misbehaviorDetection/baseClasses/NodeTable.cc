@@ -138,3 +138,23 @@ BasicSafetyMessage NodeTable::getRandomBSM() {
     return nodeHistoryList[randNode].getBSM(randBSM);
 }
 
+BasicSafetyMessage NodeTable::getNextAttackedBsm(Coord myPosition, int bsmNode, double bsmTime) {
+    if(bsmNode==0 || (simTime().dbl() - bsmTime) > 1.1){
+        double minDistance = 10000000;
+        int index = -1;
+        MDMLib mdmLib = MDMLib();
+        for (int var = 0; var < nodesNum; ++var) {
+            double distance = mdmLib.calculateDistance(myPosition,nodeHistoryList[var].getLatestBSM().getSenderPos());
+            if(minDistance > distance){
+                minDistance = distance;
+                index = var;
+            }
+        }
+        return nodeHistoryList[index].getLatestBSM();
+    }else{
+        BasicSafetyMessage latestbsm = getNodeHistory(bsmNode).getLatestBSM();
+        return latestbsm;
+    }
+}
+
+

@@ -44,6 +44,7 @@ public:
     double getDeltaTime(int, int);
 
     BasicSafetyMessage getRandomBSM();
+    BasicSafetyMessage getNextAttackedBsm(Coord myPosition, int bsmNode, double bsmTime);
 };
 
 #endif

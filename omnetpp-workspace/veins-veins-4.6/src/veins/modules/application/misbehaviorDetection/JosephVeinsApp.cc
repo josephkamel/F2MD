@@ -15,7 +15,7 @@ Define_Module(JosephVeinsApp);
 #define serialNumber "IRT-DEMO"
 #define savePath "/home/joseph/Projects/ConfidenceRange/mdmSave/"
 
-#define confPos 5
+#define confPos 7.5
 #define confSpd 0
 #define confHea 0
 
@@ -24,8 +24,14 @@ Define_Module(JosephVeinsApp);
 
 #define SAVE_PERIOD 1 //60 seconds
 
-#define START_SAVE 60 //60 seconds
-#define START_ATTACK 0 //60 seconds
+#define START_SAVE 0 //60 seconds
+#define START_ATTACK 10 //60 seconds
+
+#define DISRUPTIVE false
+
+static int targetNodes [MAXTARGETLENGTH];
+static int targetNodesLength = 0;
+static double targetClearTime = 0;
 
 void JosephVeinsApp::initialize(int stage) {
 
@@ -48,7 +54,7 @@ void JosephVeinsApp::initialize(int stage) {
             curPositionConfidence = Coord(confPos, confPos, 0);
             curSpeedConfidence = Coord(confSpd, confSpd, 0);
             curHeadingConfidence = Coord(confHea, confHea, 0);
-            TraCIColor color = TraCIColor(255,255,0,0);
+            TraCIColor color = TraCIColor(0,255,0,0);
             traciVehicle->setColor(color);
         }else if(myMdType == 2){
             curPositionConfidence = Coord(confPos, confPos, 0);
@@ -195,13 +201,33 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
                 mdmV2.resetTempFlags();
             }
 
-
-
         if (myMdType == 2) {
             if (detectedNodes.getNodesNum() > 0) {
-                attackBsm = detectedNodes.getRandomBSM();
+                attackBsm = nextAttackBsm;
+                if(DISRUPTIVE){
+                    nextAttackBsm = detectedNodes.getRandomBSM();
+                    addTargetNode(nextAttackBsm.getSenderAddress());
+                }else{
+                    nextAttackBsm = detectedNodes.getNextAttackedBsm(curPosition, nextAttackBsm.getSenderAddress(), nextAttackBsm.getArrivalTime().dbl());
+                    addTargetNode(nextAttackBsm.getSenderAddress());
+                }
+            }
+        }else{
+            if(isTargetNode(myId)){
+                TraCIColor color = TraCIColor(255,255,0,0);
+                traciVehicle->setColor(color);
+            }else{
+                TraCIColor color = TraCIColor(0,255,0,0);
+                traciVehicle->setColor(color);
             }
         }
+
+        if ((simTime().dbl()-targetClearTime) > MAXTARGETTIME) {
+            targetClearTime = simTime().dbl();
+            clearTargetNodes();
+        }
+
+
     }
 
 //Your application has received a beacon message from another car or RSU
@@ -238,3 +264,44 @@ void JosephVeinsApp::handlePositionUpdate(cObject* obj) {
 //the vehicle has moved. Code that reacts to new positions goes here.
 //member variables such as currentPosition and currentSpeed are updated in the parent class
 }
+
+
+void JosephVeinsApp::addTargetNode(int id){
+    bool found = false;
+    for (int var = 0; var < targetNodesLength; ++var) {
+        if(targetNodes[var] == id){
+            found = true;
+        }
+    }
+
+    if(!found){
+        targetNodes[targetNodesLength] = id;
+        targetNodesLength ++;
+    }
+}
+void JosephVeinsApp::removeTargetNode(int id){
+    int index = -1;
+    for (int var = 0; var < targetNodesLength; ++var) {
+        if(targetNodes[var] == id){
+            index = var;
+            break;
+        }
+    }
+
+    for (int var = index; var < targetNodesLength-1; ++var) {
+        targetNodes[var] = targetNodes[var+1];
+    }
+    targetNodesLength --;
+}
+void JosephVeinsApp::clearTargetNodes(){
+    targetNodesLength = 0;
+}
+bool JosephVeinsApp::isTargetNode(int id){
+    for (int var = 0; var < targetNodesLength; ++var) {
+        if(targetNodes[var] == id){
+            return true;
+        }
+    }
+    return false;
+}
+

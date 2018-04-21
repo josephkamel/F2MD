@@ -59,6 +59,7 @@ void BaseWaveApplLayer::initialize(int stage) {
         myMdType = 0;
 
         attackBsm.setSenderAddress(0);
+        nextAttackBsm.setSenderAddress(0);
 
         //read parameters
         headerLength = par("headerLength").longValue();

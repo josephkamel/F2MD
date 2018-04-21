@@ -58,6 +58,11 @@ class JosephVeinsApp : public BaseWaveApplLayer {
         double induceMisbehaviorProb(double faulty, double attackers);
         double induceMisbehaviorFixed(double faulty, double attackers);
 
+        void addTargetNode(int id);
+        void removeTargetNode(int id);
+        void clearTargetNodes();
+        bool isTargetNode(int id);
+
         typedef std::list<Obstacle*> ObstacleGridCell;
         typedef std::vector<ObstacleGridCell> ObstacleGridRow;
         typedef std::vector<ObstacleGridRow> Obstacles;
