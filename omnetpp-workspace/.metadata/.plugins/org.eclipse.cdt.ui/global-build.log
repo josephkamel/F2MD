@@ -49209,3 +49209,141 @@ make MODE=release all
 make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
 make[1]: Nothing to be done for 'all'.
 make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+22:24:57 **** Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+veins/modules/application/misbehaviorDetection/MDModule.cc
+veins/modules/application/misbehaviorDetection/MDModuleV2.cc
+veins/modules/application/misbehaviorDetection/baseClasses/BsmCheck.cc
+veins/modules/application/misbehaviorDetection/baseClasses/InterTest.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeTable.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MBReport.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDAuthority.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GaussianRandom.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GeneralLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc
+veins/modules/application/traci/MyVeinsApp.cc
+veins/modules/application/traci/TraCIDemo11p.cc
+veins/modules/application/traci/TraCIDemoRSU11p.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+22:25:48 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:48:52 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+veins/modules/application/misbehaviorDetection/MDModule.cc
+veins/modules/application/misbehaviorDetection/MDModuleV2.cc
+veins/modules/application/misbehaviorDetection/baseClasses/BsmCheck.cc
+veins/modules/application/misbehaviorDetection/baseClasses/InterTest.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeTable.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MBReport.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDAuthority.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GaussianRandom.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GeneralLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc
+veins/modules/application/traci/MyVeinsApp.cc
+veins/modules/application/traci/TraCIDemo11p.cc
+veins/modules/application/traci/TraCIDemoRSU11p.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:49:53 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+veins/modules/application/misbehaviorDetection/MDModule.cc
+veins/modules/application/misbehaviorDetection/MDModuleV2.cc
+veins/modules/application/misbehaviorDetection/baseClasses/BsmCheck.cc
+veins/modules/application/misbehaviorDetection/baseClasses/InterTest.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeTable.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MBReport.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDAuthority.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GaussianRandom.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GeneralLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc
+veins/modules/application/traci/MyVeinsApp.cc
+veins/modules/application/traci/TraCIDemo11p.cc
+veins/modules/application/traci/TraCIDemoRSU11p.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:51:17 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:51:32 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+veins/modules/application/misbehaviorDetection/MDModule.cc
+veins/modules/application/misbehaviorDetection/MDModuleV2.cc
+veins/modules/application/misbehaviorDetection/baseClasses/BsmCheck.cc
+veins/modules/application/misbehaviorDetection/baseClasses/InterTest.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeTable.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MBReport.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDAuthority.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GaussianRandom.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GeneralLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc
+veins/modules/application/traci/MyVeinsApp.cc
+veins/modules/application/traci/TraCIDemo11p.cc
+veins/modules/application/traci/TraCIDemoRSU11p.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:52:06 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/ieee80211p/BaseWaveApplLayer.cc
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+veins/modules/application/misbehaviorDetection/MDModule.cc
+veins/modules/application/misbehaviorDetection/MDModuleV2.cc
+veins/modules/application/misbehaviorDetection/baseClasses/BsmCheck.cc
+veins/modules/application/misbehaviorDetection/baseClasses/InterTest.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.cc
+veins/modules/application/misbehaviorDetection/baseClasses/NodeTable.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MBReport.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.cc
+veins/modules/application/misbehaviorDetection/mdAuthority/MDAuthority.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GaussianRandom.cc
+veins/modules/application/misbehaviorDetection/supportClasses/GeneralLib.cc
+veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc
+veins/modules/application/traci/MyVeinsApp.cc
+veins/modules/application/traci/TraCIDemo11p.cc
+veins/modules/application/traci/TraCIDemoRSU11p.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:53:29 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+23:54:21 **** Incremental Build of configuration gcc-release for project veins-veins-4.6 ****
+make MODE=release all 
+make[1]: Entering directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'
+veins/modules/application/misbehaviorDetection/JosephVeinsApp.cc
+Creating shared library: ../out/gcc-release/src/libveins.so
+make[1]: Leaving directory '/home/joseph/Projects/ConfidenceRange/VeinsMD/omnetpp-workspace/veins-veins-4.6/src'

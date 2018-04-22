@@ -2806,3 +2806,27 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64
 
 !ENTRY org.eclipse.launchbar.core 2 0 2018-04-21 18:20:01.793
 !MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+!SESSION 2018-04-22 11:14:06.645 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-04-22 11:14:14.348
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-04-22 22:01:42.796 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_162
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-04-22 22:01:51.568
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-22 22:25:48.743
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2018-04-22 22:25:48.744
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
