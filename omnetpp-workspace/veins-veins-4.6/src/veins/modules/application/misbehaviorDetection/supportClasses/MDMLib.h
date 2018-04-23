@@ -54,7 +54,7 @@
 
 #define MAXTARGETLENGTH 1000
 
-#define MAXTARGETTIME 1
+#define MAXTARGETTIME 2
 
 
 class MDMLib {
