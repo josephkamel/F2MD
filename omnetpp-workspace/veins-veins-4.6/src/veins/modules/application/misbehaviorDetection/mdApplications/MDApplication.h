@@ -49,6 +49,7 @@ public:
     MDApplication(const char* name);
     void setName(const char* name);
 
+
     void SendReport(MDAuthority* mdAuthority, MBReport mbReport);
 
     void saveLine(std::string path, std::string serial, double density,

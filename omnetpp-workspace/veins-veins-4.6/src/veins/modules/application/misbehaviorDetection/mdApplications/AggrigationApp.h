@@ -23,10 +23,12 @@ using namespace omnetpp;
 class AggrigationApp: public MDApplication {
 public:
 
-    AggrigationApp(const char* name);
+    int version = 0;
+
+    AggrigationApp(const char* name, int version);
 
     std::tuple<double, MBReport> CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType, int version);
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 
     bool AggregateFactorsList(double curFactor, double *factorList,
             int factorListSize);

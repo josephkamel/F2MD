@@ -23,10 +23,12 @@ using namespace omnetpp;
 class ThresholdApp: public MDApplication {
 public:
 
-    ThresholdApp(const char* name);
+    double Threshold = 0;
+
+    ThresholdApp(const char* name, double Threshold);
 
     std::tuple<double, MBReport> CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType, double Threshold);
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 };
 
 #endif

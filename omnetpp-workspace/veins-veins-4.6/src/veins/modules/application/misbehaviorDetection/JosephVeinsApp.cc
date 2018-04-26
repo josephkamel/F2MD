@@ -1,6 +1,6 @@
 /*******************************************************************************
-* @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+* @author  Joseph Kamel
+* @email   joseph.kamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -38,12 +38,11 @@ static MDAuthority mdAuthority = MDAuthority();
 char const *AppV1Name= "AppV1";
 char const *AppV2Name= "AppV2";
 
+//ThresholdApp AppV1(AppV1Name,0.5);
+//ThresholdApp AppV2(AppV2Name,0.5);
 
-ThresholdApp thresholdAppV1(AppV1Name);
-ThresholdApp thresholdAppV2(AppV2Name);
-
-AggrigationApp aggrigationAppV1(AppV1Name);
-AggrigationApp aggrigationAppV2(AppV2Name);
+AggrigationApp AppV1(AppV1Name,1);
+AggrigationApp AppV2(AppV2Name,2);
 
 bool AppInit = false;
 
@@ -163,11 +162,8 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         BsmCheck bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
 
-        tuple <bool, MBReport> resultV1 = thresholdAppV1.CheckNodeForReport(myId, *bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType(), 0.5);
-        tuple <bool, MBReport> resultV2 = thresholdAppV2.CheckNodeForReport(myId, *bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType(), 0.5);
-
-//        tuple <bool, MBReport> resultV1 = aggrigationAppV1.CheckNodeForReport(myId,*bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType(), 1);
-//        tuple <bool, MBReport> resultV2 = aggrigationAppV2.CheckNodeForReport(myId,*bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType(), 2);
+        tuple <bool, MBReport> resultV1 = AppV1.CheckNodeForReport(myId, *bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType());
+        tuple <bool, MBReport> resultV2 = AppV2.CheckNodeForReport(myId, *bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType());
 
         if(get<0>(resultV1)){
             mdm.SendReport(&mdAuthority,get<1>(resultV1));
@@ -192,11 +188,8 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         }
 
             if(!init){
-                thresholdAppV1.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
-                thresholdAppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
-
-                aggrigationAppV1.resetAllFlags();
-                aggrigationAppV2.resetAllFlags();
+                AppV1.resetAllFlags();
+                AppV2.resetAllFlags();
                 //mdAuthority.resetAll();
                 init = true;
             }
@@ -205,19 +198,12 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
                 deltaT = simTime().dbl();
 
                 if(simTime().dbl() > START_SAVE){
-            thresholdAppV1.saveLine(savePath, serialNumber,
-                    mobility->getManager()->getManagedHosts().size(), deltaT);
-            thresholdAppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
-
-//                    aggrigationAppV1.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
-//                    aggrigationAppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+                    AppV1.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+                    AppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
                     mdAuthority.saveLine(savePath, serialNumber, deltaT);
                 }
-                thresholdAppV1.resetInstFlags();
-                thresholdAppV2.resetInstFlags();
-
-                aggrigationAppV1.resetInstFlags();
-                aggrigationAppV2.resetInstFlags();
+                AppV1.resetInstFlags();
+                AppV2.resetInstFlags();
             }
 
         if (myMdType == 2) {

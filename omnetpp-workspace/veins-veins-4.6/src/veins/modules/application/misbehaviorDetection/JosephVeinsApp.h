@@ -29,7 +29,6 @@ using namespace Veins;
 #include "mdAuthority/MDAuthority.h"
 
 #include "mdApplications/MDApplication.h"
-
 #include "mdApplications/ThresholdApp.h"
 #include "mdApplications/AggrigationApp.h"
 class JosephVeinsApp : public BaseWaveApplLayer {

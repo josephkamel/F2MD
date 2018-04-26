@@ -24,12 +24,12 @@ using namespace std;
 using namespace boost;
 
 
-ThresholdApp::ThresholdApp(const char* name):MDApplication(name){
-
+ThresholdApp::ThresholdApp(const char* name, double Threshold):MDApplication(name){
+    this->Threshold = Threshold;
 }
 
 std::tuple<double, MBReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-               BsmCheck bsmCheck, NodeTable detectedNodes, double mbType, double Threshold){
+        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType){
 
     bool checkFailed = false;
 

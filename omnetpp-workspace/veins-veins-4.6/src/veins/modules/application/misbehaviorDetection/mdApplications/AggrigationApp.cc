@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+ * @email   joseph.kamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -23,16 +23,17 @@
 using namespace std;
 using namespace boost;
 
-
 #define DELTA_TRUST_TIME 10 // application 2
 #define MAXBSM_TRUST_LENGTH 5
 
-AggrigationApp::AggrigationApp(const char* name):MDApplication(name){
-
+AggrigationApp::AggrigationApp(const char* name, int version) :
+        MDApplication(name) {
+    this->version = version;
 }
 
-std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType, int version){
+std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,
+        BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes,
+        double mbType) {
 
     bool checkFailed = false;
     MBReport mbReport;
@@ -48,12 +49,12 @@ std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,BasicSa
     BsmCheck bsmCheckList[MAXBSM_TRUST_LENGTH];
     int bsmCheckListSize = 0;
 
-
     for (int var = 0; var < nodeHist.getBSMNum(); ++var) {
         if (bsmCheckListSize < MAXBSM_TRUST_LENGTH) {
             if (mdmLib.calculateDeltaTime(bsm,
                     nodeHist.getBSM(var))<DELTA_TRUST_TIME) {
-                bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var, version);
+                bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var,
+                        version);
                 bsmCheckListSize++;
             }
         }
@@ -73,7 +74,6 @@ std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,BasicSa
         prntAppInst.incFlags("RangePlausibility", mbType);
     }
 
-
     //std::cout<< "PositionConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionConsistancy();
@@ -85,7 +85,6 @@ std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,BasicSa
         prntApp.incFlags("PositionConsistancy", mbType);
         prntAppInst.incFlags("PositionConsistancy", mbType);
     }
-
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
@@ -162,40 +161,40 @@ std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,BasicSa
         factorList[var] = bsmCheckList[var].getPositionHeadingConsistancy();
     }
 
-    if (AggregateFactorsList(bsmCheck.getPositionHeadingConsistancy(), factorList,
-            bsmCheckListSize)) {
+    if (AggregateFactorsList(bsmCheck.getPositionHeadingConsistancy(),
+            factorList, bsmCheckListSize)) {
         checkFailed = true;
         prntApp.incFlags("PositionHeadingConsistancy", mbType);
         prntAppInst.incFlags("PositionHeadingConsistancy", mbType);
     }
 
-
     for (int var = 0; var < bsmCheckListSize; ++var) {
         bsmCheckList[var].getIntersection();
     }
-
 
     InterTest inter = bsmCheck.getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
         double curInferFactor = inter.getInterValue(var);
 
         for (int i = 0; i < bsmCheckListSize; ++i) {
-            double IdIndex = bsmCheckList[i].getIntersection().getIdIndex(inter.getInterId(var));
-                if (IdIndex != -1) {
-                    factorList[i] = bsmCheckList[i].getIntersection().getInterValue(IdIndex);
-                } else {
-                    factorList[i] = 1;
-                }
+            double IdIndex = bsmCheckList[i].getIntersection().getIdIndex(
+                    inter.getInterId(var));
+            if (IdIndex != -1) {
+                factorList[i] = bsmCheckList[i].getIntersection().getInterValue(
+                        IdIndex);
+            } else {
+                factorList[i] = 1;
+            }
         }
 
         //std::cout<< "Intersection" << '\n';
-        if (AggregateFactorsList(curInferFactor, factorList, bsmCheckListSize)) {
+        if (AggregateFactorsList(curInferFactor, factorList,
+                bsmCheckListSize)) {
             checkFailed = true;
             prntApp.incFlags("Intersection", mbType);
             prntAppInst.incFlags("Intersection", mbType);
         }
     }
-
 
     if (checkFailed) {
         mbReport.setGenerationTime(simTime().dbl());
@@ -215,18 +214,14 @@ std::tuple<double, MBReport> AggrigationApp::CheckNodeForReport(int myId,BasicSa
 bool AggrigationApp::AggregateFactorsList(double curFactor, double *factorList,
         int factorListSize) {
 
-//    if (curFactor <= 0) {
-//        return true;
-//    } else if (curFactor >= 1) {
-//        return false;
-//    } else {
+    if (version == 1) {
         double averageFactor = curFactor;
         for (int var = 0; var < factorListSize; ++var) {
             averageFactor = averageFactor + factorList[var];
         }
-        if(factorListSize > 0){
-            averageFactor = averageFactor / (factorListSize+1);
-        }else{
+        if (factorListSize > 0) {
+            averageFactor = averageFactor / (factorListSize + 1);
+        } else {
             averageFactor = 1;
         }
         if ((averageFactor) <= 0.5) {
@@ -234,5 +229,28 @@ bool AggrigationApp::AggregateFactorsList(double curFactor, double *factorList,
         } else {
             return false;
         }
-//    }
+
+    } else {
+        if (curFactor <= 0) {
+            return true;
+        } else if (curFactor >= 1) {
+            return false;
+        } else {
+            double averageFactor = curFactor;
+            for (int var = 0; var < factorListSize; ++var) {
+                averageFactor = averageFactor + factorList[var];
+            }
+            if (factorListSize > 0) {
+                averageFactor = averageFactor / (factorListSize + 1);
+            } else {
+                averageFactor = 1;
+            }
+            if ((averageFactor) <= 0.5) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 }
