@@ -2,29 +2,35 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="mdAuthority" key="selection"/>
+		<item value="prntApp" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="mdAuthority"/>
-			<item value="fileNameV1"/>
-			<item value="CheckNodeForReport"/>
-			<item value="init"/>
-			<item value="SendReport"/>
-			<item value="SEND"/>
-			<item value="SEND REPORT"/>
-			<item value="MDApplications"/>
+			<item value="prntApp"/>
+			<item value="__VEINS_MDApplication_H_"/>
+			<item value="ThresholdApp"/>
+			<item value="prntTemp"/>
+			<item value="prntLong"/>
+			<item value="0"/>
+			<item value="&lt;= 0"/>
+			<item value="CheckNodeByThreshold"/>
 			<item value="MDApplication"/>
-			<item value="MDModuleV2"/>
-			<item value="MAXTARGETTIME"/>
-			<item value="INT"/>
-			<item value="int"/>
-			<item value="next"/>
-			<item value="CheckNodeByApplication2"/>
+			<item value="mdmHist"/>
+			<item value="checkFailedMin"/>
+			<item value="prntLongTemp"/>
+			<item value="prntMin"/>
+			<item value="thre"/>
+			<item value=".dat"/>
 		</list>
 		<list key="replacehistory">
+			<item value="prntAppInst"/>
+			<item value="prntApp"/>
+			<item value="&lt;= Threshold"/>
+			<item value="checkFailed"/>
+			<item value="prntTemp"/>
+			<item value="prntLong"/>
 			<item value="MDApplication"/>
 			<item value="MDApplications"/>
 			<item value="&lt;0.9"/>
@@ -34,12 +40,6 @@
 			<item value=""/>
 			<item value="²"/>
 			<item value="interDistance"/>
-			<item value="initRadius"/>
-			<item value="MDMLib"/>
-			<item value="BasicSafetyMessage"/>
-			<item value="BasicSafetyMessageV2"/>
-			<item value="BasicSafetyMessageV2_m"/>
-			<item value="BaseWaveApplLayerV2"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

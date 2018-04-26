@@ -65,15 +65,7 @@ public:
     std::map<std::string, double> CheckBSMold(NodeTable detectedNodes,int senderId);
 
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
-    std::tuple<bool, MBReport> CheckNodeByThreshold(BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
     void SendReport(MDAuthority * mdAuthority,MBReport mbReport);
-
-    void saveLine(std::string path, std::string serial, double density, double deltaT) ;
-
-    void resetTempFlags();
-    void resetAllFlags();
-
 };
 
 #endif

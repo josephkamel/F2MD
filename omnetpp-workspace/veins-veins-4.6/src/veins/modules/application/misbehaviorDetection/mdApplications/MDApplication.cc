@@ -23,8 +23,6 @@
 using namespace std;
 using namespace boost;
 
-
-
 MDApplication::MDApplication(const char* name) {
     strcpy(appName,name);
 
@@ -35,14 +33,10 @@ MDApplication::MDApplication(const char* name) {
     prntAppInst.setName(nameInst);
 }
 
-
-
 void MDApplication::SendReport(MDAuthority* mdAuthority, MBReport mbReport) {
     mdAuthority->sendReport(appName, mbReport);
 }
 
-
-static bool init = true;
 void MDApplication::saveLine(std::string path, std::string serial, double density,
         double deltaT){
 
@@ -75,17 +69,17 @@ void MDApplication::saveLine(std::string path, std::string serial, double densit
     strcat(filePathGen, fileNameApp);
 
     prntApp.getPrintable(outChar, density, deltaT);
-    prntApp.writeFile(filePathGen, outChar, init);
+    prntApp.writeFile(filePathGen, outChar, printInit);
 
     strcpy(filePathGen, directoryPathGen);
     strcat(filePathGen, "/");
     strcat(filePathGen, fileNameAppInst);
 
     prntAppInst.getPrintable(outChar, density, deltaT);
-    prntAppInst.writeFile(filePathGen, outChar, init);
+    prntAppInst.writeFile(filePathGen, outChar, printInit);
 
-    if (init) {
-        init = false;
+    if (printInit) {
+        printInit = false;
     }
 }
 

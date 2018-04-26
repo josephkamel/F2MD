@@ -23,15 +23,18 @@ class MDMHistory {
     private:
         int nodeId;
         int BSMNum;
-        BsmCheck bsmCheckList[MAXMDMLENGTH];
+        BsmCheck bsmCheckListV1[MAXMDMLENGTH];
+        BsmCheck bsmCheckListV2[MAXMDMLENGTH];
 
     public:
         MDMHistory();
         MDMHistory(int);
         int getMDMNum();
-        BsmCheck getBsmCheck(int);
-        void addBsmCheck(BsmCheck bsmCheck);
-        void setBsmCheck(int index, BsmCheck bsmCheck);
+
+        BsmCheck getBsmCheck(int index, int version);
+
+        void addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2);
+        void setBsmCheck(int index, BsmCheck bsmCheckV1,BsmCheck bsmCheckV2);
     };
 
 #endif

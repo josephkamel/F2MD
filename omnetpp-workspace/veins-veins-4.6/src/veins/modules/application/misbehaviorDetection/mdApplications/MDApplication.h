@@ -42,6 +42,7 @@ protected:
 
     Printable prntApp;
     Printable prntAppInst;
+    bool printInit = true;
 
 public:
 

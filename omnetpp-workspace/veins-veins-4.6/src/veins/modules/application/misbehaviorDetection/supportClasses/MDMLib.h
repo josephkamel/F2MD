@@ -42,8 +42,7 @@
 #define MAX_HEADING_CHANGE 90 //90
 
 #define DELTA_BSM_TIME 5 // application
-#define DELTA_TRUST_TIME 10 // application 2
-#define MAXBSM_TRUST_LENGTH 5
+
 
 #define DELTA_REPORT_TIME 5 // history report
 

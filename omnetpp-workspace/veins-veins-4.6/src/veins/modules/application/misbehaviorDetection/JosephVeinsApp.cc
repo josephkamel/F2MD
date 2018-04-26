@@ -35,20 +35,22 @@ static int targetNodesLength = 0;
 static double targetClearTime = 0;
 
 static MDAuthority mdAuthority = MDAuthority();
-char const *thresholdAppName= "thresholdApp";
-ThresholdApp thresholdApp(thresholdAppName);
+char const *AppV1Name= "AppV1";
+char const *AppV2Name= "AppV2";
 
-bool appInit = false;
+
+ThresholdApp thresholdAppV1(AppV1Name);
+ThresholdApp thresholdAppV2(AppV2Name);
+
+AggrigationApp aggrigationAppV1(AppV1Name);
+AggrigationApp aggrigationAppV2(AppV2Name);
+
+bool AppInit = false;
 
 void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
-
-        if(!appInit){
-
-        }
-
 
         //joseph
         //Initializing members and pointers of your application goes here
@@ -154,35 +156,23 @@ static double deltaT = 0;
 static bool init = false;
 void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
     int senderID = bsm->getSenderAddress();
-    if (bsm->getSenderMbType() == 0) {
-        BsmCheck bsmCheck;
-        if (!detectedNodes.includes(senderID)) {
-            NodeHistory newNode(senderID);
-            newNode.addBSM(*bsm);
-            MDMHistory newMDM(senderID);
-            newMDM.addBsmCheck(bsmCheck);
-            detectedNodes.put(senderID, newNode, newMDM);
-        } else {
-            NodeHistory existingNode = detectedNodes.getNodeHistory(senderID);
-            existingNode.addBSM(*bsm);
-            MDMHistory existingMDM = detectedNodes.getMDMHistory(senderID);
-            existingMDM.addBsmCheck(bsmCheck);
-            detectedNodes.put(senderID, existingNode, existingMDM);
-        }
-    } else {
+
         MDModule mdm(myId, curPosition, curSpeed, Coord(myWidth, myLength),
                 curHeading);
         MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence);
-
         BsmCheck bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
+        BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
 
-        tuple <bool, MBReport> resultV1 = thresholdApp.CheckNodeForReport(myId, *bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType(), 0.5);
+        tuple <bool, MBReport> resultV1 = thresholdAppV1.CheckNodeForReport(myId, *bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType(), 0.5);
+        tuple <bool, MBReport> resultV2 = thresholdAppV2.CheckNodeForReport(myId, *bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType(), 0.5);
+
+//        tuple <bool, MBReport> resultV1 = aggrigationAppV1.CheckNodeForReport(myId,*bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType(), 1);
+//        tuple <bool, MBReport> resultV2 = aggrigationAppV2.CheckNodeForReport(myId,*bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType(), 2);
+
         if(get<0>(resultV1)){
             mdm.SendReport(&mdAuthority,get<1>(resultV1));
         }
 
-        BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
-        tuple <bool, MBReport> resultV2 = mdmV2.CheckNodeByApplication2(*bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType());
         if(get<0>(resultV2)){
             mdmV2.SendReport(&mdAuthority,get<1>(resultV2));
         }
@@ -191,19 +181,22 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
             NodeHistory newNode(senderID);
             newNode.addBSM(*bsm);
             MDMHistory newMDM(senderID);
-            newMDM.addBsmCheck(bsmCheckV2);
+            newMDM.addBsmCheck(bsmCheckV1,bsmCheckV2);
             detectedNodes.put(senderID, newNode, newMDM);
         } else {
             NodeHistory existingNode = detectedNodes.getNodeHistory(senderID);
             existingNode.addBSM(*bsm);
             MDMHistory existingMDM = detectedNodes.getMDMHistory(senderID);
-            existingMDM.addBsmCheck(bsmCheckV2);
+            existingMDM.addBsmCheck(bsmCheckV1, bsmCheckV2);
             detectedNodes.put(senderID, existingNode, existingMDM);
         }
 
             if(!init){
-                mdm.resetAllFlags();
-                mdmV2.resetAllFlags();
+                thresholdAppV1.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+                thresholdAppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+
+                aggrigationAppV1.resetAllFlags();
+                aggrigationAppV2.resetAllFlags();
                 //mdAuthority.resetAll();
                 init = true;
             }
@@ -212,16 +205,19 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
                 deltaT = simTime().dbl();
 
                 if(simTime().dbl() > START_SAVE){
-                    thresholdApp.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+            thresholdAppV1.saveLine(savePath, serialNumber,
+                    mobility->getManager()->getManagedHosts().size(), deltaT);
+            thresholdAppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
 
-                    mdm.saveLine(savePath, serialNumber,
-                            mobility->getManager()->getManagedHosts().size(), deltaT);
-                    mdmV2.saveLine(savePath, serialNumber,
-                            mobility->getManager()->getManagedHosts().size(), deltaT);
+//                    aggrigationAppV1.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+//                    aggrigationAppV2.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
                     mdAuthority.saveLine(savePath, serialNumber, deltaT);
                 }
-                mdm.resetTempFlags();
-                mdmV2.resetTempFlags();
+                thresholdAppV1.resetInstFlags();
+                thresholdAppV2.resetInstFlags();
+
+                aggrigationAppV1.resetInstFlags();
+                aggrigationAppV2.resetInstFlags();
             }
 
         if (myMdType == 2) {
@@ -249,7 +245,7 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
             targetClearTime = simTime().dbl();
             clearTargetNodes();
         }
-    }
+
 
 //Your application has received a beacon message from another car or RSU
 //code for handling the message goes here

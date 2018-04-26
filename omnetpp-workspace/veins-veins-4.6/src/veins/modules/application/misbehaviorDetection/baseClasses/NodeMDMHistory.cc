@@ -22,20 +22,28 @@ MDMHistory::MDMHistory(int id) {
     BSMNum = 0;
 }
 
-BsmCheck MDMHistory::getBsmCheck(int index) {
-    return bsmCheckList[index];
+BsmCheck MDMHistory::getBsmCheck(int index, int version) {
+    if(version == 1){
+        return bsmCheckListV1[index];
+    }else{
+        return bsmCheckListV2[index];
+    }
 }
 
-void MDMHistory::setBsmCheck(int index, BsmCheck bsmCheck) {
-    bsmCheckList[index] = bsmCheck;
+
+void MDMHistory::setBsmCheck(int index, BsmCheck bsmCheckV1, BsmCheck bsmCheckV2) {
+    bsmCheckListV1[index] = bsmCheckV1;
+    bsmCheckListV2[index] = bsmCheckV2;
 }
 
-void MDMHistory::addBsmCheck(BsmCheck bsmCheck) {
+void MDMHistory::addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2) {
     if (BSMNum < MAXMDMLENGTH) {
         BSMNum++;
     }
     for (int var = BSMNum - 1; var > 0; --var) {
-        bsmCheckList[var] = bsmCheckList[var - 1];
+        bsmCheckListV1[var] = bsmCheckListV1[var - 1];
+        bsmCheckListV2[var] = bsmCheckListV2[var - 1];
     }
-    bsmCheckList[0] = bsmCheck;
+    bsmCheckListV1[0] = bsmCheckV1;
+    bsmCheckListV2[0] = bsmCheckV2;
 }

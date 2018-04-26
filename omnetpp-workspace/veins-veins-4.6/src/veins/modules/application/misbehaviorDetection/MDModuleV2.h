@@ -68,18 +68,6 @@ private:
 
     void PrintBsmCheck(int senderId, BsmCheck bsmCheck);
 
-    bool AggregateFactors(double curFactor, double factor0, double factor1);
-    bool AggregateFactorsList(double curFactor, double *factorList,
-            int factorListSize);
-
-    BsmCheck CheckNodeByThreshold( BasicSafetyMessage bsm, BsmCheck bsmCheck,
-            NodeTable detectedNodes, double mbType);
-
-    BsmCheck CheckNodeByApplication(BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
-
-
-
 
     void resetAll();
 
@@ -87,16 +75,7 @@ public:
     MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
-    std::tuple<bool, MBReport> CheckNodeByApplication2(BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
-
     void SendReport(MDAuthority * mdAuthority,MBReport mbReport);
-
-    void saveLine(std::string path, std::string serial, double density,
-            double deltaT);
-
-    void resetTempFlags();
-    void resetAllFlags();
 };
 
 #endif
