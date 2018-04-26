@@ -1,6 +1,7 @@
 /*******************************************************************************
- * @author  Joseph Kamel
- * @date    11/04/2014
+ * @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com
+ * @date    11/04/2018
  * @version 1.0
  *
  * SCA (Secure Cooperative Autonomous systems)
@@ -10,6 +11,8 @@
 
 #ifndef __VEINS_MDModuleV2_H_
 #define __VEINS_MDModuleV2_H_
+
+#include <tuple>
 
 #include <omnetpp.h>
 #include <veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.h>
@@ -75,12 +78,8 @@ private:
     BsmCheck CheckNodeByApplication(BasicSafetyMessage bsm,
             BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 
-    BsmCheck CheckNodeByApplication2(BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 
 
-
-    void SendReport(MBReport mbReport);
 
     void resetAll();
 
@@ -88,7 +87,10 @@ public:
     MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
-    void CheckNodesHistoryForReport(NodeTable* detectedNodes);
+    std::tuple<bool, MBReport> CheckNodeByApplication2(BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+
+    void SendReport(MDAuthority * mdAuthority,MBReport mbReport);
 
     void saveLine(std::string path, std::string serial, double density,
             double deltaT);

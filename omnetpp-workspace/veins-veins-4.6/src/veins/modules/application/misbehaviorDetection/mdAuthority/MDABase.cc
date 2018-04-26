@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com 
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -8,16 +9,36 @@
 * All rights reserved.
 *******************************************************************************/
 
-#include <veins/modules/application/misbehaviorDetection/mdAuthority/MDABase.h>
+#include "MDABase.h"
 
-MDABase::MDABase(const char * name) {
-    strcpy(this->name, name);
+MDABase::MDABase() {
+    init = true;
     totalFaultyNum = 0;
     totalAttackerNum = 0;
     reportedFaultyNum = 0;
     reportedAttackerNum = 0;
     faultyAverageReportDelay = 0;
     attackerAverageReportDelay = 0;
+
+}
+
+MDABase::MDABase(const char * name) {
+    strcpy(this->name, name);
+    init = true;
+    totalFaultyNum = 0;
+    totalAttackerNum = 0;
+    reportedFaultyNum = 0;
+    reportedAttackerNum = 0;
+    faultyAverageReportDelay = 0;
+    attackerAverageReportDelay = 0;
+}
+
+char* MDABase::getName(){
+    return this->name;
+}
+
+void MDABase::setName(const char * name){
+    strcpy(this->name, name);
 }
 
 void MDABase::resetAll(){
@@ -67,16 +88,16 @@ void MDABase::addReportedAttacker(int id, double time) {
     reportedAttackerNum++;
 }
 
-void MDABase::writeFile(std::string path, char* printStr, bool init) {
+void MDABase::writeFile(std::string path, char* printStr) {
     ofstream outFile;
     if(init){
         outFile.open(path,
                 std::ofstream::out);
+        init = false;
     }else{
         outFile.open(path,
                 std::ofstream::out | std::ofstream::app | std::ofstream::ate);
     }
-
 
     outFile.seekp(0, std::ios::end);
     outFile << printStr << "\n";
@@ -120,6 +141,7 @@ int MDABase::totalAttackerIndex(int id) {
 }
 
 void MDABase::getPrintable(char* outStr, double time) {
+
     char line[1024] = "";
     char data[64] = "";
     strcat(line, name);

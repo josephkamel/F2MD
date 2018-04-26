@@ -2,29 +2,31 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="MAXTARGETTIME" key="selection"/>
+		<item value="mdAuthority" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="mdAuthority"/>
+			<item value="fileNameV1"/>
+			<item value="CheckNodeForReport"/>
+			<item value="init"/>
+			<item value="SendReport"/>
+			<item value="SEND"/>
+			<item value="SEND REPORT"/>
+			<item value="MDApplications"/>
+			<item value="MDApplication"/>
+			<item value="MDModuleV2"/>
 			<item value="MAXTARGETTIME"/>
 			<item value="INT"/>
 			<item value="int"/>
 			<item value="next"/>
 			<item value="CheckNodeByApplication2"/>
-			<item value="CheckNodeByApplication"/>
-			<item value="AggregateFactorsList(double curFactor, double *factorList,&#x0A;        int factorListSize) "/>
-			<item value="DELTA_BSM_TIME"/>
-			<item value="mdmHist"/>
-			<item value="nodeHist"/>
-			<item value="tapp"/>
-			<item value="app"/>
-			<item value="    prntMaxTemp.incAll(mbType);"/>
-			<item value="InterTest"/>
-			<item value="conf2"/>
 		</list>
 		<list key="replacehistory">
+			<item value="MDApplication"/>
+			<item value="MDApplications"/>
 			<item value="&lt;0.9"/>
 			<item value="9"/>
 			<item value="8"/>
@@ -38,8 +40,6 @@
 			<item value="BasicSafetyMessageV2"/>
 			<item value="BasicSafetyMessageV2_m"/>
 			<item value="BaseWaveApplLayerV2"/>
-			<item value="MDModuleV2"/>
-			<item value="NodeHistory"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

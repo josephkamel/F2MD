@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -16,12 +17,15 @@
 
 using namespace omnetpp;
 
-#define TOTCARNUM 100000
+#define TOTCARNUM 10000
+
 
 class MDABase {
 private:
 
     char name[32];
+
+    bool init = true;
 
     int totalFaultyIdList[TOTCARNUM];
     double totalFaultyTimeList[TOTCARNUM];
@@ -31,18 +35,19 @@ private:
     double totalAttackerTimeList[TOTCARNUM];
     int totalAttackerNum = 0;
 
-    int reportedFaultyIdList[TOTCARNUM];
-    double reportedFaultyTimeList[TOTCARNUM];
-    int reportedFaultyNum = 0;
-
     int reportedAttackerIdList[TOTCARNUM];
     double reportedAttackerTimeList[TOTCARNUM];
     int reportedAttackerNum = 0;
+
+    int reportedFaultyIdList[TOTCARNUM];
+    double reportedFaultyTimeList[TOTCARNUM];
+    int reportedFaultyNum = 0;
 
     double faultyAverageReportDelay = 0;
     double attackerAverageReportDelay = 0;
 
 public:
+    MDABase();
     MDABase(const char *);
     void addTotalFaulty(int id, double time);
     void addReportedFaulty(int id, double time);
@@ -63,7 +68,11 @@ public:
     int totalAttackerIndex(int id);
 
     void getPrintable(char* outStr, double time);
-    void writeFile(std::string path, char* printStr, bool init);
+    void writeFile(std::string path, char* printStr);
+
+    char* getName();
+
+    void setName(const char*);
 
     void resetAll();
 

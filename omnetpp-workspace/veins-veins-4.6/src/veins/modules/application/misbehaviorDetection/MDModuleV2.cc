@@ -1,6 +1,7 @@
 /*******************************************************************************
- * @author  Joseph Kamel
- * @date    11/04/2014
+ * @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com 
+ * @date    11/04/2018
  * @version 1.0
  *
  * SCA (Secure Cooperative Autonomous systems)
@@ -18,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 
 #include "supportClasses/Printable.h"
 
@@ -506,8 +508,8 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     CheckNodeByThreshold(bsm, bsmCheck, detectedNodes, bsm.getSenderMbType());
 
-    bsmCheck = CheckNodeByApplication2(bsm, bsmCheck, detectedNodes,
-            bsm.getSenderMbType());
+//    CheckNodeByApplication(bsm, bsmCheck, detectedNodes,
+//            bsm.getSenderMbType());
 
     return bsmCheck;
 }
@@ -716,7 +718,7 @@ BsmCheck MDModuleV2::CheckNodeByApplication(BasicSafetyMessage bsm,
         mbReport.setSenderId(myId);
         mbReport.setReportedId(senderId);
         mbReport.setMbType(mbType);
-        SendReport(mbReport);
+  //      SendReport(mbReport);
 
         prntApp.incCumulFlags(mbType);
         prntAppTemp.incCumulFlags(mbType);
@@ -751,7 +753,7 @@ bool MDModuleV2::AggregateFactors(double curFactor, double factor0,
     }
 }
 
-BsmCheck MDModuleV2::CheckNodeByApplication2(BasicSafetyMessage bsm,
+std::tuple<bool, MBReport>  MDModuleV2::CheckNodeByApplication2(BasicSafetyMessage bsm,
         BsmCheck bsmCheck, NodeTable detectedNodes, double mbType) {
 
     bool checkFailed = false;
@@ -922,14 +924,14 @@ BsmCheck MDModuleV2::CheckNodeByApplication2(BasicSafetyMessage bsm,
         mbReport.setSenderId(myId);
         mbReport.setReportedId(senderId);
         mbReport.setMbType(mbType);
-        SendReport(mbReport);
+//        SendReport(mbReport);
 
         prntApp.incCumulFlags(mbType);
         prntAppTemp.incCumulFlags(mbType);
 
         bsmCheck.setReported(true);
     }
-    return bsmCheck;
+    return std::make_tuple(checkFailed, mbReport);
 }
 
 bool MDModuleV2::AggregateFactorsList(double curFactor, double *factorList,
@@ -1122,141 +1124,9 @@ BsmCheck MDModuleV2::CheckNodeByThreshold(BasicSafetyMessage bsm,
     return bsmCheck;
 }
 
-void MDModuleV2::CheckNodesHistoryForReport(NodeTable* detectedNodes) {
-
-    for (int var = 0; var < detectedNodes->getNodesNum(); ++var) {
-
-        int senderId = detectedNodes->getNodeId(var);
-
-        MDMHistory mdmHist = detectedNodes->getMDMHistory(senderId);
-        NodeHistory nodeHist = detectedNodes->getNodeHistory(senderId);
-
-        BsmCheck bsmCheck = mdmHist.getBsmCheck(0);
-        BasicSafetyMessage bsm = nodeHist.getBSM(0);
-        double mbType = bsm.getSenderMbType();
-
-        if (mbType != 0) {
-            std::cout << "OK " << myId << " " << senderId << " " << mbType
-                    << '\n';
-            std::cout << bsmCheck.getPositionSpeedConsistancy() << '\n';
-
-            if (bsmCheck.getReported() == false) {
-                if (simTime().dbl()
-                        - bsm.getArrivalTime().dbl() > DELTA_REPORT_TIME) {
-
-                    bool checkFailed = false;
-                    MBReport mbReport;
-
-                    if (bsmCheck.getRangePlausibility() < 0.5) {
-                        std::cout << "##########V2 " << "ART FAILED => "
-                                << bsmCheck.getRangePlausibility() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntApp.incFlags("RangePlausibility", mbType);
-                        prntAppTemp.incFlags("RangePlausibility", mbType);
-                    }
-                    if (bsmCheck.getPositionConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "MGTD FAILED => "
-                                << bsmCheck.getPositionConsistancy() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntApp.incFlags("PositionConsistancy", mbType);
-                        prntAppTemp.incFlags("PositionConsistancy", mbType);
-                    }
-                    if (bsmCheck.getSpeedConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "MGTS FAILED => "
-                                << bsmCheck.getSpeedConsistancy() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntApp.incFlags("SpeedConsistancy", mbType);
-                        prntAppTemp.incFlags("SpeedConsistancy", mbType);
-                    }
-
-                    if (bsmCheck.getPositionSpeedConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "MGTSV FAILED => "
-                                << bsmCheck.getPositionSpeedConsistancy()
-                                << " A:" << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntApp.incFlags("PositionSpeedConsistancy", mbType);
-                        prntAppTemp.incFlags("PositionSpeedConsistancy",
-                                mbType);
-                    }
-
-                    if (bsmCheck.getSpeedPlausibility() < 0.5) {
-                        std::cout << "##########V2 " << "MAXS FAILED => "
-                                << bsmCheck.getSpeedPlausibility() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntApp.incFlags("SpeedPlausibility", mbType);
-                        prntAppTemp.incFlags("SpeedPlausibility", mbType);
-                    }
-                    if (bsmCheck.getPositionPlausibility() < 0.5) {
-                        std::cout << "##########V2 " << "MAP FAILED => "
-                                << bsmCheck.getPositionPlausibility() << " A:"
-                                << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-                        prntApp.incFlags("PositionConsistancy", mbType);
-                        prntAppTemp.incFlags("PositionConsistancy", mbType);
-                    }
-
-                    if (bsmCheck.getSuddenAppearence() < 0.5) {
-                        std::cout << "##########V2 " << "SAW FAILED => "
-                                << bsmCheck.getSuddenAppearence() << " A:"
-                                << myId << " B:" << senderId << '\n';
-
-                        prntApp.incFlags("SuddenAppearence", mbType);
-                        prntAppTemp.incFlags("SuddenAppearence", mbType);
-                    }
-
-                    if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
-                        std::cout << "##########V2 " << "PHC FAILED => "
-                                << bsmCheck.getPositionHeadingConsistancy()
-                                << " A:" << myId << " B:" << senderId << '\n';
-                        checkFailed = true;
-
-                        prntApp.incFlags("PositionHeadingConsistancy", mbType);
-                        prntAppTemp.incFlags("PositionHeadingConsistancy",
-                                mbType);
-                    }
-
-                    InterTest inter = bsmCheck.getIntersection();
-                    for (int var = 0; var < inter.getInterNum(); ++var) {
-                        if (inter.getInterValue(var) < 0.5) {
-                            std::cout << "##########V2 " << "INT FAILED => "
-                                    << inter.getInterValue(var) << " A:" << myId
-                                    << " B:" << senderId << " C:"
-                                    << inter.getInterId(var) << '\n';
-                            checkFailed = true;
-
-                            prntApp.incFlags("Intersection", mbType);
-                            prntAppTemp.incFlags("Intersection", mbType);
-                        }
-                    }
-
-                    if (checkFailed) {
-                        mbReport.setGenerationTime(simTime().dbl());
-                        mbReport.setSenderId(myId);
-                        mbReport.setReportedId(senderId);
-                        mbReport.setMbType(mbType);
-                        SendReport(mbReport);
-
-                        prntApp.incCumulFlags(mbType);
-                        prntAppTemp.incCumulFlags(mbType);
-
-                        bsmCheck.setReported(true);
-                        mdmHist.setBsmCheck(0, bsmCheck);
-                        detectedNodes->setMDMHistory(senderId, mdmHist);
-                    }
-                }
-            }
-        }
-    }
-
-}
-
-void MDModuleV2::SendReport(MBReport mbReport) {
-    MDAuthority mdAuthority;
-    mdAuthority.sendReportV2(mbReport);
+void MDModuleV2::SendReport(MDAuthority* mdAuthority,MBReport mbReport) {
+    char nameV2[32] = "mdaV2";
+    mdAuthority->sendReport(nameV2, mbReport);
 }
 
 static bool init = true;

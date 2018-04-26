@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com 
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -33,10 +34,22 @@ static int targetNodes [MAXTARGETLENGTH];
 static int targetNodesLength = 0;
 static double targetClearTime = 0;
 
+static MDAuthority mdAuthority = MDAuthority();
+char const *thresholdAppName= "thresholdApp";
+ThresholdApp thresholdApp(thresholdAppName);
+
+bool appInit = false;
+
 void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
+
+        if(!appInit){
+
+        }
+
+
         //joseph
         //Initializing members and pointers of your application goes here
         EV << "Initializing " << par("appName").stringValue() << std::endl;
@@ -47,6 +60,7 @@ void JosephVeinsApp::initialize(int stage) {
 
         myMdType = induceMisbehaviorFixed(FAULTY, ATTACKERS);
         mdAuthority.addNewNode(myId, myMdType, simTime().dbl());
+
 
         std::string stringId = std::to_string(myId);
 
@@ -160,25 +174,32 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
                 curHeading);
         MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence);
 
-        BsmCheck bsmCheck = mdmV2.CheckBSM(*bsm, detectedNodes);
+        BsmCheck bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
+
+        tuple <bool, MBReport> resultV1 = thresholdApp.CheckNodeForReport(myId, *bsm, bsmCheckV1, detectedNodes, bsm->getSenderMbType(), 0.5);
+        if(get<0>(resultV1)){
+            mdm.SendReport(&mdAuthority,get<1>(resultV1));
+        }
+
+        BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
+        tuple <bool, MBReport> resultV2 = mdmV2.CheckNodeByApplication2(*bsm, bsmCheckV2, detectedNodes, bsm->getSenderMbType());
+        if(get<0>(resultV2)){
+            mdmV2.SendReport(&mdAuthority,get<1>(resultV2));
+        }
 
         if (!detectedNodes.includes(senderID)) {
             NodeHistory newNode(senderID);
             newNode.addBSM(*bsm);
             MDMHistory newMDM(senderID);
-            newMDM.addBsmCheck(bsmCheck);
+            newMDM.addBsmCheck(bsmCheckV2);
             detectedNodes.put(senderID, newNode, newMDM);
         } else {
             NodeHistory existingNode = detectedNodes.getNodeHistory(senderID);
             existingNode.addBSM(*bsm);
             MDMHistory existingMDM = detectedNodes.getMDMHistory(senderID);
-            existingMDM.addBsmCheck(bsmCheck);
+            existingMDM.addBsmCheck(bsmCheckV2);
             detectedNodes.put(senderID, existingNode, existingMDM);
         }
-
-        mdm.reportMB(mdm.CheckBSM(detectedNodes, senderID), senderID,
-                bsm->getSenderMbType());
-
 
             if(!init){
                 mdm.resetAllFlags();
@@ -191,6 +212,8 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
                 deltaT = simTime().dbl();
 
                 if(simTime().dbl() > START_SAVE){
+                    thresholdApp.saveLine(savePath, serialNumber, mobility->getManager()->getManagedHosts().size(), deltaT);
+
                     mdm.saveLine(savePath, serialNumber,
                             mobility->getManager()->getManagedHosts().size(), deltaT);
                     mdmV2.saveLine(savePath, serialNumber,
@@ -226,8 +249,6 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
             targetClearTime = simTime().dbl();
             clearTargetNodes();
         }
-
-
     }
 
 //Your application has received a beacon message from another car or RSU

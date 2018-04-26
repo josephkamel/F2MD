@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com 
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -42,6 +43,43 @@ Printable::Printable(const char* name) {
 
     allTests_1 = 0;
     allTests_2 = 0;
+}
+
+Printable::Printable() {
+
+    flagsRangePlausibility_1 = 0;
+    flagsPositionPlausibility_1 = 0;
+    flagsSpeedPlausibility_1 = 0;
+    flagsPositionConsistancy_1 = 0;
+    flagsPositionSpeedConsistancy_1 = 0;
+    flagsSpeedConsistancy_1 = 0;
+    flagsBeaconFrequency_1 = 0;
+    flagsIntersection_1 = 0;
+    flagsSuddenAppearence_1 = 0;
+    flagsSuddenAppearence_1 = 0;
+    flagsPositionHeadingConsistancy_1 = 0;
+
+
+    flagsRangePlausibility_2 = 0;
+    flagsPositionPlausibility_2 = 0;
+    flagsSpeedPlausibility_2 = 0;
+    flagsPositionConsistancy_2 = 0;
+    flagsPositionSpeedConsistancy_2 = 0;
+    flagsSpeedConsistancy_2 = 0;
+    flagsBeaconFrequency_2 = 0;
+    flagsIntersection_2 = 0;
+    flagsSuddenAppearence_2 = 0;
+    flagsPositionHeadingConsistancy_2 = 0;
+
+    cumulFlags_1 = 0;
+    cumulFlags_2 = 0;
+
+    allTests_1 = 0;
+    allTests_2 = 0;
+}
+
+void Printable::setName(const char* name){
+    strcpy(this->name, name);
 }
 
 void Printable::incAll(double mbType) {

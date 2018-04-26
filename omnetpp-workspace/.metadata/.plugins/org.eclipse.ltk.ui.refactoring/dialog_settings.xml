@@ -7,8 +7,8 @@
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
 	</section>
 	<section name="RefactoringStatusDialog">
-		<item value="806" key="DIALOG_WIDTH"/>
-		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
-		<item value="488" key="DIALOG_HEIGHT"/>
+		<item value="800" key="DIALOG_WIDTH"/>
+		<item value="1|Open Sans|9.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="483" key="DIALOG_HEIGHT"/>
 	</section>
 </section>

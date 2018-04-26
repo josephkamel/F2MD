@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -10,7 +11,7 @@
 
 #ifndef __VEINS_MDAuthority_H_
 #define __VEINS_MDAuthority_H_
-
+#include <string.h>
 #include <omnetpp.h>
 #include "MBReport.h"
 #include "MDABase.h"
@@ -19,20 +20,25 @@
 
 using namespace omnetpp;
 
+#define ABaseNbr 2
+
 class MDAuthority {
 private:
 
-    void treatReportV1(MBReport report);
-    void treatReportV2(MBReport report);
+    MDABase baseList[ABaseNbr];
+
+    int baseListNum = 0;
+    void treatReport(MDABase* base, int index, MBReport report);
 
 
 public:
     MDAuthority();
 
-    void addNewNode(int id, double mbType, double time);
+    void registerNewBase(char* baseName);
 
-    void sendReportV1(MBReport report);
-    void sendReportV2(MBReport report);
+    void addNewNode(int id, double mbType, double time);
+    void addReportedNode(int id, double mbType, double time);
+    void sendReport(char* baseName, MBReport report);
 
     void saveLine(std::string path, std::string serial,double time);
 

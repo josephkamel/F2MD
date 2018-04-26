@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -27,21 +28,14 @@ using namespace Veins;
 #include "supportClasses/GeneralLib.h"
 #include "mdAuthority/MDAuthority.h"
 
-/**
- * @brief
- * This is a stub for a typical Veins application layer.
- * Most common functions are overloaded.
- * See MyVeinsApp.cc for hints
- *
- * @author David Eckhoff
- *
- */
+#include "mdApplications/MDApplication.h"
+#include "mdApplications/ThresholdApp.h"
+
 
 class JosephVeinsApp : public BaseWaveApplLayer {
     private:
         NodeTable detectedNodes;
         GeneralLib genLib = GeneralLib();
-        MDAuthority mdAuthority = MDAuthority();
 
     public:
         virtual void initialize(int stage);

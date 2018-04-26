@@ -1,6 +1,7 @@
 /*******************************************************************************
-* @author  Joseph Kamel
-* @date    11/04/2014
+* @author  Joseph Kamel 
+* @email   joseph.kamel@gmail.com
+* @date    11/04/2018
 * @version 1.0
 *
 * SCA (Secure Cooperative Autonomous systems)
@@ -10,6 +11,8 @@
 
 #ifndef __VEINS_MDModule_H_
 #define __VEINS_MDModule_H_
+
+#include <tuple>
 
 #include <omnetpp.h>
 
@@ -53,13 +56,18 @@ private:
     double PositionHeadingConsistancyCheck(Coord curHeading,
             Coord curPosition, Coord oldPosition, double deltaTime, double curSpeed);
 
-    void SendReport(MBReport mbReport);
+    InterTest MultipleIntersectionCheck(NodeTable detectedNodes,
+            BasicSafetyMessage bsm);
 
 public:
 
     MDModule(int myId, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
-    std::map<std::string, double> CheckBSM(NodeTable detectedNodes,int senderId);
-    void reportMB(std::map<std::string, double> result, int senderId , double mbType);
+    std::map<std::string, double> CheckBSMold(NodeTable detectedNodes,int senderId);
+
+    BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
+    std::tuple<bool, MBReport> CheckNodeByThreshold(BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+    void SendReport(MDAuthority * mdAuthority,MBReport mbReport);
 
     void saveLine(std::string path, std::string serial, double density, double deltaT) ;
 
