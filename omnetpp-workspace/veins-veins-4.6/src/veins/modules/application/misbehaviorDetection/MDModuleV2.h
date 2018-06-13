@@ -39,6 +39,11 @@ private:
     Coord myPosition;
     Coord myPositionConfidence;
 
+    Coord myHeading;
+    Coord myHeadingConfidence;
+
+    Coord mySize;
+
     MDMLib mdmLib;
 
     double RangePlausibilityCheck(Coord, Coord, Coord, Coord);
@@ -48,11 +53,20 @@ private:
             Coord curPositionConfidence, Coord oldPosition,
             Coord oldPositionConfidence, double time);
     double SpeedConsistancyCheck(double, double, double, double, double);
-    double IntersectionCheck(Coord, Coord, Coord, Coord);
+    double IntersectionCheck(Coord nodePosition1,
+            Coord nodePositionConfidence1, Coord nodePosition2,
+            Coord nodePositionConfidence2, Coord nodeHeading1, Coord nodeHeading2,
+            Coord nodeSize1, Coord nodeSize2);
     InterTest MultipleIntersectionCheck(NodeTable detectedNodes,
             BasicSafetyMessage bsm);
 
     double PositionSpeedConsistancyCheck(Coord curPosition,
+            Coord curPositionConfidence, Coord oldPosition,
+            Coord oldPositionConfidence, double curSpeed,
+            double curSpeedConfidence, double oldspeed,
+            double oldSpeedConfidence, double time);
+
+    double PositionSpeedConsistancyCheckOld(Coord curPosition,
             Coord curPositionConfidence, Coord oldPosition,
             Coord oldPositionConfidence, double curSpeed,
             double curSpeedConfidence, double oldspeed,
@@ -72,7 +86,7 @@ private:
     void resetAll();
 
 public:
-    MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence);
+    MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
     void SendReport(MDAuthority * mdAuthority,MBReport mbReport);

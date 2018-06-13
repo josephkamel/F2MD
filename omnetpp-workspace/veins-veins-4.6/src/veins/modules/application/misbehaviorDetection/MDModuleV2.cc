@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+ * @email   joseph.kamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -20,20 +20,22 @@
 #include <string>
 #include <vector>
 
-
 using namespace std;
 using namespace boost;
 
-MDModuleV2::MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence) {
+MDModuleV2::MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence,
+        Coord myHeading, Coord myHeadingConfidence, Coord mySize) {
     this->myId = myId;
     this->myPosition = myPosition;
     this->myPositionConfidence = myPositionConfidence;
+    this->myHeading = myHeading;
+    this->myHeadingConfidence = myHeadingConfidence;
+    this->mySize = mySize;
 }
 
 double MDModuleV2::RangePlausibilityCheck(Coord receiverPosition,
         Coord receiverPositionConfidence, Coord senderPosition,
         Coord senderPositionConfidence) {
-
 
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
@@ -54,6 +56,7 @@ double MDModuleV2::PositionConsistancyCheck(Coord curPosition,
 
     double factor = mdmLib.CircleCircleFactor(distance, curR, oldR,
     MAX_CONSISTANT_DISTANCE * time);
+
     return factor;
 }
 
@@ -83,12 +86,14 @@ double MDModuleV2::SpeedPlausibilityCheck(double speed,
     } else if ((fabs(speed) - fabs(speedConfidence) / 2) > MAX_PLAUSIBLE_SPEED) {
         return 0;
     } else {
-        return (fabs(speedConfidence) / 2 + (MAX_PLAUSIBLE_SPEED - fabs(speed)))
-                / fabs(speedConfidence);
+        double factor = (fabs(speedConfidence) / 2
+                + (MAX_PLAUSIBLE_SPEED - fabs(speed))) / fabs(speedConfidence);
+
+        return factor;
     }
 }
 
-double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
+double MDModuleV2::PositionSpeedConsistancyCheckOld(Coord curPosition,
         Coord curPositionConfidence, Coord oldPosition,
         Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
         double oldspeed, double oldSpeedConfidence, double time) {
@@ -109,8 +114,9 @@ double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
 
         minfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed, curR,
                 oldR, maxspeed - MIN_PSS);
+
 //        std::cout << " theoreticalSpeed:" << theoreticalSpeed << " curR:" << curR
-//                << " oldR:" << oldR << " maxspeed - MIN_SPEED_DELTA:" << maxspeed - MIN_SPEED_DELTA
+//                << " oldR:" << oldR << " maxspeed - MIN_PSS:" << maxspeed - MIN_PSS
 //                << '\n';
 
         double maxfactor;
@@ -127,11 +133,78 @@ double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
 //                << " theoreticalSpeed:" << theoreticalSpeed << " maxspeed:" << maxspeed
 //                << " minspeed:" << minspeed << '\n';
 
+        double factor = 1;
+
         if (minfactor < maxfactor) {
-            return minfactor;
+            factor = minfactor;
         } else {
-            return maxfactor;
+            factor = maxfactor;
         }
+
+        factor = (factor - 0.5) * 2;
+        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
+        if (factor > 0.75) {
+            factor = 1;
+        }
+      //  std::cout << " Old Min:" << minfactor << " Max:" << maxfactor << '\n';
+        return factor;
+
+    } else {
+        return 1;
+    }
+}
+
+double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
+        Coord curPositionConfidence, Coord oldPosition,
+        Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
+        double oldspeed, double oldSpeedConfidence, double time) {
+
+    MDMLib mdmLib;
+
+    if (time < MAX_TIME_DELTA) {
+
+        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+        double theoreticalSpeed = distance / time;
+        double maxspeed = std::max(curSpeed, oldspeed);
+        double minspeed = std::min(curSpeed, oldspeed);
+
+        double curR = curPositionConfidence.x / time + curSpeedConfidence;
+        double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
+
+        double maxfactor = mdmLib.OneSidedCircleSegmentFactor(
+                maxspeed - theoreticalSpeed, curR, oldR, MAX_PSS);
+
+        double minfactor = mdmLib.OneSidedCircleSegmentFactor(
+                theoreticalSpeed - minspeed, curR, oldR, - MIN_PSS);
+
+        double factor = 1;
+
+        if (minfactor < maxfactor) {
+            factor = minfactor;
+        } else {
+            factor = maxfactor;
+        }
+
+        factor = (factor - 0.5) * 2;
+        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
+        if (factor > 0.75) {
+            factor = 1;
+        }
+
+        double factorOld = PositionSpeedConsistancyCheckOld(curPosition,
+                curPositionConfidence, oldPosition, oldPositionConfidence,
+                curSpeed, curSpeedConfidence, oldspeed, oldSpeedConfidence,
+                time);
+
+//        std::cout << " Min:" << minfactor << " Max:" << maxfactor << '\n';
+//
+//        if(factorOld !=factor){
+//            std::cout << " factorOld:" << factorOld << " factor:" << factor << '\n';
+//            std::cout << "============================================" << '\n';
+//        }
+
+
+        return factor;
 
     } else {
         return 1;
@@ -140,14 +213,26 @@ double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
 
 double MDModuleV2::IntersectionCheck(Coord nodePosition1,
         Coord nodePositionConfidence1, Coord nodePosition2,
-        Coord nodePositionConfidence2) {
+        Coord nodePositionConfidence2, Coord nodeHeading1, Coord nodeHeading2,
+        Coord nodeSize1, Coord nodeSize2) {
 
-    double distance = mdmLib.calculateDistance(nodePosition1, nodePosition2);
-    double intFactor = mdmLib.intersectionFactor(nodePositionConfidence1.x,
-            nodePositionConfidence2.x, distance, MIN_INT_DIST);
+//    double distance = mdmLib.calculateDistance(nodePosition1, nodePosition2);
+//    double intFactor = mdmLib.CircleIntersectionFactor(
+//            nodePositionConfidence1.x, nodePositionConfidence2.x, distance,
+//            MIN_INT_DIST);
+//    intFactor = 1 - intFactor;
+//    return intFactor;
 
-    intFactor = 1 - intFactor;
-    return intFactor;
+    double heading1 = mdmLib.calculateHeadingAngle(nodeHeading1);
+    double heading2 = mdmLib.calculateHeadingAngle(nodeHeading2);
+
+    double intFactor2 = mdmLib.EllipseEllipseIntersectionFactor(nodePosition1,
+            nodePositionConfidence1, nodePosition2, nodePositionConfidence2,
+            heading1, heading2, nodeSize1, nodeSize2);
+    intFactor2 = 1 - intFactor2;
+    double factor = intFactor2;
+
+    return factor;
 
 }
 
@@ -156,6 +241,9 @@ InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
     int senderId = bsm.getSenderAddress();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
+    Coord senderHeading = bsm.getSenderHeading();
+
+    Coord senderSize = Coord(bsm.getSenderWidth(), bsm.getSenderLength());
 
     NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
     NodeHistory varNode;
@@ -165,7 +253,7 @@ InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
     int INTNum = 0;
 
     INTScore = IntersectionCheck(myPosition, myPositionConfidence, senderPos,
-            senderPosConfidence);
+            senderPosConfidence, myHeading, senderHeading, mySize, senderSize);
     if (INTScore < 1) {
         result["INTId_0"] = myId;
         result["INTCheck_0"] = INTScore;
@@ -184,10 +272,15 @@ InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
             if (mdmLib.calculateDeltaTime(varNode.getLatestBSM(),
                     bsm) < MAX_DELTA_INTER) {
 
+                Coord varSize = Coord(varNode.getLatestBSM().getSenderWidth(),
+                        varNode.getLatestBSM().getSenderLength());
+
                 INTScore = IntersectionCheck(
                         varNode.getLatestBSM().getSenderPos(),
                         varNode.getLatestBSM().getSenderPosConfidence(),
-                        senderPos, senderPosConfidence);
+                        senderPos, senderPosConfidence,
+                        varNode.getLatestBSM().getSenderHeading(),
+                        senderHeading, varSize, senderSize);
                 if (INTScore < 1) {
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
@@ -306,7 +399,9 @@ double MDModuleV2::PositionPlausibilityCheck(Coord senderPosition,
 //                << '\n';
 //    }
 
-    return (1 - (Intersection / count));
+    double factor = (1 - (Intersection / count));
+
+    return factor;
 }
 
 double MDModuleV2::BeaconFrequencyCheck(double timeNew, double timeOld) {
@@ -355,35 +450,77 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
 
         double xLow = distance * cos(angleLow * PI / 180);
 
-        double curFactorLow = mdmLib.calculateCircleSegment(
-                curPositionConfidence.x, curPositionConfidence.x + xLow)
-                / (PI * curPositionConfidence.x * curPositionConfidence.x);
-        double oldFactorLow = 1
-                - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
-                        oldPositionConfidence.x - xLow)
-                        / (PI * oldPositionConfidence.x
-                                * oldPositionConfidence.x);
+        double curFactorLow = 1;
+        if (curPositionConfidence.x == 0) {
+            if (angleLow <= MAX_HEADING_CHANGE) {
+                curFactorLow = 1;
+            } else {
+                curFactorLow = 0;
+            }
+        } else {
+            curFactorLow = mdmLib.calculateCircleSegment(
+                    curPositionConfidence.x, curPositionConfidence.x + xLow)
+                    / (PI * curPositionConfidence.x * curPositionConfidence.x);
+        }
+
+        double oldFactorLow = 1;
+        if (oldPositionConfidence.x == 0) {
+            if (angleLow <= MAX_HEADING_CHANGE) {
+                oldFactorLow = 1;
+            } else {
+                oldFactorLow = 0;
+            }
+        } else {
+            oldFactorLow = 1
+                    - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
+                            oldPositionConfidence.x - xLow)
+                            / (PI * oldPositionConfidence.x
+                                    * oldPositionConfidence.x);
+        }
 
         double xHigh = distance * cos(angleHigh * PI / 180);
+        double curFactorHigh = 1;
+        if (curPositionConfidence.x == 0) {
+            if (angleHigh <= MAX_HEADING_CHANGE) {
+                curFactorHigh = 1;
+            } else {
+                curFactorHigh = 0;
+            }
+        } else {
+            curFactorHigh = mdmLib.calculateCircleSegment(
+                    curPositionConfidence.x, curPositionConfidence.x + xHigh)
+                    / (PI * curPositionConfidence.x * curPositionConfidence.x);
+        }
 
-        double curFactorHigh = mdmLib.calculateCircleSegment(
-                curPositionConfidence.x, curPositionConfidence.x + xHigh)
-                / (PI * curPositionConfidence.x * curPositionConfidence.x);
-        double oldFactorHigh = 1
-                - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
-                        oldPositionConfidence.x - xHigh)
-                        / (PI * oldPositionConfidence.x
-                                * oldPositionConfidence.x);
+        double oldFactorHigh = 1;
+        if (oldPositionConfidence.x == 0) {
+            if (angleHigh <= MAX_HEADING_CHANGE) {
+                oldFactorHigh = 1;
+            } else {
+                oldFactorHigh = 0;
+            }
+        } else {
+            oldFactorHigh = 1
+                    - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
+                            oldPositionConfidence.x - xHigh)
+                            / (PI * oldPositionConfidence.x
+                                    * oldPositionConfidence.x);
+        }
 
         double factor = (curFactorLow + oldFactorLow + curFactorHigh
                 + oldFactorHigh) / 4;
 
-//    if(factor<=0.001){
+//    if(factor<=0.0){
+//
+//        std::cout<<"curPos: "<<curPosition<<'\n';
+//        std::cout<<"oldPos: "<<oldPosition<<'\n';
 //
 //        std::cout<<"relativePos: "<<relativePos<<'\n';
 //
 //        std::cout<<"curFactorLow: "<<curFactorLow<<'\n';
 //        std::cout<<"oldFactorLow: "<<oldFactorLow<<'\n';
+//        std::cout<<"curFactorHigh: "<<curFactorHigh<<'\n';
+//        std::cout<<"oldFactorHigh: "<<oldFactorHigh<<'\n';
 //        std::cout<<"positionAngle: "<<positionAngle<<'\n';
 //        std::cout<<"curHeadingAngle: "<<curHeadingAngle<<'\n';
 //        std::cout<<"angleDelta: "<<angleDelta<<'\n';
@@ -395,7 +532,15 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
 //        }else{
 //            std::cout<<"NONZ: "<<factor<<'\n';
 //        }
+//
+//     //   exit(0);
 //    }
+
+        factor = (factor - 0.5) * 2;
+        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
+        if (factor > 0.75) {
+            factor = 1;
+        }
 
         return factor;
     } else {
@@ -483,7 +628,6 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     //PrintBsmCheck(senderId, bsmCheck);
 
-
     return bsmCheck;
 }
 
@@ -545,7 +689,7 @@ void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
 
 }
 
-void MDModuleV2::SendReport(MDAuthority* mdAuthority,MBReport mbReport) {
+void MDModuleV2::SendReport(MDAuthority* mdAuthority, MBReport mbReport) {
     char nameV2[32] = "mdaV2";
     mdAuthority->sendReport(nameV2, mbReport);
 }

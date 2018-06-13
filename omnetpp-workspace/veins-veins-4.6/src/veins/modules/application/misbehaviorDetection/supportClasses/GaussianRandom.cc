@@ -10,6 +10,7 @@
 *******************************************************************************/
 
 #include "GaussianRandom.h"
+#define EPSILON_G 0.05
 
 GaussianRandom::GaussianRandom(double curPosConfidence, Coord curSpeedConfidence, Coord curHeadingConfidence) {
     this->curPosConfidence = curPosConfidence;
@@ -39,11 +40,8 @@ Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
     double theta = genLib.RandomDouble(0, 2 * PI);
 
-    if(r>curPosConfidence ){
-        r = curPosConfidence - 0.0001;
-    }
-    if(r<-curPosConfidence){
-        r = -curPosConfidence + 0.0001;
+    while(r>=(curPosConfidence+EPSILON_G) || r<=-(curPosConfidence+EPSILON_G) ){
+        r =  getGaussianRand(0, curPosConfidence/3);
     }
 
     double deltaX = r * cos(theta);

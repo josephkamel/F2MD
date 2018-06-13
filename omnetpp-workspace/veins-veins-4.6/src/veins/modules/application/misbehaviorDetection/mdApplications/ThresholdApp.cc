@@ -123,3 +123,57 @@ std::tuple<double, MBReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafe
 
     return std::make_tuple(checkFailed, mbReport);
 }
+
+double ThresholdApp::getMinFactor(int myId,BasicSafetyMessage bsm,
+        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType){
+
+    double minFactor = 1;
+
+    int senderId = bsm.getSenderAddress();
+
+    if (bsmCheck.getRangePlausibility() <= minFactor) {
+        minFactor = bsmCheck.getRangePlausibility();
+    }
+
+    if (bsmCheck.getPositionConsistancy() <= minFactor) {
+        minFactor = bsmCheck.getPositionConsistancy();
+    }
+
+    if (bsmCheck.getPositionSpeedConsistancy() <= minFactor) {
+        minFactor = bsmCheck.getPositionSpeedConsistancy();
+    }
+
+    if (bsmCheck.getSpeedConsistancy() <= minFactor) {
+        minFactor = bsmCheck.getSpeedConsistancy();
+    }
+
+    if (bsmCheck.getSpeedPlausibility() <= minFactor) {
+        minFactor = bsmCheck.getSpeedPlausibility();
+    }
+
+    if (bsmCheck.getPositionPlausibility() <= minFactor) {
+        minFactor = bsmCheck.getPositionPlausibility();
+    }
+
+    if (bsmCheck.getBeaconFrequency() <= minFactor) {
+        minFactor = bsmCheck.getBeaconFrequency();
+    }
+
+    if (bsmCheck.getPositionHeadingConsistancy() <= minFactor) {
+        minFactor = bsmCheck.getPositionHeadingConsistancy();
+    }
+
+    InterTest inter = bsmCheck.getIntersection();
+    for (int var = 0; var < inter.getInterNum(); ++var) {
+
+        double IT = inter.getInterValue(var);
+
+        if (IT <= minFactor) {
+            minFactor = IT;
+        }
+
+    }
+
+
+    return minFactor;
+}

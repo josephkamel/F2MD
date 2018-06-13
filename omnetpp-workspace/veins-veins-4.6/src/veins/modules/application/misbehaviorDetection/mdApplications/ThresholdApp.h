@@ -29,6 +29,9 @@ public:
 
     std::tuple<double, MBReport> CheckNodeForReport(int myId,BasicSafetyMessage bsm,
             BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+
+    double getMinFactor(int myId,BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 };
 
 #endif

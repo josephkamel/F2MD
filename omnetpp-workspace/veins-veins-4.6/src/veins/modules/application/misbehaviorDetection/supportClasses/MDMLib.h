@@ -15,6 +15,8 @@
 #include <omnetpp.h>
 #include <veins/modules/application/misbehaviorDetection/supportClasses/rectIntLib/RectIntLib.h>
 
+#include "ellipseIntLib/EllipseIntLib.h"
+
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #define MAX_CONFIDENCE_RANGE 10 //3
@@ -25,9 +27,9 @@
 #define MAX_PSS 5.8 // 5.73402
 #define MAX_TIME_DELTA 1.1
 
-#define MAX_DELTA_INTER 1.001
+#define MAX_DELTA_INTER 0.5 //1.001
 
-#define SUDDEN_APPEARENCE_RANGE 210 // 420/2
+#define SUDDEN_APPEARENCE_RANGE 210 // AggrigationApp420/2
 
 #define MAX_CONSISTANT_DISTANCE 43 // 42.77
 #define MAX_PLAUSIBLE_SPEED 43 // 42.77
@@ -53,8 +55,10 @@
 #define MAXNODESLENGTH 100
 
 #define MAXTARGETLENGTH 1000
-
 #define MAXTARGETTIME 2
+
+#define MAXACCUSEDLENGTH 1000
+#define MAXACCUSEDTTIME 2
 
 
 class MDMLib {
@@ -62,10 +66,14 @@ class MDMLib {
 private:
     void countCircles(double rc, double rl, double rs);
     double calculateCircles(double dl, double ds);
-    double gaussianSum(double x, double sig);
+
     double boundedGaussianSum(double x1, double x2, double sig);
 
+    double importanceFactor(double r1, double r2, double d);
+
 public:
+    double gaussianSum(double x, double sig);
+
     double calculateDistance(Coord, Coord);
     double calculateSpeed(Coord Speed);
 
@@ -80,11 +88,16 @@ public:
     double CircleCircleFactor(double d, double r1, double r2, double range);
     double OneSidedCircleSegmentFactor(double d, double r1, double r2,
             double range);
-    double intersectionFactor(double conf1, double conf2, double d,
+    double CircleIntersectionFactor(double conf1, double conf2, double d,
             double initRadius);
+
+
 
     double RectRectFactor(Coord c1, Coord c2, double heading1, double heading2,
             Coord size1, Coord size2);
+
+    double EllipseEllipseIntersectionFactor(Coord pos1, Coord posConf1, Coord pos2, Coord posConf2, double heading1,
+            double heading2, Coord size1, Coord size2);
 
 };
 

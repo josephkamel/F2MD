@@ -57,6 +57,7 @@ void BaseWaveApplLayer::initialize(int stage) {
         curHeading = Coord(0, 0, 0);
 
         myMdType = 0;
+        myAttackType = 0;
 
         attackBsm.setSenderAddress(0);
         nextAttackBsm.setSenderAddress(0);
@@ -199,19 +200,44 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
         bsm->setSenderLength(myLength);
         //joseph
         if(myMdType == 2){
-            if(attackBsm.getSenderAddress() != 0){
-                bsm->setSenderPos(attackBsm.getSenderPos());
-                bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
 
-                bsm->setSenderSpeed(attackBsm.getSenderSpeed());
-                bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());
-
-                bsm->setSenderHeading(attackBsm.getSenderHeading());
-                bsm->setSenderHeadingConfidence(attackBsm.getSenderHeadingConfidence());
-
-                bsm->setSenderWidth(attackBsm.getSenderWidth());
-                bsm->setSenderLength(attackBsm.getSenderLength());
+            if(myAttackType == 1){
+                bsm->setSenderPos(Coord(curPosition.x+ConstX,curPosition.y+ConstY,curPosition.z));
             }
+
+            if(myAttackType == 2){
+                if(attackBsm.getSenderAddress() != 0){
+                    bsm->setSenderPos(attackBsm.getSenderPos());
+                    bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
+
+                    bsm->setSenderSpeed(attackBsm.getSenderSpeed());
+                    bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());
+
+                    bsm->setSenderHeading(attackBsm.getSenderHeading());
+                    bsm->setSenderHeadingConfidence(attackBsm.getSenderHeadingConfidence());
+
+                    bsm->setSenderWidth(attackBsm.getSenderWidth());
+                    bsm->setSenderLength(attackBsm.getSenderLength());
+                }
+            }
+
+            if(myAttackType == 3){
+                if(attackBsm.getSenderAddress() != 0){
+                    bsm->setSenderPos(attackBsm.getSenderPos());
+                    bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
+
+                    bsm->setSenderSpeed(attackBsm.getSenderSpeed());
+                    bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());
+
+                    bsm->setSenderHeading(attackBsm.getSenderHeading());
+                    bsm->setSenderHeadingConfidence(attackBsm.getSenderHeadingConfidence());
+
+                    bsm->setSenderWidth(attackBsm.getSenderWidth());
+                    bsm->setSenderLength(attackBsm.getSenderLength());
+                }
+            }
+
+
         }
 
         //joseph

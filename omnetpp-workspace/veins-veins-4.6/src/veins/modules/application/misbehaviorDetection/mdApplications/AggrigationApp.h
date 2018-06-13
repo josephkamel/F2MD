@@ -24,14 +24,21 @@ class AggrigationApp: public MDApplication {
 public:
 
     int version = 0;
+    double deltaTrustTime=10;
+    int maxBsmTrustNum=5;
 
-    AggrigationApp(const char* name, int version);
+    AggrigationApp(const char* name, int version, double deltaTrustTime, int maxBsmTrustNum);
 
     std::tuple<double, MBReport> CheckNodeForReport(int myId,BasicSafetyMessage bsm,
             BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 
     bool AggregateFactorsList(double curFactor, double *factorList,
             int factorListSize);
+    double AggregateFactorsListDouble(double curFactor, double *factorList,
+                int factorListSize);
+
+    double getMinFactor(int myId,BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
 };
 
 #endif

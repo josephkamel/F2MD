@@ -2,30 +2,32 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="prntApp" key="selection"/>
+		<item value="PositionSpee" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="prntApp"/>
-			<item value="__VEINS_MDApplication_H_"/>
-			<item value="ThresholdApp"/>
-			<item value="prntTemp"/>
-			<item value="prntLong"/>
-			<item value="0"/>
-			<item value="&lt;= 0"/>
-			<item value="CheckNodeByThreshold"/>
-			<item value="MDApplication"/>
-			<item value="mdmHist"/>
-			<item value="checkFailedMin"/>
-			<item value="prntLongTemp"/>
-			<item value="prntMin"/>
-			<item value="thre"/>
-			<item value=".dat"/>
+			<item value="positionspee"/>
+			<item value="confi"/>
+			<item value="maxBsmTrustNum"/>
+			<item value="0.9"/>
+			<item value="gaussianSum"/>
+			<item value="isTargetNode"/>
+			<item value="clearTargetNodes"/>
+			<item value="removeTargetNode"/>
+			<item value="addTargetNode"/>
+			<item value="static int targetNodes[MAXTARGETLENGTH];&#x0A;static int targetNodesLength = 0;"/>
+			<item value="minFactor"/>
+			<item value="setColor`"/>
+			<item value="setColor"/>
+			<item value="print"/>
+			<item value="PositionHeadingConsistancy"/>
 		</list>
 		<list key="replacehistory">
+			<item value="-0"/>
 			<item value="prntAppInst"/>
+			<item value="AggrigationApp"/>
 			<item value="prntApp"/>
 			<item value="&lt;= Threshold"/>
 			<item value="checkFailed"/>
@@ -38,8 +40,6 @@
 			<item value="8"/>
 			<item value="AggregateFactors"/>
 			<item value=""/>
-			<item value="²"/>
-			<item value="interDistance"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

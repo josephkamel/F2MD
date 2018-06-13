@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+ * @email   joseph.kamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -118,7 +118,7 @@ double MDMLib::calculateHeadingAngle(Coord heading) {
 
     if (heading.x >= 0 && heading.y > 0) {
         angle = 360 + angle;
-    } else if (heading.x <0 && heading.y >= 0) {
+    } else if (heading.x < 0 && heading.y >= 0) {
         angle = 360 + angle;
     }
 
@@ -228,10 +228,10 @@ double MDMLib::SegmentSegmentFactor(double d, double r1, double r2,
         }
     }
 
-    if(r1==0 && r1 == 0){
-        if(d>range){
+    if (r1 == 0 && r1 == 0) {
+        if (d > range) {
             return 0;
-        }else{
+        } else {
             return 1;
         }
     }
@@ -337,6 +337,10 @@ double MDMLib::CircleSegmentFactor(double d, double r1, double r2,
 
 double MDMLib::OneSidedCircleSegmentFactor(double d, double r1, double r2,
         double range) {
+
+    if(d<0){
+        return 1;
+    }
 
     if (range > d + r1 + r2) {
         return 1;
@@ -481,12 +485,8 @@ double MDMLib::boundedGaussianSum(double x1, double x2, double sig) {
     return gaussianSum(x2, sig) - gaussianSum(x1, sig);
 }
 
-double MDMLib::intersectionFactor(double conf1, double conf2, double d,
-        double interDistance) {
 
-    double r1 = conf1 + interDistance;
-    double r2 = conf2 + interDistance;
-
+double MDMLib::importanceFactor(double r1, double r2, double d){
     double s1 = 0;
     double e1 = 0;
     double s2 = 0;
@@ -555,12 +555,24 @@ double MDMLib::intersectionFactor(double conf1, double conf2, double d,
 //    factor1 = (factor1) / ((e1 - s1) / (2 * r1));
 //    factor2 = (factor2) / ((e2 - s2) / (2 * r2));
 
+    return factor1 * factor2;
+}
+
+double MDMLib::CircleIntersectionFactor(double conf1, double conf2, double d,
+        double interDistance) {
+
+    double r1 = conf1 + interDistance;
+    double r2 = conf2 + interDistance;
+
+    double impFactor = importanceFactor(r1, r2, d);
+
     double areaIntersection = calculateCircleCircleIntersection(r1, r2, d);
 
     double areaFactor1 = areaIntersection / (PI * r1 * r1);
     double areaFactor2 = areaIntersection / (PI * r2 * r2);
 
-    double areaFactor = areaIntersection / ((PI * r1 * r1)+(PI * r2 * r2)-areaIntersection);
+    double areaFactor = areaIntersection
+            / ((PI * r1 * r1) + (PI * r2 * r2) - areaIntersection);
 
 //    double nbrCirles1 = calculateCircles(r1 * 2, interDistance* 2);
 //    double nbrCirles2 = calculateCircles(r2 * 2, interDistance* 2);
@@ -579,22 +591,15 @@ double MDMLib::intersectionFactor(double conf1, double conf2, double d,
 
 //    double factor = (factor1 * areaFactor1 + factor2 * areaFactor2)/2;
 
-    double maxFactor = 1 -  ((interDistance*interDistance*PI) /(r1*r1*2));
+    double maxFactor = 1
+            - ((interDistance * interDistance * PI) / (r1 * r1 * PI));
 
-    //double factor = (factor1 * areaFactor1 * factor2 * areaFactor2);
-    double factor = areaFactor*factor1*factor2;
 
-//    if(factor >0.1){
-//        std::cout<<"factor:" << factor<<'\n';
-//        std::cout<<"factor1:" << factor1<<'\n';
-//        std::cout<<"factor2:" << factor2<<'\n';
-//        std::cout<<"areaFactor:" << areaFactor<<'\n';
-//        std::cout<<"areaFactor1:" << areaFactor1<<'\n';
-//        std::cout<<"areaFactor2:" << areaFactor2<<'\n';
-//        exit(0);
-//    }
+    double factor = areaFactor * impFactor;
 
-    if(factor>maxFactor){
+
+
+    if (factor > maxFactor) {
         factor = 1;
     }
 
@@ -609,5 +614,66 @@ double MDMLib::RectRectFactor(Coord c1, Coord c2, double heading1,
             c2.x, c2.y, size2.x, size2.y, heading2);
 
     return intArea / (size2.x * size2.y);
+}
+
+double MDMLib::EllipseEllipseIntersectionFactor(Coord pos1, Coord posConf1,
+        Coord pos2, Coord posConf2, double heading1, double heading2,
+        Coord size1, Coord size2) {
+    EllipseIntLib eil;
+
+    double dx1 = size1.x + posConf1.x * 2;
+    double dy1 = size1.y + posConf1.x * 2;
+
+    double dx2 = size2.x + posConf2.x * 2;
+    double dy2 = size2.y + posConf2.x * 2;
+
+    double intArea = eil.EllipseIntArea(pos1.x, pos1.y, dx1, dy1, heading1,
+            pos2.x, pos2.y, dx2, dy2, heading2);
+
+    double areaFactor = intArea
+            / ((PI * (dx1 / 2) * (dy1 / 2)) + (PI * (dx2 / 2) * (dy2 / 2))
+                    - intArea);
+
+    double distance = calculateDistance(pos1, pos2);
+    double centersAngle = calculateHeadingAngle(
+            Coord(pos2.x - pos1.x, pos2.y - pos1.y));
+
+    double c1 = centersAngle * PI/ 180;
+    double h1 = heading1 * PI / 180;
+    double h2 = heading2 * PI / 180;
+
+    double diffAngle1 = atan2(sin(h1 - c1), cos(h1 - c1));
+    double diffAngle2 = atan2(sin(h2 - c1), cos(h2 - c1));
+
+    if(diffAngle1>PI/2){
+        diffAngle1 = diffAngle1 - PI;
+    }
+    if(diffAngle1<-PI/2){
+        diffAngle1 = diffAngle1 + PI;
+    }
+    if(diffAngle2>PI/2){
+        diffAngle2 = diffAngle2 - PI;
+    }
+    if(diffAngle2<-PI/2){
+        diffAngle2 = diffAngle2 + PI;
+    }
+    double impR1 = (dx1/2) * sin(diffAngle1) + (dy1/2) * cos(diffAngle1);
+    double impR2 = (dx2/2) * sin(diffAngle2) + (dy2/2) * cos(diffAngle2);
+
+    double impFactor = importanceFactor(impR1, impR2, distance);
+
+//    if(impFactor <=0){
+//        impFactor = 1;
+//    }
+
+    double factor = impFactor * areaFactor;
+
+    double maxFactor = 1
+            - (((size1.x / 2) * (size1.y / 2) * PI)
+                    / ((dx1 / 2) * (dy1 / 2) * PI));
+    if (factor > maxFactor) {
+        factor = 1;
+    }
+    return factor;
 }
 

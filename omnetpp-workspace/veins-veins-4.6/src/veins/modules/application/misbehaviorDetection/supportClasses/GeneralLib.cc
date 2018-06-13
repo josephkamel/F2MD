@@ -18,29 +18,29 @@ Coord GeneralLib::TypeToSize(std::string type){
 
     //lust
     if (type == "passenger1")
-        return Coord(1.8,5.0 - 1.5 -1,0);
+        return Coord(1.8,5.0 - 1.5 -0,0);
     if (type == "passenger2a")
-        return Coord(1.8,4.5- 1.5 -1,0);
+        return Coord(1.8,4.5- 1.5 -0,0);
     if (type == "passenger2b")
-        return Coord(1.8,4.5- 1.5 -1,0);
+        return Coord(1.8,4.5- 1.5 -0,0);
     if (type == "passenger3")
-        return Coord(1.8,6.0- 1.5 -1,0);
+        return Coord(1.8,6.0- 1.5 -0,0);
     if (type == "passenger4")
-        return Coord(1.8,5.5- 1.5 -1,0);
+        return Coord(1.8,5.5- 1.5 -0,0);
     if (type == "passenger5")
-        return Coord(1.8,7.0- 2.5 -1,0);
+        return Coord(1.8,7.0- 2.5 -0,0);
     if (type == "bus")
-        return Coord(1.8,12-3 -1,0);
+        return Coord(1.8,12-3 -0,0);
 
     // irt
     if (type == "DEFAULT_VEHTYPE")
-        return Coord(1.8,2.5 -1,0);
+        return Coord(1.8,2.5 -0,0);
     if (type == "bait")
-        return Coord(1.8,2.5 -1,0);
+        return Coord(1.8,2.5 -0,0);
     if (type == "victim")
-        return Coord(1.8,2.5 -1,0);
+        return Coord(1.8,2.5 -0,0);
     if (type == "attacker")
-        return Coord(1.8,2.5 -1,0);
+        return Coord(1.8,2.5 -0,0);
 
 }
 

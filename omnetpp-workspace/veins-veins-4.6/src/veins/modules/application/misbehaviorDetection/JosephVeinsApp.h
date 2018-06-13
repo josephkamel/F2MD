@@ -56,6 +56,11 @@ class JosephVeinsApp : public BaseWaveApplLayer {
         void clearTargetNodes();
         bool isTargetNode(int id);
 
+        void addAccusedNode(int id);
+        void removeAccusedNode(int id);
+        void clearAccusedNodes();
+        bool isAccusedNode(int id);
+
         typedef std::list<Obstacle*> ObstacleGridCell;
         typedef std::vector<ObstacleGridCell> ObstacleGridRow;
         typedef std::vector<ObstacleGridRow> Obstacles;
