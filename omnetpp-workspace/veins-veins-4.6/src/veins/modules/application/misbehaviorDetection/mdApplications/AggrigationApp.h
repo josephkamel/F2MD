@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+ * @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -24,21 +24,23 @@ class AggrigationApp: public MDApplication {
 public:
 
     int version = 0;
-    double deltaTrustTime=10;
-    int maxBsmTrustNum=5;
+    double Threshold = 0.5;
+    double deltaTrustTime = 10;
+    int maxBsmTrustNum = 5;
+    int minFactor = 1;
 
-    AggrigationApp(const char* name, int version, double deltaTrustTime, int maxBsmTrustNum);
+    AggrigationApp(const char* name, int version, double deltaTrustTime,
+            int maxBsmTrustNum);
 
-    std::tuple<double, MBReport> CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+    std::tuple<double, MDReport> CheckNodeForReport(int myId,
+            BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
-    bool AggregateFactorsList(double curFactor, double *factorList,
-            int factorListSize);
+//    bool AggregateFactorsList(double curFactor, double *factorList,
+//            int factorListSize);
     double AggregateFactorsListDouble(double curFactor, double *factorList,
-                int factorListSize);
+            int factorListSize);
 
-    double getMinFactor(int myId,BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+    double getMinFactor();
 };
 
 #endif

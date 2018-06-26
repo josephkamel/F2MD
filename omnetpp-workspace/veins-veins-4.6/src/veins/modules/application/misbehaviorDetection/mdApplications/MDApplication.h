@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -26,7 +26,7 @@
 #include "veins/modules/obstacle/Obstacle.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
-#include "../mdAuthority/MBReport.h"
+#include "../mdReport/MDReport.h"
 #include "../mdAuthority/MDAuthority.h"
 
 #include "../supportClasses/Printable.h"
@@ -50,7 +50,7 @@ public:
     void setName(const char* name);
 
 
-    void SendReport(MDAuthority* mdAuthority, MBReport mbReport);
+    void SendReport(MDAuthority* mdAuthority, MDReport mbReport);
 
     void saveLine(std::string path, std::string serial, double density,
             double deltaT);

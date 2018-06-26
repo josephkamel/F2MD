@@ -188,13 +188,17 @@ class BaseWaveApplLayer : public BaseApplLayer {
         double myWidth;
         double myLength;
 
-        double myMdType;
-        double myAttackType;
+        std::string myMdType;
+        std::string myAttackType;
         double ConstX;
         double ConstY;
 
+        std::string myReportType;
+
         BasicSafetyMessage attackBsm = BasicSafetyMessage();
         BasicSafetyMessage nextAttackBsm = BasicSafetyMessage();
+
+        BasicSafetyMessage myBsm = BasicSafetyMessage();
 
         int myId;
         int mySCH;

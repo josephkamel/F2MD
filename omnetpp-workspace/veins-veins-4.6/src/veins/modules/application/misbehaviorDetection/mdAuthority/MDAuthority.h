@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -11,12 +11,9 @@
 
 #ifndef __VEINS_MDAuthority_H_
 #define __VEINS_MDAuthority_H_
-#include <string.h>
-#include <omnetpp.h>
-#include "MBReport.h"
-#include "MDABase.h"
-#include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
+#include "MDABase.h"
+#include "../mdReport/MDReport.h"
 
 using namespace omnetpp;
 
@@ -28,7 +25,7 @@ private:
     MDABase baseList[ABaseNbr];
 
     int baseListNum = 0;
-    void treatReport(MDABase* base, int index, MBReport report);
+    void treatReport(MDABase* base, int index, MDReport report);
 
 
 public:
@@ -36,9 +33,9 @@ public:
 
     void registerNewBase(char* baseName);
 
-    void addNewNode(int id, double mbType, double time);
-    void addReportedNode(int id, double mbType, double time);
-    void sendReport(char* baseName, MBReport report);
+    void addNewNode(int id, std::string mbType, double time);
+    void addReportedNode(int id, std::string mbType, double time);
+    void sendReport(char* baseName, MDReport report);
 
     void saveLine(std::string path, std::string serial,double time);
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+* @email   josephekamel@gmail.com 
  * @date    11/04/2018
  * @version 1.0
  *
@@ -33,7 +33,7 @@ MDApplication::MDApplication(const char* name) {
     prntAppInst.setName(nameInst);
 }
 
-void MDApplication::SendReport(MDAuthority* mdAuthority, MBReport mbReport) {
+void MDApplication::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
     mdAuthority->sendReport(appName, mbReport);
 }
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -9,30 +9,31 @@
  * All rights reserved.
  *******************************************************************************/
 
-#ifndef __VEINS_MDModuleV2_H_
-#define __VEINS_MDModuleV2_H_
+#ifndef __VEINS_MDModuleV3_H_
+#define __VEINS_MDModuleV3_H_
 
 #include <tuple>
 
 #include <omnetpp.h>
 #include <veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.h>
 
-#include "baseClasses/NodeTable.h"
-#include "baseClasses/InterTest.h"
-#include "baseClasses/BsmCheck.h"
-#include "baseClasses/InterTest.h"
-#include "supportClasses/MDMLib.h"
-#include "JosephVeinsApp.h"
+#include "../baseClasses/NodeTable.h"
+#include "../baseClasses/InterTest.h"
+#include "../baseClasses/BsmCheck.h"
+#include "../baseClasses/InterTest.h"
+#include "../supportClasses/MDMLib.h"
+#include "../JosephVeinsApp.h"
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
-#include "mdAuthority/MBReport.h"
-#include "mdAuthority/MDAuthority.h"
+#include "../mdReport/MDReport.h"
+#include "../mdAuthority/MDAuthority.h"
+
 using namespace Veins;
 using namespace omnetpp;
 
-class MDModuleV2 {
+class MDModuleV3 {
 private:
 
     int myId;
@@ -86,10 +87,10 @@ private:
     void resetAll();
 
 public:
-    MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    MDModuleV3(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
-    void SendReport(MDAuthority * mdAuthority,MBReport mbReport);
+    void SendReport(MDAuthority * mdAuthority,MDReport mbReport);
 };
 
 #endif

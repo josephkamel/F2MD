@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+* @email   josephekamel@gmail.com 
 * @date    11/04/2018
 * @version 1.0
 *
@@ -13,11 +13,11 @@
 
 MDABase::MDABase() {
     init = true;
-    totalFaultyNum = 0;
+    totalGenuineNum = 0;
     totalAttackerNum = 0;
-    reportedFaultyNum = 0;
+    reportedGenuineNum = 0;
     reportedAttackerNum = 0;
-    faultyAverageReportDelay = 0;
+    GenuineAverageReportDelay = 0;
     attackerAverageReportDelay = 0;
 
 }
@@ -25,11 +25,11 @@ MDABase::MDABase() {
 MDABase::MDABase(const char * name) {
     strcpy(this->name, name);
     init = true;
-    totalFaultyNum = 0;
+    totalGenuineNum = 0;
     totalAttackerNum = 0;
-    reportedFaultyNum = 0;
+    reportedGenuineNum = 0;
     reportedAttackerNum = 0;
-    faultyAverageReportDelay = 0;
+    GenuineAverageReportDelay = 0;
     attackerAverageReportDelay = 0;
 }
 
@@ -42,18 +42,18 @@ void MDABase::setName(const char * name){
 }
 
 void MDABase::resetAll(){
-    totalFaultyNum = 0;
+    totalGenuineNum = 0;
     totalAttackerNum = 0;
-    reportedFaultyNum = 0;
+    reportedGenuineNum = 0;
     reportedAttackerNum = 0;
-    faultyAverageReportDelay = 0;
+    GenuineAverageReportDelay = 0;
     attackerAverageReportDelay = 0;
 }
 
-void MDABase::addTotalFaulty(int id, double time) {
-    totalFaultyIdList[totalFaultyNum] = id;
-    totalFaultyTimeList[totalFaultyNum] = time;
-    totalFaultyNum++;
+void MDABase::addTotalGenuine(int id, double time) {
+    totalGenuineIdList[totalGenuineNum] = id;
+    totalGenuineTimeList[totalGenuineNum] = time;
+    totalGenuineNum++;
 }
 
 void MDABase::addTotalAttacker(int id, double time) {
@@ -62,17 +62,17 @@ void MDABase::addTotalAttacker(int id, double time) {
     totalAttackerNum++;
 }
 
-void MDABase::addReportedFaulty(int id, double time) {
-    reportedFaultyIdList[reportedFaultyNum] = id;
-    reportedFaultyTimeList[reportedFaultyNum] = time;
+void MDABase::addReportedGenuine(int id, double time) {
+    reportedGenuineIdList[reportedGenuineNum] = id;
+    reportedGenuineTimeList[reportedGenuineNum] = time;
 
-    int totalIndex = totalFaultyIndex(id);
-    double deltaTime = time - totalFaultyTimeList[totalIndex];
+    int totalIndex = totalGenuineIndex(id);
+    double deltaTime = time - totalGenuineTimeList[totalIndex];
 
-    faultyAverageReportDelay = (faultyAverageReportDelay * (double)reportedFaultyNum
-            + deltaTime) / ((double)reportedFaultyNum + 1);
+    GenuineAverageReportDelay = (GenuineAverageReportDelay * (double)reportedGenuineNum
+            + deltaTime) / ((double)reportedGenuineNum + 1);
 
-    reportedFaultyNum++;
+    reportedGenuineNum++;
 }
 
 void MDABase::addReportedAttacker(int id, double time) {
@@ -104,9 +104,9 @@ void MDABase::writeFile(std::string path, char* printStr) {
     outFile.close();
 }
 
-bool MDABase::alreadyReportedFaulty(int id) {
-    for (int var = 0; var < reportedFaultyNum; ++var) {
-        if (id == reportedFaultyIdList[var]) {
+bool MDABase::alreadyReportedGenuine(int id) {
+    for (int var = 0; var < reportedGenuineNum; ++var) {
+        if (id == reportedGenuineIdList[var]) {
             return true;
         }
     }
@@ -122,9 +122,9 @@ bool MDABase::alreadyReportedAttacker(int id) {
     return false;
 }
 
-int MDABase::totalFaultyIndex(int id) {
-    for (int var = 0; var < totalFaultyNum; ++var) {
-        if (id == totalFaultyIdList[var]) {
+int MDABase::totalGenuineIndex(int id) {
+    for (int var = 0; var < totalGenuineNum; ++var) {
+        if (id == totalGenuineIdList[var]) {
             return var;
         }
     }
@@ -149,13 +149,13 @@ void MDABase::getPrintable(char* outStr, double time) {
     sprintf(data, "%f", time);
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%d", reportedFaultyNum);
+    sprintf(data, "%d", reportedGenuineNum);
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%d", totalFaultyNum);
+    sprintf(data, "%d", totalGenuineNum);
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", faultyAverageReportDelay);
+    sprintf(data, "%f", GenuineAverageReportDelay);
     strcat(line, data);
     strcat(line, " ");
     sprintf(data, "%d", reportedAttackerNum);
@@ -171,10 +171,10 @@ void MDABase::getPrintable(char* outStr, double time) {
         outStr[i] = line[i];
     }
 
-    std::cout << "=*-=*-=*-=*- " << name << " =*-=*-=*-=*- Faulty:"
-            << reportedFaultyNum << "/" << totalFaultyNum<<" "
-            << (double)reportedFaultyNum / (double)totalFaultyNum * 100 << "% "
-            << faultyAverageReportDelay <<"s |Attacker:"
+    std::cout << "=*-=*-=*-=*- " << name << " =*-=*-=*-=*- Genuine:"
+            << reportedGenuineNum << "/" << totalGenuineNum<<" "
+            << (double)reportedGenuineNum / (double)totalGenuineNum * 100 << "% "
+            << GenuineAverageReportDelay <<"s |Attacker:"
             << reportedAttackerNum << "/" << totalAttackerNum<<" "
             << (double)reportedAttackerNum / (double)totalAttackerNum * 100 << "% "
             << attackerAverageReportDelay <<"s"<<'\n';

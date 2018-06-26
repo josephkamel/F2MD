@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+* @email   josephekamel@gmail.com 
 * @date    11/04/2018
 * @version 1.0
 *
@@ -82,28 +82,29 @@ void Printable::setName(const char* name){
     strcpy(this->name, name);
 }
 
-void Printable::incAll(double mbType) {
-    if(mbType==1){
+void Printable::incAll(std::string mbType) {
+
+    if (!mbType.compare("genuine")) {
         allTests_1++;
 
     }
-    if(mbType==2){
+    if (!mbType.compare("attacker")) {
         allTests_2++;
     }
 
 }
 
-void Printable::incCumulFlags(double mbType) {
-    if(mbType==1){
+void Printable::incCumulFlags(std::string mbType) {
+    if (!mbType.compare("genuine")) {
         cumulFlags_1++;
     }
-    if(mbType==2){
+    if (!mbType.compare("attacker")) {
         cumulFlags_2++;
     }
 }
 
-void Printable::incFlags(std::string inString, double mbType) {
-    if(mbType == 1){
+void Printable::incFlags(std::string inString, std::string mbType) {
+    if (!mbType.compare("genuine")) {
         if (inString == "RangePlausibility")
             flagsRangePlausibility_1++;
         if (inString == "PositionPlausibility")
@@ -126,7 +127,7 @@ void Printable::incFlags(std::string inString, double mbType) {
             flagsPositionHeadingConsistancy_1++;
     }
 
-    if(mbType == 2){
+    if (!mbType.compare("attacker")) {
         if (inString == "RangePlausibility")
             flagsRangePlausibility_2++;
         if (inString == "PositionPlausibility")
@@ -282,8 +283,8 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
         outStr[i] = line[i];
     }
 
-    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_1:"
-            << cumulFlags_1 / allTests_1 * 100 << "%" << '\n';
+//    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_1:"
+//            << cumulFlags_1 / allTests_1 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++"
 //            << " flagsRangePlausibility_1:"
 //            << flagsRangePlausibility_1 / allTests_1 * 100 << "%" << '\n';
@@ -314,8 +315,8 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
 //            << flagsSuddenAppearence_1 / allTests_1 * 100 << "%" << '\n';
 
 
-    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_2:"
-            << cumulFlags_2 / allTests_2 * 100 << "%" << '\n';
+//    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_2:"
+//            << cumulFlags_2 / allTests_2 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++"
 //            << " flagsRangePlausibility_2:"
 //            << flagsRangePlausibility_2 / allTests_2 * 100 << "%" << '\n';

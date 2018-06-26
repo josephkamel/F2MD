@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel
- * @email   joseph.kamel@gmail.com
+ * @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -11,7 +11,6 @@
 
 #include "MDAuthority.h"
 
-
 MDAuthority::MDAuthority() {
     char nameV1[32] = "mdaV1";
     char nameV2[32] = "mdaV2";
@@ -19,63 +18,63 @@ MDAuthority::MDAuthority() {
     registerNewBase(nameV2);
 }
 
-void MDAuthority::registerNewBase(char* baseName){
+void MDAuthority::registerNewBase(char* baseName) {
     baseList[baseListNum].setName(baseName);
     baseListNum++;
 }
 
-void MDAuthority::addNewNode(int id, double mbType, double time) {
-    if (mbType == 1) {
+void MDAuthority::addNewNode(int id, std::string mbType, double time) {
+    if (!mbType.compare("genuine")) {
         for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addTotalFaulty(id, time);
+            baseList[var].addTotalGenuine(id, time);
         }
     }
-    if (mbType == 2) {
+    if (!mbType.compare("attacker")) {
         for (int var = 0; var < baseListNum; ++var) {
             baseList[var].addTotalAttacker(id, time);
         }
     }
 }
 
-void MDAuthority::addReportedNode(int id, double mbType, double time) {
-    if (mbType == 1) {
+void MDAuthority::addReportedNode(int id, std::string mbType, double time) {
+    if (!mbType.compare("genuine")) {
         for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addReportedFaulty(id, time);
+            baseList[var].addReportedGenuine(id, time);
         }
     }
-    if (mbType == 2) {
+    if (!mbType.compare("attacker")) {
         for (int var = 0; var < baseListNum; ++var) {
             baseList[var].addReportedAttacker(id, time);
         }
     }
 }
 
-
-void MDAuthority::sendReport(char* baseName, MBReport report){
+void MDAuthority::sendReport(char* baseName, MDReport report) {
     int index = -1;
     for (int var = 0; var < baseListNum; ++var) {
-        if(strcmp(baseList[var].getName(), baseName)==0){
+        if (strcmp(baseList[var].getName(), baseName) == 0) {
             index = var;
             break;
         }
     }
-    if(index != -1){
-        treatReport(baseList, index , report);
-    }else{
+    if (index != -1) {
+        treatReport(baseList, index, report);
+    } else {
         baseList[baseListNum].setName(baseName);
-        treatReport(baseList,baseListNum,report);
+        treatReport(baseList, baseListNum, report);
         baseListNum++;
     }
 }
 
-void MDAuthority::treatReport(MDABase *base, int index, MBReport report) {
-    if (report.getMbType() == 1) {
-        if (!base[index].alreadyReportedFaulty(report.getReportedId())) {
-            base[index].addReportedFaulty(report.getReportedId(),
+void MDAuthority::treatReport(MDABase *base, int index, MDReport report) {
+    if (!report.getMbType().compare("genuine")) {
+        if (!base[index].alreadyReportedGenuine(report.getReportedId())) {
+            base[index].addReportedGenuine(report.getReportedId(),
                     report.getGenerationTime());
         }
     }
-    if (report.getMbType() == 2) {
+
+    if (!report.getMbType().compare("attacker")) {
         if (!base[index].alreadyReportedAttacker(report.getReportedId())) {
             base[index].addReportedAttacker(report.getReportedId(),
                     report.getGenerationTime());

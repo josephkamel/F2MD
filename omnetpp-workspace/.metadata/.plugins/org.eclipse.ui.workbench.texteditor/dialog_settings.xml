@@ -2,29 +2,34 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="PositionSpee" key="selection"/>
+		<item value="myReportType" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="positionspee"/>
-			<item value="confi"/>
-			<item value="maxBsmTrustNum"/>
-			<item value="0.9"/>
-			<item value="gaussianSum"/>
-			<item value="isTargetNode"/>
-			<item value="clearTargetNodes"/>
-			<item value="removeTargetNode"/>
-			<item value="addTargetNode"/>
-			<item value="static int targetNodes[MAXTARGETLENGTH];&#x0A;static int targetNodesLength = 0;"/>
+			<item value="myReportType"/>
+			<item value="REPORT_VERSION"/>
+			<item value="writeStrToFile"/>
+			<item value="=*-=*-="/>
+			<item value="mdAuthority"/>
+			<item value="AppV1"/>
+			<item value="sudden"/>
 			<item value="minFactor"/>
-			<item value="setColor`"/>
-			<item value="setColor"/>
-			<item value="print"/>
-			<item value="PositionHeadingConsistancy"/>
+			<item value="detectedNodes\"/>
+			<item value="detectedNodes"/>
+			<item value="addBsmCheck"/>
+			<item value="setBsmCheck"/>
+			<item value="Error: File alread exists."/>
+			<item value="Error: File alread exists"/>
+			<item value="getInterId"/>
 		</list>
 		<list key="replacehistory">
+			<item value="tempStr = tempStr + &quot;)&quot;;"/>
+			<item value="std::to_string("/>
+			<item value="const std::string"/>
+			<item value="MDReport"/>
+			<item value="OneMessageReport"/>
 			<item value="-0"/>
 			<item value="prntAppInst"/>
 			<item value="AggrigationApp"/>
@@ -35,11 +40,6 @@
 			<item value="prntLong"/>
 			<item value="MDApplication"/>
 			<item value="MDApplications"/>
-			<item value="&lt;0.9"/>
-			<item value="9"/>
-			<item value="8"/>
-			<item value="AggregateFactors"/>
-			<item value=""/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

@@ -56,8 +56,8 @@ void BaseWaveApplLayer::initialize(int stage) {
         myLength = 0;
         curHeading = Coord(0, 0, 0);
 
-        myMdType = 0;
-        myAttackType = 0;
+        myMdType = "genuine";
+        myAttackType = "";
 
         attackBsm.setSenderAddress(0);
         nextAttackBsm.setSenderAddress(0);
@@ -185,7 +185,8 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
     if (BasicSafetyMessage* bsm = dynamic_cast<BasicSafetyMessage*>(wsm)) {
 
-        bsm->setSenderMbType(myMdType);
+        bsm->setSenderMbTypeStr(myMdType);
+        bsm->setSenderAttackTypeStr(myAttackType);
 
         bsm->setSenderPos(curPosition);
         bsm->setSenderPosConfidence(curPositionConfidence);
@@ -199,13 +200,13 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
         bsm->setSenderWidth(myWidth);
         bsm->setSenderLength(myLength);
         //joseph
-        if(myMdType == 2){
+        if(!myMdType.compare("attacker")){
 
-            if(myAttackType == 1){
+            if(!myAttackType.compare("ConstAddition")){
                 bsm->setSenderPos(Coord(curPosition.x+ConstX,curPosition.y+ConstY,curPosition.z));
             }
 
-            if(myAttackType == 2){
+            if(!myAttackType.compare("Disruptive")){
                 if(attackBsm.getSenderAddress() != 0){
                     bsm->setSenderPos(attackBsm.getSenderPos());
                     bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
@@ -221,7 +222,7 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
                 }
             }
 
-            if(myAttackType == 3){
+            if(!myAttackType.compare("DataReplay")){
                 if(attackBsm.getSenderAddress() != 0){
                     bsm->setSenderPos(attackBsm.getSenderPos());
                     bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
@@ -328,6 +329,9 @@ void BaseWaveApplLayer::handleSelfMsg(cMessage* msg) {
         populateWSM(bsm);
         sendDown(bsm);
         scheduleAt(simTime() + beaconInterval, sendBeaconEvt);
+
+        myBsm = *bsm;
+
         break;
     }
     case SEND_WSA_EVT: {

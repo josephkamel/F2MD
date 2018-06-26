@@ -40,5 +40,7 @@
 	<section name="CRenameRefactoringInputPage">
 	</section>
 	<section name="completion_proposal_size">
+		<item value="219" key="contextSelector.size.y"/>
+		<item value="309" key="contextSelector.size.x"/>
 	</section>
 </section>

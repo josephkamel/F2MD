@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
- * @email   joseph.kamel@gmail.com
+ * @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -689,7 +689,7 @@ void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
 
 }
 
-void MDModuleV2::SendReport(MDAuthority* mdAuthority, MBReport mbReport) {
+void MDModuleV2::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
     char nameV2[32] = "mdaV2";
     mdAuthority->sendReport(nameV2, mbReport);
 }

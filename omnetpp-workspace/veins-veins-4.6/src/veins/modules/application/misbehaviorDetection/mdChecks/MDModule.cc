@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel
- * @email   joseph.kamel@gmail.com
+ * @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -22,7 +22,7 @@
 #include <vector>
 #include <algorithm>    // std::max
 
-#include "supportClasses/Printable.h"
+#include "../supportClasses/Printable.h"
 
 using namespace std;
 using namespace boost;
@@ -44,7 +44,7 @@ double MDModule::RangePlausibilityCheck(Coord senderPosition,
     if (distance < MAX_PLAUSIBLE_RANGE) {
         return 1;
     } else {
-        return 0;//distance
+        return 0; //distance
     }
 }
 
@@ -55,7 +55,7 @@ double MDModule::PositionConsistancyCheck(Coord curPosition, Coord oldPosition,
     if (distance < MAX_CONSISTANT_DISTANCE * time) {
         return 1;
     } else {
-        return 0;//distance
+        return 0; //distance
     }
 }
 
@@ -67,13 +67,13 @@ double MDModule::SpeedConsistancyCheck(double curSpeed, double oldspeed,
         if (speedDelta < MAX_PLAUSIBLE_ACCEL * time) {
             return 1;
         } else {
-            return 0;//distance
+            return 0; //distance
         }
     } else {
         if (speedDelta < MAX_PLAUSIBLE_DECEL * time) {
             return 1;
         } else {
-            return 0;//distance
+            return 0; //distance
         }
     }
 
@@ -108,7 +108,7 @@ double MDModule::PositionSpeedConsistancyCheck(Coord curPosition,
             return 0; // deltaMax - MIN_PSS
         } else {
             if (deltaMin > MAX_PSS) {
-                return 0;// deltaMin - MAX_PSS
+                return 0; // deltaMin - MAX_PSS
             } else {
                 return 1;
             }
@@ -164,6 +164,7 @@ InterTest MDModule::MultipleIntersectionCheck(NodeTable detectedNodes,
     if (INTScore < 1) {
         result["INTId_0"] = myId;
         result["INTCheck_0"] = INTScore;
+
         INTNum++;
     }
 
@@ -388,8 +389,8 @@ BsmCheck MDModule::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
 
-    bsmCheck.setRangePlausibility(RangePlausibilityCheck(myPosition,
-            bsm.getSenderPos()));
+    bsmCheck.setRangePlausibility(
+            RangePlausibilityCheck(myPosition, bsm.getSenderPos()));
 
     bsmCheck.setSpeedPlausibility(
             SpeedPlausibilityCheck(
@@ -446,8 +447,7 @@ BsmCheck MDModule::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
     return bsmCheck;
 }
 
-
-void MDModule::SendReport(MDAuthority * mdAuthority, MBReport mbReport) {
+void MDModule::SendReport(MDAuthority * mdAuthority, MDReport mbReport) {
     char nameV1[32] = "mdaV1";
     mdAuthority->sendReport(nameV1, mbReport);
 }

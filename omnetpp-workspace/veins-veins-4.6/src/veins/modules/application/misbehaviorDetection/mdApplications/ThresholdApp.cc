@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+* @email   josephekamel@gmail.com 
  * @date    11/04/2018
  * @version 1.0
  *
@@ -28,69 +28,100 @@ ThresholdApp::ThresholdApp(const char* name, double Threshold):MDApplication(nam
     this->Threshold = Threshold;
 }
 
-std::tuple<double, MBReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType){
+std::tuple<double, MDReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
+        BsmCheck bsmCheck, NodeTable detectedNodes){
 
     bool checkFailed = false;
 
-    MBReport mbReport;
+    MDReport mbReport;
 
-    prntApp.incAll(mbType);
-    prntAppInst.incAll(mbType);
+    minFactor = 1;
+
+    prntApp.incAll(bsm.getSenderMbTypeStr());
+    prntAppInst.incAll(bsm.getSenderMbTypeStr());
 
     int senderId = bsm.getSenderAddress();
 
+    if(bsmCheck.getRangePlausibility()<minFactor){
+        minFactor = bsmCheck.getRangePlausibility();
+    }
     if (bsmCheck.getRangePlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("RangePlausibility", mbType);
-        prntAppInst.incFlags("RangePlausibility", mbType);
+        prntApp.incFlags("RangePlausibility", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("RangePlausibility", bsm.getSenderMbTypeStr());
     }
 
+    if(bsmCheck.getRangePlausibility()<minFactor){
+        minFactor = bsmCheck.getRangePlausibility();
+    }
     if (bsmCheck.getPositionConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionConsistancy", mbType);
-        prntAppInst.incFlags("PositionConsistancy", mbType);
+        prntApp.incFlags("PositionConsistancy", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("PositionConsistancy", bsm.getSenderMbTypeStr());
     }
 
+
+    if(bsmCheck.getPositionSpeedConsistancy()<minFactor){
+        minFactor = bsmCheck.getPositionSpeedConsistancy();
+    }
     if (bsmCheck.getPositionSpeedConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionSpeedConsistancy", mbType);
-        prntAppInst.incFlags("PositionSpeedConsistancy", mbType);
+        prntApp.incFlags("PositionSpeedConsistancy", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("PositionSpeedConsistancy", bsm.getSenderMbTypeStr());
     }
 
+    if(bsmCheck.getSpeedConsistancy()<minFactor){
+        minFactor = bsmCheck.getSpeedConsistancy();
+    }
     if (bsmCheck.getSpeedConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("SpeedConsistancy", mbType);
-        prntAppInst.incFlags("SpeedConsistancy", mbType);
+        prntApp.incFlags("SpeedConsistancy", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("SpeedConsistancy", bsm.getSenderMbTypeStr());
     }
 
+    if(bsmCheck.getSpeedPlausibility()<minFactor){
+        minFactor = bsmCheck.getSpeedPlausibility();
+    }
     if (bsmCheck.getSpeedPlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("SpeedPlausibility", mbType);
-        prntAppInst.incFlags("SpeedPlausibility", mbType);
+        prntApp.incFlags("SpeedPlausibility", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("SpeedPlausibility", bsm.getSenderMbTypeStr());
     }
 
+    if(bsmCheck.getPositionPlausibility()<minFactor){
+        minFactor = bsmCheck.getPositionPlausibility();
+    }
     if (bsmCheck.getPositionPlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionPlausibility", mbType);
-        prntAppInst.incFlags("PositionPlausibility", mbType);
+        prntApp.incFlags("PositionPlausibility", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("PositionPlausibility", bsm.getSenderMbTypeStr());
     }
 
+    if(bsmCheck.getBeaconFrequency()<minFactor){
+        minFactor = bsmCheck.getBeaconFrequency();
+    }
     if (bsmCheck.getBeaconFrequency() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("BeaconFrequency", mbType);
-        prntAppInst.incFlags("BeaconFrequency", mbType);
+        prntApp.incFlags("BeaconFrequency", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("BeaconFrequency", bsm.getSenderMbTypeStr());
     }
 
+    if(bsmCheck.getSuddenAppearence()<minFactor){
+   //     minFactor = bsmCheck.getSuddenAppearence();
+    }
     if (bsmCheck.getSuddenAppearence() <= Threshold) {
-        prntApp.incFlags("SuddenAppearence", mbType);
-        prntAppInst.incFlags("SuddenAppearence", mbType);
+   //     checkFailed = true;
+        prntApp.incFlags("SuddenAppearence", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("SuddenAppearence", bsm.getSenderMbTypeStr());
     }
 
+    if( bsmCheck.getPositionHeadingConsistancy()<minFactor){
+        minFactor = bsmCheck.getPositionHeadingConsistancy();
+    }
     if (bsmCheck.getPositionHeadingConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionHeadingConsistancy", mbType);
-        prntAppInst.incFlags("PositionHeadingConsistancy", mbType);
+        prntApp.incFlags("PositionHeadingConsistancy", bsm.getSenderMbTypeStr());
+        prntAppInst.incFlags("PositionHeadingConsistancy", bsm.getSenderMbTypeStr());
     }
 
     bool maxInterFound = false;
@@ -101,11 +132,15 @@ std::tuple<double, MBReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafe
 
         double IT = inter.getInterValue(var);
 
+        if(IT<minFactor){
+            minFactor = IT;
+        }
+
         if (IT <= Threshold) {
             checkFailed = true;
             if (!minInterFound) {
-                prntApp.incFlags("Intersection", mbType);
-                prntAppInst.incFlags("Intersection", mbType);
+                prntApp.incFlags("Intersection", bsm.getSenderMbTypeStr());
+                prntAppInst.incFlags("Intersection", bsm.getSenderMbTypeStr());
                 minInterFound = true;
             }
         }
@@ -115,65 +150,16 @@ std::tuple<double, MBReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafe
         mbReport.setGenerationTime(simTime().dbl());
         mbReport.setSenderId(myId);
         mbReport.setReportedId(senderId);
-        mbReport.setMbType(mbType);
+        mbReport.setMbType(bsm.getSenderMbTypeStr());
+        mbReport.setAttackType(bsm.getSenderAttackTypeStr());
 
-        prntApp.incCumulFlags(mbType);
-        prntAppInst.incCumulFlags(mbType);
+        prntApp.incCumulFlags(bsm.getSenderMbTypeStr());
+        prntAppInst.incCumulFlags(bsm.getSenderMbTypeStr());
     }
 
     return std::make_tuple(checkFailed, mbReport);
 }
 
-double ThresholdApp::getMinFactor(int myId,BasicSafetyMessage bsm,
-        BsmCheck bsmCheck, NodeTable detectedNodes, double mbType){
-
-    double minFactor = 1;
-
-    int senderId = bsm.getSenderAddress();
-
-    if (bsmCheck.getRangePlausibility() <= minFactor) {
-        minFactor = bsmCheck.getRangePlausibility();
-    }
-
-    if (bsmCheck.getPositionConsistancy() <= minFactor) {
-        minFactor = bsmCheck.getPositionConsistancy();
-    }
-
-    if (bsmCheck.getPositionSpeedConsistancy() <= minFactor) {
-        minFactor = bsmCheck.getPositionSpeedConsistancy();
-    }
-
-    if (bsmCheck.getSpeedConsistancy() <= minFactor) {
-        minFactor = bsmCheck.getSpeedConsistancy();
-    }
-
-    if (bsmCheck.getSpeedPlausibility() <= minFactor) {
-        minFactor = bsmCheck.getSpeedPlausibility();
-    }
-
-    if (bsmCheck.getPositionPlausibility() <= minFactor) {
-        minFactor = bsmCheck.getPositionPlausibility();
-    }
-
-    if (bsmCheck.getBeaconFrequency() <= minFactor) {
-        minFactor = bsmCheck.getBeaconFrequency();
-    }
-
-    if (bsmCheck.getPositionHeadingConsistancy() <= minFactor) {
-        minFactor = bsmCheck.getPositionHeadingConsistancy();
-    }
-
-    InterTest inter = bsmCheck.getIntersection();
-    for (int var = 0; var < inter.getInterNum(); ++var) {
-
-        double IT = inter.getInterValue(var);
-
-        if (IT <= minFactor) {
-            minFactor = IT;
-        }
-
-    }
-
-
+double ThresholdApp::getMinFactor(){
     return minFactor;
 }

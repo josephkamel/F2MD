@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com 
+* @email   josephekamel@gmail.com 
 * @date    11/04/2018
 * @version 1.0
 *
@@ -14,12 +14,14 @@
 
 MDMHistory::MDMHistory() {
     nodeId = 0;
-    BSMNum = 0;
+    BSMNumV1 = 0;
+    BSMNumV2 = 0;
 }
 
 MDMHistory::MDMHistory(int id) {
     nodeId = id;
-    BSMNum = 0;
+    BSMNumV1 = 0;
+    BSMNumV2 = 0;
 }
 
 BsmCheck MDMHistory::getBsmCheck(int index, int version) {
@@ -32,18 +34,51 @@ BsmCheck MDMHistory::getBsmCheck(int index, int version) {
 
 
 void MDMHistory::setBsmCheck(int index, BsmCheck bsmCheckV1, BsmCheck bsmCheckV2) {
-    bsmCheckListV1[index] = bsmCheckV1;
-    bsmCheckListV2[index] = bsmCheckV2;
+    setBsmCheck(index,bsmCheckV1,1);
+    setBsmCheck(index,bsmCheckV2,2);
+}
+
+void MDMHistory::setBsmCheck(int index, BsmCheck bsmCheck, int version) {
+    switch (version) {
+        case 1:{
+            bsmCheckListV1[index] = bsmCheck;
+            break;
+        }
+        case 2:{
+            bsmCheckListV2[index] = bsmCheck;
+            break;
+        }
+    }
 }
 
 void MDMHistory::addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2) {
-    if (BSMNum < MAXMDMLENGTH) {
-        BSMNum++;
+    addBsmCheck(bsmCheckV1,1);
+    addBsmCheck(bsmCheckV2,2);
+}
+
+void MDMHistory::addBsmCheck(BsmCheck bsmCheck, int version) {
+    switch (version) {
+        case 1:{
+            if (BSMNumV1 < MAXMDMLENGTH) {
+                BSMNumV1++;
+            }
+            for (int var = BSMNumV1 - 1; var > 0; --var) {
+                bsmCheckListV1[var] = bsmCheckListV1[var - 1];
+            }
+            bsmCheckListV1[0] = bsmCheck;
+            break;
+        }
+
+        case 2:{
+            if (BSMNumV2 < MAXMDMLENGTH) {
+                BSMNumV2++;
+            }
+            for (int var = BSMNumV2 - 1; var > 0; --var) {
+                bsmCheckListV2[var] = bsmCheckListV2[var - 1];
+            }
+            bsmCheckListV2[0] = bsmCheck;
+            break;
+        }
     }
-    for (int var = BSMNum - 1; var > 0; --var) {
-        bsmCheckListV1[var] = bsmCheckListV1[var - 1];
-        bsmCheckListV2[var] = bsmCheckListV2[var - 1];
-    }
-    bsmCheckListV1[0] = bsmCheckV1;
-    bsmCheckListV2[0] = bsmCheckV2;
+
 }

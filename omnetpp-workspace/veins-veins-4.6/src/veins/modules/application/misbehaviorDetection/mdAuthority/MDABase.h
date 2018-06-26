@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -12,8 +12,12 @@
 #ifndef __VEINS_MDABase_H_
 #define __VEINS_MDABase_H_
 
+#include <string.h>
 #include <omnetpp.h>
+#include "MDABase.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
+#include "../mdReport/MDReport.h"
+
 
 using namespace omnetpp;
 
@@ -27,9 +31,9 @@ private:
 
     bool init = true;
 
-    int totalFaultyIdList[TOTCARNUM];
-    double totalFaultyTimeList[TOTCARNUM];
-    int totalFaultyNum = 0;
+    int totalGenuineIdList[TOTCARNUM];
+    double totalGenuineTimeList[TOTCARNUM];
+    int totalGenuineNum = 0;
 
     int totalAttackerIdList[TOTCARNUM];
     double totalAttackerTimeList[TOTCARNUM];
@@ -39,32 +43,32 @@ private:
     double reportedAttackerTimeList[TOTCARNUM];
     int reportedAttackerNum = 0;
 
-    int reportedFaultyIdList[TOTCARNUM];
-    double reportedFaultyTimeList[TOTCARNUM];
-    int reportedFaultyNum = 0;
+    int reportedGenuineIdList[TOTCARNUM];
+    double reportedGenuineTimeList[TOTCARNUM];
+    int reportedGenuineNum = 0;
 
-    double faultyAverageReportDelay = 0;
+    double GenuineAverageReportDelay = 0;
     double attackerAverageReportDelay = 0;
 
 public:
     MDABase();
     MDABase(const char *);
-    void addTotalFaulty(int id, double time);
-    void addReportedFaulty(int id, double time);
+    void addTotalGenuine(int id, double time);
+    void addReportedGenuine(int id, double time);
 
     void addTotalAttacker(int id, double time);
     void addReportedAttacker(int id, double time);
 
-    void getTotalFaulty(int id);
-    void getReportedFaultyIdList(int id);
+    void getTotalGenuine(int id);
+    void getReportedGenuineIdList(int id);
 
     void getTotalAttackerIdList(int id);
     void getReportedAttackerIdList(int id);
 
-    bool alreadyReportedFaulty(int id);
+    bool alreadyReportedGenuine(int id);
     bool alreadyReportedAttacker(int id);
 
-    int totalFaultyIndex(int id);
+    int totalGenuineIndex(int id);
     int totalAttackerIndex(int id);
 
     void getPrintable(char* outStr, double time);

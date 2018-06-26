@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -16,15 +16,17 @@
 
 #include <omnetpp.h>
 
-#include "baseClasses/NodeTable.h"
-#include "supportClasses/MDMLib.h"
-#include "JosephVeinsApp.h"
+#include "../baseClasses/NodeTable.h"
+#include "../supportClasses/MDMLib.h"
+#include "../JosephVeinsApp.h"
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
-#include "mdAuthority/MBReport.h"
-#include "mdAuthority/MDAuthority.h"
+#include "../mdReport/MDReport.h"
+#include "../mdAuthority/MDAuthority.h"
+
+#include "../supportClasses/Printable.h"
 
 using namespace Veins;
 using namespace omnetpp;
@@ -65,7 +67,7 @@ public:
     std::map<std::string, double> CheckBSMold(NodeTable detectedNodes,int senderId);
 
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
-    void SendReport(MDAuthority * mdAuthority,MBReport mbReport);
+    void SendReport(MDAuthority * mdAuthority,MDReport mbReport);
 };
 
 #endif

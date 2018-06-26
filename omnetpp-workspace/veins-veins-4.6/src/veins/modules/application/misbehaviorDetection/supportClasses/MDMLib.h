@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -50,9 +50,9 @@
 
 #define POS_HEADING_TIME 1.1
 
-#define MAXBSMLENGTH 10
-#define MAXMDMLENGTH 10
-#define MAXNODESLENGTH 100
+#define MAXBSMLENGTH 20
+#define MAXMDMLENGTH 20
+#define MAXNODESLENGTH 50
 
 #define MAXTARGETLENGTH 1000
 #define MAXTARGETTIME 2
@@ -67,12 +67,12 @@ private:
     void countCircles(double rc, double rl, double rs);
     double calculateCircles(double dl, double ds);
 
-    double boundedGaussianSum(double x1, double x2, double sig);
 
     double importanceFactor(double r1, double r2, double d);
 
 public:
     double gaussianSum(double x, double sig);
+    double boundedGaussianSum(double x1, double x2, double sig);
 
     double calculateDistance(Coord, Coord);
     double calculateSpeed(Coord Speed);

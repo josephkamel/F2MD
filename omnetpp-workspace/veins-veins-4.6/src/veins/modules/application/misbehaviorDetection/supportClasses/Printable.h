@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -62,9 +62,9 @@ public:
 
     void setName(const char *);
 
-    void incAll(double mbType);
-    void incCumulFlags(double mbType);
-    void incFlags(std::string inString, double mbType);
+    void incAll(std::string mbType);
+    void incCumulFlags(std::string mbType);
+    void incFlags(std::string inString, std::string mbType);
     void resetAll();
     void getPrintable(char* outStr, double density,double deltaT);
 

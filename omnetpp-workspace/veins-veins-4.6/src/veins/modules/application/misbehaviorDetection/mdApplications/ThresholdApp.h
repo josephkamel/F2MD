@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -24,14 +24,13 @@ class ThresholdApp: public MDApplication {
 public:
 
     double Threshold = 0;
-
+    double minFactor = 1;
     ThresholdApp(const char* name, double Threshold);
 
-    std::tuple<double, MBReport> CheckNodeForReport(int myId,BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+    std::tuple<double, MDReport> CheckNodeForReport(int myId, BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes );
 
-    double getMinFactor(int myId,BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes, double mbType);
+    double getMinFactor();
 };
 
 #endif

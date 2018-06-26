@@ -1,6 +1,6 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
-* @email   joseph.kamel@gmail.com
+* @email   josephekamel@gmail.com
 * @date    11/04/2018
 * @version 1.0
 *
@@ -22,9 +22,13 @@ using namespace omnetpp;
 class MDMHistory {
     private:
         int nodeId;
-        int BSMNum;
+        int BSMNumV1;
+        int BSMNumV2;
         BsmCheck bsmCheckListV1[MAXMDMLENGTH];
         BsmCheck bsmCheckListV2[MAXMDMLENGTH];
+
+        void addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2);
+        void setBsmCheck(int index, BsmCheck bsmCheckV1,BsmCheck bsmCheckV2);
 
     public:
         MDMHistory();
@@ -33,8 +37,9 @@ class MDMHistory {
 
         BsmCheck getBsmCheck(int index, int version);
 
-        void addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2);
-        void setBsmCheck(int index, BsmCheck bsmCheckV1,BsmCheck bsmCheckV2);
+        void addBsmCheck(BsmCheck bsmCheck, int version);
+
+        void setBsmCheck(int index, BsmCheck bsmCheck, int version);
     };
 
 #endif

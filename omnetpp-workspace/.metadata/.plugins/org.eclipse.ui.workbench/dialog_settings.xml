@@ -9,20 +9,16 @@
 		<item value="302" key="dialogWidth"/>
 		<list key="textEntries">
 			<item value="2"/>
-			<item value="1"/>
 		</list>
 		<list key="orderedElements">
 			<item value="org.eclipse.cdt.ui.editor.CEditorveins-veins-4.6/src/veins/modules/application/misbehaviorDetection/supportClasses/Printable.cc"/>
-			<item value="org.eclipse.cdt.ui.editor.CEditorveins-veins-4.6/src/veins/modules/application/misbehaviorDetection/supportClasses/MDMLib.cc"/>
 		</list>
 		<list key="orderedProviders">
-			<item value="org.eclipse.ui.editors"/>
 			<item value="org.eclipse.ui.editors"/>
 		</list>
 		<list key="textArray">
 			<item value="print"/>
 			<item value="prin"/>
-			<item value="mdml"/>
 		</list>
 	</section>
 	<section name="NewWizardAction">
