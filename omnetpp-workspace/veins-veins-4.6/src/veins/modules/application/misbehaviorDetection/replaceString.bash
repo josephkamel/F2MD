@@ -1,1 +1,0 @@
-find . -name '*.h' -exec sed -i 's/@author  Joseph Kamel/@author  Joseph Kamel \n* @email   josephekamel@gmail.com/g' {} \;
