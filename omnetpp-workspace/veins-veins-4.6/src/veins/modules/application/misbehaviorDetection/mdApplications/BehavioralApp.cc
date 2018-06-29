@@ -31,7 +31,7 @@ BehavioralApp::BehavioralApp(const char* name, int version, double deltaTrustTim
     this->Augmentation = Augmentation;
 }
 
-std::tuple<double, MDReport> BehavioralApp::CheckNodeForReport(int myId,
+bool BehavioralApp::CheckNodeForReport(int myId,
         BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
 
     bool checkFailed = false;
@@ -238,19 +238,12 @@ std::tuple<double, MDReport> BehavioralApp::CheckNodeForReport(int myId,
     }
 
     if (checkFailed) {
-        mbReport.setGenerationTime(simTime().dbl());
-        mbReport.setSenderId(myId);
-        mbReport.setReportedId(senderId);
-        mbReport.setMbType(bsm.getSenderMbTypeStr());
-        mbReport.setAttackType(bsm.getSenderAttackTypeStr());
-//        SendReport(mbReport);
-
         prntApp.incCumulFlags(bsm.getSenderMbTypeStr());
         prntAppInst.incCumulFlags(bsm.getSenderMbTypeStr());
 
         bsmCheck.setReported(true);
     }
-    return std::make_tuple(checkFailed, mbReport);
+    return checkFailed;
 }
 
 std::tuple<double, int> BehavioralApp::getZeroNumber(BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {

@@ -11,12 +11,36 @@
 
 #include "MDReport.h"
 
+static bool setDate = false;
+static std::string curDate;
 
 MDReport::MDReport() {
+
+    if (!setDate) {
+        char dateBuffer[50];
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(dateBuffer, "%d-%d-%d_%d:%d:%d", tm.tm_year + 1900,
+                tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        std::string curDateTemp(dateBuffer);
+        curDate = curDateTemp;
+        setDate = true;
+    }
+
 //    generationTime=0;
 //    senderId=0;
 //    reportedId=0;
 //    mbType = 0;
+}
+
+void MDReport::setBaseReport(MDReport baseReport) {
+    generationTime = baseReport.getGenerationTime();
+    senderId = baseReport.getSenderId();
+    reportedId = baseReport.getReportedId();
+    mbType = baseReport.getMbType();
+    attackType = baseReport.getAttackType();
+    senderGps = baseReport.getSenderGps();
+    reportedGps = baseReport.getReportedGps();
 }
 
 double MDReport::getGenerationTime() {
@@ -34,9 +58,24 @@ std::string MDReport::getMbType() {
     return mbType;
 }
 
-
 std::string MDReport::getAttackType() {
     return attackType;
+}
+
+void MDReport::setSenderGps(Coord Gps){
+    senderGps = Gps;
+}
+
+void MDReport::setReportedGps(Coord Gps){
+    reportedGps = Gps;
+}
+
+Coord MDReport::getSenderGps(){
+    return senderGps;
+}
+
+Coord MDReport::getReportedGps(){
+    return reportedGps;
 }
 
 void MDReport::setGenerationTime(double time) {
@@ -90,6 +129,41 @@ std::string MDReport::getBaseReportXml() {
     return xml.getOutString();
 }
 
+std::string MDReport::getBaseReportJson(std::string reportTypeStr) {
+
+    std::string tempStr ="";
+
+    JsonWriter jw;
+    jw.openJsonElement("Metadata", false);
+
+    tempStr = jw.getSimpleTag("senderId",std::to_string(senderId),true);
+    jw.addTagToElement("Metadata", tempStr);
+    tempStr = jw.getSimpleTag("reportedId",std::to_string(reportedId),true);
+    jw.addTagToElement("Metadata", tempStr);
+    tempStr = jw.getSimpleTag("generationTime",std::to_string(generationTime),true);
+    jw.addTagToElement("Metadata", tempStr);
+
+    jw.openJsonElementList("senderGps");
+    jw.addTagToElement("senderGps", std::to_string(senderGps.x));
+    jw.addFinalTagToElement("senderGps", std::to_string(senderGps.y));
+    tempStr = jw.getJsonElementList("senderGps");
+    jw.addTagToElement("Metadata", tempStr);
+
+    jw.openJsonElementList("reportedGps");
+    jw.addTagToElement("reportedGps", std::to_string(reportedGps.x));
+    jw.addFinalTagToElement("reportedGps", std::to_string(reportedGps.y));
+    tempStr = jw.getJsonElementList("reportedGps");
+    jw.addTagToElement("Metadata", tempStr);
+
+    tempStr = jw.getSimpleTag("mbType",mbType,false);
+    jw.addTagToElement("Metadata", tempStr);
+    tempStr = jw.getSimpleTag("attackType",attackType,false);
+    jw.addTagToElement("Metadata", tempStr);
+    tempStr = jw.getSimpleTag("reportType",reportTypeStr,false);
+    jw.addFinalTagToElement("Metadata", tempStr);
+
+    return jw.getJsonElement("Metadata");
+}
 
 bool MDReport::writeStrToFile(const std::string strFileCnst,
         const std::string serial, const std::string version,
@@ -97,14 +171,23 @@ bool MDReport::writeStrToFile(const std::string strFileCnst,
     int gentime = generationTime;
     int gentime00 = (generationTime - gentime) * 100;
 
-    std::string strFile = strFileCnst + serial + "/MDReports/MDReport_"
-            + version + "_" + std::to_string(gentime) + "-"
+    std::string dirnameStr = strFileCnst + serial + "/MDReports_" + curDate;
+    const char* dirnameConst = dirnameStr.c_str();
+
+    struct stat info;
+    if (stat(dirnameConst, &info) != 0) {
+        mkdir(dirnameConst, 0777);
+    } else if (info.st_mode & S_IFDIR) {
+    } else {
+        mkdir(dirnameConst, 0777);
+    }
+
+    std::string strFile = strFileCnst + serial + "/MDReports_" + curDate
+            + "/MDReport_" + version + "_" + std::to_string(gentime) + "-"
             + std::to_string(gentime00) + "_" + std::to_string(senderId) + "_"
-            + std::to_string(reportedId) + ".xml";
+            + std::to_string(reportedId) + ".rep";
 
     std::fstream checkFile(strFile);
-
-    std::cout << strFile << "\n";
 
     if (checkFile.is_open()) {
 

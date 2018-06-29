@@ -32,7 +32,7 @@ public:
     AggrigationApp(const char* name, int version, double deltaTrustTime,
             int maxBsmTrustNum);
 
-    std::tuple<double, MDReport> CheckNodeForReport(int myId,
+    bool CheckNodeForReport(int myId,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
 //    bool AggregateFactorsList(double curFactor, double *factorList,

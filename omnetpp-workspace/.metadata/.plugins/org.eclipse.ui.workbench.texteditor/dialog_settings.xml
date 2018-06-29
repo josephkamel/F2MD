@@ -2,29 +2,33 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="myReportType" key="selection"/>
+		<item value="JsonWriter" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="XmlWriter"/>
+			<item value="report"/>
+			<item value="reports"/>
+			<item value="old"/>
+			<item value="BasicSafetyMessage"/>
+			<item value="attack"/>
+			<item value="mbType);"/>
+			<item value=", mbType);"/>
+			<item value="getSenderMbType()"/>
+			<item value="CheckNodeForReport"/>
+			<item value="checkFailed"/>
 			<item value="myReportType"/>
 			<item value="REPORT_VERSION"/>
 			<item value="writeStrToFile"/>
 			<item value="=*-=*-="/>
-			<item value="mdAuthority"/>
-			<item value="AppV1"/>
-			<item value="sudden"/>
-			<item value="minFactor"/>
-			<item value="detectedNodes\"/>
-			<item value="detectedNodes"/>
-			<item value="addBsmCheck"/>
-			<item value="setBsmCheck"/>
-			<item value="Error: File alread exists."/>
-			<item value="Error: File alread exists"/>
-			<item value="getInterId"/>
 		</list>
 		<list key="replacehistory">
+			<item value="JsonWriter"/>
+			<item value="bsm.getSenderMbTypeStr());"/>
+			<item value=", bsm.getSenderMbTypeStr());"/>
+			<item value="getSenderMbTypeStr()"/>
 			<item value="tempStr = tempStr + &quot;)&quot;;"/>
 			<item value="std::to_string("/>
 			<item value="const std::string"/>
@@ -36,10 +40,6 @@
 			<item value="prntApp"/>
 			<item value="&lt;= Threshold"/>
 			<item value="checkFailed"/>
-			<item value="prntTemp"/>
-			<item value="prntLong"/>
-			<item value="MDApplication"/>
-			<item value="MDApplications"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

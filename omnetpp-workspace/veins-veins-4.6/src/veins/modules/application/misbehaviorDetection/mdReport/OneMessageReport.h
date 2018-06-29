@@ -33,7 +33,8 @@ class OneMessageReport: public MDReport {
         OneMessageReport(MDReport baseReport);
         void setReportedCheck(BsmCheck reportedCheck);
         void setReportedBsm(BasicSafetyMessage reportedBsm);
-        std::string getReportPrintable();
+        std::string getReportPrintableXml();
+        std::string getReportPrintableJson();
 
     };
 

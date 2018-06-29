@@ -9,13 +9,12 @@
  * All rights reserved.
  *******************************************************************************/
 
-#include "MDModuleV3.h"
-
 #include <stdio.h>
 #include <stdlib.h>     /* atof */
 #include <boost/algorithm/string.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <veins/modules/application/misbehaviorDetection/mdChecks/ExperiChecks.h>
 #include <iostream>
 #include <string>
 #include <vector>

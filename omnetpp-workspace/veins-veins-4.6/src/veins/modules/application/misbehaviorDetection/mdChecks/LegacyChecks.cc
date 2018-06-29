@@ -9,14 +9,13 @@
  * All rights reserved.
  *******************************************************************************/
 
-#include "MDModule.h"
-
 #include <stdio.h>
 #include <stdlib.h>     /* atof */
 #include <boost/algorithm/string.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <veins/modules/application/misbehaviorDetection/mdChecks/LegacyChecks.h>
 #include <iostream>
 #include <string>
 #include <vector>

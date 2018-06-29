@@ -9,13 +9,12 @@
  * All rights reserved.
  *******************************************************************************/
 
-#include "MDModuleV2.h"
-
 #include <stdio.h>
 #include <stdlib.h>     /* atof */
 #include <boost/algorithm/string.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <veins/modules/application/misbehaviorDetection/mdChecks/CaTChChecks.h>
 #include <iostream>
 #include <string>
 #include <vector>

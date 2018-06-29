@@ -191,6 +191,9 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
         bsm->setSenderPos(curPosition);
         bsm->setSenderPosConfidence(curPositionConfidence);
 
+        std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
+        bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
+
         bsm->setSenderSpeed(curSpeed);
         bsm->setSenderSpeedConfidence(curSpeedConfidence);
 
@@ -204,12 +207,17 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
             if(!myAttackType.compare("ConstAddition")){
                 bsm->setSenderPos(Coord(curPosition.x+ConstX,curPosition.y+ConstY,curPosition.z));
+                std::pair<double, double> currLonLat = traci->getLonLat(Coord(curPosition.x+ConstX,curPosition.y+ConstY,curPosition.z));
+                bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
             }
 
             if(!myAttackType.compare("Disruptive")){
                 if(attackBsm.getSenderAddress() != 0){
                     bsm->setSenderPos(attackBsm.getSenderPos());
                     bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
+
+                    std::pair<double, double> currLonLat = traci->getLonLat(attackBsm.getSenderPos());
+                    bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
 
                     bsm->setSenderSpeed(attackBsm.getSenderSpeed());
                     bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());
@@ -226,6 +234,9 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
                 if(attackBsm.getSenderAddress() != 0){
                     bsm->setSenderPos(attackBsm.getSenderPos());
                     bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
+
+                    std::pair<double, double> currLonLat = traci->getLonLat(attackBsm.getSenderPos());
+                    bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
 
                     bsm->setSenderSpeed(attackBsm.getSenderSpeed());
                     bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());

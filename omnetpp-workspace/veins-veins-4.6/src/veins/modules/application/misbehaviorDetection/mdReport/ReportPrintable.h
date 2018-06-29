@@ -18,8 +18,10 @@
 
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 #include "../supportClasses/XmlWriter.h"
+#include "../supportClasses/JsonWriter.h"
 
 using namespace omnetpp;
+using namespace Veins;
 
 class ReportPrintable {
 
@@ -27,8 +29,12 @@ private:
 
 public:
 
+
     std::string getCheckXml(BsmCheck Check);
     std::string getBsmXml(BasicSafetyMessage bsm);
+
+    std::string getCheckJson(BsmCheck Check);
+    std::string getBsmJson(BasicSafetyMessage bsm);
 
 };
 

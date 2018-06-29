@@ -27,7 +27,7 @@ public:
     double minFactor = 1;
     ThresholdApp(const char* name, double Threshold);
 
-    std::tuple<double, MDReport> CheckNodeForReport(int myId, BasicSafetyMessage bsm,
+    bool CheckNodeForReport(int myId, BasicSafetyMessage bsm,
             BsmCheck bsmCheck, NodeTable detectedNodes );
 
     double getMinFactor();

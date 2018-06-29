@@ -11,10 +11,14 @@
 
 #include "JosephVeinsApp.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <linux/limits.h>
+
 Define_Module(JosephVeinsApp);
 
 #define serialNumber "IRT-DEMO"
-#define savePath "/home/joseph/Projects/ConfidenceRange/mdmSave/"
+#define savePath "../../../../../mdmSave/"
 
 #define confPos 5
 #define confSpd 0
@@ -25,6 +29,7 @@ Define_Module(JosephVeinsApp);
 #define START_SAVE 0 //60 seconds
 #define START_ATTACK 10 //60 seconds
 
+// attack 1 OneMessageReport, 2 EvidenceReport
 #define REPORT_VERSION "EvidenceReport"
 
 #define ATTACKER_PROB 0.1
@@ -33,16 +38,12 @@ Define_Module(JosephVeinsApp);
 #define CONSTX 300
 #define CONSTY 300
 
-static bool EnableV1 = true;
+static bool EnableV1 = false;
 static bool EnableV2 = true;
 
 static MDAuthority mdAuthority = MDAuthority();
 char const *AppV1Name = "AppV1";
 char const *AppV2Name = "AppV2";
-
-static bool PrintTPFP = false;
-static VarThrePrintable varThrePrintableV1(AppV1Name);
-static VarThrePrintable varThrePrintableV2(AppV2Name);
 
 ThresholdApp AppV1(AppV1Name, 0.5);
 ThresholdApp AppV2(AppV2Name, 0.5);
@@ -53,6 +54,12 @@ ThresholdApp AppV2(AppV2Name, 0.5);
 //BehavioralApp AppV1(AppV1Name,1,10.0,10,3);
 //BehavioralApp AppV2(AppV2Name,2,10.0,10,3);
 
+static bool PrintTPFP = false;
+static VarThrePrintable varThrePrintableV1(AppV1Name);
+static VarThrePrintable varThrePrintableV2(AppV2Name);
+#include <stdlib.h>
+#include <stdio.h>
+#include <linux/limits.h>
 void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
@@ -81,6 +88,7 @@ void JosephVeinsApp::initialize(int stage) {
         if (!myMdType.compare("genuine")) {
             TraCIColor color = TraCIColor(0, 255, 0, 0);
             traciVehicle->setColor(color);
+            myAttackType = "genuine";
         } else if (!myMdType.compare("attacker")) {
 
             myAttackType = ATTACK_TYPE;
@@ -163,171 +171,12 @@ double JosephVeinsApp::induceMisbehaviorProb(double faulty, double attackers) {
 
     return 0;
 }
-static double deltaT = 0;
-static bool init = false;
-void JosephVeinsApp::onBSMold(BasicSafetyMessage* bsm) {
-    int senderID = bsm->getSenderAddress();
 
-    MDModule mdm(myId, curPosition, curSpeed, Coord(myWidth, myLength),
-            curHeading);
-    MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence, curHeading,
-            curHeadingConfidence, Coord(myWidth, myLength));
-
-    BsmCheck bsmCheckV1_ = mdm.CheckBSM(*bsm, detectedNodes);
-    BsmCheck bsmCheckV2_ = mdmV2.CheckBSM(*bsm, detectedNodes);
-
-    tuple<bool, MDReport> resultV1 = AppV1.CheckNodeForReport(myId, *bsm,
-            bsmCheckV1_, detectedNodes);
-    tuple<bool, MDReport> resultV2 = AppV2.CheckNodeForReport(myId, *bsm,
-            bsmCheckV2_, detectedNodes);
-
-    if (get<0>(resultV1)) {
-        mdm.SendReport(&mdAuthority, get<1>(resultV1));
-
-        if (!myReportType.compare("OneMessageReport")) {
-            OneMessageReport omr = OneMessageReport(get<1>(resultV1));
-            omr.setReportedBsm(*bsm);
-            omr.setReportedCheck(bsmCheckV1_);
-            omr.writeStrToFile(savePath, serialNumber, "V1",
-                    omr.getReportPrintable());
-            std::cout << omr.getReportPrintable();
-        }
-
-        if (!myReportType.compare("EvidenceReport")) {
-            EvidenceReport evr = EvidenceReport(get<1>(resultV1));
-            evr.addEvidence(myBsm, bsmCheckV1_, *bsm, detectedNodes);
-            evr.writeStrToFile(savePath, serialNumber, "V1",
-                    evr.getReportPrintable());
-            std::cout << evr.getReportPrintable();
-        }
-
-    }
-
-    if (get<0>(resultV2)) {
-        mdmV2.SendReport(&mdAuthority, get<1>(resultV2));
-
-        if (!myReportType.compare("OneMessageReport")) {
-            OneMessageReport omr = OneMessageReport(get<1>(resultV1));
-            omr.setReportedBsm(*bsm);
-            omr.setReportedCheck(bsmCheckV2_);
-            omr.writeStrToFile(savePath, serialNumber, "V2",
-                    omr.getReportPrintable());
-            std::cout << omr.getReportPrintable();
-
-        }
-        if (!myReportType.compare("EvidenceReport")) {
-            EvidenceReport evr = EvidenceReport(get<1>(resultV1));
-            evr.addEvidence(myBsm, bsmCheckV2_, *bsm, detectedNodes);
-            evr.writeStrToFile(savePath, serialNumber, "V2",
-                    evr.getReportPrintable());
-            std::cout << evr.getReportPrintable();
-        }
-
-    }
-
-    if (!detectedNodes.includes(senderID)) {
-        NodeHistory newNode(senderID);
-        newNode.addBSM(*bsm);
-        MDMHistory newMDM(senderID);
-        newMDM.addBsmCheck(bsmCheckV1_, 1);
-        newMDM.addBsmCheck(bsmCheckV2_, 2);
-        detectedNodes.put(senderID, newNode, newMDM);
-    } else {
-        NodeHistory existingNode = detectedNodes.getNodeHistory(senderID);
-        existingNode.addBSM(*bsm);
-        MDMHistory existingMDM = detectedNodes.getMDMHistory(senderID);
-        existingMDM.addBsmCheck(bsmCheckV1_, 1);
-        existingMDM.addBsmCheck(bsmCheckV2_, 2);
-        detectedNodes.put(senderID, existingNode, existingMDM);
-    }
-
-    if (!init) {
-        AppV1.resetAllFlags();
-        AppV2.resetAllFlags();
-        //mdAuthority.resetAll();
-        init = true;
-    }
-
-    if (PrintTPFP) {
-        double minFactorV1 = AppV1.getMinFactor();
-        double minFactorV2 = AppV2.getMinFactor();
-        varThrePrintableV1.registerMessage(bsm->getSenderMbTypeStr(), minFactorV1);
-        varThrePrintableV2.registerMessage(bsm->getSenderMbTypeStr(), minFactorV2);
-    }
-
-    if ((simTime().dbl() - deltaT) > SAVE_PERIOD) {
-        deltaT = simTime().dbl();
-        if (PrintTPFP) {
-            varThrePrintableV1.saveFile(savePath, serialNumber);
-            varThrePrintableV2.saveFile(savePath, serialNumber);
-        }
-
-        if (simTime().dbl() > START_SAVE) {
-            AppV1.saveLine(savePath, serialNumber,
-                    mobility->getManager()->getManagedHosts().size(), deltaT);
-            AppV2.saveLine(savePath, serialNumber,
-                    mobility->getManager()->getManagedHosts().size(), deltaT);
-            mdAuthority.saveLine(savePath, serialNumber, deltaT);
-        }
-        AppV1.resetInstFlags();
-        AppV2.resetInstFlags();
-    }
-
-    if (get<0>(resultV1)) {
-        addAccusedNode(senderID);
-    }
-
-    if (!myMdType.compare("attacker")) {
-
-        if (!myAttackType.compare("Disruptive")
-                || !myAttackType.compare("DataReplay")) {
-            if (detectedNodes.getNodesNum() > 0) {
-                attackBsm = nextAttackBsm;
-                if (!myAttackType.compare("Disruptive")) {
-                    nextAttackBsm = detectedNodes.getRandomBSM();
-                    addTargetNode(nextAttackBsm.getSenderAddress());
-                }
-                if (!myAttackType.compare("DataReplay")) {
-                    nextAttackBsm = detectedNodes.getNextAttackedBsm(
-                            curPosition, nextAttackBsm.getSenderAddress(),
-                            nextAttackBsm.getArrivalTime().dbl());
-                    addTargetNode(nextAttackBsm.getSenderAddress());
-                }
-            }
-        }
-
-    } else {
-        if (isTargetNode(myId)) {
-            TraCIColor color = TraCIColor(255, 255, 0, 0);
-            traciVehicle->setColor(color);
-        } else {
-            TraCIColor color = TraCIColor(0, 255, 0, 0);
-            traciVehicle->setColor(color);
-        }
-        if (isAccusedNode(myId)) {
-            TraCIColor color = TraCIColor(0, 0, 255, 0);
-            traciVehicle->setColor(color);
-        }
-    }
-
-    if ((simTime().dbl() - targetClearTime) > MAXTARGETTIME) {
-        targetClearTime = simTime().dbl();
-        clearTargetNodes();
-    }
-
-    if ((simTime().dbl() - accusedClearTime) > MAXACCUSEDTTIME) {
-        accusedClearTime = simTime().dbl();
-        clearAccusedNodes();
-    }
-
-//Your application has received a beacon message from another car or RSU
-//code for handling the message goes here
-
-}
 
 BsmCheck bsmCheckV1;
 BsmCheck bsmCheckV2;
 void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
+
     int senderID = bsm->getSenderAddress();
 
     if (EnableV1) {
@@ -426,24 +275,43 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         MDModule mdm(myId, curPosition, curSpeed, Coord(myWidth, myLength),
                 curHeading);
         bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
-        tuple<bool, MDReport> result = AppV1.CheckNodeForReport(myId, *bsm,
+        bool result = AppV1.CheckNodeForReport(myId, *bsm,
                 bsmCheckV1, detectedNodes);
-        if (get<0>(result)) {
-            mdm.SendReport(&mdAuthority, get<1>(result));
+        if (result) {
+            MDReport reportBase;
+                reportBase.setGenerationTime(simTime().dbl());
+                reportBase.setSenderId(myId);
+                reportBase.setReportedId(senderID);
+                reportBase.setMbType(bsm->getSenderMbTypeStr());
+                reportBase.setAttackType(bsm->getSenderAttackTypeStr());
+                std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
+                reportBase.setSenderGps(Coord(currLonLat.first,currLonLat.second));
+                reportBase.setReportedGps(bsm->getSenderGpsCoordinates());
+
+            mdm.SendReport(&mdAuthority, reportBase);
+
+            if (!myReportType.compare("BasicCheckReport")) {
+                BasicCheckReport bcr = BasicCheckReport(reportBase);
+                bcr.setReportedCheck(bsmCheckV1);
+                bcr.writeStrToFile(savePath, serialNumber, "V1",
+                        bcr.getReportPrintableJson());
+//                std::cout << bcr.getReportPrintableJson();
+            }
+
             if (!myReportType.compare("OneMessageReport")) {
-                OneMessageReport omr = OneMessageReport(get<1>(result));
+                OneMessageReport omr = OneMessageReport(reportBase);
                 omr.setReportedBsm(*bsm);
                 omr.setReportedCheck(bsmCheckV1);
                 omr.writeStrToFile(savePath, serialNumber, "V1",
-                        omr.getReportPrintable());
-                std::cout << omr.getReportPrintable();
+                        omr.getReportPrintableJson());
+//                std::cout << omr.getReportPrintableJson();
             }
             if (!myReportType.compare("EvidenceReport")) {
-                EvidenceReport evr = EvidenceReport(get<1>(result));
+                EvidenceReport evr = EvidenceReport(reportBase);
                 evr.addEvidence(myBsm, bsmCheckV1, *bsm, detectedNodes);
                 evr.writeStrToFile(savePath, serialNumber, "V1",
-                        evr.getReportPrintable());
-                std::cout << evr.getReportPrintable();
+                        evr.getReportPrintableJson());
+             //   std::cout << evr.getReportPrintable();
             }
 
         }
@@ -473,7 +341,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             }
             AppV1.resetInstFlags();
         }
-        if (get<0>(result)) {
+        if (result) {
             addAccusedNode(senderID);
         }
 
@@ -483,25 +351,46 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence, curHeading,
                 curHeadingConfidence, Coord(myWidth, myLength));
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
-        tuple<bool, MDReport> result = AppV2.CheckNodeForReport(myId, *bsm,
+        bool result = AppV2.CheckNodeForReport(myId, *bsm,
                 bsmCheckV2, detectedNodes);
-        if (get<0>(result)) {
-            mdmV2.SendReport(&mdAuthority, get<1>(result));
+        if (result) {
+
+            MDReport reportBase;
+                reportBase.setGenerationTime(simTime().dbl());
+                reportBase.setSenderId(myId);
+                reportBase.setReportedId(senderID);
+                reportBase.setMbType(bsm->getSenderMbTypeStr());
+                reportBase.setAttackType(bsm->getSenderAttackTypeStr());
+                std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
+                reportBase.setSenderGps(Coord(currLonLat.first,currLonLat.second));
+                reportBase.setReportedGps(bsm->getSenderGpsCoordinates());
+
+            mdmV2.SendReport(&mdAuthority, reportBase);
+
+            if (!myReportType.compare("BasicCheckReport")) {
+                BasicCheckReport bcr = BasicCheckReport(reportBase);
+                bcr.setReportedCheck(bsmCheckV2);
+                bcr.writeStrToFile(savePath, serialNumber, "V2",
+                        bcr.getReportPrintableJson());
+            //    std::cout << bcr.getReportPrintableJson();
+            }
+
             if (!myReportType.compare("OneMessageReport")) {
-                OneMessageReport omr = OneMessageReport(get<1>(result));
+
+                OneMessageReport omr = OneMessageReport(reportBase);
                 omr.setReportedBsm(*bsm);
                 omr.setReportedCheck(bsmCheckV2);
-//                omr.writeStrToFile(savePath, serialNumber, "V2",
-//                        omr.getReportPrintable());
-//                std::cout << omr.getReportPrintable();
+                omr.writeStrToFile(savePath, serialNumber, "V2",
+                        omr.getReportPrintableJson());
+             //   std::cout << omr.getReportPrintableJson();
 
             }
             if (!myReportType.compare("EvidenceReport")) {
-                EvidenceReport evr = EvidenceReport(get<1>(result));
+                EvidenceReport evr = EvidenceReport(reportBase);
                 evr.addEvidence(myBsm, bsmCheckV2, *bsm, detectedNodes);
-//                evr.writeStrToFile(savePath, serialNumber, "V2",
-//                        evr.getReportPrintable());
-//                std::cout << evr.getReportPrintable();
+                evr.writeStrToFile(savePath, serialNumber, "V2",
+                        evr.getReportPrintableJson());
+           //    std::cout << evr.getReportPrintableJson();
 
             }
 
@@ -532,7 +421,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             }
             AppV2.resetInstFlags();
         }
-        if (get<0>(result)) {
+        if (result) {
             addAccusedNode(senderID);
         }
 

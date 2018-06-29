@@ -28,7 +28,7 @@ ThresholdApp::ThresholdApp(const char* name, double Threshold):MDApplication(nam
     this->Threshold = Threshold;
 }
 
-std::tuple<double, MDReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
+bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
         BsmCheck bsmCheck, NodeTable detectedNodes){
 
     bool checkFailed = false;
@@ -147,17 +147,11 @@ std::tuple<double, MDReport> ThresholdApp::CheckNodeForReport(int myId,BasicSafe
 
     }
     if (checkFailed) {
-        mbReport.setGenerationTime(simTime().dbl());
-        mbReport.setSenderId(myId);
-        mbReport.setReportedId(senderId);
-        mbReport.setMbType(bsm.getSenderMbTypeStr());
-        mbReport.setAttackType(bsm.getSenderAttackTypeStr());
-
         prntApp.incCumulFlags(bsm.getSenderMbTypeStr());
         prntAppInst.incCumulFlags(bsm.getSenderMbTypeStr());
     }
 
-    return std::make_tuple(checkFailed, mbReport);
+    return checkFailed;
 }
 
 double ThresholdApp::getMinFactor(){

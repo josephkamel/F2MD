@@ -18,6 +18,7 @@
 
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 #include "../supportClasses/XmlWriter.h"
+#include "../supportClasses/JsonWriter.h"
 #include "ReportPrintable.h"
 #include "../baseClasses/NodeTable.h"
 
@@ -39,7 +40,8 @@ public:
     EvidenceReport(MDReport baseReport);
     void addEvidence(BasicSafetyMessage myBsm, BsmCheck reportedCheck, BasicSafetyMessage receivedBsm,
             NodeTable detectedNodes);
-    std::string getReportPrintable();
+    std::string getReportXml();
+    std::string getReportPrintableJson();
 };
 
 #endif

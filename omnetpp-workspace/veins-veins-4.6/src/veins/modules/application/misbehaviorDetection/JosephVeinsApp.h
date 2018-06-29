@@ -13,14 +13,16 @@
 #define __VEINS_JOSEPHVEINSAPP_H_
 
 #include <math.h>
-#include "mdChecks/MDModule.h"
-#include "mdChecks/MDModuleV2.h"
-#include "mdChecks/MDModuleV3.h"
 #include <omnetpp.h>
+#include <veins/modules/application/misbehaviorDetection/mdChecks/CaTChChecks.h>
+#include <veins/modules/application/misbehaviorDetection/mdChecks/ExperiChecks.h>
+#include <veins/modules/application/misbehaviorDetection/mdChecks/LegacyChecks.h>
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 using namespace omnetpp;
 using namespace Veins;
+
+#include "veins/modules/messages/BasicSafetyMessage_m.h"
 
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
@@ -39,6 +41,7 @@ using namespace Veins;
 
 #include <veins/modules/application/misbehaviorDetection/mdReport/OneMessageReport.h>
 #include <veins/modules/application/misbehaviorDetection/mdReport/EvidenceReport.h>
+#include <veins/modules/application/misbehaviorDetection/mdReport/BasicCheckReport.h>
 
 static int targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
@@ -58,7 +61,6 @@ public:
 protected:
 
     virtual void onBSM(BasicSafetyMessage* bsm);
-    virtual void onBSMold(BasicSafetyMessage* bsm);
     virtual void onWSM(WaveShortMessage* wsm);
     virtual void onWSA(WaveServiceAdvertisment* wsa);
 

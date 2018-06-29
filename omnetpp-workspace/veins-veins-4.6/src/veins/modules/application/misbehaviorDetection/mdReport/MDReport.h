@@ -13,10 +13,13 @@
 #define __VEINS_MDReport_H_
 
 #include <omnetpp.h>
+#include <time.h>
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #include "../baseClasses/BsmCheck.h"
 #include "../supportClasses/XmlWriter.h"
+#include "../supportClasses/JsonWriter.h"
+#include <sys/stat.h>
 
 using namespace omnetpp;
 
@@ -30,8 +33,14 @@ protected:
     std::string mbType;
     std::string attackType;
 
+    Coord senderGps;
+    Coord reportedGps;
+
+
 public:
     MDReport();
+
+    void setBaseReport(MDReport baseReport);
 
     void setGenerationTime(double time);
     void setSenderId(int id);
@@ -39,13 +48,20 @@ public:
     void setMbType(std::string type);
     void setAttackType(std::string type);
 
+    void setSenderGps(Coord senderGps);
+    void setReportedGps(Coord reportedGps);
+
     double getGenerationTime();
     int getSenderId();
     int getReportedId();
     std::string getMbType();
     std::string getAttackType();
 
+    Coord getSenderGps();
+    Coord getReportedGps();
+
     std::string getBaseReportXml();
+    std::string getBaseReportJson(std::string reportType);
     bool writeStrToFile(const std::string strFileCnst, const std::string serial,
             const std::string version, const std::string outStr);
 

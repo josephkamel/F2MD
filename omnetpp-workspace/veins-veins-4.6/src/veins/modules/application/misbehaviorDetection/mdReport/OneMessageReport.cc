@@ -12,10 +12,7 @@
 #include <veins/modules/application/misbehaviorDetection/mdReport/OneMessageReport.h>
 
 OneMessageReport::OneMessageReport(MDReport baseReport) {
-    generationTime = baseReport.getGenerationTime();
-    senderId = baseReport.getSenderId();
-    reportedId = baseReport.getReportedId();
-    mbType = baseReport.getMbType();
+    setBaseReport(baseReport);
 }
 void OneMessageReport::setReportedCheck(BsmCheck reportedCheck) {
     this->reportedCheck = reportedCheck;
@@ -25,7 +22,7 @@ void OneMessageReport::setReportedBsm(BasicSafetyMessage reportedBsm) {
     this->reportedBsm = reportedBsm;
 }
 
-std::string OneMessageReport::getReportPrintable() {
+std::string OneMessageReport::getReportPrintableXml() {
 
     ReportPrintable rp;
 
@@ -46,6 +43,24 @@ std::string OneMessageReport::getReportPrintable() {
     xml.writeCloseTag();
 
     return xml.getOutString();
+}
+
+std::string OneMessageReport::getReportPrintableJson() {
+    ReportPrintable rp;
+
+    JsonWriter jw;
+    jw.writeHeader();
+    jw.openJsonElement("Report",false);
+    jw.addTagToElement("Report",getBaseReportJson("OneMessageReport"));
+    jw.addTagToElement("Report",rp.getCheckJson(reportedCheck));
+
+    jw.openJsonElementList("BSMs");
+    jw.addFinalTagToElement("BSMs",rp.getBsmJson(reportedBsm));
+    jw.addFinalTagToElement("Report",jw.getJsonElementList("BSMs"));
+    jw.addElement(jw.getJsonElement("Report"));
+    jw.writeFooter();
+
+    return jw.getOutString();
 }
 
 

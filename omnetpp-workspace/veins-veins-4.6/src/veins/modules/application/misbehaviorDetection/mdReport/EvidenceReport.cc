@@ -12,10 +12,7 @@
 #include <veins/modules/application/misbehaviorDetection/mdReport/EvidenceReport.h>
 
 EvidenceReport::EvidenceReport(MDReport baseReport) {
-    generationTime = baseReport.getGenerationTime();
-    senderId = baseReport.getSenderId();
-    reportedId = baseReport.getReportedId();
-    mbType = baseReport.getMbType();
+    setBaseReport(baseReport);
     bsmListNum = 0;
 }
 
@@ -122,7 +119,7 @@ void EvidenceReport::addEvidence(BasicSafetyMessage myBsm,
     }
 }
 
-std::string EvidenceReport::getReportPrintable() {
+std::string EvidenceReport::getReportXml() {
 
     ReportPrintable rp;
 
@@ -147,4 +144,32 @@ std::string EvidenceReport::getReportPrintable() {
     xml.writeCloseTag();
 
     return xml.getOutString();
+}
+
+std::string EvidenceReport::getReportPrintableJson() {
+
+    ReportPrintable rp;
+
+    JsonWriter jw;
+    jw.writeHeader();
+    jw.openJsonElement("Report",false);
+
+    jw.addTagToElement("Report",getBaseReportJson("EvidenceReport"));
+
+    jw.addTagToElement("Report",rp.getCheckJson(reportedCheck));
+
+    jw.openJsonElementList("BSMs");
+
+    for (int var = 0; var < bsmListNum; ++var) {
+        if(var < bsmListNum-1){
+            jw.addTagToElement("BSMs",rp.getBsmJson(bsmList[var]));
+        }else{
+            jw.addFinalTagToElement("BSMs",rp.getBsmJson(bsmList[var]));
+        }
+    }
+    jw.addFinalTagToElement("Report",jw.getJsonElementList("BSMs"));
+    jw.addElement(jw.getJsonElement("Report"));
+    jw.writeFooter();
+
+    return jw.getOutString();
 }
