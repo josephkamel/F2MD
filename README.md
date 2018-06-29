@@ -5,9 +5,6 @@ This project aims to create recreate within a simulation all the elements that f
 
 ## Project Diagram
 
-This project is based on the Veins simulator.
-
-```
  ![alt text](https://github.com/josephkamel/F2MD/blob/master/F2MD-Diagram.png)
-```
+
 
