@@ -11,10 +11,6 @@
 
 #include "JosephVeinsApp.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <linux/limits.h>
-
 Define_Module(JosephVeinsApp);
 
 #define serialNumber "IRT-DEMO"
