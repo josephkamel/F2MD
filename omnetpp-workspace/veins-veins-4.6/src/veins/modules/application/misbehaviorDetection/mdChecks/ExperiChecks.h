@@ -33,7 +33,7 @@
 using namespace Veins;
 using namespace omnetpp;
 
-class MDModuleV3 {
+class ExperiChecks {
 private:
 
     int myId;
@@ -87,7 +87,7 @@ private:
     void resetAll();
 
 public:
-    MDModuleV3(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    ExperiChecks(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
     void SendReport(MDAuthority * mdAuthority,MDReport mbReport);

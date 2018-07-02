@@ -13,7 +13,7 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "IRT-DEMO"
+#define serialNumber "COLLECT-REPORTS-ConstAddition5050"
 #define savePath "../../../../../mdmSave/"
 
 #define confPos 5
@@ -31,8 +31,8 @@ Define_Module(JosephVeinsApp);
 #define ATTACKER_PROB 0.1
 #define ATTACK_TYPE "ConstAddition"
 // attack 1 ConstAddition, 2 Disruptive, 3 DataReplay
-#define CONSTX 300
-#define CONSTY 300
+#define CONSTX 50
+#define CONSTY 50
 
 static bool EnableV1 = false;
 static bool EnableV2 = true;
@@ -109,7 +109,7 @@ void JosephVeinsApp::finish() {
     //statistics recording goes here
 }
 
-static double totalFaulty = 0;
+static double totalGenuine = 0;
 static double totalAttacker = 0;
 std::string JosephVeinsApp::induceMisbehavior(double attacker) {
 
@@ -119,19 +119,19 @@ std::string JosephVeinsApp::induceMisbehavior(double attacker) {
         return "genuine";
     }
 
-    if ((totalAttacker + totalFaulty) == 0) {
-        totalFaulty++;
+    if ((totalAttacker + totalGenuine) == 0) {
+        totalGenuine++;
         return "genuine";
     }
 
-    double realFactor = totalAttacker / (totalFaulty + totalAttacker);
+    double realFactor = totalAttacker / (totalGenuine + totalAttacker);
     double theoFactor = attacker / (genuine + attacker);
 
     if (theoFactor > realFactor) {
         totalAttacker++;
         return "attacker";
     } else {
-        totalFaulty++;
+        totalGenuine++;
         return "genuine";
     }
 
@@ -268,7 +268,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
 
     switch (version) {
     case 1: {
-        MDModule mdm(myId, curPosition, curSpeed, Coord(myWidth, myLength),
+        LegacyChecks mdm(myId, curPosition, curSpeed, Coord(myWidth, myLength),
                 curHeading);
         bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
         bool result = AppV1.CheckNodeForReport(myId, *bsm,
@@ -344,7 +344,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         break;
     }
     case 2: {
-        MDModuleV2 mdmV2(myId, curPosition, curPositionConfidence, curHeading,
+        CaTChChecks mdmV2(myId, curPosition, curPositionConfidence, curHeading,
                 curHeadingConfidence, Coord(myWidth, myLength));
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
         bool result = AppV2.CheckNodeForReport(myId, *bsm,

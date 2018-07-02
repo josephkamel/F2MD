@@ -22,7 +22,7 @@
 using namespace std;
 using namespace boost;
 
-MDModuleV2::MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence,
+CaTChChecks::CaTChChecks(int myId, Coord myPosition, Coord myPositionConfidence,
         Coord myHeading, Coord myHeadingConfidence, Coord mySize) {
     this->myId = myId;
     this->myPosition = myPosition;
@@ -32,7 +32,7 @@ MDModuleV2::MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence,
     this->mySize = mySize;
 }
 
-double MDModuleV2::RangePlausibilityCheck(Coord receiverPosition,
+double CaTChChecks::RangePlausibilityCheck(Coord receiverPosition,
         Coord receiverPositionConfidence, Coord senderPosition,
         Coord senderPositionConfidence) {
 
@@ -46,7 +46,7 @@ double MDModuleV2::RangePlausibilityCheck(Coord receiverPosition,
     return factor;
 }
 
-double MDModuleV2::PositionConsistancyCheck(Coord curPosition,
+double CaTChChecks::PositionConsistancyCheck(Coord curPosition,
         Coord curPositionConfidence, Coord oldPosition,
         Coord oldPositionConfidence, double time) {
     double distance = mdmLib.calculateDistance(curPosition, oldPosition);
@@ -59,7 +59,7 @@ double MDModuleV2::PositionConsistancyCheck(Coord curPosition,
     return factor;
 }
 
-double MDModuleV2::SpeedConsistancyCheck(double curSpeed,
+double CaTChChecks::SpeedConsistancyCheck(double curSpeed,
         double curSpeedConfidence, double oldspeed, double oldSpeedConfidence,
         double time) {
 
@@ -78,7 +78,7 @@ double MDModuleV2::SpeedConsistancyCheck(double curSpeed,
     return factor;
 }
 
-double MDModuleV2::SpeedPlausibilityCheck(double speed,
+double CaTChChecks::SpeedPlausibilityCheck(double speed,
         double speedConfidence) {
     if ((fabs(speed) + fabs(speedConfidence) / 2) < MAX_PLAUSIBLE_SPEED) {
         return 1;
@@ -92,7 +92,7 @@ double MDModuleV2::SpeedPlausibilityCheck(double speed,
     }
 }
 
-double MDModuleV2::PositionSpeedConsistancyCheckOld(Coord curPosition,
+double CaTChChecks::PositionSpeedConsistancyCheckOld(Coord curPosition,
         Coord curPositionConfidence, Coord oldPosition,
         Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
         double oldspeed, double oldSpeedConfidence, double time) {
@@ -153,7 +153,7 @@ double MDModuleV2::PositionSpeedConsistancyCheckOld(Coord curPosition,
     }
 }
 
-double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
+double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         Coord curPositionConfidence, Coord oldPosition,
         Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
         double oldspeed, double oldSpeedConfidence, double time) {
@@ -210,7 +210,7 @@ double MDModuleV2::PositionSpeedConsistancyCheck(Coord curPosition,
     }
 }
 
-double MDModuleV2::IntersectionCheck(Coord nodePosition1,
+double CaTChChecks::IntersectionCheck(Coord nodePosition1,
         Coord nodePositionConfidence1, Coord nodePosition2,
         Coord nodePositionConfidence2, Coord nodeHeading1, Coord nodeHeading2,
         Coord nodeSize1, Coord nodeSize2) {
@@ -235,7 +235,7 @@ double MDModuleV2::IntersectionCheck(Coord nodePosition1,
 
 }
 
-InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
+InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         BasicSafetyMessage bsm) {
     int senderId = bsm.getSenderAddress();
     Coord senderPos = bsm.getSenderPos();
@@ -316,7 +316,7 @@ InterTest MDModuleV2::MultipleIntersectionCheck(NodeTable detectedNodes,
     return intertTest;
 }
 
-double MDModuleV2::SuddenAppearenceCheck(Coord receiverPosition,
+double CaTChChecks::SuddenAppearenceCheck(Coord receiverPosition,
         Coord receiverPositionConfidence, Coord senderPosition,
         Coord senderPositionConfidence) {
     double distance = mdmLib.calculateDistance(senderPosition,
@@ -343,7 +343,7 @@ double MDModuleV2::SuddenAppearenceCheck(Coord receiverPosition,
     return factor;
 }
 
-double MDModuleV2::PositionPlausibilityCheck(Coord senderPosition,
+double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
         Coord senderPositionConfidence, double senderSpeed,
         double senderSpeedConfidence) {
 
@@ -403,7 +403,7 @@ double MDModuleV2::PositionPlausibilityCheck(Coord senderPosition,
     return factor;
 }
 
-double MDModuleV2::BeaconFrequencyCheck(double timeNew, double timeOld) {
+double CaTChChecks::BeaconFrequencyCheck(double timeNew, double timeOld) {
     double timeDelta = timeNew - timeOld;
     if (timeDelta < MAX_BEACON_FREQUENCY) {
         return 0;
@@ -412,7 +412,7 @@ double MDModuleV2::BeaconFrequencyCheck(double timeNew, double timeOld) {
     }
 }
 
-double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
+double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
         Coord curHeadingConfidence, Coord oldPosition,
         Coord oldPositionConfidence, Coord curPosition,
         Coord curPositionConfidence, double deltaTime, double curSpeed,
@@ -547,7 +547,7 @@ double MDModuleV2::PositionHeadingConsistancyCheck(Coord curHeading,
     }
 }
 
-BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
+BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     BsmCheck bsmCheck = BsmCheck();
 
@@ -630,7 +630,7 @@ BsmCheck MDModuleV2::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
     return bsmCheck;
 }
 
-void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
+void CaTChChecks::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
 
     if (bsmCheck.getRangePlausibility() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "ART FAILED => "
@@ -688,7 +688,7 @@ void MDModuleV2::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
 
 }
 
-void MDModuleV2::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
+void CaTChChecks::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
     char nameV2[32] = "mdaV2";
     mdAuthority->sendReport(nameV2, mbReport);
 }

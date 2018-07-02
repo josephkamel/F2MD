@@ -35,7 +35,7 @@
 using namespace Veins;
 using namespace omnetpp;
 
-class MDModuleV2 {
+class CaTChChecks {
 private:
 
     int myId;
@@ -89,7 +89,7 @@ private:
     void resetAll();
 
 public:
-    MDModuleV2(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    CaTChChecks(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
     void SendReport(MDAuthority * mdAuthority,MDReport mbReport);

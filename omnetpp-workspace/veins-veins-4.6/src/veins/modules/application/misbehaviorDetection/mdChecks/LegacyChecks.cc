@@ -26,7 +26,7 @@
 using namespace std;
 using namespace boost;
 
-MDModule::MDModule(int myId, Coord myPosition, Coord mySpeed, Coord mySize,
+LegacyChecks::LegacyChecks(int myId, Coord myPosition, Coord mySpeed, Coord mySize,
         Coord myHeading) {
     this->myId = myId;
     this->myPosition = myPosition;
@@ -35,7 +35,7 @@ MDModule::MDModule(int myId, Coord myPosition, Coord mySpeed, Coord mySize,
     this->myHeading = myHeading;
 }
 
-double MDModule::RangePlausibilityCheck(Coord senderPosition,
+double LegacyChecks::RangePlausibilityCheck(Coord senderPosition,
         Coord receiverPosition) {
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
@@ -47,7 +47,7 @@ double MDModule::RangePlausibilityCheck(Coord senderPosition,
     }
 }
 
-double MDModule::PositionConsistancyCheck(Coord curPosition, Coord oldPosition,
+double LegacyChecks::PositionConsistancyCheck(Coord curPosition, Coord oldPosition,
         double time) {
     double distance = mdmLib.calculateDistance(curPosition, oldPosition);
 
@@ -58,7 +58,7 @@ double MDModule::PositionConsistancyCheck(Coord curPosition, Coord oldPosition,
     }
 }
 
-double MDModule::SpeedConsistancyCheck(double curSpeed, double oldspeed,
+double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
         double time) {
     double speedDelta = curSpeed - oldspeed;
 
@@ -81,7 +81,7 @@ double MDModule::SpeedConsistancyCheck(double curSpeed, double oldspeed,
 //static double minDeltaMax = 10;
 //static double maxDeltaMin = 0;
 
-double MDModule::PositionSpeedConsistancyCheck(Coord curPosition,
+double LegacyChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         Coord oldPosition, double curSpeed, double oldspeed, double time) {
     if (time < MAX_TIME_DELTA) {
         double distance = mdmLib.calculateDistance(curPosition, oldPosition);
@@ -117,7 +117,7 @@ double MDModule::PositionSpeedConsistancyCheck(Coord curPosition,
     }
 }
 
-double MDModule::SpeedPlausibilityCheck(double speed) {
+double LegacyChecks::SpeedPlausibilityCheck(double speed) {
 
     if (fabs(speed) < MAX_PLAUSIBLE_SPEED) {
         return 1;
@@ -126,7 +126,7 @@ double MDModule::SpeedPlausibilityCheck(double speed) {
     }
 }
 
-double MDModule::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
+double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
         Coord head1, Coord nodePosition2, Coord nodeSize2, Coord head2) {
 
     double heading1 = mdmLib.calculateHeadingAngle(head1);
@@ -145,7 +145,7 @@ double MDModule::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
 
 }
 
-InterTest MDModule::MultipleIntersectionCheck(NodeTable detectedNodes,
+InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         BasicSafetyMessage bsm) {
     int senderId = bsm.getSenderAddress();
     Coord senderPos = bsm.getSenderPos();
@@ -220,7 +220,7 @@ InterTest MDModule::MultipleIntersectionCheck(NodeTable detectedNodes,
     return intertTest;
 }
 
-double MDModule::SuddenAppearenceCheck(Coord senderPosition,
+double LegacyChecks::SuddenAppearenceCheck(Coord senderPosition,
         Coord receiverPosition) {
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
@@ -231,7 +231,7 @@ double MDModule::SuddenAppearenceCheck(Coord senderPosition,
     }
 }
 
-double MDModule::PositionPlausibilityCheck(Coord senderPosition,
+double LegacyChecks::PositionPlausibilityCheck(Coord senderPosition,
         double senderSpeed) {
     if (senderSpeed <= MAX_NON_ROUTE_SPEED) {
         return 1;
@@ -250,7 +250,7 @@ double MDModule::PositionPlausibilityCheck(Coord senderPosition,
     }
 }
 
-double MDModule::BeaconFrequencyCheck(double timeNew, double timeOld) {
+double LegacyChecks::BeaconFrequencyCheck(double timeNew, double timeOld) {
     double timeDelta = timeNew - timeOld;
     if (timeDelta < MAX_BEACON_FREQUENCY) {
         return 0;
@@ -259,7 +259,7 @@ double MDModule::BeaconFrequencyCheck(double timeNew, double timeOld) {
     }
 }
 
-double MDModule::PositionHeadingConsistancyCheck(Coord curHeading,
+double LegacyChecks::PositionHeadingConsistancyCheck(Coord curHeading,
         Coord curPosition, Coord oldPosition, double deltaTime,
         double curSpeed) {
     if (deltaTime < 1.1) {
@@ -291,7 +291,7 @@ double MDModule::PositionHeadingConsistancyCheck(Coord curHeading,
     }
 }
 
-std::map<std::string, double> MDModule::CheckBSMold(NodeTable detectedNodes,
+std::map<std::string, double> LegacyChecks::CheckBSMold(NodeTable detectedNodes,
         int senderId) {
 
     std::map<std::string, double> result;
@@ -378,7 +378,7 @@ std::map<std::string, double> MDModule::CheckBSMold(NodeTable detectedNodes,
     return result;
 }
 
-BsmCheck MDModule::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
+BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     BsmCheck bsmCheck = BsmCheck();
 
@@ -446,7 +446,7 @@ BsmCheck MDModule::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
     return bsmCheck;
 }
 
-void MDModule::SendReport(MDAuthority * mdAuthority, MDReport mbReport) {
+void LegacyChecks::SendReport(MDAuthority * mdAuthority, MDReport mbReport) {
     char nameV1[32] = "mdaV1";
     mdAuthority->sendReport(nameV1, mbReport);
 }

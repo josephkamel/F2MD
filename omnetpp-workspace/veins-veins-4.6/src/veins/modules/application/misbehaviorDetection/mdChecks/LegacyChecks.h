@@ -31,7 +31,7 @@
 using namespace Veins;
 using namespace omnetpp;
 
-class MDModule {
+class LegacyChecks {
 
 private:
 
@@ -63,7 +63,7 @@ private:
 
 public:
 
-    MDModule(int myId, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
+    LegacyChecks(int myId, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
     std::map<std::string, double> CheckBSMold(NodeTable detectedNodes,int senderId);
 
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);

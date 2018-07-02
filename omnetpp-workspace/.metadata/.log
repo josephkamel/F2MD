@@ -6719,3 +6719,12 @@ org.eclipse.core.internal.resources.ResourceException: Resource is out of sync w
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
 !SUBENTRY 2 org.eclipse.core.resources 4 274 2018-06-29 11:04:52.925
 !MESSAGE Resource is out of sync with the file system: '/veins-veins-4.6/.settings/language.settings.xml'.
+!SESSION 2018-07-02 11:24:42.685 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_171
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-07-02 11:24:51.565
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
