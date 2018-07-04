@@ -1,2 +1,3 @@
 omnetpp-workspace/inet/*
 omnetpp-workspace/veins-veins-4.6/networks/*
+!omnetpp-workspace/veins-veins-4.6/networks/IRTSystemXScenario/

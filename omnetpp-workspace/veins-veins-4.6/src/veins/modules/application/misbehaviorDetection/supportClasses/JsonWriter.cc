@@ -40,7 +40,7 @@ void JsonWriter::openJsonElement(const std::string openTag, bool noName) {
             break;
         }
     }
-    if(elementIndex = -1){
+    if(elementIndex == -1){
         std::string element = "";
 
         tempOpenTag.resize(openTags + 1);
@@ -75,7 +75,7 @@ void JsonWriter::openJsonElementList(const std::string openTag) {
             break;
         }
     }
-    if(elementIndex = -1){
+    if(elementIndex == -1){
         std::string element = "";
 
         tempOpenTag.resize(openTags + 1);

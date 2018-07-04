@@ -227,6 +227,12 @@ std::string ReportPrintable::getCheckJson(BsmCheck Check){
 
          tempStr = jw.getJsonElement("veh");
 
+//         std::cout<<tempStr<<"\n";
+//         std::size_t found = tempStr.find("{");
+//         if (!(found!=std::string::npos)){
+//             exit(0);
+//         }
+
          if(var < Check.getIntersection().getInterNum() -1){
              jw.addTagToElement("inT", tempStr);
          }else{

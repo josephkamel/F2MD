@@ -2,12 +2,15 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="JsonWriter" key="selection"/>
+		<item value="EnableV2" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="noName"/>
+			<item value="MDModuleV2"/>
+			<item value="EnableV2"/>
 			<item value="XmlWriter"/>
 			<item value="report"/>
 			<item value="reports"/>
@@ -20,11 +23,9 @@
 			<item value="CheckNodeForReport"/>
 			<item value="checkFailed"/>
 			<item value="myReportType"/>
-			<item value="REPORT_VERSION"/>
-			<item value="writeStrToFile"/>
-			<item value="=*-=*-="/>
 		</list>
 		<list key="replacehistory">
+			<item value="Ca"/>
 			<item value="JsonWriter"/>
 			<item value="bsm.getSenderMbTypeStr());"/>
 			<item value=", bsm.getSenderMbTypeStr());"/>
@@ -39,7 +40,6 @@
 			<item value="AggrigationApp"/>
 			<item value="prntApp"/>
 			<item value="&lt;= Threshold"/>
-			<item value="checkFailed"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

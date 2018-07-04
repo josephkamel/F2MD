@@ -13,7 +13,7 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "COLLECT-REPORTS-ConstAddition5050"
+#define serialNumber "IRT-DATAREPL"
 #define savePath "../../../../../mdmSave/"
 
 #define confPos 5
@@ -29,7 +29,7 @@ Define_Module(JosephVeinsApp);
 #define REPORT_VERSION "EvidenceReport"
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE "ConstAddition"
+#define ATTACK_TYPE "Disruptive"
 // attack 1 ConstAddition, 2 Disruptive, 3 DataReplay
 #define CONSTX 50
 #define CONSTY 50
