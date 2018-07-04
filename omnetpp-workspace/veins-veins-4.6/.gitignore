@@ -39,3 +39,6 @@ subprojects/veins_inet/examples/**/.qtenvrc
 subprojects/veins_inet/examples/**/.cmdenv-log
 subprojects/veins_inet/examples/**/valgrind.out
 /networks/
+!/networks/IRTSystemXScenario/
+/networks/IRTSystemXScenario/results
+
