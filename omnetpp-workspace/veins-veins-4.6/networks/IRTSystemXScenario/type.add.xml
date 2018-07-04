@@ -1,0 +1,1 @@
+<additional><vType accel="2.6" color="1,0,1" decel="4.5" id="bait" length="2.5" maxSpeed="14" minGap="2.5" sigma="0.5" /><vType accel="2.6" color="1,1,0" decel="4.5" id="victim" length="2.5" maxSpeed="14" minGap="2.5" sigma="0.5" /><vType accel="2.6" color="1,0,0" decel="4.5" id="attacker" length="2.5" maxSpeed="14" minGap="2.5" sigma="0.5" /></additional>
