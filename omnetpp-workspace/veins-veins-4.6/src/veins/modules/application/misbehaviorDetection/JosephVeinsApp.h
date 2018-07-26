@@ -83,6 +83,23 @@ protected:
     void clearAccusedNodes();
     bool isAccusedNode(int id);
 
+    void checkPseudonymChange();
+
+    double messageToleranceBuffer = 0;
+    double disposablePCP();
+
+    double lastChangeTime = 0;
+    double periodicalPCP();
+
+    double cumulativeDistance = 0;
+    Coord lastPos = Coord (0,0,0);
+    double distanceBasedPCP();
+
+    double randomPCP();
+
+    BasicSafetyMessage StopBsm;
+    bool StopInitiated;
+
     typedef std::list<Obstacle*> ObstacleGridCell;
     typedef std::vector<ObstacleGridCell> ObstacleGridRow;
     typedef std::vector<ObstacleGridRow> Obstacles;

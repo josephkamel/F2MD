@@ -26,9 +26,9 @@
 using namespace std;
 using namespace boost;
 
-LegacyChecks::LegacyChecks(int myId, Coord myPosition, Coord mySpeed, Coord mySize,
+LegacyChecks::LegacyChecks(int myPseudonym, Coord myPosition, Coord mySpeed, Coord mySize,
         Coord myHeading) {
-    this->myId = myId;
+    this->myPseudonym = myPseudonym;
     this->myPosition = myPosition;
     this->mySpeed = mySpeed;
     this->mySize = mySize;
@@ -147,7 +147,7 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
 
 InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         BasicSafetyMessage bsm) {
-    int senderId = bsm.getSenderAddress();
+    int senderId = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
 
     NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
@@ -161,7 +161,7 @@ InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
             Coord(bsm.getSenderWidth(), bsm.getSenderLength()),
             bsm.getSenderHeading());
     if (INTScore < 1) {
-        result["INTId_0"] = myId;
+        result["INTId_0"] = myPseudonym;
         result["INTCheck_0"] = INTScore;
 
         INTNum++;
@@ -291,98 +291,11 @@ double LegacyChecks::PositionHeadingConsistancyCheck(Coord curHeading,
     }
 }
 
-std::map<std::string, double> LegacyChecks::CheckBSMold(NodeTable detectedNodes,
-        int senderId) {
-
-    std::map<std::string, double> result;
-
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
-
-    result["RangePlausibility"] = RangePlausibilityCheck(myPosition,
-            senderNode.getLatestBSM().getSenderPos());
-    result["PositionPlausibility"] = PositionPlausibilityCheck(
-            senderNode.getSenderPos(0), senderNode.getSenderSpeed(0));
-    result["SpeedPlausibility"] = SpeedPlausibilityCheck(
-            senderNode.getSenderSpeed(0));
-
-    if (detectedNodes.getNodeHistory(senderId).getBSMNum() > 1) {
-        result["PositionConsistancy"] = PositionConsistancyCheck(
-                senderNode.getSenderPos(0), senderNode.getSenderPos(1),
-                senderNode.getDeltaTime(0, 1));
-
-        result["SpeedConsistancy"] = SpeedConsistancyCheck(
-                senderNode.getSenderSpeed(0), senderNode.getSenderSpeed(1),
-                senderNode.getDeltaTime(0, 1));
-
-        result["PositionSpeedConsistancy"] = PositionSpeedConsistancyCheck(
-                senderNode.getSenderPos(0), senderNode.getSenderPos(1),
-                senderNode.getSenderSpeed(0), senderNode.getSenderSpeed(1),
-                senderNode.getDeltaTime(0, 1));
-
-        result["BeaconFrequency"] = BeaconFrequencyCheck(
-                senderNode.getArrivalTime(0), senderNode.getArrivalTime(1));
-
-        result["PositionHeadingConsistancy"] = PositionHeadingConsistancyCheck(
-                senderNode.getSenderHeading(0), senderNode.getSenderPos(0),
-                senderNode.getSenderPos(1),
-                mdmLib.calculateDeltaTime(senderNode.getBSM(0),
-                        senderNode.getBSM(1)), senderNode.getSenderSpeed(0));
-
-    } else {
-        result["SuddenAppearence"] = SuddenAppearenceCheck(myPosition,
-                senderNode.getLatestBSM().getSenderPos());
-    }
-
-    result["INTId_0"] = myId;
-    result["INTCheck_0"] = IntersectionCheck(myPosition, mySize, myHeading,
-            senderNode.getSenderPos(0), senderNode.getSenderSize(0),
-            senderNode.getSenderHeading(0));
-
-    NodeHistory varNode;
-    double INTScore = 0;
-    int INTNum = 1;
-
-    char num_string[32];
-    char INTId_string[64] = "INTId_";
-    char INTCheck_string[64] = "INTCheck_";
-
-    for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
-        if (detectedNodes.getNodeId(var) != senderId) {
-            if (detectedNodes.getDeltaTime(detectedNodes.getNodeId(var),
-                    senderId) < MAX_DELTA_INTER) {
-                varNode = detectedNodes.getNodeHistory(
-                        detectedNodes.getNodeId(var));
-                INTScore = IntersectionCheck(varNode.getSenderPos(0),
-                        varNode.getSenderSize(0), varNode.getSenderHeading(0),
-                        senderNode.getSenderPos(0), senderNode.getSenderSize(0),
-                        senderNode.getSenderHeading(0));
-                if (INTScore > 0) {
-                    sprintf(num_string, "%d", INTNum);
-                    strcat(INTId_string, num_string);
-                    strcat(INTCheck_string, num_string);
-                    result[INTId_string] = detectedNodes.getNodeId(var);
-                    result[INTCheck_string] = INTScore;
-
-                    strncpy(INTId_string, "INTId_", sizeof(INTId_string));
-                    strncpy(INTCheck_string, "INTCheck_",
-                            sizeof(INTCheck_string));
-
-                    INTNum++;
-                }
-            }
-        }
-    }
-
-    result["INTNum"] = INTNum;
-
-    return result;
-}
-
 BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
 
     BsmCheck bsmCheck = BsmCheck();
 
-    int senderId = bsm.getSenderAddress();
+    int senderId = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
 
@@ -444,10 +357,5 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes)
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 
     return bsmCheck;
-}
-
-void LegacyChecks::SendReport(MDAuthority * mdAuthority, MDReport mbReport) {
-    char nameV1[32] = "mdaV1";
-    mdAuthority->sendReport(nameV1, mbReport);
 }
 

@@ -1,6 +1,6 @@
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=linux
-configDescList=org.eclipse.launchbar.core.descriptorType.default\:veins,org.eclipse.launchbar.core.descriptorType.default\:CologneScenario,org.eclipse.launchbar.core.descriptorType.default\:LuST,org.eclipse.launchbar.core.descriptorType.default\:LuSTScenario,org.eclipse.launchbar.core.descriptorType.default\:DefaultScenario,org.eclipse.launchbar.core.descriptorType.default\:IRTSystemXScenario
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:veins,org.eclipse.launchbar.core.descriptorType.default\:CologneScenario,org.eclipse.launchbar.core.descriptorType.default\:LuST,org.eclipse.launchbar.core.descriptorType.default\:LuSTScenario,org.eclipse.launchbar.core.descriptorType.default\:DefaultScenario,org.eclipse.launchbar.core.descriptorType.default\:PrextScenario,org.eclipse.launchbar.core.descriptorType.default\:IRTSystemXScenario
 eclipse.preferences.version=1
 org.eclipse.launchbar.core.descriptorType.default\:DefaultScenario/activeLaunchMode=run
 org.eclipse.launchbar.core.descriptorType.default\:IRTSystemXScenario/activeLaunchMode=run

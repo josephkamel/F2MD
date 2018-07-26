@@ -90,7 +90,6 @@ public:
     ExperiChecks(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
-    void SendReport(MDAuthority * mdAuthority,MDReport mbReport);
 };
 
 #endif

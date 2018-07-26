@@ -38,7 +38,7 @@ using namespace omnetpp;
 class CaTChChecks {
 private:
 
-    int myId;
+    int myPseudonym;
     Coord myPosition;
     Coord myPositionConfidence;
 
@@ -89,10 +89,9 @@ private:
     void resetAll();
 
 public:
-    CaTChChecks(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    CaTChChecks(int myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
-    void SendReport(MDAuthority * mdAuthority,MDReport mbReport);
 };
 
 #endif

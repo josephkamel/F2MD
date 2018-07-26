@@ -267,7 +267,7 @@ double ExperiChecks::IntersectionCheck(Coord nodePosition1,
 
 InterTest ExperiChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         BasicSafetyMessage bsm) {
-    int senderId = bsm.getSenderAddress();
+    int senderId = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
     Coord senderHeading = bsm.getSenderHeading();
@@ -591,7 +591,7 @@ BsmCheck ExperiChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes)
 
     BsmCheck bsmCheck = BsmCheck();
 
-    int senderId = bsm.getSenderAddress();
+    int senderId = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
 
@@ -728,8 +728,4 @@ void ExperiChecks::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
 
 }
 
-void ExperiChecks::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
-    char nameV2[32] = "mdaV2";
-    mdAuthority->sendReport(nameV2, mbReport);
-}
 

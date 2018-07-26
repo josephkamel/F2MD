@@ -126,6 +126,16 @@ void BaseWaveApplLayer::initialize(int stage) {
     }
 }
 
+void BaseWaveApplLayer::addMyBsm(BasicSafetyMessage bsm) {
+    if (myBsmNum < MYBSM_SIZE) {
+        myBsmNum++;
+    }
+    for (int var = myBsmNum - 1; var > 0; --var) {
+        myBsm[var] = myBsm[var - 1];
+    }
+    myBsm[0] = bsm;
+}
+
 simtime_t BaseWaveApplLayer::computeAsynchronousSendingTime(simtime_t interval,
         t_channel chan) {
 
@@ -185,14 +195,17 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
     if (BasicSafetyMessage* bsm = dynamic_cast<BasicSafetyMessage*>(wsm)) {
 
-        bsm->setSenderMbTypeStr(myMdType);
-        bsm->setSenderAttackTypeStr(myAttackType);
+        bsm->setSenderPseudonym(myPseudonym);
+
+        bsm->setSenderMbType(myMdType.c_str());
+        bsm->setSenderAttackType(myAttackType.c_str());
 
         bsm->setSenderPos(curPosition);
         bsm->setSenderPosConfidence(curPositionConfidence);
 
         std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
-        bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
+        bsm->setSenderGpsCoordinates(
+                Coord(currLonLat.first, currLonLat.second));
 
         bsm->setSenderSpeed(curSpeed);
         bsm->setSenderSpeedConfidence(curSpeedConfidence);
@@ -203,52 +216,28 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
         bsm->setSenderWidth(myWidth);
         bsm->setSenderLength(myLength);
         //joseph
-        if(!myMdType.compare("attacker")){
+        if (!myMdType.compare("attacker")) {
 
-            if(!myAttackType.compare("ConstAddition")){
-                bsm->setSenderPos(Coord(curPosition.x+ConstX,curPosition.y+ConstY,curPosition.z));
-                std::pair<double, double> currLonLat = traci->getLonLat(Coord(curPosition.x+ConstX,curPosition.y+ConstY,curPosition.z));
-                bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
+            if (attackBsm.getSenderPseudonym() != 0) {
+                bsm->setSenderPos(attackBsm.getSenderPos());
+                bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
+
+                std::pair<double, double> currLonLat = traci->getLonLat(
+                        attackBsm.getSenderPos());
+                bsm->setSenderGpsCoordinates(
+                        Coord(currLonLat.first, currLonLat.second));
+
+                bsm->setSenderSpeed(attackBsm.getSenderSpeed());
+                bsm->setSenderSpeedConfidence(
+                        attackBsm.getSenderSpeedConfidence());
+
+                bsm->setSenderHeading(attackBsm.getSenderHeading());
+                bsm->setSenderHeadingConfidence(
+                        attackBsm.getSenderHeadingConfidence());
+
+                bsm->setSenderWidth(attackBsm.getSenderWidth());
+                bsm->setSenderLength(attackBsm.getSenderLength());
             }
-
-            if(!myAttackType.compare("Disruptive")){
-                if(attackBsm.getSenderAddress() != 0){
-                    bsm->setSenderPos(attackBsm.getSenderPos());
-                    bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
-
-                    std::pair<double, double> currLonLat = traci->getLonLat(attackBsm.getSenderPos());
-                    bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
-
-                    bsm->setSenderSpeed(attackBsm.getSenderSpeed());
-                    bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());
-
-                    bsm->setSenderHeading(attackBsm.getSenderHeading());
-                    bsm->setSenderHeadingConfidence(attackBsm.getSenderHeadingConfidence());
-
-                    bsm->setSenderWidth(attackBsm.getSenderWidth());
-                    bsm->setSenderLength(attackBsm.getSenderLength());
-                }
-            }
-
-            if(!myAttackType.compare("DataReplay")){
-                if(attackBsm.getSenderAddress() != 0){
-                    bsm->setSenderPos(attackBsm.getSenderPos());
-                    bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
-
-                    std::pair<double, double> currLonLat = traci->getLonLat(attackBsm.getSenderPos());
-                    bsm->setSenderGpsCoordinates(Coord(currLonLat.first,currLonLat.second));
-
-                    bsm->setSenderSpeed(attackBsm.getSenderSpeed());
-                    bsm->setSenderSpeedConfidence(attackBsm.getSenderSpeedConfidence());
-
-                    bsm->setSenderHeading(attackBsm.getSenderHeading());
-                    bsm->setSenderHeadingConfidence(attackBsm.getSenderHeadingConfidence());
-
-                    bsm->setSenderWidth(attackBsm.getSenderWidth());
-                    bsm->setSenderLength(attackBsm.getSenderLength());
-                }
-            }
-
 
         }
 
@@ -274,6 +263,19 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
     }
 }
 
+double BaseWaveApplLayer::getNextPseudonym() {
+    pseudoNum++;
+    double simTimeDbl = simTime().dbl();
+    while (simTimeDbl > 9999) {
+        simTimeDbl = simTimeDbl / 10;
+    }
+    double pseudo = myId * 10000 + simTimeDbl;
+    double digitNumber = (int) (log10(pseudo) + 1);
+    double pseudoNumAdd = pseudoNum * pow(10, digitNumber + 1);
+    pseudo = pseudo + pseudoNumAdd;
+    return pseudo;
+}
+
 void BaseWaveApplLayer::receiveSignal(cComponent* source, simsignal_t signalID,
         cObject* obj, cObject* details) {
     Enter_Method_Silent();
@@ -289,7 +291,8 @@ void BaseWaveApplLayer::handlePositionUpdate(cObject* obj) {
     ChannelMobilityPtrType const mobility = check_and_cast<
             ChannelMobilityPtrType>(obj);
 
-    GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x, curSpeedConfidence, curHeadingConfidence);
+    GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x,
+            curSpeedConfidence, curHeadingConfidence);
 
     curPosition = gaussian.OffsetPosition(mobility->getCurrentPosition());
     curSpeed = gaussian.OffsetSpeed(mobility->getCurrentSpeed());
@@ -341,7 +344,7 @@ void BaseWaveApplLayer::handleSelfMsg(cMessage* msg) {
         sendDown(bsm);
         scheduleAt(simTime() + beaconInterval, sendBeaconEvt);
 
-        myBsm = *bsm;
+        addMyBsm(*bsm);
 
         break;
     }

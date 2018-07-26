@@ -35,7 +35,7 @@ class LegacyChecks {
 
 private:
 
-    int myId;
+    int myPseudonym;
     Coord myPosition;
     Coord mySpeed;
     Coord mySize;
@@ -63,11 +63,9 @@ private:
 
 public:
 
-    LegacyChecks(int myId, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
-    std::map<std::string, double> CheckBSMold(NodeTable detectedNodes,int senderId);
-
+    LegacyChecks(int myPseudonym, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
-    void SendReport(MDAuthority * mdAuthority,MDReport mbReport);
+
 };
 
 #endif

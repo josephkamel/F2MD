@@ -84,7 +84,7 @@ std::string ReportPrintable::getBsmXml(BasicSafetyMessage bsm){
     xml.init();
 
     tempStr = "id=\"";
-    tempStr = tempStr + std::to_string(bsm.getSenderAddress());
+    tempStr = tempStr + std::to_string(bsm.getSenderPseudonym());
     tempStr = tempStr + "\"";
 
     tempStr = tempStr + "ts=\"";
@@ -251,7 +251,7 @@ std::string ReportPrintable::getBsmJson(BasicSafetyMessage bsm){
     std::string tempStr = "";
     JsonWriter jw;
     jw.openJsonElement("Bsm",true);
-    tempStr = jw.getSimpleTag("id", std::to_string(bsm.getSenderAddress()),true);
+    tempStr = jw.getSimpleTag("id", std::to_string(bsm.getSenderPseudonym()),true);
     jw.addTagToElement("Bsm", tempStr);
 
     tempStr = jw.getSimpleTag("ts", bsm.getArrivalTime().str(),true);

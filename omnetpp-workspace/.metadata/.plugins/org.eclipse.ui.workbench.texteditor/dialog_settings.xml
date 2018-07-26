@@ -2,29 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="EnableV2" key="selection"/>
+		<item value="Coord" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="noName"/>
-			<item value="MDModuleV2"/>
-			<item value="EnableV2"/>
-			<item value="XmlWriter"/>
-			<item value="report"/>
-			<item value="reports"/>
-			<item value="old"/>
-			<item value="BasicSafetyMessage"/>
-			<item value="attack"/>
-			<item value="mbType);"/>
-			<item value=", mbType);"/>
-			<item value="getSenderMbType()"/>
-			<item value="CheckNodeForReport"/>
-			<item value="checkFailed"/>
-			<item value="myReportType"/>
+			<item value="coord"/>
+			<item value="checkPseudonymChange"/>
+			<item value="BaseWaveApplLayer"/>
+			<item value="wave"/>
+			<item value="myId"/>
+			<item value="stringId"/>
+			<item value="myPseudonym"/>
+			<item value="getSenderAddress"/>
+			<item value="myID"/>
+			<item value="senderWidth"/>
+			<item value="getcomm"/>
+			<item value="command"/>
+			<item value="getco"/>
+			<item value="serverVersion"/>
+			<item value="connectionManager"/>
 		</list>
 		<list key="replacehistory">
+			<item value="myPseudonym"/>
 			<item value="Ca"/>
 			<item value="JsonWriter"/>
 			<item value="bsm.getSenderMbTypeStr());"/>
@@ -39,7 +40,6 @@
 			<item value="prntAppInst"/>
 			<item value="AggrigationApp"/>
 			<item value="prntApp"/>
-			<item value="&lt;= Threshold"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

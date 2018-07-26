@@ -39,10 +39,10 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     double temp = 0;
     minFactor = 1;
 
-    prntApp.incAll(bsm.getSenderMbTypeStr());
-    prntAppInst.incAll(bsm.getSenderMbTypeStr());
+    prntApp.incAll(bsm.getSenderMbType());
+    prntAppInst.incAll(bsm.getSenderMbType());
 
-    int senderId = bsm.getSenderAddress();
+    int senderId = bsm.getSenderPseudonym();
 
     MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
     NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
@@ -75,8 +75,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("RangePlausibility", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("RangePlausibility", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("RangePlausibility", bsm.getSenderMbType());
+        prntAppInst.incFlags("RangePlausibility", bsm.getSenderMbType());
     }
 
     //std::cout<< "PositionConsistancy" << '\n';
@@ -90,8 +90,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionConsistancy", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("PositionConsistancy", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("PositionConsistancy", bsm.getSenderMbType());
+        prntAppInst.incFlags("PositionConsistancy", bsm.getSenderMbType());
     }
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
@@ -105,8 +105,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionSpeedConsistancy", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("PositionSpeedConsistancy", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("PositionSpeedConsistancy", bsm.getSenderMbType());
+        prntAppInst.incFlags("PositionSpeedConsistancy", bsm.getSenderMbType());
     }
 
     //std::cout<< "SpeedConsistancy" << '\n';
@@ -120,8 +120,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("SpeedConsistancy", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("SpeedConsistancy", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("SpeedConsistancy", bsm.getSenderMbType());
+        prntAppInst.incFlags("SpeedConsistancy", bsm.getSenderMbType());
     }
 
     //std::cout<< "SpeedPlausibility" << '\n';
@@ -135,8 +135,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("SpeedPlausibility", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("SpeedPlausibility", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("SpeedPlausibility", bsm.getSenderMbType());
+        prntAppInst.incFlags("SpeedPlausibility", bsm.getSenderMbType());
     }
 
     //std::cout<< "PositionPlausibility" << '\n';
@@ -150,8 +150,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionPlausibility", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("PositionPlausibility", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("PositionPlausibility", bsm.getSenderMbType());
+        prntAppInst.incFlags("PositionPlausibility", bsm.getSenderMbType());
     }
 
     //std::cout<< "BeaconFrequency" << '\n';
@@ -165,8 +165,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("BeaconFrequency", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("BeaconFrequency", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("BeaconFrequency", bsm.getSenderMbType());
+        prntAppInst.incFlags("BeaconFrequency", bsm.getSenderMbType());
     }
 
     //std::cout<< "SuddenAppearence" << '\n';
@@ -179,8 +179,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
    //     temp = minFactor;
     }
     if (temp<Threshold) {
-        prntApp.incFlags("SuddenAppearence", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("SuddenAppearence", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("SuddenAppearence", bsm.getSenderMbType());
+        prntAppInst.incFlags("SuddenAppearence", bsm.getSenderMbType());
     }
 
     //std::cout<< "PositionHeadingConsistancy" << '\n';
@@ -194,8 +194,8 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     }
     if (temp<Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionHeadingConsistancy", bsm.getSenderMbTypeStr());
-        prntAppInst.incFlags("PositionHeadingConsistancy", bsm.getSenderMbTypeStr());
+        prntApp.incFlags("PositionHeadingConsistancy", bsm.getSenderMbType());
+        prntAppInst.incFlags("PositionHeadingConsistancy", bsm.getSenderMbType());
     }
 
     InterTest inter = bsmCheck.getIntersection();
@@ -220,14 +220,14 @@ bool AggrigationApp::CheckNodeForReport(int myId,
         }
         if (temp<Threshold) {
             checkFailed = true;
-            prntApp.incFlags("Intersection", bsm.getSenderMbTypeStr());
-            prntAppInst.incFlags("Intersection", bsm.getSenderMbTypeStr());
+            prntApp.incFlags("Intersection", bsm.getSenderMbType());
+            prntAppInst.incFlags("Intersection", bsm.getSenderMbType());
         }
     }
 
     if (checkFailed) {
-        prntApp.incCumulFlags(bsm.getSenderMbTypeStr());
-        prntAppInst.incCumulFlags(bsm.getSenderMbTypeStr());
+        prntApp.incCumulFlags(bsm.getSenderMbType());
+        prntAppInst.incCumulFlags(bsm.getSenderMbType());
         bsmCheck.setReported(true);
     }
     return checkFailed;

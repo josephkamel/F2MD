@@ -62,6 +62,8 @@ using Veins::AnnotationManagerAccess;
  * @see PhyLayer80211p
  * @see Decider80211p
  */
+
+#define MYBSM_SIZE 10
 class BaseWaveApplLayer : public BaseApplLayer {
 
     public:
@@ -145,6 +147,9 @@ class BaseWaveApplLayer : public BaseApplLayer {
          */
         virtual void checkAndTrackPacket(cMessage* msg);
 
+
+        double getNextPseudonym();
+
     protected:
 
         /* pointers ill be set when used with TraCIMobility */
@@ -190,15 +195,19 @@ class BaseWaveApplLayer : public BaseApplLayer {
 
         std::string myMdType;
         std::string myAttackType;
-        double ConstX;
-        double ConstY;
 
         std::string myReportType;
+
 
         BasicSafetyMessage attackBsm = BasicSafetyMessage();
         BasicSafetyMessage nextAttackBsm = BasicSafetyMessage();
 
-        BasicSafetyMessage myBsm = BasicSafetyMessage();
+        BasicSafetyMessage myBsm[MYBSM_SIZE];
+        void addMyBsm(BasicSafetyMessage bsm);
+        int myBsmNum = 0;
+
+        double myPseudonym;
+        double pseudoNum;
 
         int myId;
         int mySCH;
