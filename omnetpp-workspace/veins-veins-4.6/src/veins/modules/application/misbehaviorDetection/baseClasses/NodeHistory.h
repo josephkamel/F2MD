@@ -21,15 +21,15 @@ using namespace omnetpp;
 
 class NodeHistory {
     private:
-        int nodeId;
+        unsigned long nodePseudonym;
         int bsmNum;
         BasicSafetyMessage bsmList[MAXBSMLENGTH];
         BasicSafetyMessage* getBSMList();
 
     public:
         NodeHistory();
-        NodeHistory(int);
-        NodeHistory(int, BasicSafetyMessage);
+        NodeHistory(unsigned long);
+        NodeHistory(unsigned long, BasicSafetyMessage);
         void addBSM(BasicSafetyMessage bsm);
         BasicSafetyMessage getLatestBSM();
         BasicSafetyMessage getSecondLatestBSM();

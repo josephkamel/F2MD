@@ -14,19 +14,19 @@
 InterTest::InterTest() {
     interNum = 0;
     currentNum = 0;
-    interId = new int[interNum];
+    interPseudonym = new unsigned long[interNum];
     interValue = new double[interNum];
 }
 
 InterTest::InterTest(int interNum) {
     this->interNum = interNum;
     currentNum = 0;
-    interId = new int[interNum];
+    interPseudonym = new unsigned long[interNum];
     interValue = new double[interNum];
 }
 
-void InterTest::addInterValue(int id, double value) {
-    interId[currentNum] = id;
+void InterTest::addInterValue(unsigned long pseudo, double value) {
+    interPseudonym[currentNum] = pseudo;
     interValue[currentNum] = value;
     currentNum++;
 }
@@ -35,15 +35,15 @@ int InterTest::getInterNum() {
     return interNum;
 }
 
-int InterTest::getInterId(int index) {
-    return interId[index];
+unsigned long InterTest::getInterId(int index) {
+    return interPseudonym[index];
 }
 
 double InterTest::getInterValue(int index) {
     return interValue[index];
 }
 
-int InterTest::getIdIndex(int id) {
+int InterTest::getIdIndex(unsigned long id) {
     for (int var = 0; var < currentNum; ++var) {
         if(getInterId(var) == id){
             return var;

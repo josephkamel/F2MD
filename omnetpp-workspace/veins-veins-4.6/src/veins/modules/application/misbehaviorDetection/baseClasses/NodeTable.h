@@ -24,7 +24,7 @@ private:
     int nodesNum;
     NodeHistory nodeHistoryList[MAXNODESLENGTH];
     MDMHistory mdmHistoryList[MAXNODESLENGTH];
-    int nodeIds[MAXNODESLENGTH];
+    unsigned long nodePseudos[MAXNODESLENGTH];
 
     int getOldestNode();
 
@@ -32,17 +32,17 @@ public:
     NodeTable();
     int getNodesNum();
     NodeHistory* getNodeHistoryList();
-    int getNodeId(int);
-    void put(int, NodeHistory, MDMHistory);
+    unsigned long getNodePseudo(int);
+    void put(unsigned long, NodeHistory, MDMHistory);
     NodeHistory getNodeHistory(int);
-    MDMHistory getMDMHistory(int);
+    MDMHistory getMDMHistory(unsigned long nodePseudonym);
 
     void setNodeHistory(int index,NodeHistory);
     void setMDMHistory(int index,MDMHistory);
 
-    bool includes(int);
+    bool includes(unsigned long nodePseudonym);
 
-    double getDeltaTime(int, int);
+    double getDeltaTime(unsigned long nodePseudo1, unsigned long nodePseudo2);
 
     BasicSafetyMessage getRandomBSM();
     BasicSafetyMessage getNextAttackedBsm(Coord myPosition, int bsmNode, double bsmTime);

@@ -7893,3 +7893,81 @@ org.eclipse.cdt.internal.formatter.AbortFormatting: [281/24] Unexpected token ty
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:590)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1499)
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1472)
+!SESSION 2018-07-27 10:52:35.490 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_171
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-07-27 10:52:42.525
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-07-27 10:52:46.580
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-07-27 13:59:51.449 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_171
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-07-27 13:59:56.010
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-07-27 14:00:00.231
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-07-27 14:45:16.372
+!MESSAGE Error in CDT UI during reconcile
+!STACK 1
+C Model Exception: C Model Status [Element JosephVeinsApp.cc does not exist.]
+	at org.eclipse.cdt.internal.core.model.CElement.newNotPresentException(CElement.java:484)
+	at org.eclipse.cdt.internal.core.model.TranslationUnit.makeConsistent(TranslationUnit.java:580)
+	at org.eclipse.cdt.internal.core.model.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:62)
+	at org.eclipse.cdt.internal.core.model.CModelOperation.execute(CModelOperation.java:341)
+	at org.eclipse.cdt.internal.core.model.CModelOperation.run(CModelOperation.java:607)
+	at org.eclipse.cdt.internal.core.model.CModelOperation.runOperation(CModelOperation.java:635)
+	at org.eclipse.cdt.internal.core.model.WorkingCopy.reconcile(WorkingCopy.java:362)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:78)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:73)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:349)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+!SUBENTRY 1 org.eclipse.cdt.core 4 969 2018-07-27 14:45:16.374
+!MESSAGE Element JosephVeinsApp.cc does not exist.
+!SESSION 2018-07-27 18:20:17.056 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_171
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-07-27 18:20:23.886
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-07-27 18:20:31.000
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-07-27 18:28:13.077 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_171
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-07-27 18:28:21.776
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-07-27 23:13:55.987 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_171
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-07-27 23:14:00.835
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.omnetpp.main 1 0 2018-07-27 23:14:06.627
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.

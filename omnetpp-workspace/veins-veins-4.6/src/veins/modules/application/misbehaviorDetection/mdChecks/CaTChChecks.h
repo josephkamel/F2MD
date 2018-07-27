@@ -38,7 +38,7 @@ using namespace omnetpp;
 class CaTChChecks {
 private:
 
-    int myPseudonym;
+    unsigned long myPseudonym;
     Coord myPosition;
     Coord myPositionConfidence;
 
@@ -83,13 +83,13 @@ private:
     double BeaconFrequencyCheck(double, double);
     double SuddenAppearenceCheck(Coord, Coord, Coord, Coord);
 
-    void PrintBsmCheck(int senderId, BsmCheck bsmCheck);
+    void PrintBsmCheck(unsigned long senderPseudonym, BsmCheck bsmCheck);
 
 
     void resetAll();
 
 public:
-    CaTChChecks(int myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    CaTChChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
 };

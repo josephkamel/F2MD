@@ -21,7 +21,7 @@ using namespace omnetpp;
 
 class MDMHistory {
     private:
-        int nodeId;
+    unsigned long nodePseudonym;
         int BSMNumV1;
         int BSMNumV2;
         BsmCheck bsmCheckListV1[MAXMDMLENGTH];
@@ -32,7 +32,7 @@ class MDMHistory {
 
     public:
         MDMHistory();
-        MDMHistory(int);
+        MDMHistory(unsigned long);
         int getMDMNum();
 
         BsmCheck getBsmCheck(int index, int version);

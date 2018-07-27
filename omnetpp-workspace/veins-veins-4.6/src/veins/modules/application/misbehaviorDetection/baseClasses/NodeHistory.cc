@@ -12,17 +12,17 @@
 #include "NodeHistory.h"
 
 NodeHistory::NodeHistory() {
-    nodeId = 0;
+    nodePseudonym = 0;
     bsmNum = 0;
 }
 
-NodeHistory::NodeHistory(int id) {
-    nodeId = id;
+NodeHistory::NodeHistory(unsigned long pseudo) {
+    nodePseudonym = pseudo;
     bsmNum = 0;
 }
 
-NodeHistory::NodeHistory(int id, BasicSafetyMessage bsm) {
-    nodeId = id;
+NodeHistory::NodeHistory(unsigned long pseudo, BasicSafetyMessage bsm) {
+    nodePseudonym = pseudo;
     bsmNum = 0;
     addBSM(bsm);
 }

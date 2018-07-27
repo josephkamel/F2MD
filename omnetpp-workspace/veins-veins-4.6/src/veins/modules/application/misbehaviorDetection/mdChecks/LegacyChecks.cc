@@ -26,7 +26,7 @@
 using namespace std;
 using namespace boost;
 
-LegacyChecks::LegacyChecks(int myPseudonym, Coord myPosition, Coord mySpeed, Coord mySize,
+LegacyChecks::LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed, Coord mySize,
         Coord myHeading) {
     this->myPseudonym = myPseudonym;
     this->myPosition = myPosition;
@@ -60,16 +60,22 @@ double LegacyChecks::PositionConsistancyCheck(Coord curPosition, Coord oldPositi
 
 double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
         double time) {
+
     double speedDelta = curSpeed - oldspeed;
 
+    double attFact = mdmLib.gaussianSum(1, 1/3);
+    if(time>=1){
+        attFact = time;
+    }
+
     if (speedDelta > 0) {
-        if (speedDelta < MAX_PLAUSIBLE_ACCEL * time) {
+        if (speedDelta < MAX_PLAUSIBLE_ACCEL * attFact) {
             return 1;
         } else {
             return 0; //distance
         }
     } else {
-        if (speedDelta < MAX_PLAUSIBLE_DECEL * time) {
+        if (speedDelta < MAX_PLAUSIBLE_DECEL * attFact) {
             return 1;
         } else {
             return 0; //distance
@@ -147,10 +153,11 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
 
 InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         BasicSafetyMessage bsm) {
-    int senderId = bsm.getSenderPseudonym();
+
+    unsigned long senderPseudonym = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
+    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
     NodeHistory varNode;
 
     std::map<std::string, double> result;
@@ -172,9 +179,9 @@ InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
     char INTCheck_string[64] = "INTCheck_";
 
     for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
-        if (detectedNodes.getNodeId(var) != senderId) {
+        if (detectedNodes.getNodePseudo(var) != senderPseudonym) {
             varNode = detectedNodes.getNodeHistory(
-                    detectedNodes.getNodeId(var));
+                    detectedNodes.getNodePseudo(var));
 
             if (mdmLib.calculateDeltaTime(varNode.getLatestBSM(),
                     bsm) < MAX_DELTA_INTER) {
@@ -188,7 +195,7 @@ InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
                     strcat(INTCheck_string, num_string);
-                    result[INTId_string] = detectedNodes.getNodeId(var);
+                    result[INTId_string] = detectedNodes.getNodePseudo(var);
                     result[INTCheck_string] = INTScore;
 
                     strncpy(INTId_string, "INTId_", sizeof(INTId_string));
@@ -295,11 +302,11 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes)
 
     BsmCheck bsmCheck = BsmCheck();
 
-    int senderId = bsm.getSenderPseudonym();
+    unsigned long senderPseudonym = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
+    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
 
     bsmCheck.setRangePlausibility(
             RangePlausibilityCheck(myPosition, bsm.getSenderPos()));
@@ -308,7 +315,7 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes)
             SpeedPlausibilityCheck(
                     mdmLib.calculateSpeed(bsm.getSenderSpeed())));
 
-    if (detectedNodes.getNodeHistory(senderId).getBSMNum() > 0) {
+    if (detectedNodes.getNodeHistory(senderPseudonym).getBSMNum() > 0) {
 
         bsmCheck.setPositionConsistancy(
                 PositionConsistancyCheck(senderPos,

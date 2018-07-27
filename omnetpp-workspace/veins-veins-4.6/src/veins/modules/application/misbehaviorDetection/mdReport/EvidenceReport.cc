@@ -98,14 +98,14 @@ void EvidenceReport::addEvidence(BasicSafetyMessage myBsm,
     }
 
     for (int var = 0; var < eviNum - 1; ++var) {
-        addBsmToList(detectedNodes.getNodeHistory(reportedId).getBSM(var));
+        addBsmToList(detectedNodes.getNodeHistory(reportedPseudo).getBSM(var));
     }
 
     for (int var = 0; var < reportedCheck.getIntersection().getInterNum();
             ++var) {
         if (reportedCheck.getIntersection().getInterValue(var) < 1) {
 
-            if (senderId == reportedCheck.getIntersection().getInterId(var)) {
+            if (senderPseudonym == reportedCheck.getIntersection().getInterId(var)) {
                 if(!myBsmAdded){
                     addBsmToList(myBsm);
                 }

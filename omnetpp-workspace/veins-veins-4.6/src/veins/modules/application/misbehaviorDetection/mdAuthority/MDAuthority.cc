@@ -23,28 +23,28 @@ void MDAuthority::registerNewBase(char* baseName) {
     baseListNum++;
 }
 
-void MDAuthority::addNewNode(int id, std::string mbType, double time) {
+void MDAuthority::addNewNode(unsigned long pseudo, std::string mbType, double time) {
     if (!mbType.compare("genuine")) {
         for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addTotalGenuine(id, time);
+            baseList[var].addTotalGenuine(pseudo, time);
         }
     }
     if (!mbType.compare("attacker")) {
         for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addTotalAttacker(id, time);
+            baseList[var].addTotalAttacker(pseudo, time);
         }
     }
 }
 
-void MDAuthority::addReportedNode(int id, std::string mbType, double time) {
+void MDAuthority::addReportedNode(unsigned long pseudo, std::string mbType, double time) {
     if (!mbType.compare("genuine")) {
         for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addReportedGenuine(id, time);
+            baseList[var].addReportedGenuine(pseudo, time);
         }
     }
     if (!mbType.compare("attacker")) {
         for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addReportedAttacker(id, time);
+            baseList[var].addReportedAttacker(pseudo, time);
         }
     }
 }
@@ -68,15 +68,15 @@ void MDAuthority::sendReport(char* baseName, MDReport report) {
 
 void MDAuthority::treatReport(MDABase *base, int index, MDReport report) {
     if (!report.getMbType().compare("genuine")) {
-        if (!base[index].alreadyReportedGenuine(report.getReportedId())) {
-            base[index].addReportedGenuine(report.getReportedId(),
+        if (!base[index].alreadyReportedGenuine(report.getReportedPseudo())) {
+            base[index].addReportedGenuine(report.getReportedPseudo(),
                     report.getGenerationTime());
         }
     }
 
     if (!report.getMbType().compare("attacker")) {
-        if (!base[index].alreadyReportedAttacker(report.getReportedId())) {
-            base[index].addReportedAttacker(report.getReportedId(),
+        if (!base[index].alreadyReportedAttacker(report.getReportedPseudo())) {
+            base[index].addReportedAttacker(report.getReportedPseudo(),
                     report.getGenerationTime());
         }
     }

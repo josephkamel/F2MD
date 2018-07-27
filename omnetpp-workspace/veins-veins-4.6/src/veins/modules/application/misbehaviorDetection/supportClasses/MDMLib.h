@@ -61,6 +61,9 @@
 #define MAXACCUSEDTTIME 2
 
 
+#define MAX_SYBIL_NUM 10
+
+
 class MDMLib {
 
 private:

@@ -31,19 +31,19 @@ private:
 
     bool init = true;
 
-    int totalGenuineIdList[TOTCARNUM];
+    unsigned long totalGenuineIdList[TOTCARNUM];
     double totalGenuineTimeList[TOTCARNUM];
     int totalGenuineNum = 0;
 
-    int totalAttackerIdList[TOTCARNUM];
+    unsigned long totalAttackerIdList[TOTCARNUM];
     double totalAttackerTimeList[TOTCARNUM];
     int totalAttackerNum = 0;
 
-    int reportedAttackerIdList[TOTCARNUM];
+    unsigned long reportedAttackerIdList[TOTCARNUM];
     double reportedAttackerTimeList[TOTCARNUM];
     int reportedAttackerNum = 0;
 
-    int reportedGenuineIdList[TOTCARNUM];
+    unsigned long reportedGenuineIdList[TOTCARNUM];
     double reportedGenuineTimeList[TOTCARNUM];
     int reportedGenuineNum = 0;
 
@@ -53,23 +53,23 @@ private:
 public:
     MDABase();
     MDABase(const char *);
-    void addTotalGenuine(int id, double time);
-    void addReportedGenuine(int id, double time);
+    void addTotalGenuine(unsigned long id, double time);
+    void addReportedGenuine(unsigned long id, double time);
 
-    void addTotalAttacker(int id, double time);
-    void addReportedAttacker(int id, double time);
+    void addTotalAttacker(unsigned long id, double time);
+    void addReportedAttacker(unsigned long id, double time);
 
-    void getTotalGenuine(int id);
-    void getReportedGenuineIdList(int id);
+    void getTotalGenuine(unsigned long id);
+    void getReportedGenuineIdList(unsigned long id);
 
-    void getTotalAttackerIdList(int id);
-    void getReportedAttackerIdList(int id);
+    void getTotalAttackerIdList(unsigned long id);
+    void getReportedAttackerIdList(unsigned long id);
 
-    bool alreadyReportedGenuine(int id);
-    bool alreadyReportedAttacker(int id);
+    bool alreadyReportedGenuine(unsigned long id);
+    bool alreadyReportedAttacker(unsigned long id);
 
-    int totalGenuineIndex(int id);
-    int totalAttackerIndex(int id);
+    int totalGenuineIndex(unsigned long id);
+    int totalAttackerIndex(unsigned long id);
 
     void getPrintable(char* outStr, double time);
     void writeFile(std::string path, char* printStr);

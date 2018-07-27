@@ -35,7 +35,7 @@ class LegacyChecks {
 
 private:
 
-    int myPseudonym;
+    unsigned long myPseudonym;
     Coord myPosition;
     Coord mySpeed;
     Coord mySize;
@@ -63,7 +63,7 @@ private:
 
 public:
 
-    LegacyChecks(int myPseudonym, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
+    LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
 };

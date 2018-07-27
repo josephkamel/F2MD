@@ -36,7 +36,7 @@ using namespace omnetpp;
 class ExperiChecks {
 private:
 
-    int myId;
+    unsigned long myPseudonym;
     Coord myPosition;
     Coord myPositionConfidence;
 
@@ -81,13 +81,13 @@ private:
     double BeaconFrequencyCheck(double, double);
     double SuddenAppearenceCheck(Coord, Coord, Coord, Coord);
 
-    void PrintBsmCheck(int senderId, BsmCheck bsmCheck);
+    void PrintBsmCheck(unsigned long myPseudonym, BsmCheck bsmCheck);
 
 
     void resetAll();
 
 public:
-    ExperiChecks(int myId, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    ExperiChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
 };

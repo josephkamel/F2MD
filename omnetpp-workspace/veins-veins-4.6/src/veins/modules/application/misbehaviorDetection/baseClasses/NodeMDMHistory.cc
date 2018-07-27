@@ -13,13 +13,13 @@
 
 
 MDMHistory::MDMHistory() {
-    nodeId = 0;
+    nodePseudonym = 0;
     BSMNumV1 = 0;
     BSMNumV2 = 0;
 }
 
-MDMHistory::MDMHistory(int id) {
-    nodeId = id;
+MDMHistory::MDMHistory(unsigned long pseudo) {
+    nodePseudonym = pseudo;
     BSMNumV1 = 0;
     BSMNumV2 = 0;
 }

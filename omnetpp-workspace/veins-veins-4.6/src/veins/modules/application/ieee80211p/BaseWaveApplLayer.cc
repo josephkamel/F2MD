@@ -219,6 +219,8 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
         if (!myMdType.compare("attacker")) {
 
             if (attackBsm.getSenderPseudonym() != 0) {
+                bsm->setSenderPseudonym(attackBsm.getSenderPseudonym());
+
                 bsm->setSenderPos(attackBsm.getSenderPos());
                 bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
 
@@ -263,16 +265,18 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
     }
 }
 
-double BaseWaveApplLayer::getNextPseudonym() {
+unsigned long BaseWaveApplLayer::getNextPseudonym() {
     pseudoNum++;
     double simTimeDbl = simTime().dbl();
     while (simTimeDbl > 9999) {
         simTimeDbl = simTimeDbl / 10;
     }
-    double pseudo = myId * 10000 + simTimeDbl;
-    double digitNumber = (int) (log10(pseudo) + 1);
+    simTimeDbl = (int)simTimeDbl;
+    unsigned long pseudo = myId * 10000 + simTimeDbl;
+    double digitNumber = (unsigned long) (log10(pseudo) + 1);
     double pseudoNumAdd = pseudoNum * pow(10, digitNumber + 1);
     pseudo = pseudo + pseudoNumAdd;
+
     return pseudo;
 }
 
@@ -290,7 +294,15 @@ void BaseWaveApplLayer::receiveSignal(cComponent* source, simsignal_t signalID,
 void BaseWaveApplLayer::handlePositionUpdate(cObject* obj) {
     ChannelMobilityPtrType const mobility = check_and_cast<
             ChannelMobilityPtrType>(obj);
+    GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x,
+            curSpeedConfidence, curHeadingConfidence);
 
+    curPosition = gaussian.OffsetPosition(mobility->getCurrentPosition());
+    curSpeed = gaussian.OffsetSpeed(mobility->getCurrentSpeed());
+    curHeading = gaussian.OffsetHeading(mobility->getCurrentDirection());
+}
+
+void BaseWaveApplLayer::updateVehicleInfo() {
     GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x,
             curSpeedConfidence, curHeadingConfidence);
 
@@ -336,6 +348,7 @@ void BaseWaveApplLayer::handleLowerMsg(cMessage* msg) {
     delete (msg);
 }
 
+double handleSelfMsgInt = 0;
 void BaseWaveApplLayer::handleSelfMsg(cMessage* msg) {
     switch (msg->getKind()) {
     case SEND_BEACON_EVT: {

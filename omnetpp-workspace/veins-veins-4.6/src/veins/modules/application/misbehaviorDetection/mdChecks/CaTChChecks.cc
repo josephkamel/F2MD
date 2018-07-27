@@ -22,7 +22,7 @@
 using namespace std;
 using namespace boost;
 
-CaTChChecks::CaTChChecks(int myPseudonym, Coord myPosition, Coord myPositionConfidence,
+CaTChChecks::CaTChChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence,
         Coord myHeading, Coord myHeadingConfidence, Coord mySize) {
     this->myPseudonym = myPseudonym;
     this->myPosition = myPosition;
@@ -64,17 +64,22 @@ double CaTChChecks::SpeedConsistancyCheck(double curSpeed,
         double time) {
 
     double speedDelta = curSpeed - oldspeed;
+
+    double attFact = mdmLib.gaussianSum(1, 1/3);
+    if(time>=1){
+        attFact = time;
+    }
+
     double factor = 1;
     if (speedDelta > 0) {
         factor = mdmLib.SegmentSegmentFactor(speedDelta, curSpeedConfidence,
                 oldSpeedConfidence,
-                MAX_PLAUSIBLE_ACCEL * time);
+                MAX_PLAUSIBLE_ACCEL * attFact);
     } else {
         factor = mdmLib.SegmentSegmentFactor(speedDelta, curSpeedConfidence,
                 oldSpeedConfidence,
-                MAX_PLAUSIBLE_DECEL * time);
+                MAX_PLAUSIBLE_DECEL * attFact);
     }
-
     return factor;
 }
 
@@ -163,6 +168,11 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
 
     MDMLib mdmLib;
 
+    double attFact = mdmLib.gaussianSum(1, 1/3);
+    if(time>=1){
+        attFact = 1;
+    }
+
     if (time < MAX_TIME_DELTA) {
 
         double distance = mdmLib.calculateDistance(curPosition, oldPosition);
@@ -202,13 +212,18 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
                 curSpeed, curSpeedConfidence, oldspeed, oldSpeedConfidence,
                 time);
 
-//        std::cout << " Min:" << minfactor << " Max:" << maxfactor << '\n';
-//
-//        if(factorOld !=factor){
-//            std::cout << " factorOld:" << factorOld << " factor:" << factor << '\n';
-//            std::cout << "============================================" << '\n';
-//        }
+        if(factor<0){
+            std::cout << " Min:" << minfactor << " Max:" << maxfactor << '\n';
+            std::cout << " time:" << time << '\n';
+            std::cout << " MaxSpeed:" << maxspeed << '\n';
+            std::cout << " minspeed:" << minspeed << '\n';
+            std::cout << " theoreticalSpeed:" << theoreticalSpeed << '\n';
 
+            if(factorOld !=factor){
+                std::cout << " factorOld:" << factorOld << " factor:" << factor << '\n';
+                std::cout << "============================================" << '\n';
+            }
+        }
 
         return factor;
 
@@ -244,14 +259,14 @@ double CaTChChecks::IntersectionCheck(Coord nodePosition1,
 
 InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         BasicSafetyMessage bsm) {
-    int senderId = bsm.getSenderPseudonym();
+    unsigned long senderPseudonym = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
     Coord senderHeading = bsm.getSenderHeading();
 
     Coord senderSize = Coord(bsm.getSenderWidth(), bsm.getSenderLength());
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
+    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
     NodeHistory varNode;
 
     std::map<std::string, double> result;
@@ -271,9 +286,9 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
     char INTCheck_string[64] = "INTCheck_";
 
     for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
-        if (detectedNodes.getNodeId(var) != senderId) {
+        if (detectedNodes.getNodePseudo(var) != senderPseudonym) {
             varNode = detectedNodes.getNodeHistory(
-                    detectedNodes.getNodeId(var));
+                    detectedNodes.getNodePseudo(var));
 
             if (mdmLib.calculateDeltaTime(varNode.getLatestBSM(),
                     bsm) < MAX_DELTA_INTER) {
@@ -291,7 +306,7 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
                     strcat(INTCheck_string, num_string);
-                    result[INTId_string] = detectedNodes.getNodeId(var);
+                    result[INTId_string] = detectedNodes.getNodePseudo(var);
                     result[INTCheck_string] = INTScore;
 
                     strncpy(INTId_string, "INTId_", sizeof(INTId_string));
@@ -561,11 +576,11 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) 
 
     BsmCheck bsmCheck = BsmCheck();
 
-    int senderId = bsm.getSenderPseudonym();
+    unsigned long senderPseudonym = bsm.getSenderPseudonym();
     Coord senderPos = bsm.getSenderPos();
     Coord senderPosConfidence = bsm.getSenderPosConfidence();
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderId);
+    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
 
     bsmCheck.setRangePlausibility(
             RangePlausibilityCheck(myPosition, myPositionConfidence, senderPos,
@@ -575,7 +590,7 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) 
             SpeedPlausibilityCheck(mdmLib.calculateSpeed(bsm.getSenderSpeed()),
                     mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
 
-    if (detectedNodes.getNodeHistory(senderId).getBSMNum() > 0) {
+    if (detectedNodes.getNodeHistory(senderPseudonym).getBSMNum() > 0) {
         bsmCheck.setPositionConsistancy(
                 PositionConsistancyCheck(senderPos, senderPosConfidence,
                         senderNode.getLatestBSM().getSenderPos(),
@@ -635,56 +650,62 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) 
 
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 
-    PrintBsmCheck(senderId, bsmCheck);
+    PrintBsmCheck(senderPseudonym, bsmCheck);
 
     return bsmCheck;
 }
 
-void CaTChChecks::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
+void CaTChChecks::PrintBsmCheck(unsigned long senderPseudonym, BsmCheck bsmCheck) {
 
     if (bsmCheck.getRangePlausibility() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "ART FAILED => "
                 << bsmCheck.getRangePlausibility() << " A:" << myPseudonym << " B:"
-                << senderId << '\n';
+                << senderPseudonym << '\n';
     }
     if (bsmCheck.getPositionConsistancy() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "MGTD FAILED => "
                 << bsmCheck.getPositionConsistancy() << " A:" << myPseudonym << " B:"
-                << senderId << '\n';
+                << senderPseudonym << '\n';
     }
     if (bsmCheck.getSpeedConsistancy() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "MGTS FAILED => "
                 << bsmCheck.getSpeedConsistancy() << " A:" << myPseudonym << " B:"
-                << senderId << '\n';
+                << senderPseudonym << '\n';
     }
 
     if (bsmCheck.getPositionSpeedConsistancy() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "MGTSV FAILED => "
                 << bsmCheck.getPositionSpeedConsistancy() << " A:" << myPseudonym
-                << " B:" << senderId << '\n';
+                << " B:" << senderPseudonym << '\n';
     }
 
     if (bsmCheck.getSpeedPlausibility() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "MAXS FAILED => "
                 << bsmCheck.getSpeedPlausibility() << " A:" << myPseudonym << " B:"
-                << senderId << '\n';
+                << senderPseudonym << '\n';
     }
     if (bsmCheck.getPositionPlausibility() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "MAP FAILED => "
                 << bsmCheck.getPositionPlausibility() << " A:" << myPseudonym << " B:"
-                << senderId << '\n';
+                << senderPseudonym << '\n';
     }
 
     if (bsmCheck.getSuddenAppearence() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "SAW FAILED => "
                 << bsmCheck.getSuddenAppearence() << " A:" << myPseudonym << " B:"
-                << senderId << '\n';
+                << senderPseudonym << '\n';
     }
 
     if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "PHC FAILED => "
                 << bsmCheck.getPositionHeadingConsistancy() << " A:" << myPseudonym
-                << " B:" << senderId << '\n';
+                << " B:" << senderPseudonym << '\n';
+    }
+
+    if (bsmCheck.getBeaconFrequency() < 0.5) {
+        std::cout << "^^^^^^^^^^^V2 " << "FREQ FAILED => "
+                << bsmCheck.getBeaconFrequency() << " A:" << myPseudonym
+                << " B:" << senderPseudonym << '\n';
     }
 
     InterTest inter = bsmCheck.getIntersection();
@@ -692,7 +713,7 @@ void CaTChChecks::PrintBsmCheck(int senderId, BsmCheck bsmCheck) {
         if (inter.getInterValue(var) < 0.5) {
             std::cout << "^^^^^^^^^^^V2 " << "INT FAILED => "
                     << inter.getInterValue(var) << " A:" << myPseudonym << " B:"
-                    << senderId << " C:" << inter.getInterId(var) << '\n';
+                    << senderPseudonym << " C:" << inter.getInterId(var) << '\n';
         }
     }
 

@@ -28,8 +28,8 @@ class MDReport {
 
 protected:
     double generationTime;
-    int senderId;
-    int reportedId;
+    unsigned long senderPseudonym;
+    unsigned long reportedPseudo;
     std::string mbType;
     std::string attackType;
 
@@ -43,8 +43,8 @@ public:
     void setBaseReport(MDReport baseReport);
 
     void setGenerationTime(double time);
-    void setSenderId(int id);
-    void setReportedId(int id);
+    void setSenderPseudo(unsigned long pseudo);
+    void setReportedPseudo(unsigned long pseudo);
     void setMbType(std::string type);
     void setAttackType(std::string type);
 
@@ -52,8 +52,8 @@ public:
     void setReportedGps(Coord reportedGps);
 
     double getGenerationTime();
-    int getSenderId();
-    int getReportedId();
+    unsigned long getSenderPseudo();
+    unsigned long getReportedPseudo();
     std::string getMbType();
     std::string getAttackType();
 

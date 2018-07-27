@@ -43,12 +43,13 @@ using namespace Veins;
 #include <veins/modules/application/misbehaviorDetection/mdReport/EvidenceReport.h>
 #include <veins/modules/application/misbehaviorDetection/mdReport/BasicCheckReport.h>
 
-static int targetNodes[MAXTARGETLENGTH];
+static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
 static double targetClearTime = 0;
-static int accusedNodes[MAXACCUSEDLENGTH];
+static unsigned long accusedNodes[MAXACCUSEDLENGTH];
 static int accusedNodesLength = 0;
 static double accusedClearTime = 0;
+
 
 class JosephVeinsApp: public BaseWaveApplLayer {
 private:
@@ -99,6 +100,12 @@ protected:
 
     BasicSafetyMessage StopBsm;
     bool StopInitiated;
+
+    bool DoSInitiated;
+
+    unsigned long SybilMyOldPseudo = 0;
+    unsigned long SybilPseudonyms[MAX_SYBIL_NUM];
+    int SybilVehSeq = 0;
 
     typedef std::list<Obstacle*> ObstacleGridCell;
     typedef std::vector<ObstacleGridCell> ObstacleGridRow;

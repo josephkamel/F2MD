@@ -23,18 +23,18 @@ NodeHistory* NodeTable::getNodeHistoryList() {
     return nodeHistoryList;
 }
 
-int NodeTable::getNodeId(int index) {
-    return nodeIds[index];
+unsigned long NodeTable::getNodePseudo(int index) {
+    return nodePseudos[index];
 }
 
-void NodeTable::put(int nodeId, NodeHistory nodeHistory,
+void NodeTable::put(unsigned long pseudo, NodeHistory nodeHistory,
         MDMHistory mdmHistory) {
 
     bool included = false;
     int nodeKey;
 
     for (int var = 0; var < nodesNum; ++var) {
-        if (nodeId == nodeIds[var]) {
+        if (pseudo == nodePseudos[var]) {
             included = true;
             nodeKey = var;
             break;
@@ -46,13 +46,13 @@ void NodeTable::put(int nodeId, NodeHistory nodeHistory,
         mdmHistoryList[nodeKey] = mdmHistory;
     } else {
         if (nodesNum < MAXNODESLENGTH) {
-            nodeIds[nodesNum] = nodeId;
+            nodePseudos[nodesNum] = pseudo;
             nodeHistoryList[nodesNum] = nodeHistory;
             mdmHistoryList[nodesNum] = mdmHistory;
             nodesNum++;
         } else {
             nodeKey = getOldestNode();
-            nodeIds[nodeKey] = nodeId;
+            nodePseudos[nodeKey] = pseudo;
             nodeHistoryList[nodeKey] = nodeHistory;
             mdmHistoryList[nodeKey] = mdmHistory;
         }
@@ -77,9 +77,9 @@ int NodeTable::getOldestNode() {
 }
 
 NodeHistory NodeTable::getNodeHistory(int nodeId) {
-    int totalNodes = sizeof(nodeIds) / sizeof(nodeIds[0]);
+    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
     for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodeIds[var]) {
+        if (nodeId == nodePseudos[var]) {
             return nodeHistoryList[var];
         }
     }
@@ -88,27 +88,27 @@ NodeHistory NodeTable::getNodeHistory(int nodeId) {
 }
 
 void NodeTable::setNodeHistory(int nodeId ,NodeHistory nodeHistory){
-    int totalNodes = sizeof(nodeIds) / sizeof(nodeIds[0]);
+    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
     for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodeIds[var]) {
+        if (nodeId == nodePseudos[var]) {
             nodeHistoryList[var] = nodeHistory;
         }
     }
 }
 
 void NodeTable::setMDMHistory(int nodeId ,MDMHistory mdmHistory){
-    int totalNodes = sizeof(nodeIds) / sizeof(nodeIds[0]);
+    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
     for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodeIds[var]) {
+        if (nodeId == nodePseudos[var]) {
             mdmHistoryList[var] = nodeId;
         }
     }
 }
 
-MDMHistory NodeTable::getMDMHistory(int nodeId) {
-    int totalNodes = sizeof(nodeIds) / sizeof(nodeIds[0]);
+MDMHistory NodeTable::getMDMHistory(unsigned long nodePseudonym) {
+    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
     for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodeIds[var]) {
+        if (nodePseudonym == nodePseudos[var]) {
             return mdmHistoryList[var];
         }
     }
@@ -116,20 +116,20 @@ MDMHistory NodeTable::getMDMHistory(int nodeId) {
     return nullNode;
 }
 
-bool NodeTable::includes(int nodeId) {
-    int totalNodes = sizeof(nodeIds) / sizeof(nodeIds[0]);
+bool NodeTable::includes(unsigned long nodePseudonym) {
+    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
     for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodeIds[var]) {
+        if (nodePseudonym == nodePseudos[var]) {
             return true;
         }
     }
     return false;
 }
 
-double NodeTable::getDeltaTime(int nodeId1, int nodeId2) {
+double NodeTable::getDeltaTime(unsigned long nodePseudo1, unsigned long nodePseudo2) {
     return fabs(
-            getNodeHistory(nodeId1).getArrivalTime(0)
-                    - getNodeHistory(nodeId2).getArrivalTime(0));
+            getNodeHistory(nodePseudo1).getArrivalTime(0)
+                    - getNodeHistory(nodePseudo2).getArrivalTime(0));
 }
 
 BasicSafetyMessage NodeTable::getRandomBSM() {

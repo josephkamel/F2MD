@@ -21,18 +21,18 @@ class InterTest {
     private:
         int interNum;
         int currentNum;
-        int* interId;
+        unsigned long* interPseudonym;
         double* interValue;
 
     public:
         InterTest();
         InterTest(int interNum);
         int getInterNum();
-        void addInterValue(int id, double value);
-        int getInterId(int index);
+        void addInterValue(unsigned long pseudo, double value);
+        unsigned long getInterId(int index);
         double getInterValue(int index);
 
-        int getIdIndex(int id);
+        int getIdIndex(unsigned long pseudo);
 
     };
 

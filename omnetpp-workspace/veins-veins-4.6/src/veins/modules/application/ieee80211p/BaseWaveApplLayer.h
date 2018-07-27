@@ -148,7 +148,7 @@ class BaseWaveApplLayer : public BaseApplLayer {
         virtual void checkAndTrackPacket(cMessage* msg);
 
 
-        double getNextPseudonym();
+        unsigned long getNextPseudonym();
 
     protected:
 
@@ -206,8 +206,10 @@ class BaseWaveApplLayer : public BaseApplLayer {
         void addMyBsm(BasicSafetyMessage bsm);
         int myBsmNum = 0;
 
-        double myPseudonym;
-        double pseudoNum;
+        unsigned long myPseudonym;
+        int pseudoNum;
+
+        void updateVehicleInfo();
 
         int myId;
         int mySCH;

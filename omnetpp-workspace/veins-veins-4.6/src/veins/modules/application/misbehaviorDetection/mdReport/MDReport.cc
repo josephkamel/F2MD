@@ -35,8 +35,8 @@ MDReport::MDReport() {
 
 void MDReport::setBaseReport(MDReport baseReport) {
     generationTime = baseReport.getGenerationTime();
-    senderId = baseReport.getSenderId();
-    reportedId = baseReport.getReportedId();
+    senderPseudonym = baseReport.getSenderPseudo();
+    reportedPseudo = baseReport.getReportedPseudo();
     mbType = baseReport.getMbType();
     attackType = baseReport.getAttackType();
     senderGps = baseReport.getSenderGps();
@@ -47,11 +47,11 @@ double MDReport::getGenerationTime() {
     return generationTime;
 }
 
-int MDReport::getSenderId() {
-    return senderId;
+unsigned long MDReport::getSenderPseudo() {
+    return senderPseudonym;
 }
-int MDReport::getReportedId() {
-    return reportedId;
+unsigned long MDReport::getReportedPseudo() {
+    return reportedPseudo;
 }
 
 std::string MDReport::getMbType() {
@@ -82,11 +82,11 @@ void MDReport::setGenerationTime(double time) {
     generationTime = time;
 }
 
-void MDReport::setSenderId(int id) {
-    senderId = id;
+void MDReport::setSenderPseudo(unsigned long pseudo) {
+    senderPseudonym = pseudo;
 }
-void MDReport::setReportedId(int id) {
-    reportedId = id;
+void MDReport::setReportedPseudo(unsigned long pseudo) {
+    reportedPseudo = pseudo;
 }
 void MDReport::setMbType(std::string type) {
     mbType = type;
@@ -105,11 +105,11 @@ std::string MDReport::getBaseReportXml() {
     xml.writeOpenTag("Metadata");
 
     xml.writeStartElementTag("senderId");
-    xml.writeString(std::to_string(senderId));
+    xml.writeString(std::to_string(senderPseudonym));
     xml.writeEndElementTag();
 
     xml.writeStartElementTag("reportedId");
-    xml.writeString(std::to_string(reportedId));
+    xml.writeString(std::to_string(reportedPseudo));
     xml.writeEndElementTag();
 
     xml.writeStartElementTag("generationTime");
@@ -136,9 +136,9 @@ std::string MDReport::getBaseReportJson(std::string reportTypeStr) {
     JsonWriter jw;
     jw.openJsonElement("Metadata", false);
 
-    tempStr = jw.getSimpleTag("senderId",std::to_string(senderId),true);
+    tempStr = jw.getSimpleTag("senderId",std::to_string(senderPseudonym),true);
     jw.addTagToElement("Metadata", tempStr);
-    tempStr = jw.getSimpleTag("reportedId",std::to_string(reportedId),true);
+    tempStr = jw.getSimpleTag("reportedId",std::to_string(reportedPseudo),true);
     jw.addTagToElement("Metadata", tempStr);
     tempStr = jw.getSimpleTag("generationTime",std::to_string(generationTime),true);
     jw.addTagToElement("Metadata", tempStr);
@@ -169,7 +169,7 @@ bool MDReport::writeStrToFile(const std::string strFileCnst,
         const std::string serial, const std::string version,
         const std::string outStr) {
     int gentime = generationTime;
-    int gentime00 = (generationTime - gentime) * 100;
+    int gentime0000 = (generationTime - gentime) * 10000;
 
     std::string dirnameStr = strFileCnst + serial + "/MDReports_" + curDate;
     const char* dirnameConst = dirnameStr.c_str();
@@ -184,8 +184,8 @@ bool MDReport::writeStrToFile(const std::string strFileCnst,
 
     std::string strFile = strFileCnst + serial + "/MDReports_" + curDate
             + "/MDReport_" + version + "_" + std::to_string(gentime) + "-"
-            + std::to_string(gentime00) + "_" + std::to_string(senderId) + "_"
-            + std::to_string(reportedId) + ".rep";
+            + std::to_string(gentime0000) + "_" + std::to_string(senderPseudonym) + "_"
+            + std::to_string(reportedPseudo) + ".rep";
 
     std::fstream checkFile(strFile);
 
