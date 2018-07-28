@@ -6,7 +6,7 @@
 		<item value="false" key="TOGGLE_SELECTED"/>
 		<item value="490" key="DIALOG_HEIGHT"/>
 		<item value="679" key="DIALOG_X_ORIGIN"/>
-		<item value="211" key="DIALOG_Y_ORIGIN"/>
+		<item value="346" key="DIALOG_Y_ORIGIN"/>
 		<item value="true" key="BUILD_NOW"/>
 	</section>
 	<section name="ChooseWorkspaceDialogSettings">

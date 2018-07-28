@@ -2,29 +2,33 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Coord" key="selection"/>
+		<item value="pseudo =" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="coord"/>
-			<item value="checkPseudonymChange"/>
-			<item value="BaseWaveApplLayer"/>
-			<item value="wave"/>
-			<item value="myId"/>
-			<item value="stringId"/>
+			<item value="id ="/>
+			<item value=" id"/>
+			<item value="id"/>
 			<item value="myPseudonym"/>
-			<item value="getSenderAddress"/>
-			<item value="myID"/>
-			<item value="senderWidth"/>
-			<item value="getcomm"/>
-			<item value="command"/>
-			<item value="getco"/>
-			<item value="serverVersion"/>
-			<item value="connectionManager"/>
+			<item value="senderPseudonym"/>
+			<item value="SAW"/>
+			<item value="getnext"/>
+			<item value="getMDMHistory"/>
+			<item value="put"/>
+			<item value="interId"/>
+			<item value="int senderId"/>
+			<item value="int myId"/>
+			<item value="senderId"/>
+			<item value="senderId\"/>
+			<item value="senderIf"/>
 		</list>
 		<list key="replacehistory">
+			<item value="pseudo ="/>
+			<item value=" pseudo"/>
+			<item value="pseudo"/>
+			<item value="unsigned long senderPseudonym"/>
 			<item value="myPseudonym"/>
 			<item value="Ca"/>
 			<item value="JsonWriter"/>
@@ -36,10 +40,6 @@
 			<item value="const std::string"/>
 			<item value="MDReport"/>
 			<item value="OneMessageReport"/>
-			<item value="-0"/>
-			<item value="prntAppInst"/>
-			<item value="AggrigationApp"/>
-			<item value="prntApp"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
