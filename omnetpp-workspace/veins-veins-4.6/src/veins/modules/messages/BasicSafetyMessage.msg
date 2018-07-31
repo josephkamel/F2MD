@@ -35,8 +35,8 @@ packet BasicSafetyMessage extends WaveShortMessage {
     Coord senderHeadingConfidence;
     double senderWidth;
     double senderLength;
-    string senderMbType;
-    string senderAttackType;
+    int senderMbType;
+    int senderAttackType;
     Coord senderGpsCoordinates;
     unsigned long senderPseudonym;
 }

@@ -22,20 +22,27 @@ void VarThrePrintable::setName(const char* name) {
     strcpy(this->name, name);
 }
 
-void VarThrePrintable::registerMessage(std::string mbType, double minFactor) {
+void VarThrePrintable::registerMessage(mbTypes::Mbs mbType, double minFactor) {
     int index = 0;
     for (double var = THRE_MIN; var <= THRE_MAX; var = var + THRE_STEP) {
         if (minFactor <= var) {
-            if(!mbType.compare("attacker")) {
+
+            switch (mbType) {
+            case mbTypes::Attacker:
                 TP[index]++;
-            } else {
+                break;
+            case mbTypes::Genuine:
                 FP[index]++;
+                break;
             }
         } else {
-            if(!mbType.compare("attacker")) {
+            switch (mbType) {
+            case mbTypes::Attacker:
                 FN[index]++;
-            } else {
+                break;
+            case mbTypes::Genuine:
                 TN[index]++;
+                break;
             }
         }
         index++;
@@ -101,12 +108,12 @@ void VarThrePrintable::getVarThrePrintable(char* outStr) {
 
 }
 
-void VarThrePrintable::saveFile(std::string path, std::string serial){
+void VarThrePrintable::saveFile(std::string path, std::string serial) {
 
     char fileNameApp[64];
 
-    strcpy(fileNameApp,"VarThre");
-    strcat(fileNameApp,name);
+    strcpy(fileNameApp, "VarThre");
+    strcat(fileNameApp, name);
     strcat(fileNameApp, ".dat");
 
     char outChar[1024];

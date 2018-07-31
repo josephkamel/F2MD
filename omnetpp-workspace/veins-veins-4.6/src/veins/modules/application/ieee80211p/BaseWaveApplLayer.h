@@ -37,6 +37,10 @@
 
 #include <math.h>       /* atan */
 
+#include "../misbehaviorDetection/enumTypes/MbTypes.h"
+#include "../misbehaviorDetection/enumTypes/AttackTypes.h"
+#include "../misbehaviorDetection/enumTypes/ReportTypes.h"
+
 using Veins::TraCIMobility;
 using Veins::TraCICommandInterface;
 using Veins::AnnotationManager;
@@ -193,11 +197,10 @@ class BaseWaveApplLayer : public BaseApplLayer {
         double myWidth;
         double myLength;
 
-        std::string myMdType;
-        std::string myAttackType;
+        mbTypes::Mbs myMdType;
+        attackTypes::Attacks myAttackType;
 
-        std::string myReportType;
-
+        reportTypes::Report myReportType;
 
         BasicSafetyMessage attackBsm = BasicSafetyMessage();
         BasicSafetyMessage nextAttackBsm = BasicSafetyMessage();

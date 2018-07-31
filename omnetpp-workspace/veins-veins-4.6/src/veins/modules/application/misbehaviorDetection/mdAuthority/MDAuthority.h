@@ -33,8 +33,8 @@ public:
 
     void registerNewBase(char* baseName);
 
-    void addNewNode(unsigned long pseudo, std::string mbType, double time);
-    void addReportedNode(unsigned long pseudo, std::string mbType, double time);
+    void addNewNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
+    void addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
     void sendReport(char* baseName, MDReport report);
 
     void saveLine(std::string path, std::string serial,double time);

@@ -22,6 +22,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "../enumTypes/MbTypes.h"
+
 using namespace std;
 using namespace boost;
 
@@ -49,7 +51,7 @@ public:
 
     void setName(const char *);
 
-    void registerMessage(std::string mbType, double minFactor);
+    void registerMessage(mbTypes::Mbs mbType, double minFactor);
 
     void resetAll();
     void getVarThrePrintable(char* outStr);

@@ -1,13 +1,13 @@
 /*******************************************************************************
-* @author  Joseph Kamel 
-* @email   josephekamel@gmail.com 
-* @date    11/04/2018
-* @version 1.0
-*
-* SCA (Secure Cooperative Autonomous systems)
-* Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
-* All rights reserved.
-*******************************************************************************/
+ * @author  Joseph Kamel
+ * @email   josephekamel@gmail.com
+ * @date    11/04/2018
+ * @version 1.0
+ *
+ * SCA (Secure Cooperative Autonomous systems)
+ * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+ * All rights reserved.
+ *******************************************************************************/
 
 #include "Printable.h"
 
@@ -25,7 +25,6 @@ Printable::Printable(const char* name) {
     flagsSuddenAppearence_1 = 0;
     flagsSuddenAppearence_1 = 0;
     flagsPositionHeadingConsistancy_1 = 0;
-
 
     flagsRangePlausibility_2 = 0;
     flagsPositionPlausibility_2 = 0;
@@ -59,7 +58,6 @@ Printable::Printable() {
     flagsSuddenAppearence_1 = 0;
     flagsPositionHeadingConsistancy_1 = 0;
 
-
     flagsRangePlausibility_2 = 0;
     flagsPositionPlausibility_2 = 0;
     flagsSpeedPlausibility_2 = 0;
@@ -78,78 +76,111 @@ Printable::Printable() {
     allTests_2 = 0;
 }
 
-void Printable::setName(const char* name){
+void Printable::setName(const char* name) {
     strcpy(this->name, name);
 }
 
-void Printable::incAll(std::string mbType) {
-
-    if (!mbType.compare("genuine")) {
+void Printable::incAll(mbTypes::Mbs mbType) {
+    switch (mbType) {
+    case mbTypes::Genuine: {
         allTests_1++;
-
     }
-    if (!mbType.compare("attacker")) {
+        break;
+    case mbTypes::Attacker: {
         allTests_2++;
     }
-
+        break;
+    }
 }
 
-void Printable::incCumulFlags(std::string mbType) {
-    if (!mbType.compare("genuine")) {
+void Printable::incCumulFlags(mbTypes::Mbs mbType) {
+
+    switch (mbType) {
+    case mbTypes::Genuine: {
         cumulFlags_1++;
     }
-    if (!mbType.compare("attacker")) {
+        break;
+    case mbTypes::Attacker: {
         cumulFlags_2++;
+    }
+        break;
     }
 }
 
-void Printable::incFlags(std::string inString, std::string mbType) {
-    if (!mbType.compare("genuine")) {
-        if (inString == "RangePlausibility")
+void Printable::incFlags(mdChecksTypes::Checks check, mbTypes::Mbs mbType) {
+
+    switch (mbType) {
+    case mbTypes::Genuine: {
+        switch (check) {
+        case mdChecksTypes::RangePlausibility:
             flagsRangePlausibility_1++;
-        if (inString == "PositionPlausibility")
+            break;
+        case mdChecksTypes::PositionPlausibility:
             flagsPositionPlausibility_1++;
-        if (inString == "SpeedPlausibility")
+            break;
+        case mdChecksTypes::SpeedPlausibility:
             flagsSpeedPlausibility_1++;
-        if (inString == "PositionConsistancy")
+            break;
+        case mdChecksTypes::PositionConsistancy:
             flagsPositionConsistancy_1++;
-        if (inString == "PositionSpeedConsistancy")
+            break;
+        case mdChecksTypes::PositionSpeedConsistancy:
             flagsPositionSpeedConsistancy_1++;
-        if (inString == "SpeedConsistancy")
+            break;
+        case mdChecksTypes::SpeedConsistancy:
             flagsSpeedConsistancy_1++;
-        if (inString == "BeaconFrequency")
+            break;
+        case mdChecksTypes::BeaconFrequency:
             flagsBeaconFrequency_1++;
-        if (inString == "Intersection")
+            break;
+        case mdChecksTypes::Intersection:
             flagsIntersection_1++;
-        if (inString == "SuddenAppearence")
+            break;
+        case mdChecksTypes::SuddenAppearence:
             flagsSuddenAppearence_1++;
-        if (inString == "PositionHeadingConsistancy")
+            break;
+        case mdChecksTypes::PositionHeadingConsistancy:
             flagsPositionHeadingConsistancy_1++;
+            break;
+        }
     }
-
-    if (!mbType.compare("attacker")) {
-        if (inString == "RangePlausibility")
+        break;
+    case mbTypes::Attacker: {
+        switch (check) {
+        case mdChecksTypes::RangePlausibility:
             flagsRangePlausibility_2++;
-        if (inString == "PositionPlausibility")
+            break;
+        case mdChecksTypes::PositionPlausibility:
             flagsPositionPlausibility_2++;
-        if (inString == "SpeedPlausibility")
+            break;
+        case mdChecksTypes::SpeedPlausibility:
             flagsSpeedPlausibility_2++;
-        if (inString == "PositionConsistancy")
+            break;
+        case mdChecksTypes::PositionConsistancy:
             flagsPositionConsistancy_2++;
-        if (inString == "PositionSpeedConsistancy")
+            break;
+        case mdChecksTypes::PositionSpeedConsistancy:
             flagsPositionSpeedConsistancy_2++;
-        if (inString == "SpeedConsistancy")
+            break;
+        case mdChecksTypes::SpeedConsistancy:
             flagsSpeedConsistancy_2++;
-        if (inString == "BeaconFrequency")
+            break;
+        case mdChecksTypes::BeaconFrequency:
             flagsBeaconFrequency_2++;
-        if (inString == "Intersection")
+            break;
+        case mdChecksTypes::Intersection:
             flagsIntersection_2++;
-        if (inString == "SuddenAppearence")
+            break;
+        case mdChecksTypes::SuddenAppearence:
             flagsSuddenAppearence_2++;
-        if (inString == "PositionHeadingConsistancy")
+            break;
+        case mdChecksTypes::PositionHeadingConsistancy:
             flagsPositionHeadingConsistancy_2++;
+            break;
+        }
     }
-
+        break;
+    }
 
 }
 
@@ -185,13 +216,14 @@ void Printable::resetAll() {
 
 void Printable::writeFile(std::string path, char* printStr, bool init) {
     ofstream outFile;
-    if(init){
+    if (init) {
         outFile.open(path, std::ofstream::out);
-    }else{
-        outFile.open(path, std::ofstream::out | std::ofstream::app | std::ofstream::ate);
+    } else {
+        outFile.open(path,
+                std::ofstream::out | std::ofstream::app | std::ofstream::ate);
     }
 
-    outFile.seekp(0,std::ios::end);
+    outFile.seekp(0, std::ios::end);
     outFile << printStr << "\n";
     outFile.close();
 }
@@ -200,84 +232,84 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
     char line[1024] = "";
     char data[64] = "";
 
-    strcat(line, name);//1
+    strcat(line, name); //1
     strcat(line, " ");
     sprintf(data, "%f", deltaT);
-    strcat(line, data);//2
+    strcat(line, data); //2
     strcat(line, " ");
     sprintf(data, "%f", density);
-    strcat(line, data);//3
+    strcat(line, data); //3
     strcat(line, " ");
-    sprintf(data, "%f", flagsRangePlausibility_1);//4
+    sprintf(data, "%f", flagsRangePlausibility_1); //4
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionPlausibility_1);//5
+    sprintf(data, "%f", flagsPositionPlausibility_1); //5
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedPlausibility_1);//6
+    sprintf(data, "%f", flagsSpeedPlausibility_1); //6
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionConsistancy_1);//7
+    sprintf(data, "%f", flagsPositionConsistancy_1); //7
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionSpeedConsistancy_1);//8
+    sprintf(data, "%f", flagsPositionSpeedConsistancy_1); //8
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedConsistancy_1);//9
+    sprintf(data, "%f", flagsSpeedConsistancy_1); //9
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsBeaconFrequency_1);//10
+    sprintf(data, "%f", flagsBeaconFrequency_1); //10
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsIntersection_1);//11
+    sprintf(data, "%f", flagsIntersection_1); //11
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSuddenAppearence_1);//12
+    sprintf(data, "%f", flagsSuddenAppearence_1); //12
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionHeadingConsistancy_1);//13
+    sprintf(data, "%f", flagsPositionHeadingConsistancy_1); //13
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", cumulFlags_1);//14
+    sprintf(data, "%f", cumulFlags_1); //14
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", allTests_1);//15
+    sprintf(data, "%f", allTests_1); //15
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsRangePlausibility_2);//16
+    sprintf(data, "%f", flagsRangePlausibility_2); //16
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionPlausibility_2);//17
+    sprintf(data, "%f", flagsPositionPlausibility_2); //17
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedPlausibility_2);//18
+    sprintf(data, "%f", flagsSpeedPlausibility_2); //18
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionConsistancy_2);//19
+    sprintf(data, "%f", flagsPositionConsistancy_2); //19
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionSpeedConsistancy_2);//20
+    sprintf(data, "%f", flagsPositionSpeedConsistancy_2); //20
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSpeedConsistancy_2);//21
+    sprintf(data, "%f", flagsSpeedConsistancy_2); //21
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsBeaconFrequency_2);//22
+    sprintf(data, "%f", flagsBeaconFrequency_2); //22
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsIntersection_2);//23
+    sprintf(data, "%f", flagsIntersection_2); //23
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsSuddenAppearence_2);//24
+    sprintf(data, "%f", flagsSuddenAppearence_2); //24
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", flagsPositionHeadingConsistancy_2);//25
+    sprintf(data, "%f", flagsPositionHeadingConsistancy_2); //25
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", cumulFlags_2);//26
+    sprintf(data, "%f", cumulFlags_2); //26
     strcat(line, data);
     strcat(line, " ");
-    sprintf(data, "%f", allTests_2);//27
+    sprintf(data, "%f", allTests_2); //27
     strcat(line, data);
     for (int i = 0; i < 1024; ++i) {
         outStr[i] = line[i];
@@ -313,7 +345,6 @@ void Printable::getPrintable(char* outStr, double density, double deltaT) {
 //            << flagsIntersection_1 / allTests_1 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++" << " flagsSuddenAppearence_1:"
 //            << flagsSuddenAppearence_1 / allTests_1 * 100 << "%" << '\n';
-
 
 //    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_2:"
 //            << cumulFlags_2 / allTests_2 * 100 << "%" << '\n';

@@ -56,8 +56,8 @@ void BaseWaveApplLayer::initialize(int stage) {
         myLength = 0;
         curHeading = Coord(0, 0, 0);
 
-        myMdType = "genuine";
-        myAttackType = "";
+        myMdType = mbTypes::Genuine;
+        myAttackType = attackTypes::Attacks::Genuine;
 
         attackBsm.setSenderAddress(0);
         nextAttackBsm.setSenderAddress(0);
@@ -197,52 +197,72 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
         bsm->setSenderPseudonym(myPseudonym);
 
-        bsm->setSenderMbType(myMdType.c_str());
-        bsm->setSenderAttackType(myAttackType.c_str());
+        bsm->setSenderMbType(myMdType);
+        bsm->setSenderAttackType(myAttackType);
 
-        bsm->setSenderPos(curPosition);
-        bsm->setSenderPosConfidence(curPositionConfidence);
+        switch (myMdType) {
+            case mbTypes::Genuine:{
+                bsm->setSenderPos(curPosition);
+                bsm->setSenderPosConfidence(curPositionConfidence);
 
-        std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
-        bsm->setSenderGpsCoordinates(
-                Coord(currLonLat.first, currLonLat.second));
-
-        bsm->setSenderSpeed(curSpeed);
-        bsm->setSenderSpeedConfidence(curSpeedConfidence);
-
-        bsm->setSenderHeading(curHeading);
-        bsm->setSenderHeadingConfidence(curHeadingConfidence);
-
-        bsm->setSenderWidth(myWidth);
-        bsm->setSenderLength(myLength);
-        //joseph
-        if (!myMdType.compare("attacker")) {
-
-            if (attackBsm.getSenderPseudonym() != 0) {
-                bsm->setSenderPseudonym(attackBsm.getSenderPseudonym());
-
-                bsm->setSenderPos(attackBsm.getSenderPos());
-                bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
-
-                std::pair<double, double> currLonLat = traci->getLonLat(
-                        attackBsm.getSenderPos());
+                std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
                 bsm->setSenderGpsCoordinates(
                         Coord(currLonLat.first, currLonLat.second));
 
-                bsm->setSenderSpeed(attackBsm.getSenderSpeed());
-                bsm->setSenderSpeedConfidence(
-                        attackBsm.getSenderSpeedConfidence());
+                bsm->setSenderSpeed(curSpeed);
+                bsm->setSenderSpeedConfidence(curSpeedConfidence);
 
-                bsm->setSenderHeading(attackBsm.getSenderHeading());
-                bsm->setSenderHeadingConfidence(
-                        attackBsm.getSenderHeadingConfidence());
+                bsm->setSenderHeading(curHeading);
+                bsm->setSenderHeadingConfidence(curHeadingConfidence);
 
-                bsm->setSenderWidth(attackBsm.getSenderWidth());
-                bsm->setSenderLength(attackBsm.getSenderLength());
+                bsm->setSenderWidth(myWidth);
+                bsm->setSenderLength(myLength);
             }
 
-        }
+                break;
+            case mbTypes::Attacker:{
+                if (attackBsm.getSenderPseudonym() != 0) {
+                    bsm->setSenderPseudonym(attackBsm.getSenderPseudonym());
 
+                    bsm->setSenderPos(attackBsm.getSenderPos());
+                    bsm->setSenderPosConfidence(attackBsm.getSenderPosConfidence());
+
+                    std::pair<double, double> currLonLat = traci->getLonLat(
+                            attackBsm.getSenderPos());
+                    bsm->setSenderGpsCoordinates(
+                            Coord(currLonLat.first, currLonLat.second));
+
+                    bsm->setSenderSpeed(attackBsm.getSenderSpeed());
+                    bsm->setSenderSpeedConfidence(
+                            attackBsm.getSenderSpeedConfidence());
+
+                    bsm->setSenderHeading(attackBsm.getSenderHeading());
+                    bsm->setSenderHeadingConfidence(
+                            attackBsm.getSenderHeadingConfidence());
+
+                    bsm->setSenderWidth(attackBsm.getSenderWidth());
+                    bsm->setSenderLength(attackBsm.getSenderLength());
+                }else{
+                    bsm->setSenderPos(curPosition);
+                    bsm->setSenderPosConfidence(curPositionConfidence);
+
+                    std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
+                    bsm->setSenderGpsCoordinates(
+                            Coord(currLonLat.first, currLonLat.second));
+
+                    bsm->setSenderSpeed(curSpeed);
+                    bsm->setSenderSpeedConfidence(curSpeedConfidence);
+
+                    bsm->setSenderHeading(curHeading);
+                    bsm->setSenderHeadingConfidence(curHeadingConfidence);
+
+                    bsm->setSenderWidth(myWidth);
+                    bsm->setSenderLength(myLength);
+                }
+            }
+            default:
+                break;
+        }
         //joseph
 
         bsm->setPsid(-1);

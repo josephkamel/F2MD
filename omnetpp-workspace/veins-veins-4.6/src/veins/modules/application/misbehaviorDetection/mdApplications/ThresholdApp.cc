@@ -37,8 +37,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
 
     minFactor = 1;
 
-    prntApp.incAll(bsm.getSenderMbType());
-    prntAppInst.incAll(bsm.getSenderMbType());
+    prntApp.incAll(mbTypes::intMb[bsm.getSenderMbType()]);
+    prntAppInst.incAll(mbTypes::intMb[bsm.getSenderMbType()]);
 
     int senderId = bsm.getSenderPseudonym();
 
@@ -47,8 +47,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getRangePlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("RangePlausibility", bsm.getSenderMbType());
-        prntAppInst.incFlags("RangePlausibility", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getRangePlausibility()<minFactor){
@@ -56,8 +56,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getPositionConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionConsistancy", bsm.getSenderMbType());
-        prntAppInst.incFlags("PositionConsistancy", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
 
@@ -66,8 +66,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getPositionSpeedConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionSpeedConsistancy", bsm.getSenderMbType());
-        prntAppInst.incFlags("PositionSpeedConsistancy", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getSpeedConsistancy()<minFactor){
@@ -75,8 +75,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getSpeedConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("SpeedConsistancy", bsm.getSenderMbType());
-        prntAppInst.incFlags("SpeedConsistancy", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getSpeedPlausibility()<minFactor){
@@ -84,8 +84,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getSpeedPlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("SpeedPlausibility", bsm.getSenderMbType());
-        prntAppInst.incFlags("SpeedPlausibility", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getPositionPlausibility()<minFactor){
@@ -93,8 +93,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getPositionPlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionPlausibility", bsm.getSenderMbType());
-        prntAppInst.incFlags("PositionPlausibility", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getBeaconFrequency()<minFactor){
@@ -102,8 +102,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getBeaconFrequency() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("BeaconFrequency", bsm.getSenderMbType());
-        prntAppInst.incFlags("BeaconFrequency", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getSuddenAppearence()<minFactor){
@@ -111,8 +111,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getSuddenAppearence() <= Threshold) {
    //     checkFailed = true;
-        prntApp.incFlags("SuddenAppearence", bsm.getSenderMbType());
-        prntAppInst.incFlags("SuddenAppearence", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     if( bsmCheck.getPositionHeadingConsistancy()<minFactor){
@@ -120,8 +120,8 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
     }
     if (bsmCheck.getPositionHeadingConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp.incFlags("PositionHeadingConsistancy", bsm.getSenderMbType());
-        prntAppInst.incFlags("PositionHeadingConsistancy", bsm.getSenderMbType());
+        prntApp.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     bool maxInterFound = false;
@@ -139,16 +139,16 @@ bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
         if (IT <= Threshold) {
             checkFailed = true;
             if (!minInterFound) {
-                prntApp.incFlags("Intersection", bsm.getSenderMbType());
-                prntAppInst.incFlags("Intersection", bsm.getSenderMbType());
+                prntApp.incFlags(mdChecksTypes::Intersection, mbTypes::intMb[bsm.getSenderMbType()]);
+                prntAppInst.incFlags(mdChecksTypes::Intersection, mbTypes::intMb[bsm.getSenderMbType()]);
                 minInterFound = true;
             }
         }
 
     }
     if (checkFailed) {
-        prntApp.incCumulFlags(bsm.getSenderMbType());
-        prntAppInst.incCumulFlags(bsm.getSenderMbType());
+        prntApp.incCumulFlags(mbTypes::intMb[bsm.getSenderMbType()]);
+        prntAppInst.incCumulFlags(mbTypes::intMb[bsm.getSenderMbType()]);
     }
 
     return checkFailed;

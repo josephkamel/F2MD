@@ -43,6 +43,14 @@ using namespace Veins;
 #include <veins/modules/application/misbehaviorDetection/mdReport/EvidenceReport.h>
 #include <veins/modules/application/misbehaviorDetection/mdReport/BasicCheckReport.h>
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <linux/limits.h>
+#include "enumTypes/AttackTypes.h"
+#include "enumTypes/PseudoChangeTypes.h"
+#include "enumTypes/ReportTypes.h"
+#include "enumTypes/MbTypes.h"
+
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
 static double targetClearTime = 0;
@@ -68,9 +76,11 @@ protected:
     virtual void handleSelfMsg(cMessage* msg);
     virtual void handlePositionUpdate(cObject* obj);
 
-    double induceMisbehaviorProb(double faulty, double attackers);
-    std::string induceMisbehavior(double attackers);
+    mbTypes::Mbs induceMisbehavior(double attackers);
     void LocalMisbehaviorDetection(BasicSafetyMessage* bsm, int version);
+
+    void sendReport(MDReport reportBase,std::string version, BsmCheck bsmCheck, BasicSafetyMessage *bsm);
+
 
     void treatAttackFlags();
 
@@ -98,6 +108,7 @@ protected:
 
     double randomPCP();
 
+
     BasicSafetyMessage StopBsm;
     bool StopInitiated;
 
@@ -106,6 +117,8 @@ protected:
     unsigned long SybilMyOldPseudo = 0;
     unsigned long SybilPseudonyms[MAX_SYBIL_NUM];
     int SybilVehSeq = 0;
+
+    pseudoChangeTypes::PseudoChange myPcType;
 
     typedef std::list<Obstacle*> ObstacleGridCell;
     typedef std::vector<ObstacleGridCell> ObstacleGridRow;

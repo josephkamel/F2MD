@@ -20,6 +20,9 @@
 #include <vector>
 #include <fstream>
 
+#include "../enumTypes/MbTypes.h"
+#include "../enumTypes/MdChecksTypes.h"
+
 using namespace std;
 using namespace boost;
 
@@ -62,9 +65,9 @@ public:
 
     void setName(const char *);
 
-    void incAll(std::string mbType);
-    void incCumulFlags(std::string mbType);
-    void incFlags(std::string inString, std::string mbType);
+    void incAll(mbTypes::Mbs mbType);
+    void incCumulFlags(mbTypes::Mbs mbType);
+    void incFlags(mdChecksTypes::Checks check, mbTypes::Mbs mbType);
     void resetAll();
     void getPrintable(char* outStr, double density,double deltaT);
 

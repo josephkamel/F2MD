@@ -16,6 +16,8 @@
 #include <omnetpp.h>
 
 #include "MDApplication.h"
+#include "../enumTypes/MdChecksTypes.h"
+#include "../enumTypes/MbTypes.h"
 
 using namespace Veins;
 using namespace omnetpp;

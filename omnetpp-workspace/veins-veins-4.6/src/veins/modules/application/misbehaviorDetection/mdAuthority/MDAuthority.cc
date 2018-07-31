@@ -23,30 +23,40 @@ void MDAuthority::registerNewBase(char* baseName) {
     baseListNum++;
 }
 
-void MDAuthority::addNewNode(unsigned long pseudo, std::string mbType, double time) {
-    if (!mbType.compare("genuine")) {
-        for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addTotalGenuine(pseudo, time);
+void MDAuthority::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType, double time) {
+    switch (mbType) {
+        case mbTypes::Genuine:{
+            for (int var = 0; var < baseListNum; ++var) {
+                baseList[var].addTotalGenuine(pseudo, time);
+            }
         }
-    }
-    if (!mbType.compare("attacker")) {
-        for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addTotalAttacker(pseudo, time);
+            break;
+        case mbTypes::Attacker:{
+            for (int var = 0; var < baseListNum; ++var) {
+                baseList[var].addTotalAttacker(pseudo, time);
+            }
         }
+            break;
     }
 }
 
-void MDAuthority::addReportedNode(unsigned long pseudo, std::string mbType, double time) {
-    if (!mbType.compare("genuine")) {
-        for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addReportedGenuine(pseudo, time);
+void MDAuthority::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType, double time) {
+
+    switch (mbType) {
+        case mbTypes::Genuine:{
+            for (int var = 0; var < baseListNum; ++var) {
+                baseList[var].addReportedGenuine(pseudo, time);
+            }
         }
-    }
-    if (!mbType.compare("attacker")) {
-        for (int var = 0; var < baseListNum; ++var) {
-            baseList[var].addReportedAttacker(pseudo, time);
+            break;
+        case mbTypes::Attacker:{
+            for (int var = 0; var < baseListNum; ++var) {
+                baseList[var].addReportedAttacker(pseudo, time);
+            }
         }
+            break;
     }
+
 }
 
 void MDAuthority::sendReport(char* baseName, MDReport report) {
@@ -67,14 +77,15 @@ void MDAuthority::sendReport(char* baseName, MDReport report) {
 }
 
 void MDAuthority::treatReport(MDABase *base, int index, MDReport report) {
-    if (!report.getMbType().compare("genuine")) {
+
+    if (!report.getMbType().compare("Genuine")) {
         if (!base[index].alreadyReportedGenuine(report.getReportedPseudo())) {
             base[index].addReportedGenuine(report.getReportedPseudo(),
                     report.getGenerationTime());
         }
     }
 
-    if (!report.getMbType().compare("attacker")) {
+    if (!report.getMbType().compare("Attacker")) {
         if (!base[index].alreadyReportedAttacker(report.getReportedPseudo())) {
             base[index].addReportedAttacker(report.getReportedPseudo(),
                     report.getGenerationTime());

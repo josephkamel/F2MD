@@ -13,7 +13,7 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "IRT-DEMO"
+#define serialNumber "IRT-Sybil5"
 #define savePath "../../../../../mdmSave/"
 
 #define confPos 0
@@ -25,61 +25,20 @@ Define_Module(JosephVeinsApp);
 #define START_SAVE 0 //60 seconds
 #define START_ATTACK 10 //60 seconds
 
-// attack 1 OneMessageReport, 2 EvidenceReport, 3 BasicCheckReport
-#define REPORT_VERSION "EvidenceReport"
+#define REPORT_VERSION reportTypes::EvidenceReport
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE "Sybil"
-// attacks
-// ConstPos ,ConstPosOffset, RandomPos, RandomPosOffset
-// ConstSpeed, ConstSpeedOffet, RandomSpeed, RansomSpeedOffet
-// EventualStop, Disruptive, DataReplay, StaleMessages
-// DoS DoS-Random DoS-Disruptive Sybil
-
-#define ConstPosX 1200
-#define ConstPosY 1200
-
-#define ConstPosOffsetX 50
-#define ConstPosOffsetY 50
-
-#define RandomPosX 3900
-#define RandomPosY 1700
-
-#define RandomPosOffsetX 50
-#define RandomPosOffsetY 50
-
-#define ConstSpeedX 30
-#define ConstSpeedY 30
-
-#define ConstSpeedOffsetX 5
-#define ConstSpeedOffsetY 5
-
-#define RandomSpeedX 40
-#define RandomSpeedY 40
-
-#define RandomSpeedOffsetX 7
-#define RandomSpeedOffsetY 7
-
-#define StopProb 0.025
-
-#define StaleMessages_Buffer 5 //less than 10
-
-#define DosMultipleFreq 2 // times faster
-
-#define SybilVehNumber 10 // max 10
-#define SybilDistanceX 5 // meters
-#define SybilDistanceY 3 // meters
+#define ATTACK_TYPE attackTypes::Sybil
+// ConstPos, ConstPosOffset, RandomPos, RandomPosOffset,
+// ConstSpeed, ConstSpeedOffset, RandomSpeed, RandomSpeedOffset,
+// EventualStop, Disruptive, DataReplay, StaleMessages,
+// DoS, DoSRandom, DoSDisruptive, Sybil,
 
 static bool EnablePC = false;
-#define PC_TYPE "Periodical"
-// PC_TYPE 1 Periodical, 2 Disposable, 3 DistanceBased, 3 Random
-#define Tolerance_Buffer 10 // nbr of messages
-#define Period_Change_Time 1 //seconds
-#define Period_Change_Distance 1000 //meters
-#define Random_Change_Chance 0.01 // 0.01 over 1 = 1% chance
+#define PC_TYPE pseudoChangeTypes::Periodical
 
 //Detection Application
-static bool EnableV1 = true;
+static bool EnableV1 = false;
 static bool EnableV2 = true;
 
 static MDAuthority mdAuthority = MDAuthority();
@@ -98,9 +57,7 @@ ThresholdApp AppV2(AppV2Name, 0.5);
 static bool PrintTPFP = false;
 static VarThrePrintable varThrePrintableV1(AppV1Name);
 static VarThrePrintable varThrePrintableV2(AppV2Name);
-#include <stdlib.h>
-#include <stdio.h>
-#include <linux/limits.h>
+
 void JosephVeinsApp::initialize(int stage) {
 
     //INITMIsbehaviorDetection---------------------------------------
@@ -120,6 +77,7 @@ void JosephVeinsApp::initialize(int stage) {
         myMdType = induceMisbehavior(ATTACKER_PROB);
 
         //pseudonym-------------------------------
+        myPcType = PC_TYPE;
         pseudoNum = 0;
         myPseudonym = getNextPseudonym();
 
@@ -138,11 +96,14 @@ void JosephVeinsApp::initialize(int stage) {
 
         myReportType = REPORT_VERSION;
 
-        if (!myMdType.compare("genuine")) {
+        switch (myMdType) {
+        case mbTypes::Genuine: {
             TraCIColor color = TraCIColor(0, 255, 0, 0);
             traciVehicle->setColor(color);
-            myAttackType = "genuine";
-        } else if (!myMdType.compare("attacker")) {
+            myAttackType = attackTypes::Genuine;
+        }
+            break;
+        case mbTypes::Attacker: {
 
             //attack-------------------------------
             myAttackType = ATTACK_TYPE;
@@ -152,7 +113,7 @@ void JosephVeinsApp::initialize(int stage) {
             SybilMyOldPseudo = myPseudonym;
             SybilVehSeq = 0;
 
-            if (!myAttackType.compare("Sybil")) {
+            if (myAttackType == attackTypes::Sybil) {
                 for (int var = 0; var < SybilVehNumber; ++var) {
                     SybilPseudonyms[var] = getNextPseudonym();
                 }
@@ -161,27 +122,36 @@ void JosephVeinsApp::initialize(int stage) {
 
             TraCIColor color = TraCIColor(255, 0, 0, 0);
             traciVehicle->setColor(color);
-        } else {
-            TraCIColor color = TraCIColor(0, 0, 0, 0);
-            traciVehicle->setColor(color);
         }
-
-    } else if (stage == 1) {
-
-        //Initializing members that require initialized other modules goes here
+        break;
+        default:
+        TraCIColor color = TraCIColor(0, 0, 0, 0);
+        traciVehicle->setColor(color);
+        break;
     }
+
+} else if (stage == 1) {
+
+    //Initializing members that require initialized other modules goes here
+}
 }
 
 void JosephVeinsApp::checkPseudonymChange() {
-    std::string pcType = PC_TYPE;
-    if (!pcType.compare("Periodical")) {
+    switch (myPcType) {
+    case pseudoChangeTypes::Periodical:
         periodicalPCP();
-    } else if (!pcType.compare("Disposable")) {
+        break;
+    case pseudoChangeTypes::Disposable:
         disposablePCP();
-    } else if (!pcType.compare("DistanceBased")) {
+        break;
+    case pseudoChangeTypes::DistanceBased:
         distanceBasedPCP();
-    } else if (!pcType.compare("Random")) {
-        distanceBasedPCP();
+        break;
+    case pseudoChangeTypes::Random:
+        randomPCP();
+        break;
+    default:
+        break;
     }
 }
 
@@ -227,17 +197,17 @@ void JosephVeinsApp::finish() {
 
 static double totalGenuine = 0;
 static double totalAttacker = 0;
-std::string JosephVeinsApp::induceMisbehavior(double attacker) {
+mbTypes::Mbs JosephVeinsApp::induceMisbehavior(double attacker) {
 
     double genuine = 1 - attacker;
 
     if (simTime().dbl() < START_ATTACK) {
-        return "genuine";
+        return mbTypes::Genuine;
     }
 
     if ((totalAttacker + totalGenuine) == 0) {
         totalGenuine++;
-        return "genuine";
+        return mbTypes::Genuine;
     }
 
     double realFactor = totalAttacker / (totalGenuine + totalAttacker);
@@ -245,10 +215,10 @@ std::string JosephVeinsApp::induceMisbehavior(double attacker) {
 
     if (theoFactor > realFactor) {
         totalAttacker++;
-        return "attacker";
+        return mbTypes::Attacker;
     } else {
         totalGenuine++;
-        return "genuine";
+        return mbTypes::Genuine;
     }
 
 }
@@ -278,7 +248,8 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         }
         detectedNodes.put(senderPseudonym, newNode, newMDM);
     } else {
-        NodeHistory existingNode = detectedNodes.getNodeHistory(senderPseudonym);
+        NodeHistory existingNode = detectedNodes.getNodeHistory(
+                senderPseudonym);
         existingNode.addBSM(*bsm);
         MDMHistory existingMDM = detectedNodes.getMDMHistory(senderPseudonym);
         if (EnableV1) {
@@ -299,10 +270,11 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
 
 }
 void JosephVeinsApp::treatAttackFlags() {
-    if (!myMdType.compare("attacker")) {
+    if (myMdType == mbTypes::Attacker) {
         updateVehicleInfo();
 
-        if (!myAttackType.compare("StaleMessages")) {
+        switch (myAttackType) {
+        case attackTypes::StaleMessages: {
             if (myBsmNum >= StaleMessages_Buffer) {
                 attackBsm = myBsm[StaleMessages_Buffer];
                 attackBsm.setSenderPseudonym(myPseudonym);
@@ -315,8 +287,9 @@ void JosephVeinsApp::treatAttackFlags() {
                 }
             }
         }
+            break;
 
-        if (!myAttackType.compare("ConstPos")) {
+        case attackTypes::ConstPos: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
@@ -332,8 +305,9 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("ConstPosOffset")) {
+        case attackTypes::ConstPosOffset: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
@@ -351,15 +325,16 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("RandomPos")) {
+        case attackTypes::RandomPos: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
-            double x = genLib.RandomDouble(0, RandomPosX);
-            double y = genLib.RandomDouble(0, RandomPosY);
+            double randPosX = genLib.RandomDouble(0, RandomPosX);
+            double randPosY = genLib.RandomDouble(0, RandomPosY);
 
-            attackBsm.setSenderPos(Coord(x, y, curPosition.z));
+            attackBsm.setSenderPos(Coord(randPosX, randPosY, curPosition.z));
             attackBsm.setSenderPosConfidence(curPositionConfidence);
 
             attackBsm.setSenderSpeed(curSpeed);
@@ -371,16 +346,18 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("RandomPosOffset")) {
+        case attackTypes::RandomPosOffset: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
-            double x = genLib.RandomDouble(0, RandomPosOffsetX);
-            double y = genLib.RandomDouble(0, RandomPosOffsetY);
+            double randPosOffsetx = genLib.RandomDouble(0, RandomPosOffsetX);
+            double randPosOffsety = genLib.RandomDouble(0, RandomPosOffsetY);
 
             attackBsm.setSenderPos(
-                    Coord(curPosition.x + x, curPosition.y + y, curPosition.z));
+                    Coord(curPosition.x + randPosOffsetx,
+                            curPosition.y + randPosOffsety, curPosition.z));
             attackBsm.setSenderPosConfidence(curPositionConfidence);
 
             attackBsm.setSenderSpeed(curSpeed);
@@ -392,8 +369,9 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("ConstSpeed")) {
+        case attackTypes::ConstSpeed: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
@@ -410,8 +388,9 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("ConstSpeedOffset")) {
+        case attackTypes::ConstSpeedOffset: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
@@ -428,9 +407,11 @@ void JosephVeinsApp::treatAttackFlags() {
 
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
-        }
 
-        if (!myAttackType.compare("RandomSpeed")) {
+        }
+            break;
+
+        case attackTypes::RandomSpeed: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
@@ -449,8 +430,9 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("RandomSpeedOffset")) {
+        case attackTypes::RandomSpeedOffset: {
             attackBsm = myBsm[0];
             attackBsm.setSenderPseudonym(myPseudonym);
 
@@ -470,8 +452,9 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("EventualStop")) {
+        case attackTypes::EventualStop: {
             if (StopInitiated) {
                 attackBsm = StopBsm;
                 attackBsm.setSenderPseudonym(myPseudonym);
@@ -495,17 +478,20 @@ void JosephVeinsApp::treatAttackFlags() {
                 attackBsm.setSenderPseudonym(0);
             }
         }
+            break;
 
-        if (!myAttackType.compare("Disruptive")) {
+        case attackTypes::Disruptive: {
             if (detectedNodes.getNodesNum() > 0) {
                 attackBsm = nextAttackBsm;
                 attackBsm.setSenderPseudonym(myPseudonym);
                 nextAttackBsm = detectedNodes.getRandomBSM();
                 addTargetNode(nextAttackBsm.getSenderPseudonym());
             }
-        }
 
-        if (!myAttackType.compare("DataReplay")) {
+        }
+            break;
+
+        case attackTypes::DataReplay: {
             if (detectedNodes.getNodesNum() > 0) {
                 attackBsm = nextAttackBsm;
                 attackBsm.setSenderPseudonym(myPseudonym);
@@ -515,16 +501,18 @@ void JosephVeinsApp::treatAttackFlags() {
                 addTargetNode(nextAttackBsm.getSenderPseudonym());
             }
         }
+            break;
 
-        if (!myAttackType.compare("DoS")) {
+        case attackTypes::DoS: {
             if (!DoSInitiated) {
                 beaconInterval.setRaw(beaconInterval.raw() / DosMultipleFreq);
                 DoSInitiated = true;
             }
             attackBsm.setSenderPseudonym(0);
         }
+            break;
 
-        if (!myAttackType.compare("DoS-Random")) {
+        case attackTypes::DoSRandom: {
             if (!DoSInitiated) {
                 beaconInterval.setRaw(beaconInterval.raw() / DosMultipleFreq);
                 DoSInitiated = true;
@@ -553,8 +541,10 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
         }
+            break;
 
-        if (!myAttackType.compare("DoS-Disruptive")) {
+        case attackTypes::DoSDisruptive: {
+
             if (!DoSInitiated) {
                 beaconInterval.setRaw(beaconInterval.raw() / DosMultipleFreq);
                 DoSInitiated = true;
@@ -567,10 +557,13 @@ void JosephVeinsApp::treatAttackFlags() {
                 addTargetNode(nextAttackBsm.getSenderPseudonym());
             }
         }
+            break;
 
-        if (!myAttackType.compare("Sybil")) {
+        case attackTypes::Sybil: {
+
             if (!DoSInitiated) {
-                beaconInterval.setRaw(beaconInterval.raw() / (SybilVehNumber+1));
+                beaconInterval.setRaw(
+                        beaconInterval.raw() / (SybilVehNumber + 1));
                 DoSInitiated = true;
             }
             if (SybilMyOldPseudo != myPseudonym) {
@@ -583,35 +576,35 @@ void JosephVeinsApp::treatAttackFlags() {
             int SquareX = SybilVehSeq / 2;
             int SquareY = SybilVehSeq % 2;
 
-            double XOffset = - SquareX * (myLength + SybilDistanceX);
-            double YOffset = - SquareY * (myWidth + SybilDistanceY);
+            double XOffset = -SquareX * (myLength + SybilDistanceX);
+            double YOffset = -SquareY * (myWidth + SybilDistanceY);
             MDMLib mdmLib = MDMLib();
             double curHeadingAngle = mdmLib.calculateHeadingAngle(curHeading);
 
-            Coord relativePos = Coord(XOffset,YOffset,0);
+            Coord relativePos = Coord(XOffset, YOffset, 0);
             double DeltaAngle = mdmLib.calculateHeadingAngle(relativePos);
 
             double newAngle = curHeadingAngle + DeltaAngle;
-            newAngle = std::fmod(newAngle,360);
+            newAngle = std::fmod(newAngle, 360);
 
             newAngle = 360 - newAngle;
 
-            double DOffset = sqrt((pow(XOffset,2))+(pow(YOffset,2)));
+            double DOffset = sqrt((pow(XOffset, 2)) + (pow(YOffset, 2)));
 
-            double relativeX = DOffset * cos(newAngle*PI/180);
-            double relativeY = DOffset * sin(newAngle*PI/180);
+            double relativeX = DOffset * cos(newAngle * PI / 180);
+            double relativeY = DOffset * sin(newAngle * PI / 180);
 
             attackBsm = myBsm[0];
 
-
-            if(SybilVehSeq>0){
-                attackBsm.setSenderPseudonym(SybilPseudonyms[SybilVehSeq-1]);
-            }else{
+            if (SybilVehSeq > 0) {
+                attackBsm.setSenderPseudonym(SybilPseudonyms[SybilVehSeq - 1]);
+            } else {
                 attackBsm.setSenderPseudonym(myPseudonym);
             }
 
             attackBsm.setSenderPos(
-                    Coord(curPosition.x + relativeX, curPosition.y + relativeY, curPosition.z));
+                    Coord(curPosition.x + relativeX, curPosition.y + relativeY,
+                            curPosition.z));
             attackBsm.setSenderPosConfidence(curPositionConfidence);
 
             attackBsm.setSenderSpeed(curSpeed);
@@ -623,11 +616,13 @@ void JosephVeinsApp::treatAttackFlags() {
             attackBsm.setSenderWidth(myWidth);
             attackBsm.setSenderLength(myLength);
 
-            if (SybilVehSeq<SybilVehNumber) {
+            if (SybilVehSeq < SybilVehNumber) {
                 SybilVehSeq++;
-            }else{
+            } else {
                 SybilVehSeq = 0;
             }
+        }
+            break;
         }
 
     } else {
@@ -676,8 +671,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             reportBase.setGenerationTime(simTime().dbl());
             reportBase.setSenderPseudo(myPseudonym);
             reportBase.setReportedPseudo(senderPseudo);
-            reportBase.setMbType(bsm->getSenderMbType());
-            reportBase.setAttackType(bsm->getSenderAttackType());
+            reportBase.setMbType(mbTypes::mbNames[bsm->getSenderMbType()]);
+            reportBase.setAttackType(
+                    attackTypes::AttackNames[bsm->getSenderAttackType()]);
             std::pair<double, double> currLonLat = traci->getLonLat(
                     curPosition);
             reportBase.setSenderGps(Coord(currLonLat.first, currLonLat.second));
@@ -686,29 +682,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             char nameV1[32] = "mdaV1";
             mdAuthority.sendReport(nameV1, reportBase);
 
-            if (!myReportType.compare("BasicCheckReport")) {
-                BasicCheckReport bcr = BasicCheckReport(reportBase);
-                bcr.setReportedCheck(bsmCheckV1);
-                bcr.writeStrToFile(savePath, serialNumber, "V1",
-                        bcr.getReportPrintableJson());
-//                std::cout << bcr.getReportPrintableJson();
-            }
+            std::string version = "V1";
 
-            if (!myReportType.compare("OneMessageReport")) {
-                OneMessageReport omr = OneMessageReport(reportBase);
-                omr.setReportedBsm(*bsm);
-                omr.setReportedCheck(bsmCheckV1);
-                omr.writeStrToFile(savePath, serialNumber, "V1",
-                        omr.getReportPrintableJson());
-//                std::cout << omr.getReportPrintableJson();
-            }
-            if (!myReportType.compare("EvidenceReport")) {
-                EvidenceReport evr = EvidenceReport(reportBase);
-                evr.addEvidence(myBsm[0], bsmCheckV1, *bsm, detectedNodes);
-                evr.writeStrToFile(savePath, serialNumber, "V1",
-                        evr.getReportPrintableJson());
-                //   std::cout << evr.getReportPrintable();
-            }
+            sendReport(reportBase, version, bsmCheckV1, bsm);
 
         }
         if (!initV1) {
@@ -718,8 +694,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
         if (PrintTPFP) {
             double minFactor = AppV1.getMinFactor();
-            varThrePrintableV1.registerMessage(bsm->getSenderMbType(),
-                    minFactor);
+
+            varThrePrintableV1.registerMessage(
+                    mbTypes::intMb[bsm->getSenderMbType()], minFactor);
         }
 
         if ((simTime().dbl() - deltaTV1) > SAVE_PERIOD) {
@@ -755,8 +732,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             reportBase.setGenerationTime(simTime().dbl());
             reportBase.setSenderPseudo(myPseudonym);
             reportBase.setReportedPseudo(senderPseudo);
-            reportBase.setMbType(bsm->getSenderMbType());
-            reportBase.setAttackType(bsm->getSenderAttackType());
+
+            reportBase.setMbType(mbTypes::mbNames[bsm->getSenderMbType()]);
+            reportBase.setAttackType(
+                    attackTypes::AttackNames[bsm->getSenderAttackType()]);
             std::pair<double, double> currLonLat = traci->getLonLat(
                     curPosition);
             reportBase.setSenderGps(Coord(currLonLat.first, currLonLat.second));
@@ -764,33 +743,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
 
             char nameV2[32] = "mdaV2";
             mdAuthority.sendReport(nameV2, reportBase);
+            std::string version = "V2";
 
-            if (!myReportType.compare("BasicCheckReport")) {
-                BasicCheckReport bcr = BasicCheckReport(reportBase);
-                bcr.setReportedCheck(bsmCheckV2);
-                bcr.writeStrToFile(savePath, serialNumber, "V2",
-                        bcr.getReportPrintableJson());
-                //    std::cout << bcr.getReportPrintableJson();
-            }
-
-            if (!myReportType.compare("OneMessageReport")) {
-
-                OneMessageReport omr = OneMessageReport(reportBase);
-                omr.setReportedBsm(*bsm);
-                omr.setReportedCheck(bsmCheckV2);
-                omr.writeStrToFile(savePath, serialNumber, "V2",
-                        omr.getReportPrintableJson());
-                //   std::cout << omr.getReportPrintableJson();
-
-            }
-            if (!myReportType.compare("EvidenceReport")) {
-                EvidenceReport evr = EvidenceReport(reportBase);
-                evr.addEvidence(myBsm[0], bsmCheckV2, *bsm, detectedNodes);
-                evr.writeStrToFile(savePath, serialNumber, "V2",
-                        evr.getReportPrintableJson());
-                //    std::cout << evr.getReportPrintableJson();
-
-            }
+            sendReport(reportBase, version, bsmCheckV2, bsm);
 
         }
         if (!initV2) {
@@ -800,8 +755,8 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
         if (PrintTPFP) {
             double minFactor = AppV2.getMinFactor();
-            varThrePrintableV2.registerMessage(bsm->getSenderMbType(),
-                    minFactor);
+            varThrePrintableV2.registerMessage(
+                    mbTypes::intMb[bsm->getSenderMbType()], minFactor);
         }
 
         if ((simTime().dbl() - deltaTV2) > SAVE_PERIOD) {
@@ -830,6 +785,37 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         break;
     }
 
+}
+
+void JosephVeinsApp::sendReport(MDReport reportBase, std::string version,
+        BsmCheck bsmCheck, BasicSafetyMessage *bsm) {
+    switch (myReportType) {
+    case reportTypes::BasicCheckReport: {
+        BasicCheckReport bcr = BasicCheckReport(reportBase);
+        bcr.setReportedCheck(bsmCheck);
+        bcr.writeStrToFile(savePath, serialNumber, version,
+                bcr.getReportPrintableJson());
+    }
+        break;
+
+    case reportTypes::OneMessageReport: {
+        OneMessageReport omr = OneMessageReport(reportBase);
+        omr.setReportedBsm(*bsm);
+        omr.setReportedCheck(bsmCheck);
+        omr.writeStrToFile(savePath, serialNumber, version,
+                omr.getReportPrintableJson());
+    }
+        break;
+    case reportTypes::EvidenceReport: {
+        EvidenceReport evr = EvidenceReport(reportBase);
+        evr.addEvidence(myBsm[0], bsmCheck, *bsm, detectedNodes);
+        evr.writeStrToFile(savePath, serialNumber, version,
+                evr.getReportPrintableJson());
+    }
+        break;
+    default:
+        break;
+    }
 }
 
 void JosephVeinsApp::onWSM(WaveShortMessage* wsm) {

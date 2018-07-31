@@ -2,44 +2,44 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="pseudo =" key="selection"/>
+		<item value="EventualStop" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="id ="/>
-			<item value=" id"/>
-			<item value="id"/>
-			<item value="myPseudonym"/>
-			<item value="senderPseudonym"/>
-			<item value="SAW"/>
-			<item value="getnext"/>
-			<item value="getMDMHistory"/>
-			<item value="put"/>
-			<item value="interId"/>
-			<item value="int senderId"/>
-			<item value="int myId"/>
-			<item value="senderId"/>
-			<item value="senderId\"/>
-			<item value="senderIf"/>
+			<item value="EventualStop"/>
+			<item value="report"/>
+			<item value="baseName"/>
+			<item value="mda"/>
+			<item value="&quot;, mbTypes::"/>
+			<item value="incFlags(&quot;"/>
+			<item value="bsm.getSenderMbType());"/>
+			<item value="&quot;, mbTypes::intMb["/>
+			<item value=".incFlags(&quot;"/>
+			<item value="(bsm.getSenderMbType());"/>
+			<item value=", bsm.getSenderMbType());"/>
+			<item value="incAll"/>
+			<item value="&quot;)"/>
+			<item value="if (inString == &quot;"/>
+			<item value="attack"/>
 		</list>
 		<list key="replacehistory">
+			<item value=", mbTypes::"/>
+			<item value="incFlags(mdChecksTypes::"/>
+			<item value="mbTypes::intMb[bsm.getSenderMbType()]);"/>
+			<item value=", mbTypes::intMb["/>
+			<item value=".incFlags(mdChecksTypes::"/>
+			<item value=", mbTypes::intMb[bsm.getSenderMbType()]);"/>
+			<item value=","/>
+			<item value=""/>
+			<item value="mb"/>
+			<item value="myAttackType == attackTypes::"/>
 			<item value="pseudo ="/>
 			<item value=" pseudo"/>
 			<item value="pseudo"/>
 			<item value="unsigned long senderPseudonym"/>
 			<item value="myPseudonym"/>
-			<item value="Ca"/>
-			<item value="JsonWriter"/>
-			<item value="bsm.getSenderMbTypeStr());"/>
-			<item value=", bsm.getSenderMbTypeStr());"/>
-			<item value="getSenderMbTypeStr()"/>
-			<item value="tempStr = tempStr + &quot;)&quot;;"/>
-			<item value="std::to_string("/>
-			<item value="const std::string"/>
-			<item value="MDReport"/>
-			<item value="OneMessageReport"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
