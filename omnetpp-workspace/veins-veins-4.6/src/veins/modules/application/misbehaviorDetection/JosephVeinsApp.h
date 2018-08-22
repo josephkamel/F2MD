@@ -35,6 +35,7 @@ using namespace Veins;
 #include "mdApplications/ThresholdApp.h"
 #include "mdApplications/AggrigationApp.h"
 #include "mdApplications/BehavioralApp.h"
+#include <veins/modules/application/misbehaviorDetection/mdApplications/ExperiApp.h>
 
 #include "supportClasses/VarThrePrintable.h"
 #include "supportClasses/XmlWriter.h"
@@ -51,6 +52,11 @@ using namespace Veins;
 #include "enumTypes/ReportTypes.h"
 #include "enumTypes/MbTypes.h"
 
+#include "supportClasses/BsmPrintable.h"
+
+#include "pcPolicies/PCPolicy.h"
+#include "mdAttacks/MDAttack.h"
+
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
 static double targetClearTime = 0;
@@ -58,11 +64,11 @@ static unsigned long accusedNodes[MAXACCUSEDLENGTH];
 static int accusedNodesLength = 0;
 static double accusedClearTime = 0;
 
-
 class JosephVeinsApp: public BaseWaveApplLayer {
 private:
-    NodeTable detectedNodes;
     GeneralLib genLib = GeneralLib();
+public:
+    NodeTable detectedNodes;
 
 public:
     virtual void initialize(int stage);
@@ -79,50 +85,37 @@ protected:
     mbTypes::Mbs induceMisbehavior(double attackers);
     void LocalMisbehaviorDetection(BasicSafetyMessage* bsm, int version);
 
-    void sendReport(MDReport reportBase,std::string version, BsmCheck bsmCheck, BasicSafetyMessage *bsm);
+    void sendReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
+            BasicSafetyMessage *bsm);
 
+    void writeMdBsm(std::string version, BsmCheck bsmCheck,
+            BasicSafetyMessage *bsm);
+
+    void writeSelfBsm(
+            BasicSafetyMessage bsm);
 
     void treatAttackFlags();
-
-    void addTargetNode(int id);
-    void removeTargetNode(int id);
-    void clearTargetNodes();
-    bool isTargetNode(int id);
-
-    void addAccusedNode(int id);
-    void removeAccusedNode(int id);
-    void clearAccusedNodes();
-    bool isAccusedNode(int id);
-
-    void checkPseudonymChange();
-
-    double messageToleranceBuffer = 0;
-    double disposablePCP();
-
-    double lastChangeTime = 0;
-    double periodicalPCP();
-
-    double cumulativeDistance = 0;
-    Coord lastPos = Coord (0,0,0);
-    double distanceBasedPCP();
-
-    double randomPCP();
-
-
-    BasicSafetyMessage StopBsm;
-    bool StopInitiated;
-
-    bool DoSInitiated;
-
-    unsigned long SybilMyOldPseudo = 0;
-    unsigned long SybilPseudonyms[MAX_SYBIL_NUM];
-    int SybilVehSeq = 0;
+    MDAttack mdAttack;
 
     pseudoChangeTypes::PseudoChange myPcType;
+    PCPolicy pcPolicy;
+
+
 
     typedef std::list<Obstacle*> ObstacleGridCell;
     typedef std::vector<ObstacleGridCell> ObstacleGridRow;
     typedef std::vector<ObstacleGridRow> Obstacles;
+
+public:
+    void addTargetNode(unsigned long id);
+    void removeTargetNode(unsigned long id);
+    void clearTargetNodes();
+    bool isTargetNode(unsigned long id);
+
+    void addAccusedNode(unsigned long id);
+    void removeAccusedNode(unsigned long id);
+    void clearAccusedNodes();
+    bool isAccusedNode(unsigned long id);
 };
 
 #endif

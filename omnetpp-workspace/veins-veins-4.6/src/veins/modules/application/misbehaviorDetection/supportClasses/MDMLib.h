@@ -45,7 +45,6 @@
 
 #define DELTA_BSM_TIME 5 // application
 
-
 #define DELTA_REPORT_TIME 5 // history report
 
 #define POS_HEADING_TIME 1.1

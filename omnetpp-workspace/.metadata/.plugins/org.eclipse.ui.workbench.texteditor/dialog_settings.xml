@@ -2,29 +2,35 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="EventualStop" key="selection"/>
+		<item value="ATTACKER_PROB" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="EventualStop"/>
-			<item value="report"/>
-			<item value="baseName"/>
-			<item value="mda"/>
-			<item value="&quot;, mbTypes::"/>
-			<item value="incFlags(&quot;"/>
-			<item value="bsm.getSenderMbType());"/>
-			<item value="&quot;, mbTypes::intMb["/>
-			<item value=".incFlags(&quot;"/>
-			<item value="(bsm.getSenderMbType());"/>
-			<item value=", bsm.getSenderMbType());"/>
-			<item value="incAll"/>
-			<item value="&quot;)"/>
-			<item value="if (inString == &quot;"/>
+			<item value="ATTACKER_PROB"/>
+			<item value="pcPolicy"/>
+			<item value="PC_"/>
+			<item value="checkPseudonymChange"/>
+			<item value="getNextPseudonym"/>
+			<item value="pseudoChangeTypes"/>
+			<item value="MDAttack"/>
+			<item value="PCPolicies"/>
 			<item value="attack"/>
+			<item value="MDAttack::"/>
+			<item value="StopBsm"/>
+			<item value="beaconInterval"/>
+			<item value="nextAttackBsm"/>
+			<item value="detectedNodes"/>
+			<item value="(my"/>
 		</list>
 		<list key="replacehistory">
+			<item value="PCPolicy"/>
+			<item value="PCPolicies"/>
+			<item value=""/>
+			<item value="(*my"/>
+			<item value="(*cur"/>
+			<item value="MDAttack"/>
 			<item value=", mbTypes::"/>
 			<item value="incFlags(mdChecksTypes::"/>
 			<item value="mbTypes::intMb[bsm.getSenderMbType()]);"/>
@@ -32,21 +38,15 @@
 			<item value=".incFlags(mdChecksTypes::"/>
 			<item value=", mbTypes::intMb[bsm.getSenderMbType()]);"/>
 			<item value=","/>
-			<item value=""/>
 			<item value="mb"/>
 			<item value="myAttackType == attackTypes::"/>
-			<item value="pseudo ="/>
-			<item value=" pseudo"/>
-			<item value="pseudo"/>
-			<item value="unsigned long senderPseudonym"/>
-			<item value="myPseudonym"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="322" key="DIALOG_WIDTH"/>
 		<item value="1|Open Sans|9.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="424" key="DIALOG_HEIGHT"/>
-		<item value="1482" key="DIALOG_X_ORIGIN"/>
-		<item value="579" key="DIALOG_Y_ORIGIN"/>
+		<item value="1158" key="DIALOG_X_ORIGIN"/>
+		<item value="489" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

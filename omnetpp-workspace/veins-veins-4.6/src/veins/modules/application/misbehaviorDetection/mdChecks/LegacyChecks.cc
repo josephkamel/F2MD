@@ -21,7 +21,6 @@
 #include <vector>
 #include <algorithm>    // std::max
 
-#include "../supportClasses/Printable.h"
 
 using namespace std;
 using namespace boost;

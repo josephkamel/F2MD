@@ -11,22 +11,7 @@
 
 #include "MDReport.h"
 
-static bool setDate = false;
-static std::string curDate;
-
 MDReport::MDReport() {
-
-    if (!setDate) {
-        char dateBuffer[50];
-        time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
-        sprintf(dateBuffer, "%d-%d-%d_%d:%d:%d", tm.tm_year + 1900,
-                tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        std::string curDateTemp(dateBuffer);
-        curDate = curDateTemp;
-        setDate = true;
-    }
-
 //    generationTime=0;
 //    senderId=0;
 //    reportedId=0;
@@ -167,7 +152,7 @@ std::string MDReport::getBaseReportJson(std::string reportTypeStr) {
 
 bool MDReport::writeStrToFile(const std::string strFileCnst,
         const std::string serial, const std::string version,
-        const std::string outStr) {
+        const std::string outStr,const std::string curDate) {
     int gentime = generationTime;
     int gentime0000 = (generationTime - gentime) * 10000;
 

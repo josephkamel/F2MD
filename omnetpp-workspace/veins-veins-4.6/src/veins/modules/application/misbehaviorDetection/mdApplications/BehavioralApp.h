@@ -18,34 +18,33 @@
 #include "MDApplication.h"
 #include "../enumTypes/MdChecksTypes.h"
 #include "../enumTypes/MbTypes.h"
+
 using namespace Veins;
 using namespace omnetpp;
+
+#define MAX_DETECTED_NODES 100
 
 class BehavioralApp: public MDApplication {
 public:
 
     int version = 0;
-
     double Threshold = 0.5;
     double deltaTrustTime = 10;
-    int maxBsmTrustNum = 5;
-    double Augmentation = 1;
     double minFactor = 1;
 
+    unsigned long PseudonymsToTMO[MAX_DETECTED_NODES];
+    unsigned long TimeOut[MAX_DETECTED_NODES];
+    int TimeOutNum = 0;
 
-    BehavioralApp(const char* name, int version, double deltaTrustTime,
-            int maxBsmTrustNum, double Augmentation);
+    BehavioralApp(const char* name, int version, double BehavioralApp,
+            double Threshold);
 
     bool CheckNodeForReport(int myId,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
-//    bool AggregateFactorsList(double curFactor, double *factorList,
-//            int factorListSize, double zeroSum, int zeroCount);
-    double AggregateFactorsListDouble(double curFactor, double *factorList,
-            int factorListSize, double zeroSum, int zeroCount);
 
-    std::tuple<double, int> getZeroNumber(BasicSafetyMessage bsm, BsmCheck bsmCheck,
-            NodeTable detectedNodes);
+    void removePseudoTMO(int index);
+    int getIndexTMO(unsigned long pseudo);
 
     double getMinFactor();
 };

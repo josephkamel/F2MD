@@ -219,7 +219,7 @@ std::string ReportPrintable::getCheckJson(BsmCheck Check){
 
      for (int var = 0; var < Check.getIntersection().getInterNum(); ++var) {
          jw.openJsonElement("veh",true);
-         tempStr = jw.getSimpleTag("id", std::to_string(Check.getIntersection().getInterId(var)),true);
+         tempStr = jw.getSimpleTag("pseudonym", std::to_string(Check.getIntersection().getInterId(var)),true);
          jw.addTagToElement("veh", tempStr);
 
          tempStr = jw.getSimpleTag("uVal", std::to_string(Check.getIntersection().getInterValue(var)),true);
@@ -251,7 +251,8 @@ std::string ReportPrintable::getBsmJson(BasicSafetyMessage bsm){
     std::string tempStr = "";
     JsonWriter jw;
     jw.openJsonElement("Bsm",true);
-    tempStr = jw.getSimpleTag("id", std::to_string(bsm.getSenderPseudonym()),true);
+
+    tempStr = jw.getSimpleTag("pseudonym", std::to_string(bsm.getSenderPseudonym()),true);
     jw.addTagToElement("Bsm", tempStr);
 
     tempStr = jw.getSimpleTag("ts", bsm.getArrivalTime().str(),true);
@@ -272,9 +273,9 @@ std::string ReportPrintable::getBsmJson(BasicSafetyMessage bsm){
     jw.addTagToElement("Bsm", tempStr);
 
     jw.openJsonElementList("PosConfidence");
-    jw.addTagToElement("PosConfidence", std::to_string(bsm.getSenderSpeedConfidence().x));
-    jw.addTagToElement("PosConfidence", std::to_string(bsm.getSenderSpeedConfidence().y));
-    jw.addFinalTagToElement("PosConfidence", std::to_string(bsm.getSenderSpeedConfidence().z));
+    jw.addTagToElement("PosConfidence", std::to_string(bsm.getSenderPosConfidence().x));
+    jw.addTagToElement("PosConfidence", std::to_string(bsm.getSenderPosConfidence().y));
+    jw.addFinalTagToElement("PosConfidence", std::to_string(bsm.getSenderPosConfidence().z));
     tempStr = jw.getJsonElementList("PosConfidence");
     jw.addTagToElement("Bsm", tempStr);
 

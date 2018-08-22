@@ -650,7 +650,7 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) 
 
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 
-    PrintBsmCheck(senderPseudonym, bsmCheck);
+//    PrintBsmCheck(senderPseudonym, bsmCheck);
 
     return bsmCheck;
 }

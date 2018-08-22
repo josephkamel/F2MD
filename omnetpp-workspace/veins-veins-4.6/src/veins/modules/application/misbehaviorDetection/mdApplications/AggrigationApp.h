@@ -29,7 +29,7 @@ public:
     double Threshold = 0.5;
     double deltaTrustTime = 10;
     int maxBsmTrustNum = 5;
-    int minFactor = 1;
+    double minFactor = 1;
 
     AggrigationApp(const char* name, int version, double deltaTrustTime,
             int maxBsmTrustNum);
@@ -37,8 +37,6 @@ public:
     bool CheckNodeForReport(int myId,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
-//    bool AggregateFactorsList(double curFactor, double *factorList,
-//            int factorListSize);
     double AggregateFactorsListDouble(double curFactor, double *factorList,
             int factorListSize);
 

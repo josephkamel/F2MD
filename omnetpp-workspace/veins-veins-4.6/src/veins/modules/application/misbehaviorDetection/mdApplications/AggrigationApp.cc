@@ -36,11 +36,11 @@ bool AggrigationApp::CheckNodeForReport(int myId,
     bool checkFailed = false;
     MDReport mbReport;
 
-    double temp = 0;
+    double tempFactor = 0;
     minFactor = 1;
 
-    prntApp.incAll(mbTypes::intMb[bsm.getSenderMbType()]);
-    prntAppInst.incAll(mbTypes::intMb[bsm.getSenderMbType()]);
+    prntApp.incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntAppInst.incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
 
     int senderId = bsm.getSenderPseudonym();
 
@@ -68,136 +68,136 @@ bool AggrigationApp::CheckNodeForReport(int myId,
         factorList[var] = bsmCheckList[var].getRangePlausibility();
     }
 
-    temp = AggregateFactorsListDouble(bsmCheck.getRangePlausibility(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getRangePlausibility(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
 
 
-        prntApp.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionConsistancy(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getPositionConsistancy(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionSpeedConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionSpeedConsistancy(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getPositionSpeedConsistancy(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "SpeedConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSpeedConsistancy(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getSpeedConsistancy(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "SpeedPlausibility" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedPlausibility();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSpeedPlausibility(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getSpeedPlausibility(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionPlausibility" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionPlausibility();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionPlausibility(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getPositionPlausibility(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "BeaconFrequency" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getBeaconFrequency();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getBeaconFrequency(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getBeaconFrequency(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "SuddenAppearence" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSuddenAppearence();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSuddenAppearence(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getSuddenAppearence(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
+    if(tempFactor<minFactor){
    //     temp = minFactor;
     }
-    if (temp<Threshold) {
-        prntApp.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMb[bsm.getSenderMbType()]);
+    if (tempFactor<Threshold) {
+        prntApp.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionHeadingConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionHeadingConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionHeadingConsistancy(), factorList,
+    tempFactor = AggregateFactorsListDouble(bsmCheck.getPositionHeadingConsistancy(), factorList,
             bsmCheckListSize);
-    if(temp<minFactor){
-        temp = minFactor;
+    if(tempFactor<minFactor){
+        minFactor = tempFactor;
     }
-    if (temp<Threshold) {
+    if (tempFactor<Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     InterTest inter = bsmCheck.getIntersection();
@@ -215,21 +215,21 @@ bool AggrigationApp::CheckNodeForReport(int myId,
             }
         }
         //std::cout<< "Intersection" << '\n';
-        temp = AggregateFactorsListDouble(curInferFactor, factorList,
+        tempFactor = AggregateFactorsListDouble(curInferFactor, factorList,
                 bsmCheckListSize);
-        if(temp<minFactor){
-            temp = minFactor;
+        if(tempFactor<minFactor){
+            minFactor = tempFactor;
         }
-        if (temp<Threshold) {
+        if (tempFactor<Threshold) {
             checkFailed = true;
-            prntApp.incFlags(mdChecksTypes::Intersection, mbTypes::intMb[bsm.getSenderMbType()]);
-            prntAppInst.incFlags(mdChecksTypes::Intersection, mbTypes::intMb[bsm.getSenderMbType()]);
+            prntApp.incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm.getSenderMbType()]);
+            prntAppInst.incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm.getSenderMbType()]);
         }
     }
 
     if (checkFailed) {
-        prntApp.incCumulFlags(mbTypes::intMb[bsm.getSenderMbType()]);
-        prntAppInst.incCumulFlags(mbTypes::intMb[bsm.getSenderMbType()]);
+        prntApp.incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst.incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
         bsmCheck.setReported(true);
     }
     return checkFailed;

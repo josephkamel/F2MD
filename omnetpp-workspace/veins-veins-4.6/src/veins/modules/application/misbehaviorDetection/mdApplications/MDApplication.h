@@ -29,7 +29,7 @@
 #include "../mdReport/MDReport.h"
 #include "../mdAuthority/MDAuthority.h"
 
-#include "../supportClasses/Printable.h"
+#include "../supportClasses/AppPrintable.h"
 
 using namespace Veins;
 using namespace omnetpp;
@@ -40,8 +40,8 @@ protected:
 
     char appName[32];
 
-    Printable prntApp;
-    Printable prntAppInst;
+    AppPrintable prntApp;
+    AppPrintable prntAppInst;
     bool printInit = true;
 
 public:

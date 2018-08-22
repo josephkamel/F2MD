@@ -30,7 +30,6 @@
 #include "../mdReport/MDReport.h"
 #include "../mdAuthority/MDAuthority.h"
 
-#include "../supportClasses/Printable.h"
 
 using namespace Veins;
 using namespace omnetpp;

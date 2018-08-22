@@ -17,9 +17,9 @@
 namespace pseudoChangeTypes {
 
 #define Tolerance_Buffer 10 // nbr of messages
-#define Period_Change_Time 1 //seconds
-#define Period_Change_Distance 1000 //meters
-#define Random_Change_Chance 0.01 // 0.01 over 1 = 1% chance
+#define Period_Change_Time 10 //seconds
+#define Period_Change_Distance 80 //meters
+#define Random_Change_Chance 0.1 // 0.01 over 1 = 1% chance
 
 enum PseudoChange {
     NoChange = 0,
@@ -30,10 +30,10 @@ enum PseudoChange {
     SIZE_OF_ENUM
 };
 
-static const char* AttackNames[] = { "NoChange", "Periodical", "Disposable",
+static const char* PseudoChangeNames[] = { "NoChange", "Periodical", "Disposable",
         "DistanceBased", "Random" };
 
-static_assert(sizeof(attackTypes::AttackNames)/sizeof(char*) == attackTypes::SIZE_OF_ENUM
+static_assert(sizeof(pseudoChangeTypes::PseudoChangeNames)/sizeof(char*) == pseudoChangeTypes::SIZE_OF_ENUM
         , "sizes dont match");
 }
 

@@ -23,9 +23,9 @@ enum Report {
     SIZE_OF_ENUM
 };
 
-static const char* AttackNames[] = { "OneMessageReport", "EvidenceReport", "BasicCheckReport"};
+static const char* ReportNames[] = { "OneMessageReport", "EvidenceReport", "BasicCheckReport"};
 
-static_assert(sizeof(attackTypes::AttackNames)/sizeof(char*) == attackTypes::SIZE_OF_ENUM
+static_assert(sizeof(reportTypes::ReportNames)/sizeof(char*) == reportTypes::SIZE_OF_ENUM
         , "sizes dont match");
 }
 

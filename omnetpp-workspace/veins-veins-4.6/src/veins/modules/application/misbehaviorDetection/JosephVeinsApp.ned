@@ -17,5 +17,6 @@ import org.car2x.veins.modules.application.ieee80211p.BaseWaveApplLayer;
 simple JosephVeinsApp extends BaseWaveApplLayer
 {
     @class(JosephVeinsApp);
-    string appName = default("Joseph first Veins App!");
+    string appName = default("Joseph Mb Veins App");
+    string helloWorld = default("testInput");
 }

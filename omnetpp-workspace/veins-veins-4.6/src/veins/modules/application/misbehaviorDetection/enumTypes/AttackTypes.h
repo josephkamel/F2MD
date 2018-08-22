@@ -80,6 +80,14 @@ static const char* AttackNames[] = { "Genuine", "ConstPos", "ConstPosOffset",
 static_assert(sizeof(attackTypes::AttackNames)/sizeof(char*) == attackTypes::SIZE_OF_ENUM
         , "sizes dont match");
 
+static const attackTypes::Attacks intAttacks[] = { Genuine, ConstPos,
+        ConstPosOffset, RandomPos, RandomPosOffset, ConstSpeed,
+        ConstSpeedOffset, RandomSpeed, RandomSpeedOffset, EventualStop,
+        Disruptive, DataReplay, StaleMessages, DoS, DoSRandom, DoSDisruptive,
+        Sybil };
+
+static_assert(sizeof(attackTypes::intAttacks)/sizeof(attackTypes::Attacks) == attackTypes::SIZE_OF_ENUM
+        , "sizes dont match");
 
 }
 

@@ -63,7 +63,7 @@ public:
     std::string getBaseReportXml();
     std::string getBaseReportJson(std::string reportType);
     bool writeStrToFile(const std::string strFileCnst, const std::string serial,
-            const std::string version, const std::string outStr);
+            const std::string version, const std::string outStr,const std::string curDate);
 
 };
 

@@ -24,12 +24,12 @@ enum Mbs {
 
 static const char* mbNames[] = { "Genuine", "Attacker"};
 
-static const Mbs intMb[] = { Genuine, Attacker };
+static const Mbs intMbs[] = { Genuine, Attacker };
 
 static_assert(sizeof(mbTypes::mbNames)/sizeof(char*) == mbTypes::SIZE_OF_ENUM
         , "sizes dont match");
 
-static_assert(sizeof(mbTypes::intMb)/sizeof(Mbs) == mbTypes::SIZE_OF_ENUM
+static_assert(sizeof(mbTypes::intMbs)/sizeof(Mbs) == mbTypes::SIZE_OF_ENUM
         , "sizes dont match");
 
 
