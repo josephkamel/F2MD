@@ -20,6 +20,7 @@
 <includePath path="/home/joseph/PhDWorkSpace/Programs/omnetpp-5.2.1/include"/>
 <includePath path="/home/joseph/Projects/ConfidenceRange/Programs/omnetpp-5.2.1/include"/>
 <includePath path="/home/joseph/Projects/F2MD/Programs/omnetpp-5.2.1/include"/>
+<includePath path="/home/sca-team/Projects/F2MD/Programs/omnetpp-5.2.1/include"/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
 <definedSymbol symbol="__cplusplus=199711L"/>
@@ -30,9 +31,11 @@
 <definedSymbol symbol="__GNUC__=5"/>
 <definedSymbol symbol="__GNUC_MINOR__=2"/>
 <definedSymbol symbol="__GNUC_MINOR__=4"/>
+<definedSymbol symbol="__GNUC_MINOR__=3"/>
 <definedSymbol symbol="__GNUC_PATCHLEVEL__=0"/>
 <definedSymbol symbol="__VERSION__=&quot;7.2.0&quot;"/>
 <definedSymbol symbol="__VERSION__=&quot;5.4.0 20160609&quot;"/>
+<definedSymbol symbol="__VERSION__=&quot;7.3.0&quot;"/>
 <definedSymbol symbol="__ATOMIC_RELAXED=0"/>
 <definedSymbol symbol="__ATOMIC_SEQ_CST=5"/>
 <definedSymbol symbol="__ATOMIC_ACQUIRE=2"/>
