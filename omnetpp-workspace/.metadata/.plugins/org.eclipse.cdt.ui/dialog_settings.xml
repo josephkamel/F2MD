@@ -22,6 +22,7 @@
 		<item value="false" key="caseSensitive"/>
 		<item value="227191" key="searchFlags"/>
 		<list key="previousPatterns">
+			<item value="Coord"/>
 			<item value="launchConfig"/>
 			<item value="PositionSpeedConsistancyCheck"/>
 			<item value="MisbehaviorDetectionModule"/>
