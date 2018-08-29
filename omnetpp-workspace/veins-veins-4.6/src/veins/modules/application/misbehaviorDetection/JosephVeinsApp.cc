@@ -66,14 +66,14 @@ static MDAuthority mdAuthority = MDAuthority();
 char const *AppV1Name = "AppV1";
 char const *AppV2Name = "AppV2";
 
-//ThresholdApp AppV1(AppV1Name, 0.5);
-//ThresholdApp AppV2(AppV2Name, 0.5);
+ThresholdApp AppV1(AppV1Name, 0.5);
+ThresholdApp AppV2(AppV2Name, 0.5);
 
 //AggrigationApp AppV1(AppV1Name,1,10.0,10);
 //AggrigationApp AppV2(AppV2Name,2,10.0,10);
 
-BehavioralApp AppV1(AppV1Name,1,10.0,0.5);
-BehavioralApp AppV2(AppV2Name,2,10.0,0.8);
+//BehavioralApp AppV1(AppV1Name,1,10.0,0.5);
+//BehavioralApp AppV2(AppV2Name,2,10.0,0.8);
 
 //ExperiApp AppV1(AppV1Name,1,10.0,10,3);
 //ExperiApp AppV2(AppV2Name,2,10.0,10,3);
@@ -89,6 +89,7 @@ void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
+
         //joseph
         //Initializing members and pointers of your application goes here
         EV << "Initializing " << par("appName").stringValue() << std::endl;

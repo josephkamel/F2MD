@@ -1599,3 +1599,12 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64
 
 !ENTRY org.omnetpp.main 1 0 2018-08-24 14:03:09.885
 !MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
+!SESSION 2018-08-27 10:45:13.906 -----------------------------------------------
+eclipse.buildId=5.2.1.171211-da8f6bc
+java.version=1.8.0_181
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.omnetpp.main 1 0 2018-08-27 10:45:20.805
+!MESSAGE OMNeT++ IDE 5.2.1.171211-da8f6bc started.
