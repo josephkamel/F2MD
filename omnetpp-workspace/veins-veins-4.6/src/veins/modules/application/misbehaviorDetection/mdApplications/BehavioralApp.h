@@ -39,7 +39,7 @@ public:
     BehavioralApp(const char* name, int version, double BehavioralApp,
             double Threshold);
 
-    bool CheckNodeForReport(int myId,
+    bool CheckNodeForReport(unsigned long myPseudonym,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
 

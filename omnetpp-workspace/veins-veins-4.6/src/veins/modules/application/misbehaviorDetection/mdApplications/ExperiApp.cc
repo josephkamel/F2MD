@@ -31,7 +31,7 @@ ExperiApp::ExperiApp(const char* name, int version, double deltaTrustTime, int m
     this->Augmentation = Augmentation;
 }
 
-bool ExperiApp::CheckNodeForReport(int myId,
+bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
 
     bool checkFailed = false;

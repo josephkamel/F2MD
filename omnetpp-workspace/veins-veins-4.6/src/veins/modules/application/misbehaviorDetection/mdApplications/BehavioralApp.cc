@@ -30,7 +30,7 @@ BehavioralApp::BehavioralApp(const char* name, int version, double deltaTrustTim
     this->Threshold = Threshold;
 }
 
-bool BehavioralApp::CheckNodeForReport(int myId,
+bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
         BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
 
     MDReport mbReport;

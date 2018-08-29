@@ -35,6 +35,7 @@ using namespace Veins;
 #include "mdApplications/ThresholdApp.h"
 #include "mdApplications/AggrigationApp.h"
 #include "mdApplications/BehavioralApp.h"
+#include "mdApplications/PyBridgeApp.h"
 #include <veins/modules/application/misbehaviorDetection/mdApplications/ExperiApp.h>
 
 #include "supportClasses/VarThrePrintable.h"

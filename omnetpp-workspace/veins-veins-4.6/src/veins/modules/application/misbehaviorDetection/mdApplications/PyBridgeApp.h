@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
- * @email   josephekamel@gmail.com
+* @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -9,28 +9,36 @@
  * All rights reserved.
  *******************************************************************************/
 
-#ifndef __VEINS_ThresholdApp_H_
-#define __VEINS_ThresholdApp_H_
+#ifndef __VEINS_PyBridgeApp_H_
+#define __VEINS_PyBridgeApp_H_
 
 #include <tuple>
 #include <omnetpp.h>
-
+#include <stdio.h>
+#include <stdlib.h>     /* atof */
+#include <boost/algorithm/string.hpp>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include "MDApplication.h"
-#include "../enumTypes/MdChecksTypes.h"
-#include "../enumTypes/MbTypes.h"
+
+#include "../supportClasses/BsmPrintable.h"
 
 using namespace Veins;
 using namespace omnetpp;
 
-class ThresholdApp: public MDApplication {
+class PyBridgeApp: public MDApplication {
 public:
 
-    double Threshold = 0;
+    int port = 80;
+    std::string host = "localhost";
     double minFactor = 1;
-    ThresholdApp(const char* name, double Threshold);
+    PyBridgeApp(const char* name,int port, std::string host);
 
     bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes);
+            BsmCheck bsmCheck, NodeTable detectedNodes );
 
     double getMinFactor();
 };

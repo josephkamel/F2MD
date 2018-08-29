@@ -34,7 +34,7 @@ public:
     AggrigationApp(const char* name, int version, double deltaTrustTime,
             int maxBsmTrustNum);
 
-    bool CheckNodeForReport(int myId,
+    bool CheckNodeForReport(unsigned long myPseudonym,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
     double AggregateFactorsListDouble(double curFactor, double *factorList,

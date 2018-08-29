@@ -36,7 +36,7 @@ public:
     ExperiApp(const char* name, int version, double deltaTrustTime,
             int maxBsmTrustNum, double Augmentation);
 
-    bool CheckNodeForReport(int myId,
+    bool CheckNodeForReport(unsigned long myPseudonym,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
 //    bool AggregateFactorsList(double curFactor, double *factorList,
