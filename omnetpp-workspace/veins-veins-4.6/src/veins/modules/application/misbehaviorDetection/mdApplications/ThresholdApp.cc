@@ -28,7 +28,7 @@ ThresholdApp::ThresholdApp(const char* name, double Threshold):MDApplication(nam
     this->Threshold = Threshold;
 }
 
-bool ThresholdApp::CheckNodeForReport(int myId,BasicSafetyMessage bsm,
+bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessage bsm,
         BsmCheck bsmCheck, NodeTable detectedNodes){
 
     bool checkFailed = false;

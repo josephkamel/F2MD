@@ -72,11 +72,14 @@ char const *AppV2Name = "AppV2";
 //AggrigationApp AppV1(AppV1Name,1,10.0,10);
 //AggrigationApp AppV2(AppV2Name,2,10.0,10);
 
-BehavioralApp AppV1(AppV1Name,1,10.0,0.5);
-BehavioralApp AppV2(AppV2Name,2,10.0,0.8);
+//BehavioralApp AppV1(AppV1Name,1,10.0,0.5);
+//BehavioralApp AppV2(AppV2Name,2,10.0,0.8);
 
 //ExperiApp AppV1(AppV1Name,1,10.0,10,3);
 //ExperiApp AppV2(AppV2Name,2,10.0,10,3);
+
+PyBridgeApp AppV1(AppV1Name,9998,"localhost");
+PyBridgeApp AppV2(AppV2Name,9998,"localhost");
 
 static bool PrintTPFP = false;
 static VarThrePrintable varThrePrintableV1(AppV1Name);

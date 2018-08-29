@@ -30,7 +30,7 @@ AggrigationApp::AggrigationApp(const char* name, int version, double deltaTrustT
     this->maxBsmTrustNum = maxBsmTrustNum;
 }
 
-bool AggrigationApp::CheckNodeForReport(int myId,
+bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
         BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
 
     bool checkFailed = false;
