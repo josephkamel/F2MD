@@ -28,7 +28,7 @@ static bool randomConf = false;
 
 #define REPORT_VERSION reportTypes::EvidenceReport
 
-static bool MixAttacks = false;
+static bool MixAttacks = true;
 static attackTypes::Attacks MixAttacksList[] = {
         attackTypes::ConstPos, attackTypes::ConstPosOffset,
         attackTypes::RandomPos, attackTypes::RandomPosOffset,
@@ -67,7 +67,7 @@ char const *AppV1Name = "AppV1";
 char const *AppV2Name = "AppV2";
 
 ThresholdApp AppV1(AppV1Name, 0.5);
-ThresholdApp AppV2(AppV2Name, 0.5);
+//ThresholdApp AppV2(AppV2Name, 0.5);
 
 //AggrigationApp AppV1(AppV1Name,1,10.0,10);
 //AggrigationApp AppV2(AppV2Name,2,10.0,10);
@@ -78,7 +78,7 @@ ThresholdApp AppV2(AppV2Name, 0.5);
 //ExperiApp AppV1(AppV1Name,1,10.0,10,3);
 //ExperiApp AppV2(AppV2Name,2,10.0,10,3);
 
-PyBridgeApp AppV1(AppV1Name,9998,"localhost");
+//PyBridgeApp AppV1(AppV1Name,9998,"localhost");
 PyBridgeApp AppV2(AppV2Name,9998,"localhost");
 
 static bool PrintTPFP = false;

@@ -36,7 +36,10 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessa
     bsmPrint.setBsmCheck(bsmCheck);
 
     std::string bsmJsonStr = bsmPrint.getBsmPrintableJson();
-    httpr.Request(bsmJsonStr);
+
+    std::string response = httpr.Request(bsmJsonStr);
+
+    std::cout<<"response:" << response << "\n";
 
     return true;
 }

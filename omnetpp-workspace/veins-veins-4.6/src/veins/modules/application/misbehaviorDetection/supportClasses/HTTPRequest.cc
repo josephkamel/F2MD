@@ -138,8 +138,8 @@ std::string HTTPRequest::Request(std::string requestArg) {
     close(sockfd);
 
     /* process response */
-    printf("Message:\n%s\n", message);
-    printf("Response:\n%s\n", response);
+    //printf("Message:\n%s\n", message);
+    //printf("Response:\n%s\n", response);
 
     return response;
 

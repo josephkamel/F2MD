@@ -63,7 +63,7 @@ std::string BsmPrintable::getBsmPrintableJson() {
     jw.addElement(jw.getJsonElement("BsmPrint"));
     jw.writeFooter();
 
-    jw.writeFooter();
+
 
     return jw.getOutString();
 }
@@ -113,6 +113,10 @@ std::string BsmPrintable::getBsmPrintHead() {
     jw.openJsonElement("Metadata", false);
 
     tempStr = jw.getSimpleTag("receiverPseudo", std::to_string(receiverPseudo),
+            true);
+    jw.addTagToElement("Metadata", tempStr);
+
+    tempStr = jw.getSimpleTag("generationTime", std::to_string(simTime().dbl()),
             true);
     jw.addTagToElement("Metadata", tempStr);
 
