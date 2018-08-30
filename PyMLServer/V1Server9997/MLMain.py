@@ -3,11 +3,10 @@ from os import listdir
 from os.path import isfile, join
 import json
 import numpy as np
-from MLDataCollectorSVM import MlDataCollector
-from MLTrainerSVM import MlTrainer
+from MLDataCollector import MlDataCollector
+from MLTrainer import MlTrainer
 from numpy import array
 import datetime
-from sklearn import svm
 from sklearn import datasets
 from sklearn.externals import joblib
 class MlMain:
@@ -22,20 +21,20 @@ class MlMain:
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFileSVM'
+	savePath = './saveFile'
 
-
-	def init(self):
+	def init(self, AIType):
 		self.DataCollector.setCurDateSrt(self.curDateStr)
 		self.DataCollector.setSavePath(self.savePath)
 		self.Trainer.setCurDateSrt(self.curDateStr)
 		self.Trainer.setSavePath(self.savePath)
+		self.Trainer.setAIType(AIType)
 
-		self.trainedModelExists()
+		self.trainedModelExists(AIType)
 
-	def mlMain(self, bsmJsonString):
+	def mlMain(self, bsmJsonString, AIType):
 		if not self.initiated:
-			self.init()
+			self.init(AIType)
 			self.initiated = True
 
 		bsmJsom = json.loads(bsmJsonString)
@@ -55,8 +54,8 @@ class MlMain:
 			print self.Trainer.valuesCollection.shape
 
 			self.Trainer.train()
-			self.clf = joblib.load(self.savePath+'/clf_'+self.curDateStr+'.pkl')
-			self.deltaCall = self.DataCollector.valuesCollection.shape[0]/2
+			self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
+			self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 			print "DataCollection And Training " + str(self.deltaCall) +" Finished!"
 
 			
@@ -77,13 +76,14 @@ class MlMain:
 		return False
 
 
-	def trainedModelExists(self):
+	def trainedModelExists(self, AIType):
 		filesNames = [f for f in listdir(self.savePath) if isfile(join(self.savePath, f))]
+		
 		for s in filesNames:
-			if s.startswith("clf_") and s.endswith(".pkl"):
-				self.curDateStr = s[4:-4]
+			if s.startswith('clf_'+AIType) and s.endswith(".pkl"):
+				self.curDateStr = s[-23:-4]
 
-				print "Loading " + self.curDateStr+" ..."
+				print "Loading " +AIType + " "+ self.curDateStr+ " ..."
 				self.clf = joblib.load(self.savePath+'/'+s)
 				self.DataCollector.setCurDateSrt(self.curDateStr)
 				self.Trainer.setCurDateSrt(self.curDateStr)
@@ -91,7 +91,7 @@ class MlMain:
 				self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
 				self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
  
-				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/2
+				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
 
 	def getArray(self,bsmJsom):
@@ -111,6 +111,7 @@ class MlMain:
 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
 		label = bsmJsom['BsmPrint']['Metadata']['mbType']
+
 		#label = 0
 		if(label == 'Genuine'):
 			numLabel = 0.0

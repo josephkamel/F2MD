@@ -112,7 +112,7 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
         }
     }
 
-    HTTPRequest httpr = HTTPRequest(9998, "localhost");
+    HTTPRequest httpr = HTTPRequest(port, "localhost");
 
     BsmPrintable bsmPrint = BsmPrintable();
     bsmPrint.setReceiverPseudo(myPseudonym);

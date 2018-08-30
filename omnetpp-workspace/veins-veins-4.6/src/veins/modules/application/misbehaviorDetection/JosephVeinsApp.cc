@@ -39,7 +39,7 @@ static attackTypes::Attacks MixAttacksList[] = {
         attackTypes::DoSRandom, attackTypes::DoSDisruptive, attackTypes::Sybil };
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE attackTypes::DataReplay
+#define ATTACK_TYPE attackTypes::ConstPosOffset
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
@@ -66,7 +66,7 @@ static MDAuthority mdAuthority = MDAuthority();
 char const *AppV1Name = "AppV1";
 char const *AppV2Name = "AppV2";
 
-ThresholdApp AppV1(AppV1Name, 0.5);
+//ThresholdApp AppV1(AppV1Name, 0.5);
 //ThresholdApp AppV2(AppV2Name, 0.5);
 
 //AggrigationApp AppV1(AppV1Name,1,10.0,10);
@@ -78,7 +78,7 @@ ThresholdApp AppV1(AppV1Name, 0.5);
 //ExperiApp AppV1(AppV1Name,1,10.0,10,3);
 //ExperiApp AppV2(AppV2Name,2,10.0,10,3);
 
-//PyBridgeApp AppV1(AppV1Name,9998,"localhost");
+PyBridgeApp AppV1(AppV1Name,9997,"localhost");
 PyBridgeApp AppV2(AppV2Name,9998,"localhost");
 
 static bool PrintTPFP = false;
