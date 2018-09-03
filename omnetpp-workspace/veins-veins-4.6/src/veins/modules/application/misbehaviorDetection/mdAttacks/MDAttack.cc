@@ -337,6 +337,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
             DoSInitiated = true;
         }
         attackBsm = myBsm[0];
+
         attackBsm.setSenderPseudonym(*myPseudonym);
 
         double x = genLib.RandomDouble(0, RandomPosX);

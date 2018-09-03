@@ -33,7 +33,7 @@ enum Checks {
 static const char* ChecksNames[] = { "RangePlausibility",
         "PositionPlausibility", "SpeedPlausibility", "PositionConsistancy",
         "PositionSpeedConsistancy", "SpeedConsistancy", "BeaconFrequency",
-        "Intersection", "SuddenAppearence", "PositionHeadingConsistancy", };
+        "Intersection", "SuddenAppearence", "PositionHeadingConsistancy" };
 
 static_assert(sizeof(mdChecksTypes::ChecksNames)/sizeof(char*) == mdChecksTypes::SIZE_OF_ENUM
         , "sizes dont match");

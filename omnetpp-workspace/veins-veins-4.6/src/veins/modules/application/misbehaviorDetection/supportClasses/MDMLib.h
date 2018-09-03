@@ -27,7 +27,7 @@
 #define MAX_PSS 5.8 // 5.73402
 #define MAX_TIME_DELTA 1.1
 
-#define MAX_DELTA_INTER 0.5 //1.001
+#define MAX_DELTA_INTER 0.4 //1.001
 
 #define SUDDEN_APPEARENCE_RANGE 210 // AggrigationApp420/2
 

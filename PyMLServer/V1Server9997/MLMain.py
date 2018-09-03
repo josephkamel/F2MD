@@ -9,8 +9,12 @@ from numpy import array
 import datetime
 from sklearn import datasets
 from sklearn.externals import joblib
-class MlMain:
 
+RTtrain = False
+RTcollectData = False
+RTpredict = True
+
+class MlMain:
 	initiated = False
 
 	curDateStr = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -40,35 +44,35 @@ class MlMain:
 		bsmJsom = json.loads(bsmJsonString)
 		curArray = self.getArray(bsmJsom)
 
-		if self.collectDur < self.deltaCall:
-			self.collectDur = self.collectDur + 1;
-			self.DataCollector.collectData(curArray)
-		else :
-			print "DataCollection And Training " + str(self.deltaCall) + " Started ..."
+		if RTcollectData:
+			if self.collectDur < self.deltaCall:
+				self.collectDur = self.collectDur + 1;
+				self.DataCollector.collectData(curArray)
+			else :
+				print "DataSave And Training " + str(self.deltaCall) + " Started ..."
+				self.collectDur = 0
+				self.DataCollector.saveData()
 
-			self.collectDur = 0
-			self.DataCollector.saveData()
-			self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
-			self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+				if RTtrain:
+					self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
+					self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+					print self.Trainer.valuesCollection.shape
+					self.Trainer.train()
+					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
+					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
 
-			print self.Trainer.valuesCollection.shape
-
-			self.Trainer.train()
-			self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
-			self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-			print "DataCollection And Training " + str(self.deltaCall) +" Finished!"
-
-			
-
+		
 		if self.clf is None:
 			return False
 		else:
-			prediction = self.clf.predict(array([curArray[0]]))
-			#print "========================================"
-			if prediction[0] == 0.0:
-				return False
-			else:
-				return True
+			if RTpredict:
+				prediction = self.clf.predict(array([curArray[0]]))
+				#print "========================================"
+				if prediction[0] == 0.0:
+					return False
+				else:
+					return True
 			#print prediction
 			#print curArray[1]
 			#print "========================================"

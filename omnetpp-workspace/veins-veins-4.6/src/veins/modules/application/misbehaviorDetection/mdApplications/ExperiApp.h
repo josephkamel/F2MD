@@ -23,7 +23,6 @@ using namespace omnetpp;
 
 class ExperiApp: public MDApplication {
 public:
-
     int version = 0;
 
     double Threshold = 0.5;
@@ -33,11 +32,13 @@ public:
     double minFactor = 1;
 
 
-    ExperiApp(const char* name, int version, double deltaTrustTime,
+    ExperiApp(int version, double deltaTrustTime,
             int maxBsmTrustNum, double Augmentation);
+
 
     bool CheckNodeForReport(unsigned long myPseudonym,
             BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
+
 
 //    bool AggregateFactorsList(double curFactor, double *factorList,
 //            int factorListSize, double zeroSum, int zeroCount);

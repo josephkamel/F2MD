@@ -32,13 +32,17 @@ using namespace omnetpp;
 class PyBridgeApp: public MDApplication {
 public:
 
+    int version = 1;
+
     int port = 80;
     std::string host = "localhost";
     double minFactor = 1;
-    PyBridgeApp(const char* name,int port, std::string host);
 
-    bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes );
+    PyBridgeApp(int version ,int port, std::string host);
+
+    bool CheckNodeForReport(unsigned long myPseudonym,
+            BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
+
 
     double getMinFactor();
 };

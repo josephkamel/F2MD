@@ -23,43 +23,45 @@ void MDAuthority::registerNewBase(char* baseName) {
     baseListNum++;
 }
 
-void MDAuthority::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType, double time) {
+void MDAuthority::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType,
+        double time) {
     switch (mbType) {
-        case mbTypes::Genuine:{
-            for (int var = 0; var < baseListNum; ++var) {
-                baseList[var].addTotalGenuine(pseudo, time);
-            }
+    case mbTypes::Genuine: {
+        for (int var = 0; var < baseListNum; ++var) {
+            baseList[var].addTotalGenuine(pseudo, time);
         }
-            break;
-        case mbTypes::Attacker:{
-            for (int var = 0; var < baseListNum; ++var) {
-                baseList[var].addTotalAttacker(pseudo, time);
-            }
+    }
+        break;
+    case mbTypes::Attacker: {
+        for (int var = 0; var < baseListNum; ++var) {
+            baseList[var].addTotalAttacker(pseudo, time);
         }
-            break;
+    }
+        break;
     }
 }
 
-void MDAuthority::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType, double time) {
+void MDAuthority::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType,
+        double time) {
 
     switch (mbType) {
-        case mbTypes::Genuine:{
-            for (int var = 0; var < baseListNum; ++var) {
-                baseList[var].addReportedGenuine(pseudo, time);
-            }
+    case mbTypes::Genuine: {
+        for (int var = 0; var < baseListNum; ++var) {
+            baseList[var].addReportedGenuine(pseudo, time);
         }
-            break;
-        case mbTypes::Attacker:{
-            for (int var = 0; var < baseListNum; ++var) {
-                baseList[var].addReportedAttacker(pseudo, time);
-            }
+    }
+        break;
+    case mbTypes::Attacker: {
+        for (int var = 0; var < baseListNum; ++var) {
+            baseList[var].addReportedAttacker(pseudo, time);
         }
-            break;
+    }
+        break;
     }
 
 }
 
-void MDAuthority::sendReport(char* baseName, MDReport report) {
+void MDAuthority::sendReport(const char* baseName, MDReport report) {
     int index = -1;
     for (int var = 0; var < baseListNum; ++var) {
         if (strcmp(baseList[var].getName(), baseName) == 0) {

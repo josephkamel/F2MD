@@ -142,7 +142,7 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
     double inter = mdmLib.RectRectFactor(nodePosition1, nodePosition2, heading1,
             heading2, nodeSize1, nodeSize2);
 
-    if (inter > 0) {
+    if (inter > 0.05) {
         return 0; //inter
     } else {
         return 1;
