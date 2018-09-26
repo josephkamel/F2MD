@@ -102,6 +102,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
                 attackBsm.setSenderPseudonym(0);
             }
         }
+
     }
         break;
 

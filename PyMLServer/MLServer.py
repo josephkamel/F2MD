@@ -5,6 +5,8 @@ from MLMain import MlMain
 from os import listdir
 from os.path import isfile, join
 
+version = 'NOVER'
+
 class S(BaseHTTPRequestHandler):
 	globalMlMain = MlMain()
 	def _set_headers(self):
@@ -24,12 +26,12 @@ class S(BaseHTTPRequestHandler):
 		'''
 		#print('The Request: %s' % (self.path))
 		requestStr = urllib2.unquote((self.path));
-		pred = self.globalMlMain.mlMain(requestStr, 'neural_network')
+		pred = self.globalMlMain.mlMain(version,requestStr, 'neural_network')
 		
 	   	# the response
 		self.wfile.write(pred)
 	
-def run(server_class=HTTPServer, handler_class=S, port=9997):
+def run(server_class=HTTPServer, handler_class=S, port=9998):
 	server_address = ('', port)
 	httpd = server_class(server_address, handler_class)
 	print 'Starting MLServer...'
@@ -38,8 +40,9 @@ def run(server_class=HTTPServer, handler_class=S, port=9997):
 
 if __name__ == "__main__":
 	from sys import argv
-
-	if len(argv) == 2:
+	
+	if len(argv) == 3:
+		version = str(argv[2])
 		run(port=int(argv[1]))
 	else:
-		run()
+		print 'not enough argv'

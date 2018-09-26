@@ -111,8 +111,8 @@ protected:
     ThresholdApp ThreV1 = ThresholdApp(1, 0.5);
     ThresholdApp ThreV2 = ThresholdApp(2, 0.5);
 
-    AggrigationApp AggrV1 = AggrigationApp(1, 10.0, 10);
-    AggrigationApp AggrV2 = AggrigationApp(2, 10.0, 10);
+    AggrigationApp AggrV1 = AggrigationApp(1,0.5, 10.0, 10);
+    AggrigationApp AggrV2 = AggrigationApp(2,0.5, 10.0, 10);
 
     BehavioralApp BehaV1 = BehavioralApp(1, 10.0, 0.8);
     BehavioralApp BehaV2 = BehavioralApp(2, 10.0, 0.8);

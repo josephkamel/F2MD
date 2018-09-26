@@ -26,11 +26,12 @@ class AggrigationApp: public MDApplication {
 public:
 
     double Threshold = 0.5;
+    double devValue = 0.5;
     double deltaTrustTime = 10;
     int maxBsmTrustNum = 5;
     double minFactor = 1;
 
-    AggrigationApp(int version, double deltaTrustTime,
+    AggrigationApp(int version, double devValue ,double deltaTrustTime,
             int maxBsmTrustNum);
 
     bool CheckNodeForReport(unsigned long myPseudonym,

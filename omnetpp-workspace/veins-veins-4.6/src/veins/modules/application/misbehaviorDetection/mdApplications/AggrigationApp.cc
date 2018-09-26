@@ -23,10 +23,11 @@
 using namespace std;
 using namespace boost;
 
-AggrigationApp::AggrigationApp(int version, double deltaTrustTime,
+AggrigationApp::AggrigationApp(int version, double devValue, double deltaTrustTime,
         int maxBsmTrustNum) :
         MDApplication(version) {
 
+    this->devValue = devValue;
     this->deltaTrustTime = deltaTrustTime;
     this->maxBsmTrustNum = maxBsmTrustNum;
 }
@@ -260,12 +261,14 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
 double AggrigationApp::AggregateFactorsListDouble(double curFactor,
         double *factorList, int factorListSize) {
     double averageFactor = curFactor;
+    double divValue = 1;
     for (int var = 0; var < factorListSize; ++var) {
-        averageFactor = averageFactor + factorList[var];
+        double decValue =  pow(devValue, var+1);
+        averageFactor = averageFactor + factorList[var]*decValue;
+        divValue = divValue + decValue;
     }
-    averageFactor = averageFactor / (factorListSize + 1);
+    averageFactor = averageFactor / divValue;
     return averageFactor;
-
 }
 
 double AggrigationApp::getMinFactor() {

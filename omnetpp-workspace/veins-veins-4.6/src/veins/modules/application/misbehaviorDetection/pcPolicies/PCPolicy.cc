@@ -11,11 +11,20 @@
 
 #include "PCPolicy.h"
 
+
 PCPolicy::PCPolicy() {
     messageToleranceBuffer = 0;
     lastChangeTime = simTime().dbl();
     cumulativeDistance = 0;
     lastPos = Coord(0, 0, 0);
+}
+
+void PCPolicy::setMbType(mbTypes::Mbs mbType) {
+    this->mbType = mbType;
+}
+
+void PCPolicy::setMdAuthority(MDAuthority* mdAuthority) {
+    this->mdAuthority = mdAuthority;
 }
 
 void PCPolicy::setCurPosition(Coord* curPosition) {
@@ -37,14 +46,16 @@ void PCPolicy::setPseudoNum(int* pseudoNum) {
 unsigned long PCPolicy::getNextPseudonym() {
     (*pseudoNum)++;
     double simTimeDbl = simTime().dbl();
-    while (simTimeDbl > 9999) {
+    while (simTimeDbl > 99) {
         simTimeDbl = simTimeDbl / 10;
     }
     simTimeDbl = (int) simTimeDbl;
-    unsigned long pseudo = (*myId) * 10000 + simTimeDbl;
+    unsigned long pseudo = (*myId) * 100 + simTimeDbl;
     double digitNumber = (unsigned long) (log10(pseudo) + 1);
     double pseudoNumAdd = (*pseudoNum) * pow(10, digitNumber + 1);
     pseudo = pseudo + pseudoNumAdd;
+
+    mdAuthority->addNewNode(pseudo, mbType, simTime().dbl());
 
     return pseudo;
 }

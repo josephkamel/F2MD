@@ -27,7 +27,9 @@ class MlMain:
 	clf = None
 	savePath = './saveFile'
 
-	def init(self, AIType):
+	def init(self, version, AIType):
+		self.savePath = self.savePath +'_'+ str(version)
+
 		self.DataCollector.setCurDateSrt(self.curDateStr)
 		self.DataCollector.setSavePath(self.savePath)
 		self.Trainer.setCurDateSrt(self.curDateStr)
@@ -36,9 +38,9 @@ class MlMain:
 
 		self.trainedModelExists(AIType)
 
-	def mlMain(self, bsmJsonString, AIType):
+	def mlMain(self, version, bsmJsonString, AIType):
 		if not self.initiated:
-			self.init(AIType)
+			self.init(version,AIType)
 			self.initiated = True
 
 		bsmJsom = json.loads(bsmJsonString)
@@ -82,7 +84,8 @@ class MlMain:
 
 	def trainedModelExists(self, AIType):
 		filesNames = [f for f in listdir(self.savePath) if isfile(join(self.savePath, f))]
-		
+		print "trainedModelExists?"
+
 		for s in filesNames:
 			if s.startswith('clf_'+AIType) and s.endswith(".pkl"):
 				self.curDateStr = s[-23:-4]
@@ -99,6 +102,7 @@ class MlMain:
 				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
 
 	def getArray(self,bsmJsom):
+
 		rP = bsmJsom['BsmPrint']['BsmCheck']['rP']
 		pP = bsmJsom['BsmPrint']['BsmCheck']['pP']
 		sP = bsmJsom['BsmPrint']['BsmCheck']['sP']
@@ -107,6 +111,7 @@ class MlMain:
 		psC = bsmJsom['BsmPrint']['BsmCheck']['psC']
 		phC = bsmJsom['BsmPrint']['BsmCheck']['phC']
 		sA = bsmJsom['BsmPrint']['BsmCheck']['sA']
+		#sA = 1
 		bF = bsmJsom['BsmPrint']['BsmCheck']['bF']
 		inT = 1
 		for x in bsmJsom['BsmPrint']['BsmCheck']['inT']:
@@ -125,5 +130,7 @@ class MlMain:
 		valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
+
+		#print "returnArray: " + str(returnArray)
 		#returnArray = returnArray.astype(np.float)
 		return returnArray

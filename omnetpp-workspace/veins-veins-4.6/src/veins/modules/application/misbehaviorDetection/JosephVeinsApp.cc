@@ -13,12 +13,14 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "IRT-DEMO"
+#define serialNumber "FRM_Th-Ag_StaleMessages_WTPC"
+//#define serialNumber "FRM_Py-Be_StaleMessages_WTPC"
+//#define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
-static bool randomConf = false;
-#define confPos 0
-#define confSpd 0
+static bool randomConf = true;
+#define confPos 3
+#define confSpd 0.5
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
@@ -39,7 +41,7 @@ static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         attackTypes::DoSDisruptive, attackTypes::Sybil };
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE attackTypes::Disruptive
+#define ATTACK_TYPE attackTypes::StaleMessages
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
@@ -53,8 +55,10 @@ static bool EnablePC = true;
 static bool EnableV1 = true;
 static bool EnableV2 = true;
 
-static mdAppTypes::App appTypeV1 = mdAppTypes::AggrigationApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
+static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::AggrigationApp;
+//static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
+//static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
 
 static bool writeSelfMsg = false;
 
@@ -92,6 +96,9 @@ void JosephVeinsApp::initialize(int stage) {
 
         pcPolicy = PCPolicy();
 
+        pcPolicy.setMbType(myMdType);
+        pcPolicy.setMdAuthority(&mdAuthority);
+
         pcPolicy.setCurPosition(&curPosition);
         pcPolicy.setMyId(&myId);
         pcPolicy.setMyPseudonym(&myPseudonym);
@@ -100,8 +107,6 @@ void JosephVeinsApp::initialize(int stage) {
         myPseudonym = pcPolicy.getNextPseudonym();
 
         //pseudonym-------------------------------
-
-        mdAuthority.addNewNode(myPseudonym, myMdType, simTime().dbl());
 
         if (randomConf) {
             double randConfPos = genLib.RandomDouble(0, confPos);
@@ -428,6 +433,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
                 curHeading, curHeadingConfidence, Coord(myWidth, myLength));
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
+
         bool result = AppV2->CheckNodeForReport(myPseudonym, *bsm, bsmCheckV2,
                 detectedNodes);
         if (result) {

@@ -111,7 +111,6 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
             minFactor = IT;
         }
     }
-
     HTTPRequest httpr = HTTPRequest(port, "localhost");
 
     BsmPrintable bsmPrint = BsmPrintable();

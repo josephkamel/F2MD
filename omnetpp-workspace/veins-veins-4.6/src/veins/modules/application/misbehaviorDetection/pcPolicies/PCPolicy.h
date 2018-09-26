@@ -20,11 +20,14 @@
 #include "../baseClasses/InterTest.h"
 #include "../baseClasses/BsmCheck.h"
 #include "../baseClasses/InterTest.h"
+
+#include "../mdAuthority/MDAuthority.h"
 #include "../supportClasses/MDMLib.h"
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
 
 #include "../enumTypes/PseudoChangeTypes.h"
+#include "../enumTypes/MbTypes.h"
 
 using namespace Veins;
 using namespace omnetpp;
@@ -38,6 +41,10 @@ protected:
     int* myId;
     int* pseudoNum;
     unsigned long* myPseudonym;
+
+
+    mbTypes::Mbs mbType;
+    MDAuthority* mdAuthority;
 
 public:
     unsigned long getNextPseudonym();
@@ -63,6 +70,10 @@ public:
     double distanceBasedPCP();
 
     double randomPCP();
+
+    void setMbType(mbTypes::Mbs mbType);
+    void setMdAuthority(MDAuthority* mdAuthority);
+
 };
 
 #endif
