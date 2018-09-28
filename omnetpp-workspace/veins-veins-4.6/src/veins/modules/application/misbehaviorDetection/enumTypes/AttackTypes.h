@@ -42,7 +42,7 @@ namespace attackTypes {
 
 #define StopProb 0.01
 
-#define StaleMessages_Buffer 5 //less than 10
+#define StaleMessages_Buffer 9 //less than 10
 
 #define DosMultipleFreq 4 // times faster
 
