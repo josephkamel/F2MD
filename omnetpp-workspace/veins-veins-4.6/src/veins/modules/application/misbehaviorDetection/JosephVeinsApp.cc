@@ -13,12 +13,14 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "IRT-DEMO"
+#define serialNumber "FRM_Th-Ag_StaleMessages_WTPC"
+//#define serialNumber "FRM_Py-Be_StaleMessages_WTPC"
+//#define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
-static bool randomConf = false;
-#define confPos 5
-#define confSpd 0
+static bool randomConf = true;
+#define confPos 3
+#define confSpd 0.5
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
@@ -28,30 +30,35 @@ static bool randomConf = false;
 
 #define REPORT_VERSION reportTypes::EvidenceReport
 
-static bool MixAttacks = true;
-static attackTypes::Attacks MixAttacksList[] = {
-        attackTypes::ConstPos, attackTypes::ConstPosOffset,
-        attackTypes::RandomPos, attackTypes::RandomPosOffset,
-        attackTypes::ConstSpeed, attackTypes::ConstSpeedOffset,
-        attackTypes::RandomSpeed, attackTypes::RandomSpeedOffset,
-        attackTypes::EventualStop, attackTypes::Disruptive,
-        attackTypes::DataReplay, attackTypes::StaleMessages, attackTypes::DoS,
-        attackTypes::DoSRandom, attackTypes::DoSDisruptive, attackTypes::Sybil };
+static bool MixAttacks = false;
+static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
+        attackTypes::ConstPosOffset, attackTypes::RandomPos,
+        attackTypes::RandomPosOffset, attackTypes::ConstSpeed,
+        attackTypes::ConstSpeedOffset, attackTypes::RandomSpeed,
+        attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
+        attackTypes::Disruptive, attackTypes::DataReplay,
+        attackTypes::StaleMessages, attackTypes::DoS, attackTypes::DoSRandom,
+        attackTypes::DoSDisruptive, attackTypes::Sybil };
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE attackTypes::DataReplay
+#define ATTACK_TYPE attackTypes::StaleMessages
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
 // 13 DoS, 14 DoSRandom, 15 DoSDisruptive, 16 Sybil
 
-static bool EnablePC = false;
+static bool EnablePC = true;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
 
 //Detection Application
 static bool EnableV1 = true;
 static bool EnableV2 = true;
+
+static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::AggrigationApp;
+//static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
+//static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
 
 static bool writeSelfMsg = false;
 
@@ -63,27 +70,6 @@ static bool writeReportsV1 = false;
 static bool writeReportsV2 = false;
 
 static MDAuthority mdAuthority = MDAuthority();
-char const *AppV1Name = "AppV1";
-char const *AppV2Name = "AppV2";
-
-ThresholdApp AppV1(AppV1Name, 0.5);
-//ThresholdApp AppV2(AppV2Name, 0.5);
-
-//AggrigationApp AppV1(AppV1Name,1,10.0,10);
-//AggrigationApp AppV2(AppV2Name,2,10.0,10);
-
-//BehavioralApp AppV1(AppV1Name,1,10.0,0.5);
-//BehavioralApp AppV2(AppV2Name,2,10.0,0.8);
-
-//ExperiApp AppV1(AppV1Name,1,10.0,10,3);
-//ExperiApp AppV2(AppV2Name,2,10.0,10,3);
-
-//PyBridgeApp AppV1(AppV1Name,9998,"localhost");
-PyBridgeApp AppV2(AppV2Name,9998,"localhost");
-
-static bool PrintTPFP = false;
-static VarThrePrintable varThrePrintableV1(AppV1Name);
-static VarThrePrintable varThrePrintableV2(AppV2Name);
 
 static bool setDate = false;
 static std::string curDate;
@@ -92,10 +78,11 @@ void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
     if (stage == 0) {
-
         //joseph
         //Initializing members and pointers of your application goes here
         EV << "Initializing " << par("appName").stringValue() << std::endl;
+
+        setMDApp(appTypeV1, appTypeV2);
 
         Coord vehSize = genLib.TypeToSize(traciVehicle->getTypeId());
         myWidth = vehSize.x;
@@ -109,6 +96,9 @@ void JosephVeinsApp::initialize(int stage) {
 
         pcPolicy = PCPolicy();
 
+        pcPolicy.setMbType(myMdType);
+        pcPolicy.setMdAuthority(&mdAuthority);
+
         pcPolicy.setCurPosition(&curPosition);
         pcPolicy.setMyId(&myId);
         pcPolicy.setMyPseudonym(&myPseudonym);
@@ -118,9 +108,7 @@ void JosephVeinsApp::initialize(int stage) {
 
         //pseudonym-------------------------------
 
-        mdAuthority.addNewNode(myPseudonym, myMdType, simTime().dbl());
-
-        if(randomConf){
+        if (randomConf) {
             double randConfPos = genLib.RandomDouble(0, confPos);
             double randConfSpeed = genLib.RandomDouble(0, randConfSpeed);
             double randConfHeading = genLib.RandomDouble(0, confHea);
@@ -128,7 +116,7 @@ void JosephVeinsApp::initialize(int stage) {
             curPositionConfidence = Coord(randConfPos, randConfPos, 0);
             curSpeedConfidence = Coord(randConfSpeed, randConfSpeed, 0);
             curHeadingConfidence = Coord(randConfHeading, randConfHeading, 0);
-        }else{
+        } else {
             curPositionConfidence = Coord(confPos, confPos, 0);
             curSpeedConfidence = Coord(confSpd, confSpd, 0);
             curHeadingConfidence = Coord(confHea, confHea, 0);
@@ -146,14 +134,19 @@ void JosephVeinsApp::initialize(int stage) {
         case mbTypes::Attacker: {
 
             //attack-------------------------------
-            if(MixAttacks){
-                int AtLiSize = sizeof(MixAttacksList)/sizeof(MixAttacksList[0]);
+            if (MixAttacks) {
+                int AtLiSize = sizeof(MixAttacksList)
+                        / sizeof(MixAttacksList[0]);
 
-                int attackIndex = genLib.RandomInt(0, AtLiSize-1);
+                int attackIndex = genLib.RandomInt(0, AtLiSize - 1);
                 myAttackType = MixAttacksList[attackIndex];
-                std::cout<<"##############################################################NEW ATTACKER:"<< myPseudonym << "\n";
-                std::cout<<"##############################################################AttackType:" << attackTypes::AttackNames[myAttackType] << "\n";
-            }else{
+                std::cout
+                        << "##############################################################NEW ATTACKER:"
+                        << myPseudonym << "\n";
+                std::cout
+                        << "##############################################################AttackType:"
+                        << attackTypes::AttackNames[myAttackType] << "\n";
+            } else {
                 myAttackType = ATTACK_TYPE;
             }
 
@@ -164,7 +157,7 @@ void JosephVeinsApp::initialize(int stage) {
             mdAttack.setCurHeadingConfidence(&curHeadingConfidence);
             mdAttack.setCurPosition(&curPosition);
             mdAttack.setCurPositionConfidence(&curPositionConfidence);
-            mdAttack.setCurSpeed(&curSpeed) ;
+            mdAttack.setCurSpeed(&curSpeed);
             mdAttack.setCurSpeedConfidence(&curSpeedConfidence);
             mdAttack.setDetectedNodes(&detectedNodes);
             mdAttack.setMyBsm(myBsm);
@@ -206,10 +199,53 @@ void JosephVeinsApp::initialize(int stage) {
     }
 }
 
-
 void JosephVeinsApp::finish() {
     BaseWaveApplLayer::finish();
     //statistics recording goes here
+}
+
+void JosephVeinsApp::setMDApp(mdAppTypes::App appTypeV1,
+        mdAppTypes::App appTypeV2) {
+    switch (appTypeV1) {
+    case mdAppTypes::ThresholdApp:
+        AppV1 = &ThreV1;
+        break;
+    case mdAppTypes::AggrigationApp:
+        AppV1 = &AggrV1;
+        break;
+    case mdAppTypes::BehavioralApp:
+        AppV1 = &BehaV1;
+        break;
+    case mdAppTypes::ExperiApp:
+        AppV1 = &ExperV1;
+        break;
+    case mdAppTypes::PyBridgeApp:
+        AppV1 = &PybgV1;
+        break;
+    default:
+        AppV1 = &ThreV1;
+        break;
+    }
+    switch (appTypeV2) {
+    case mdAppTypes::ThresholdApp:
+        AppV2 = &ThreV2;
+        break;
+    case mdAppTypes::AggrigationApp:
+        AppV2 = &AggrV2;
+        break;
+    case mdAppTypes::BehavioralApp:
+        AppV2 = &BehaV2;
+        break;
+    case mdAppTypes::ExperiApp:
+        AppV2 = &ExperV2;
+        break;
+    case mdAppTypes::PyBridgeApp:
+        AppV2 = &PybgV2;
+        break;
+    default:
+        AppV2 = &ThreV2;
+        break;
+    }
 }
 
 static double totalGenuine = 0;
@@ -249,6 +285,7 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
     if (EnableV1) {
         LocalMisbehaviorDetection(bsm, 1);
     }
+
     if (EnableV2) {
         LocalMisbehaviorDetection(bsm, 2);
     }
@@ -292,7 +329,7 @@ void JosephVeinsApp::treatAttackFlags() {
 
         attackBsm = mdAttack.launchAttack(myAttackType);
 
-        if(mdAttack.getTargetNode()>=0){
+        if (mdAttack.getTargetNode() >= 0) {
             addTargetNode(mdAttack.getTargetNode());
         }
 
@@ -335,10 +372,13 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         std::string mdv = "V1";
         LegacyChecks mdm(myPseudonym, curPosition, curSpeed,
                 Coord(myWidth, myLength), curHeading);
+//        CaTChChecks mdm(myPseudonym, curPosition, curPositionConfidence,
+//                curHeading, curHeadingConfidence, Coord(myWidth, myLength));
         bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
 
-        bool result = AppV1.CheckNodeForReport(myPseudonym, *bsm, bsmCheckV1,
+        bool result = AppV1->CheckNodeForReport(myPseudonym, *bsm, bsmCheckV1,
                 detectedNodes);
+
         if (result) {
             MDReport reportBase;
             reportBase.setGenerationTime(simTime().dbl());
@@ -365,31 +405,22 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
 
         if (!initV1) {
-            AppV1.resetAllFlags();
+            AppV1->resetAllFlags();
             //mdAuthority.resetAll();
             initV1 = true;
-        }
-        if (PrintTPFP) {
-            double minFactor = AppV1.getMinFactor();
-
-            varThrePrintableV1.registerMessage(
-                    mbTypes::intMbs[bsm->getSenderMbType()], minFactor);
         }
 
         if ((simTime().dbl() - deltaTV1) > SAVE_PERIOD) {
             deltaTV1 = simTime().dbl();
-            if (PrintTPFP) {
-                varThrePrintableV1.saveFile(savePath, serialNumber);
-            }
 
             if (simTime().dbl() > START_SAVE) {
-                AppV1.saveLine(savePath, serialNumber,
+                AppV1->saveLine(savePath, serialNumber,
                         mobility->getManager()->getManagedHosts().size(),
                         deltaTV1);
 
                 mdAuthority.saveLine(savePath, serialNumber, deltaTV1);
             }
-            AppV1.resetInstFlags();
+            AppV1->resetInstFlags();
         }
         if (result) {
             addAccusedNode(senderPseudo);
@@ -402,7 +433,8 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
                 curHeading, curHeadingConfidence, Coord(myWidth, myLength));
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
-        bool result = AppV2.CheckNodeForReport(myPseudonym, *bsm, bsmCheckV2,
+
+        bool result = AppV2->CheckNodeForReport(myPseudonym, *bsm, bsmCheckV2,
                 detectedNodes);
         if (result) {
 
@@ -433,30 +465,22 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
 
         if (!initV2) {
-            AppV2.resetAllFlags();
+            AppV2->resetAllFlags();
             //mdAuthority.resetAll();
             initV2 = true;
-        }
-        if (PrintTPFP) {
-            double minFactor = AppV2.getMinFactor();
-            varThrePrintableV2.registerMessage(
-                    mbTypes::intMbs[bsm->getSenderMbType()], minFactor);
         }
 
         if ((simTime().dbl() - deltaTV2) > SAVE_PERIOD) {
             deltaTV2 = simTime().dbl();
-            if (PrintTPFP) {
-                varThrePrintableV2.saveFile(savePath, serialNumber);
-            }
 
             if (simTime().dbl() > START_SAVE) {
-                AppV2.saveLine(savePath, serialNumber,
+                AppV2->saveLine(savePath, serialNumber,
                         mobility->getManager()->getManagedHosts().size(),
                         deltaTV2);
 
                 mdAuthority.saveLine(savePath, serialNumber, deltaTV2);
             }
-            AppV2.resetInstFlags();
+            AppV2->resetInstFlags();
         }
         if (result) {
             addAccusedNode(senderPseudo);
@@ -512,8 +536,7 @@ void JosephVeinsApp::writeMdBsm(std::string version, BsmCheck bsmCheck,
             bsmPrint.getBsmPrintableJson(), curDate);
 }
 
-void JosephVeinsApp::writeSelfBsm(
-        BasicSafetyMessage bsm) {
+void JosephVeinsApp::writeSelfBsm(BasicSafetyMessage bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
     bsmPrint.setReceiverPseudo(myId);
     bsmPrint.setBsm(bsm);
@@ -539,10 +562,9 @@ void JosephVeinsApp::handleSelfMsg(cMessage* msg) {
 
     BaseWaveApplLayer::handleSelfMsg(msg);
 
-    if(writeSelfMsg){
+    if (writeSelfMsg) {
         writeSelfBsm(myBsm[0]);
     }
-
 
 //this method is for self messages (mostly timers)
 //it is important to call the BaseWaveApplLayer function for BSM and WSM transmission

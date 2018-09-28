@@ -21,8 +21,7 @@
 
 using namespace omnetpp;
 
-#define TOTCARNUM 10000
-
+#define TOTCARNUM 100
 
 class MDABase {
 private:
@@ -47,7 +46,14 @@ private:
     double reportedGenuineTimeList[TOTCARNUM];
     int reportedGenuineNum = 0;
 
-    double GenuineAverageReportDelay = 0;
+
+    unsigned long CountTotalGenuine = 0;
+    unsigned long CountTotalAttacker = 0;
+    unsigned long CountReportedGenuine = 0;
+    unsigned long CountReportedAttacker = 0;
+
+
+    double genuineAverageReportDelay = 0;
     double attackerAverageReportDelay = 0;
 
 public:
@@ -79,6 +85,23 @@ public:
     void setName(const char*);
 
     void resetAll();
+
+    void removeOldestAttacker();
+    void removeOldestGenuine();
+
+//    int oldestReportedGenuine();
+    int oldestTotalGenuine();
+
+//    int oldestReportedAttacker();
+    int oldestTotalAttacker();
+
+    int reportedGenuineIndex(unsigned long pseudo);
+    int reportedAttackerIndex(unsigned long pseudo);
+
+    void removeTotalGenuine(int index);
+    void removeTotalAttacker(int index);
+    void removeReportedGenuine(int index);
+    void removeReportedAttacker(int index);
 
 
 

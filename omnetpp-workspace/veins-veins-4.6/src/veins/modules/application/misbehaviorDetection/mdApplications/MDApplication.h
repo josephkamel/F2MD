@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   josephekamel@gmail.com
+ * @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -11,7 +11,6 @@
 
 #ifndef __VEINS_MDApplication_H_
 #define __VEINS_MDApplication_H_
-
 
 #include <tuple>
 #include <omnetpp.h>
@@ -34,29 +33,42 @@
 using namespace Veins;
 using namespace omnetpp;
 
+
+static AppPrintable prntAppV1;
+static AppPrintable prntAppInstV1;
+
+static AppPrintable prntAppV2;
+static AppPrintable prntAppInstV2;
+
+
 class MDApplication {
+
 protected:
     MDMLib mdmLib;
 
-    char appName[32];
+    int version;
 
-    AppPrintable prntApp;
-    AppPrintable prntAppInst;
-    bool printInit = true;
+    char const *AppV1Name = "AppV1";
+    char const *AppV2Name = "AppV2";
 
+    AppPrintable* prntApp;
+    AppPrintable* prntAppInst;
 public:
 
-    MDApplication(const char* name);
-    void setName(const char* name);
+    MDApplication(int version);
 
+    virtual bool CheckNodeForReport(unsigned long myPseudonym,
+            BasicSafetyMessage bsm, BsmCheck bsmCheck,
+            NodeTable detectedNodes)= 0;
 
-    void SendReport(MDAuthority* mdAuthority, MDReport mbReport);
+    void SendReport( MDAuthority* mdAuthority, MDReport mbReport);
 
-    void saveLine(std::string path, std::string serial, double density,
+    void saveLine( std::string path, std::string serial, double density,
             double deltaT);
     void resetInstFlags();
     void resetAllFlags();
-
 };
+
+
 
 #endif

@@ -3,15 +3,18 @@ from os import listdir
 from os.path import isfile, join
 import json
 import numpy as np
-from MLDataCollectorSVM import MlDataCollector
-from MLTrainerSVM import MlTrainer
+from MLDataCollector import MlDataCollector
+from MLTrainer import MlTrainer
 from numpy import array
 import datetime
-from sklearn import svm
 from sklearn import datasets
 from sklearn.externals import joblib
-class MlMain:
 
+RTtrain = False
+RTcollectData = False
+RTpredict = True
+
+class MlMain:
 	initiated = False
 
 	curDateStr = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -22,54 +25,56 @@ class MlMain:
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFileSVM'
+	savePath = './saveFile'
 
+	def init(self, version, AIType):
+		self.savePath = self.savePath +'_'+ str(version)
 
-	def init(self):
 		self.DataCollector.setCurDateSrt(self.curDateStr)
 		self.DataCollector.setSavePath(self.savePath)
 		self.Trainer.setCurDateSrt(self.curDateStr)
 		self.Trainer.setSavePath(self.savePath)
+		self.Trainer.setAIType(AIType)
 
-		self.trainedModelExists()
+		self.trainedModelExists(AIType)
 
-	def mlMain(self, bsmJsonString):
+	def mlMain(self, version, bsmJsonString, AIType):
 		if not self.initiated:
-			self.init()
+			self.init(version,AIType)
 			self.initiated = True
 
 		bsmJsom = json.loads(bsmJsonString)
 		curArray = self.getArray(bsmJsom)
 
-		if self.collectDur < self.deltaCall:
-			self.collectDur = self.collectDur + 1;
-			self.DataCollector.collectData(curArray)
-		else :
-			print "DataCollection And Training " + str(self.deltaCall) + " Started ..."
+		if RTcollectData:
+			if self.collectDur < self.deltaCall:
+				self.collectDur = self.collectDur + 1;
+				self.DataCollector.collectData(curArray)
+			else :
+				print "DataSave And Training " + str(self.deltaCall) + " Started ..."
+				self.collectDur = 0
+				self.DataCollector.saveData()
 
-			self.collectDur = 0
-			self.DataCollector.saveData()
-			self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
-			self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+				if RTtrain:
+					self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
+					self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+					print self.Trainer.valuesCollection.shape
+					self.Trainer.train()
+					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
+					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
 
-			print self.Trainer.valuesCollection.shape
-
-			self.Trainer.train()
-			self.clf = joblib.load(self.savePath+'/clf_'+self.curDateStr+'.pkl')
-			self.deltaCall = self.DataCollector.valuesCollection.shape[0]/2
-			print "DataCollection And Training " + str(self.deltaCall) +" Finished!"
-
-			
-
+		
 		if self.clf is None:
 			return False
 		else:
-			prediction = self.clf.predict(array([curArray[0]]))
-			#print "========================================"
-			if prediction[0] == 0.0:
-				return False
-			else:
-				return True
+			if RTpredict:
+				prediction = self.clf.predict(array([curArray[0]]))
+				#print "========================================"
+				if prediction[0] == 0.0:
+					return False
+				else:
+					return True
 			#print prediction
 			#print curArray[1]
 			#print "========================================"
@@ -77,13 +82,15 @@ class MlMain:
 		return False
 
 
-	def trainedModelExists(self):
+	def trainedModelExists(self, AIType):
 		filesNames = [f for f in listdir(self.savePath) if isfile(join(self.savePath, f))]
-		for s in filesNames:
-			if s.startswith("clf_") and s.endswith(".pkl"):
-				self.curDateStr = s[4:-4]
+		print "trainedModelExists?"
 
-				print "Loading " + self.curDateStr+" ..."
+		for s in filesNames:
+			if s.startswith('clf_'+AIType) and s.endswith(".pkl"):
+				self.curDateStr = s[-23:-4]
+
+				print "Loading " +AIType + " "+ self.curDateStr+ " ..."
 				self.clf = joblib.load(self.savePath+'/'+s)
 				self.DataCollector.setCurDateSrt(self.curDateStr)
 				self.Trainer.setCurDateSrt(self.curDateStr)
@@ -91,10 +98,11 @@ class MlMain:
 				self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
 				self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
  
-				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/2
+				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
 
 	def getArray(self,bsmJsom):
+
 		rP = bsmJsom['BsmPrint']['BsmCheck']['rP']
 		pP = bsmJsom['BsmPrint']['BsmCheck']['pP']
 		sP = bsmJsom['BsmPrint']['BsmCheck']['sP']
@@ -103,6 +111,7 @@ class MlMain:
 		psC = bsmJsom['BsmPrint']['BsmCheck']['psC']
 		phC = bsmJsom['BsmPrint']['BsmCheck']['phC']
 		sA = bsmJsom['BsmPrint']['BsmCheck']['sA']
+		#sA = 1
 		bF = bsmJsom['BsmPrint']['BsmCheck']['bF']
 		inT = 1
 		for x in bsmJsom['BsmPrint']['BsmCheck']['inT']:
@@ -111,6 +120,7 @@ class MlMain:
 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
 		label = bsmJsom['BsmPrint']['Metadata']['mbType']
+
 		#label = 0
 		if(label == 'Genuine'):
 			numLabel = 0.0
@@ -120,5 +130,7 @@ class MlMain:
 		valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
+
+		#print "returnArray: " + str(returnArray)
 		#returnArray = returnArray.astype(np.float)
 		return returnArray

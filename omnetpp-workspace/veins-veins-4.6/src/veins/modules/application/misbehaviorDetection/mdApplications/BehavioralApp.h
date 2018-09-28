@@ -34,15 +34,16 @@ public:
 
     unsigned long PseudonymsToTMO[MAX_DETECTED_NODES];
     unsigned long TimeOut[MAX_DETECTED_NODES];
+    double UpdatedTMO[MAX_DETECTED_NODES];
     int TimeOutNum = 0;
 
-    BehavioralApp(const char* name, int version, double BehavioralApp,
-            double Threshold);
+    BehavioralApp(int version, double BehavioralApp, double Threshold);
 
-    bool CheckNodeForReport(unsigned long myPseudonym,
-            BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
+    bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage bsm,
+            BsmCheck bsmCheck, NodeTable detectedNodes);
 
-
+    int addPseudoTMO(unsigned long pseudo);
+    void removeOldestPseudoTMO();
     void removePseudoTMO(int index);
     int getIndexTMO(unsigned long pseudo);
 

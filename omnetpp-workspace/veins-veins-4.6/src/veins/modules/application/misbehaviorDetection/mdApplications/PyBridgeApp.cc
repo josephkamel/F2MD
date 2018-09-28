@@ -15,8 +15,8 @@
 using namespace std;
 using namespace boost;
 
-PyBridgeApp::PyBridgeApp(const char* name, int port, std::string host) :
-        MDApplication(name) {
+PyBridgeApp::PyBridgeApp(int version,int port, std::string host):
+                MDApplication(version)  {
     this->port = port;
     this->host = host;
 }
@@ -26,63 +26,63 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
 
     minFactor = 1;
     int Threshold = 0.5;
-    prntApp.incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
-    prntAppInst.incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntApp->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntAppInst->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
 
     if(bsmCheck.getRangePlausibility()<minFactor){
         minFactor = bsmCheck.getRangePlausibility();
     }
     if (bsmCheck.getRangePlausibility() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getRangePlausibility()<minFactor){
         minFactor = bsmCheck.getRangePlausibility();
     }
     if (bsmCheck.getPositionConsistancy() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getPositionSpeedConsistancy()<minFactor){
         minFactor = bsmCheck.getPositionSpeedConsistancy();
     }
     if (bsmCheck.getPositionSpeedConsistancy() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getSpeedConsistancy()<minFactor){
         minFactor = bsmCheck.getSpeedConsistancy();
     }
     if (bsmCheck.getSpeedConsistancy() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getSpeedPlausibility()<minFactor){
         minFactor = bsmCheck.getSpeedPlausibility();
     }
     if (bsmCheck.getSpeedPlausibility() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getPositionPlausibility()<minFactor){
         minFactor = bsmCheck.getPositionPlausibility();
     }
     if (bsmCheck.getPositionPlausibility() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getBeaconFrequency()<minFactor){
         minFactor = bsmCheck.getBeaconFrequency();
     }
     if (bsmCheck.getBeaconFrequency() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if(bsmCheck.getSuddenAppearence()<minFactor){
@@ -90,16 +90,16 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (bsmCheck.getSuddenAppearence() <= Threshold) {
    //     checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     if( bsmCheck.getPositionHeadingConsistancy()<minFactor){
         minFactor = bsmCheck.getPositionHeadingConsistancy();
     }
     if (bsmCheck.getPositionHeadingConsistancy() <= Threshold) {
-        prntApp.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     InterTest inter = bsmCheck.getIntersection();
@@ -111,8 +111,7 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
             minFactor = IT;
         }
     }
-
-    HTTPRequest httpr = HTTPRequest(9998, "localhost");
+    HTTPRequest httpr = HTTPRequest(port, "localhost");
 
     BsmPrintable bsmPrint = BsmPrintable();
     bsmPrint.setReceiverPseudo(myPseudonym);
@@ -126,8 +125,8 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
     //std::cout << "response:" << response << "\n";
 
     if (!response.compare("True")) {
-        prntApp.incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
         return true;
     }
     return false;

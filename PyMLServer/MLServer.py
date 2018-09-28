@@ -1,9 +1,11 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
 import urllib2
-from MLMainSVM import MlMain
+from MLMain import MlMain
 from os import listdir
 from os.path import isfile, join
+
+version = 'NOVER'
 
 class S(BaseHTTPRequestHandler):
 	globalMlMain = MlMain()
@@ -24,7 +26,7 @@ class S(BaseHTTPRequestHandler):
 		'''
 		#print('The Request: %s' % (self.path))
 		requestStr = urllib2.unquote((self.path));
-		pred = self.globalMlMain.mlMain(requestStr)
+		pred = self.globalMlMain.mlMain(version,requestStr, 'neural_network')
 		
 	   	# the response
 		self.wfile.write(pred)
@@ -38,8 +40,9 @@ def run(server_class=HTTPServer, handler_class=S, port=9998):
 
 if __name__ == "__main__":
 	from sys import argv
-
-	if len(argv) == 2:
+	
+	if len(argv) == 3:
+		version = str(argv[2])
 		run(port=int(argv[1]))
 	else:
-		run()
+		print 'not enough argv'

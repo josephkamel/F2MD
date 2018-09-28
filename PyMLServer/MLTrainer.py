@@ -1,4 +1,5 @@
-from sklearn import svm
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
 from sklearn import datasets
 from sklearn.externals import joblib
 from os import listdir
@@ -6,6 +7,9 @@ from os.path import isfile, join
 import numpy as np
 
 class MlTrainer:
+
+	AIType = 'NotSet'
+
 	valuesFileStr = 'notSet'
 	targetFileStr = 'notSet'
 	savePath = ''
@@ -26,11 +30,23 @@ class MlTrainer:
 	def setTargetCollection(self, datacol):
 		self.targetCollection = datacol
 
+	def setAIType(self, datastr):
+		self.AIType = datastr
+
 	def train(self):
-		X, y = self.valuesCollection, self.targetCollection
-		clf = svm.SVC(gamma=0.001, C=100.)
-		clf.fit(X, y)
-		joblib.dump(clf, self.savePath + '/clf_'+self.curDateStr+'.pkl')
+
+		if(self.AIType == 'svm'):
+			X, y = self.valuesCollection, self.targetCollection
+			clf = SVC(gamma=0.001, C=100.)
+			clf.fit(X, y)
+
+		if(self.AIType == 'neural_network'):
+			X, y = self.valuesCollection, self.targetCollection
+			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
+			clf.fit(X, y)
+
+		joblib.dump(clf, self.savePath + '/clf_' + self.AIType + '_'+self.curDateStr+'.pkl')
+
 
 	def loadData(self):
 		self.valuesCollection = np.load(self.savePath + '/' +self.valuesFileStr)

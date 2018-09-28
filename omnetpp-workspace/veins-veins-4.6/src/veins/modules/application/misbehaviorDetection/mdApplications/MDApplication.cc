@@ -23,29 +23,55 @@
 using namespace std;
 using namespace boost;
 
-MDApplication::MDApplication(const char* name) {
-    strcpy(appName,name);
+MDApplication::MDApplication(int version) {
 
-    prntApp.setName(name);
-    char nameInst[32];
-    strcpy(nameInst,name);
-    strcat(nameInst,"Inst");
-    prntAppInst.setName(nameInst);
+    this->version = version;
+
+    if(version == 1){
+
+        this->prntApp = &prntAppV1;
+        this->prntAppInst = &prntAppInstV1;
+
+        this->prntApp->setName(AppV1Name);
+        this->prntAppInst->setName(AppV1Name);
+
+    }else{
+
+        this->prntApp = &prntAppV2;
+        this->prntAppInst = &prntAppInstV2;
+
+        this->prntApp->setName(AppV2Name);
+        this->prntAppInst->setName(AppV2Name);
+    }
+
 }
 
 void MDApplication::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
-    mdAuthority->sendReport(appName, mbReport);
+    if(version = 1){
+        mdAuthority->sendReport(AppV1Name, mbReport);
+    }else{
+        mdAuthority->sendReport(AppV2Name, mbReport);
+    }
+
 }
 
-void MDApplication::saveLine(std::string path, std::string serial, double density,
+void MDApplication::saveLine( std::string path, std::string serial, double density,
         double deltaT){
 
     char fileNameApp[64];
     char fileNameAppInst[64];
-    strcpy(fileNameApp,appName);
-    strcat(fileNameApp, ".dat");
-    strcpy(fileNameAppInst,appName);
-    strcat(fileNameAppInst, "Inst.dat");
+
+    if(version == 1){
+        strcpy(fileNameApp,AppV1Name);
+        strcat(fileNameApp, ".dat");
+        strcpy(fileNameAppInst,AppV1Name);
+        strcat(fileNameAppInst, "Inst.dat");
+    }else{
+        strcpy(fileNameApp,AppV2Name);
+        strcat(fileNameApp, ".dat");
+        strcpy(fileNameAppInst,AppV2Name);
+        strcat(fileNameAppInst, "Inst.dat");
+    }
 
     char outChar[1024];
     char directoryPathGen[1024] = "";
@@ -68,27 +94,26 @@ void MDApplication::saveLine(std::string path, std::string serial, double densit
     strcat(filePathGen, "/");
     strcat(filePathGen, fileNameApp);
 
-    prntApp.getPrintable(outChar, density, deltaT);
-    prntApp.writeFile(filePathGen, outChar, printInit);
+    prntApp->getPrintable(outChar, density, deltaT);
+    prntApp->writeFile(filePathGen, outChar);
 
     strcpy(filePathGen, directoryPathGen);
     strcat(filePathGen, "/");
     strcat(filePathGen, fileNameAppInst);
 
-    prntAppInst.getPrintable(outChar, density, deltaT);
-    prntAppInst.writeFile(filePathGen, outChar, printInit);
-
-    if (printInit) {
-        printInit = false;
-    }
+    prntAppInst->getPrintable(outChar, density, deltaT);
+    prntAppInst->writeFile(filePathGen, outChar);
 }
+
 
 
 void MDApplication::resetInstFlags(){
-    prntAppInst.resetAll();
+    prntAppInst->resetAll();
 }
 
 void MDApplication::resetAllFlags(){
-    prntApp.resetAll();
-    prntAppInst.resetAll();
+    prntApp->resetAll();
+    prntAppInst->resetAll();
 }
+
+

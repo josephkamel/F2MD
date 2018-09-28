@@ -269,15 +269,16 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
     NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
     NodeHistory varNode;
 
-    std::map<std::string, double> result;
+    std::map<std::string, unsigned long> resultPseudo;
+    std::map<std::string, double> resultCheck;
     double INTScore = 0;
     int INTNum = 0;
 
     INTScore = IntersectionCheck(myPosition, myPositionConfidence, senderPos,
             senderPosConfidence, myHeading, senderHeading, mySize, senderSize);
     if (INTScore < 1) {
-        result["INTId_0"] = myPseudonym;
-        result["INTCheck_0"] = INTScore;
+        resultPseudo["INTId_0"] = myPseudonym;
+        resultCheck["INTCheck_0"] = INTScore;
         INTNum++;
     }
 
@@ -306,8 +307,8 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
                     strcat(INTCheck_string, num_string);
-                    result[INTId_string] = detectedNodes.getNodePseudo(var);
-                    result[INTCheck_string] = INTScore;
+                    resultPseudo[INTId_string] = detectedNodes.getNodePseudo(var);
+                    resultCheck[INTCheck_string] = INTScore;
 
                     strncpy(INTId_string, "INTId_", sizeof(INTId_string));
                     strncpy(INTCheck_string, "INTCheck_",
@@ -319,8 +320,6 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         }
     }
 
-    result["INTNum"] = INTNum;
-
     InterTest intertTest = InterTest(INTNum);
 
     for (int var = 0; var < INTNum; ++var) {
@@ -328,8 +327,8 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
         strcat(INTId_string, num_string);
         strcat(INTCheck_string, num_string);
 
-        intertTest.addInterValue(result.find(INTId_string)->second,
-                result.find(INTCheck_string)->second);
+        intertTest.addInterValue(resultPseudo.find(INTId_string)->second,
+                resultCheck.find(INTCheck_string)->second);
 
         strncpy(INTId_string, "INTId_", sizeof(INTId_string));
         strncpy(INTCheck_string, "INTCheck_", sizeof(INTCheck_string));

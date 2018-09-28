@@ -35,7 +35,7 @@ public:
 
     void addNewNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
     void addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
-    void sendReport(char* baseName, MDReport report);
+    void sendReport(const char* baseName, MDReport report);
 
     void saveLine(std::string path, std::string serial,double time);
 

@@ -45,7 +45,6 @@ AppPrintable::AppPrintable(const char* name) {
 }
 
 AppPrintable::AppPrintable() {
-
     flagsRangePlausibility_1 = 0;
     flagsPositionPlausibility_1 = 0;
     flagsSpeedPlausibility_1 = 0;
@@ -105,6 +104,26 @@ void AppPrintable::incCumulFlags(mbTypes::Mbs mbType) {
     }
         break;
     }
+}
+
+void AppPrintable::printOutDebug() {
+
+    std::cout<<"flagsRangePlausibility_1 "<< flagsRangePlausibility_1 << "\n";
+    std::cout<<"flagsPositionPlausibility_1 "<<flagsPositionPlausibility_1 << "\n";
+    std::cout<<"flagsSpeedPlausibility_1 "<< flagsSpeedPlausibility_1 << "\n";
+    std::cout<<"flagsPositionConsistancy_1 "<<flagsPositionConsistancy_1 << "\n";
+    std::cout<<"flagsPositionSpeedConsistancy_1 "<< flagsPositionSpeedConsistancy_1 << "\n";
+    std::cout<<"flagsSpeedConsistancy_1 "<<flagsSpeedConsistancy_1 << "\n";
+    std::cout<<"flagsBeaconFrequency_1 "<< flagsBeaconFrequency_1 << "\n";
+    std::cout<<"flagsIntersection_1 "<<flagsIntersection_1 << "\n";
+    std::cout<<"flagsRangePlausibility_1 "<< flagsRangePlausibility_1 << "\n";
+    std::cout<<"flagsPositionHeadingConsistancy_1 "<<flagsPositionHeadingConsistancy_1 << "\n";
+
+    std::cout<<"cumulFlags_1 "<< cumulFlags_1 << "\n";
+    std::cout<<"allTests_1 "<< allTests_1 << "\n";
+
+    std::cout<<"cumulFlags_2 "<< cumulFlags_2 << "\n";
+    std::cout<<"allTests_2 "<< allTests_2 << "\n";
 }
 
 void AppPrintable::incFlags(mdChecksTypes::Checks check, mbTypes::Mbs mbType) {
@@ -181,7 +200,6 @@ void AppPrintable::incFlags(mdChecksTypes::Checks check, mbTypes::Mbs mbType) {
     }
         break;
     }
-
 }
 
 void AppPrintable::resetAll() {
@@ -214,10 +232,11 @@ void AppPrintable::resetAll() {
     allTests_2 = 0;
 }
 
-void AppPrintable::writeFile(std::string path, char* printStr, bool init) {
+void AppPrintable::writeFile(std::string path, char* printStr) {
     ofstream outFile;
-    if (init) {
+    if (printInit) {
         outFile.open(path, std::ofstream::out);
+        printInit = false;
     } else {
         outFile.open(path,
                 std::ofstream::out | std::ofstream::app | std::ofstream::ate);

@@ -24,13 +24,16 @@ using namespace omnetpp;
 
 class ThresholdApp: public MDApplication {
 public:
+    int version = 0;
 
     double Threshold = 0;
     double minFactor = 1;
-    ThresholdApp(const char* name, double Threshold);
 
-    bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes);
+
+    ThresholdApp(int version,double Threshold);
+
+    bool CheckNodeForReport(unsigned long myPseudonym,
+            BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
 
     double getMinFactor();
 };

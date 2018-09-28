@@ -52,6 +52,7 @@ using namespace Veins;
 #include "enumTypes/PseudoChangeTypes.h"
 #include "enumTypes/ReportTypes.h"
 #include "enumTypes/MbTypes.h"
+#include "enumTypes/MdAppTypes.h"
 
 #include "supportClasses/BsmPrintable.h"
 
@@ -76,6 +77,9 @@ public:
     virtual void finish();
 protected:
 
+    MDApplication *AppV1;
+    MDApplication *AppV2;
+
     virtual void onBSM(BasicSafetyMessage* bsm);
     virtual void onWSM(WaveShortMessage* wsm);
     virtual void onWSA(WaveServiceAdvertisment* wsa);
@@ -92,8 +96,7 @@ protected:
     void writeMdBsm(std::string version, BsmCheck bsmCheck,
             BasicSafetyMessage *bsm);
 
-    void writeSelfBsm(
-            BasicSafetyMessage bsm);
+    void writeSelfBsm(BasicSafetyMessage bsm);
 
     void treatAttackFlags();
     MDAttack mdAttack;
@@ -101,13 +104,29 @@ protected:
     pseudoChangeTypes::PseudoChange myPcType;
     PCPolicy pcPolicy;
 
-
-
     typedef std::list<Obstacle*> ObstacleGridCell;
     typedef std::vector<ObstacleGridCell> ObstacleGridRow;
     typedef std::vector<ObstacleGridRow> Obstacles;
 
+    ThresholdApp ThreV1 = ThresholdApp(1, 0.5);
+    ThresholdApp ThreV2 = ThresholdApp(2, 0.5);
+
+    AggrigationApp AggrV1 = AggrigationApp(1,0.5, 10.0, 10);
+    AggrigationApp AggrV2 = AggrigationApp(2,0.5, 10.0, 10);
+
+    BehavioralApp BehaV1 = BehavioralApp(1, 10.0, 0.8);
+    BehavioralApp BehaV2 = BehavioralApp(2, 10.0, 0.8);
+
+    ExperiApp ExperV1 = ExperiApp(1, 10.0, 10, 3);
+    ExperiApp ExperV2 = ExperiApp(2, 10.0, 10, 3);
+
+    PyBridgeApp PybgV1 = PyBridgeApp(1, 9997, "localhost");
+    PyBridgeApp PybgV2 = PyBridgeApp(2, 9998, "localhost");
+
 public:
+
+    void setMDApp(mdAppTypes::App, mdAppTypes::App);
+
     void addTargetNode(unsigned long id);
     void removeTargetNode(unsigned long id);
     void clearTargetNodes();

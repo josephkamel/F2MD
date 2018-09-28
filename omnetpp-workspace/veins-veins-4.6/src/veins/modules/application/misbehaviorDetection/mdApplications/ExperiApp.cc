@@ -19,13 +19,13 @@
 #include <string>
 #include <vector>
 
-
 using namespace std;
 using namespace boost;
 
-ExperiApp::ExperiApp(const char* name, int version, double deltaTrustTime, int maxBsmTrustNum,double Augmentation) :
-        MDApplication(name) {
-    this->version = version;
+ExperiApp::ExperiApp(int version, double deltaTrustTime,
+        int maxBsmTrustNum, double Augmentation):
+                MDApplication(version)  {
+
     this->deltaTrustTime = deltaTrustTime;
     this->maxBsmTrustNum = maxBsmTrustNum;
     this->Augmentation = Augmentation;
@@ -37,12 +37,12 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     bool checkFailed = false;
     MDReport mbReport;
 
-    prntApp.incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
-    prntAppInst.incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntApp->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntAppInst->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
 
     double temp = 0;
 
-    int senderId = bsm.getSenderPseudonym();
+    unsigned long senderId = bsm.getSenderPseudonym();
 
     MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
     NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
@@ -52,8 +52,8 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
 
     for (int var = 0; var < nodeHist.getBSMNum(); ++var) {
         if (bsmCheckListSize < maxBsmTrustNum) {
-            if (mdmLib.calculateDeltaTime(bsm,
-                    nodeHist.getBSM(var))<deltaTrustTime) {
+            if (mdmLib.calculateDeltaTime(bsm, nodeHist.getBSM(var))
+                    < deltaTrustTime) {
                 bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var,
                         version);
                 bsmCheckListSize++;
@@ -72,16 +72,18 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getRangePlausibility();
     }
 
-    temp = AggregateFactorsListDouble(bsmCheck.getRangePlausibility(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getRangePlausibility(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
 
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::RangePlausibility,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::RangePlausibility,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionConsistancy" << '\n';
@@ -89,77 +91,86 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getPositionConsistancy();
     }
 
-
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionConsistancy(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getPositionConsistancy(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
 
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionSpeedConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionSpeedConsistancy(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getPositionSpeedConsistancy(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "SpeedConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSpeedConsistancy(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getSpeedConsistancy(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SpeedConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "SpeedPlausibility" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedPlausibility();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSpeedPlausibility(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getSpeedPlausibility(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SpeedPlausibility,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionPlausibility" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionPlausibility();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionPlausibility(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getPositionPlausibility(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionPlausibility,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionPlausibility,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "BeaconFrequency" << '\n';
@@ -167,43 +178,49 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getBeaconFrequency();
     }
     temp = AggregateFactorsListDouble(bsmCheck.getBeaconFrequency(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+            bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::BeaconFrequency,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::BeaconFrequency,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "SuddenAppearence" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSuddenAppearence();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSuddenAppearence(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getSuddenAppearence(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
 //        minFactor = temp;
     }
-    if (temp<Threshold) {
-        prntApp.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
+    if (temp < Threshold) {
+        prntApp->incFlags(mdChecksTypes::SuddenAppearence,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SuddenAppearence,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     //std::cout<< "PositionHeadingConsistancy" << '\n';
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionHeadingConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionHeadingConsistancy(), factorList,
-            bsmCheckListSize,zeroSum,zeroCount);
-    if(temp < minFactor){
+    temp = AggregateFactorsListDouble(bsmCheck.getPositionHeadingConsistancy(),
+            factorList, bsmCheckListSize, zeroSum, zeroCount);
+    if (temp < minFactor) {
         minFactor = temp;
     }
-    if (temp<Threshold) {
+    if (temp < Threshold) {
         checkFailed = true;
-        prntApp.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy,
+                mbTypes::intMbs[bsm.getSenderMbType()]);
     }
 
     for (int var = 0; var < bsmCheckListSize; ++var) {
@@ -226,27 +243,30 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         }
         //std::cout<< "Intersection" << '\n';
         temp = AggregateFactorsListDouble(curInferFactor, factorList,
-                bsmCheckListSize,zeroSum,zeroCount);
-        if(temp < minFactor){
+                bsmCheckListSize, zeroSum, zeroCount);
+        if (temp < minFactor) {
             minFactor = temp;
         }
-        if (temp<Threshold) {
+        if (temp < Threshold) {
             checkFailed = true;
-            prntApp.incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm.getSenderMbType()]);
-            prntAppInst.incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm.getSenderMbType()]);
+            prntApp->incFlags(mdChecksTypes::Intersection,
+                    mbTypes::intMbs[bsm.getSenderMbType()]);
+            prntAppInst->incFlags(mdChecksTypes::Intersection,
+                    mbTypes::intMbs[bsm.getSenderMbType()]);
         }
     }
 
     if (checkFailed) {
-        prntApp.incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst.incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntAppInst->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
 
         bsmCheck.setReported(true);
     }
     return checkFailed;
 }
 
-std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
+std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm,
+        BsmCheck bsmCheck, NodeTable detectedNodes) {
 
     double zeroSum = 0;
     int zeroCount = 0;
@@ -261,8 +281,8 @@ std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm, BsmChec
 
     for (int var = 0; var < nodeHist.getBSMNum(); ++var) {
         if (bsmCheckListSize < maxBsmTrustNum) {
-            if (mdmLib.calculateDeltaTime(bsm,
-                    nodeHist.getBSM(var))<deltaTrustTime) {
+            if (mdmLib.calculateDeltaTime(bsm, nodeHist.getBSM(var))
+                    < deltaTrustTime) {
                 bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var,
                         version);
                 bsmCheckListSize++;
@@ -271,77 +291,77 @@ std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm, BsmChec
     }
 
     //std::cout<< "RangePlausibility" << '\n';
-    if(bsmCheck.getRangePlausibility()<=0){
+    if (bsmCheck.getRangePlausibility() <= 0) {
         zeroSum = zeroSum + bsmCheck.getRangePlausibility();
         zeroCount++;
     }
-    if(bsmCheck.getPositionConsistancy()<=0){
+    if (bsmCheck.getPositionConsistancy() <= 0) {
         zeroSum = zeroSum + bsmCheck.getPositionConsistancy();
         zeroCount++;
     }
-    if(bsmCheck.getPositionSpeedConsistancy()<=0){
+    if (bsmCheck.getPositionSpeedConsistancy() <= 0) {
         zeroSum = zeroSum + bsmCheck.getPositionSpeedConsistancy();
         zeroCount++;
     }
-    if(bsmCheck.getSpeedConsistancy()<=0){
+    if (bsmCheck.getSpeedConsistancy() <= 0) {
         zeroSum = zeroSum + bsmCheck.getSpeedConsistancy();
         zeroCount++;
     }
-    if(bsmCheck.getSpeedPlausibility()<=0){
+    if (bsmCheck.getSpeedPlausibility() <= 0) {
         zeroSum = zeroSum + bsmCheck.getSpeedPlausibility();
         zeroCount++;
     }
-    if(bsmCheck.getPositionPlausibility()<=0){
+    if (bsmCheck.getPositionPlausibility() <= 0) {
         zeroSum = zeroSum + bsmCheck.getPositionPlausibility();
         zeroCount++;
     }
-    if(bsmCheck.getBeaconFrequency()<=0){
+    if (bsmCheck.getBeaconFrequency() <= 0) {
         zeroSum = zeroSum + bsmCheck.getBeaconFrequency();
         zeroCount++;
     }
 //    if(bsmCheck.getSuddenAppearence()<=0){
 //        zeroNumber++;
 //    }
-    if(bsmCheck.getPositionHeadingConsistancy()<=0){
+    if (bsmCheck.getPositionHeadingConsistancy() <= 0) {
         zeroSum = zeroSum + bsmCheck.getPositionHeadingConsistancy();
         zeroCount++;
     }
 
-
     for (int var = 0; var < bsmCheckListSize; ++var) {
-        if(bsmCheckList[var].getRangePlausibility()<=0){\
+        if (bsmCheckList[var].getRangePlausibility() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getRangePlausibility();
             zeroCount++;
         }
-        if(bsmCheckList[var].getPositionConsistancy()<=0){
+        if (bsmCheckList[var].getPositionConsistancy() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getPositionConsistancy();
             zeroCount++;
         }
-        if(bsmCheckList[var].getPositionSpeedConsistancy()<=0){
+        if (bsmCheckList[var].getPositionSpeedConsistancy() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getPositionSpeedConsistancy();
             zeroCount++;
         }
-        if(bsmCheckList[var].getSpeedConsistancy()<=0){
+        if (bsmCheckList[var].getSpeedConsistancy() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getSpeedConsistancy();
             zeroCount++;
         }
-        if(bsmCheckList[var].getSpeedPlausibility()<=0){
+        if (bsmCheckList[var].getSpeedPlausibility() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getSpeedPlausibility();
             zeroCount++;
         }
-        if(bsmCheckList[var].getPositionPlausibility()<=0){
+        if (bsmCheckList[var].getPositionPlausibility() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getPositionPlausibility();
             zeroCount++;
         }
-        if(bsmCheckList[var].getBeaconFrequency()<=0){
+        if (bsmCheckList[var].getBeaconFrequency() <= 0) {
             zeroSum = zeroSum + bsmCheckList[var].getBeaconFrequency();
             zeroCount++;
         }
 //        if(bsmCheckList[var].getSuddenAppearence()<=0){
 //            zeroNumber++;
 //        }
-        if(bsmCheckList[var].getPositionHeadingConsistancy()<=0){
-            zeroSum = zeroSum + bsmCheckList[var].getPositionHeadingConsistancy();
+        if (bsmCheckList[var].getPositionHeadingConsistancy() <= 0) {
+            zeroSum = zeroSum
+                    + bsmCheckList[var].getPositionHeadingConsistancy();
             zeroCount++;
         }
     }
@@ -354,16 +374,17 @@ std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm, BsmChec
             double IdIndex = bsmCheckList[i].getIntersection().getIdIndex(
                     inter.getInterId(var));
             if (IdIndex != -1) {
-                if( bsmCheckList[i].getIntersection().getInterValue(
-                        IdIndex)<=0){
-                    zeroSum = zeroSum + bsmCheckList[i].getIntersection().getInterValue(
-                            IdIndex);
+                if (bsmCheckList[i].getIntersection().getInterValue(IdIndex)
+                        <= 0) {
+                    zeroSum = zeroSum
+                            + bsmCheckList[i].getIntersection().getInterValue(
+                                    IdIndex);
                     zeroCount++;
                 }
             }
         }
 
-        if(curInferFactor <=0){
+        if (curInferFactor <= 0) {
             zeroSum = curInferFactor;
             zeroCount++;
         }
@@ -372,34 +393,48 @@ std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm, BsmChec
     return std::make_tuple(zeroSum, zeroCount);
 }
 
+double ExperiApp::AggregateFactorsListDouble(double curFactor,
+        double *factorList, int factorListSize, double zeroSum, int zeroCount) {
 
-double ExperiApp::AggregateFactorsListDouble(double curFactor, double *factorList,
-        int factorListSize,double zeroSum, int zeroCount) {
-    if (version == 1) {
-        double averageFactor = curFactor;
-        for (int var = 0; var < factorListSize; ++var) {
-            averageFactor = averageFactor + factorList[var];
-        }
-        averageFactor = averageFactor / (factorListSize + 1);
-        double addPlus = mdmLib.boundedGaussianSum(-zeroCount/2,zeroCount/2, (1 / Augmentation));
-
-        return averageFactor - addPlus;
-        return averageFactor;
-    } else {
-        if (curFactor <= 0) {
-            return 0;
-        } else {
-            double averageFactor = curFactor;
-            for (int var = 0; var < factorListSize; ++var) {
-                averageFactor = averageFactor + factorList[var];
-            }
-            averageFactor = averageFactor / (factorListSize + 1);
-            double addPlus = mdmLib.boundedGaussianSum(-zeroCount/2,zeroCount/2, (1 / Augmentation));
-
-            return averageFactor-addPlus;
-        }
+    double averageFactor = curFactor;
+    for (int var = 0; var < factorListSize; ++var) {
+        averageFactor = averageFactor + factorList[var];
     }
+    averageFactor = averageFactor / (factorListSize + 1);
+    double addPlus = mdmLib.boundedGaussianSum(-zeroCount / 2, zeroCount / 2,
+            (1 / Augmentation));
+
+    return averageFactor - addPlus;
+
 }
+
+//double ExperiApp::AggregateFactorsListDouble(double curFactor, double *factorList,
+//        int factorListSize,double zeroSum, int zeroCount) {
+//    if (version == 1) {
+//        double averageFactor = curFactor;
+//        for (int var = 0; var < factorListSize; ++var) {
+//            averageFactor = averageFactor + factorList[var];
+//        }
+//        averageFactor = averageFactor / (factorListSize + 1);
+//        double addPlus = mdmLib.boundedGaussianSum(-zeroCount/2,zeroCount/2, (1 / Augmentation));
+//
+//        return averageFactor - addPlus;
+//        return averageFactor;
+//    } else {
+//        if (curFactor <= 0) {
+//            return 0;
+//        } else {
+//            double averageFactor = curFactor;
+//            for (int var = 0; var < factorListSize; ++var) {
+//                averageFactor = averageFactor + factorList[var];
+//            }
+//            averageFactor = averageFactor / (factorListSize + 1);
+//            double addPlus = mdmLib.boundedGaussianSum(-zeroCount/2,zeroCount/2, (1 / Augmentation));
+//
+//            return averageFactor-addPlus;
+//        }
+//    }
+//}
 
 //best rate / faulty
 //bool ExperiApp::AggregateFactorsList(double curFactor, double *factorList,
@@ -444,9 +479,7 @@ double ExperiApp::AggregateFactorsListDouble(double curFactor, double *factorLis
 //    }
 //}
 
-
-
-double ExperiApp::getMinFactor(){
+double ExperiApp::getMinFactor() {
     return minFactor;
 }
 

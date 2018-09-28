@@ -29,6 +29,7 @@ using namespace boost;
 class AppPrintable {
 
 private:
+
     char name[32];
 
     double flagsRangePlausibility_1 = 0;
@@ -59,11 +60,15 @@ private:
     double allTests_1 = 0;
     double allTests_2 = 0;
 
+    bool printInit = true;
+
 public:
     AppPrintable();
     AppPrintable(const char *);
 
     void setName(const char *);
+
+    void printOutDebug();
 
     void incAll(mbTypes::Mbs mbType);
     void incCumulFlags(mbTypes::Mbs mbType);
@@ -71,7 +76,7 @@ public:
     void resetAll();
     void getPrintable(char* outStr, double density,double deltaT);
 
-    void writeFile(std::string path, char* printStr, bool init);
+    void writeFile(std::string path, char* printStr);
 };
 
 #endif
