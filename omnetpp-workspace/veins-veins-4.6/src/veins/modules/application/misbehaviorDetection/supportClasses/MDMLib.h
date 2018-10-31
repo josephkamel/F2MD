@@ -39,7 +39,9 @@
 
 #define MAX_BEACON_FREQUENCY 0.99 //0.99998
 
-#define MAX_NON_ROUTE_SPEED 6 //3
+#define MAX_DISTANCE_FROM_ROUTE 2 //4.5
+
+#define MAX_NON_ROUTE_SPEED -1 //3
 
 #define MAX_HEADING_CHANGE 90 //90
 
@@ -69,7 +71,6 @@ private:
     void countCircles(double rc, double rl, double rs);
     double calculateCircles(double dl, double ds);
 
-
     double importanceFactor(double r1, double r2, double d);
 
 public:
@@ -92,8 +93,6 @@ public:
             double range);
     double CircleIntersectionFactor(double conf1, double conf2, double d,
             double initRadius);
-
-
 
     double RectRectFactor(Coord c1, Coord c2, double heading1, double heading2,
             Coord size1, Coord size2);

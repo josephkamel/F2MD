@@ -46,11 +46,11 @@ MDApplication::MDApplication(int version) {
 
 }
 
-void MDApplication::SendReport(MDAuthority* mdAuthority, MDReport mbReport) {
+void MDApplication::SendReport(MDStatistics* mdAuthority, MDReport mbReport) {
     if(version = 1){
-        mdAuthority->sendReport(AppV1Name, mbReport);
+        mdAuthority->getReport(AppV1Name, mbReport);
     }else{
-        mdAuthority->sendReport(AppV2Name, mbReport);
+        mdAuthority->getReport(AppV2Name, mbReport);
     }
 
 }

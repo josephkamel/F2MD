@@ -25,6 +25,7 @@
 #include "MDApplication.h"
 
 #include "../supportClasses/BsmPrintable.h"
+#include "../supportClasses/HTTPRequest.h"
 
 using namespace Veins;
 using namespace omnetpp;
@@ -32,7 +33,6 @@ using namespace omnetpp;
 class PyBridgeApp: public MDApplication {
 public:
 
-    int version = 1;
 
     int port = 80;
     std::string host = "localhost";

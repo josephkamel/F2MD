@@ -26,12 +26,14 @@ using namespace std;
 using namespace boost;
 
 LegacyChecks::LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed, Coord mySize,
-        Coord myHeading) {
+        Coord myHeading, LinkControl* LinkC) {
     this->myPseudonym = myPseudonym;
     this->myPosition = myPosition;
     this->mySpeed = mySpeed;
     this->mySize = mySize;
     this->myHeading = myHeading;
+
+    this->LinkC = LinkC;
 }
 
 double LegacyChecks::RangePlausibilityCheck(Coord senderPosition,
@@ -142,7 +144,7 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
     double inter = mdmLib.RectRectFactor(nodePosition1, nodePosition2, heading1,
             heading2, nodeSize1, nodeSize2);
 
-    if (inter > 0.05) {
+    if (inter > 0.1) {
         return 0; //inter
     } else {
         return 1;
@@ -243,12 +245,21 @@ double LegacyChecks::PositionPlausibilityCheck(Coord senderPosition,
         return 1;
     }
 
+    double distance = LinkC->calculateDistance(senderPosition, 100, 100);
+
+    if(distance > MAX_DISTANCE_FROM_ROUTE){
+        return 0;
+    }else{
+        return 1;
+    }
+
     double Intersection = 0;
     ObstacleControl* obstacles = ObstacleControlAccess().getIfExists();
     for (double var = 0.5; var <= 2; var = var + 0.5) {
         Intersection = Intersection
                 + obstacles->calculateInsersion(senderPosition, var, var);
     }
+
     if (Intersection >= 5 * 2) {
         return 0; //Intersection
     } else {

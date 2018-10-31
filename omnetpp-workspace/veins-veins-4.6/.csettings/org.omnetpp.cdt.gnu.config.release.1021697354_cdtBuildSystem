@@ -20,7 +20,7 @@
 					</tool>
 					<tool id="cdt.managedbuild.tool.gnu.c.linker.base.33157182" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
 					<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1823595887" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base">
-						<option id="gnu.cpp.link.option.paths.1949067094" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+						<option id="gnu.cpp.link.option.paths.1949067094" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 							<listOptionValue builtIn="false" value="&quot;${workspace_loc:/veins-veins-4.6/src/veins/modules/Prext/lib}&quot;"/>
 						</option>
 						<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1438656455" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

@@ -23,7 +23,6 @@ using namespace omnetpp;
 
 class ExperiApp: public MDApplication {
 public:
-    int version = 0;
 
     double Threshold = 0.5;
     double deltaTrustTime = 10;

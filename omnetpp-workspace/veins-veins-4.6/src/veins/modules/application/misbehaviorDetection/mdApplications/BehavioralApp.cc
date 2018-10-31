@@ -23,11 +23,9 @@
 using namespace std;
 using namespace boost;
 
-BehavioralApp::BehavioralApp(int version, double deltaTrustTime,
+BehavioralApp::BehavioralApp(int version,
         double Threshold) :
         MDApplication(version) {
-
-    this->deltaTrustTime = deltaTrustTime;
     this->Threshold = Threshold;
 }
 
@@ -191,33 +189,30 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
         }
 
         double TMOadd = 0;
-//        int TMOadd = 10*(Threshold - minFactor);
+        //        int TMOadd = 10*(Threshold - minFactor);
+        double augFactor = exp(TimeOut[indexTMO]+2 / 2) / 2.9;
 
-        double augFactor = exp(TimeOut[indexTMO] / 2) / 4;
-
-        if (augFactor > 22) {
-            augFactor = 22;
+        if (augFactor > 20) {
+            augFactor = 20;
         }
-
         augFactor = 1;
-
         double expAdd = 10 * (1 - minFactor);
         double expV = expAdd / 1.1 - 6;
         TMOadd = (exp(expV) + 0.5) * augFactor;
 
+
 //        for (double var = 1; var >= 0; var = var - 0.1) {
 //            double expAdd = 10 * (1 - var);
-//            double expV = expAdd / 1.1 - 6;
+//            double expV = expAdd / 3 - 3;
 //            int TMOadd = exp(expV) + 0.5;
 //            std::cout << var << " " << expAdd << " " << expV << " " << TMOadd
 //                    << "\n";
 //        }
 //
 //        for (double var = 0; var < 10; ++var) {
-//            double RealAdd = exp(var / 2) / 4;
-//            std::cout << var << " RealAdd:" << RealAdd << "\n";
+//            double RealAdd = exp(var/5);
+//            std::cout << var << " RealAdd:" << RealAdd <<" "<< (1- 1/RealAdd)<< "\n";
 //        }
-
 //        exit(0);
 
 //        if(expAdd>=10){
@@ -225,6 +220,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 //        }else{
 //            TMOadd = 0;
 //        }
+
 
         TimeOut[indexTMO] = TimeOut[indexTMO] + TMOadd;
         UpdatedTMO[TimeOutNum] = simTime().dbl();

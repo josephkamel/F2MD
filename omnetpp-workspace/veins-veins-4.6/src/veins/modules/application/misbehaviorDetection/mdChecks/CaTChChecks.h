@@ -27,8 +27,10 @@
 #include "veins/modules/obstacle/Obstacle.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
+#include "../supportClasses/NetworkLinksLib/LinkControl.h"
+
 #include "../mdReport/MDReport.h"
-#include "../mdAuthority/MDAuthority.h"
+#include "../mdStats/MDStatistics.h"
 
 
 using namespace Veins;
@@ -47,6 +49,8 @@ private:
     Coord mySize;
 
     MDMLib mdmLib;
+
+    LinkControl* LinkC;
 
     double RangePlausibilityCheck(Coord, Coord, Coord, Coord);
     double PositionPlausibilityCheck(Coord, Coord, double, double);
@@ -88,7 +92,7 @@ private:
     void resetAll();
 
 public:
-    CaTChChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize);
+    CaTChChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize, LinkControl* LinkC);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
 };

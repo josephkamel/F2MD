@@ -551,11 +551,10 @@ double MDMLib::importanceFactor(double r1, double r2, double d){
     } else {
         factor2 = boundedGaussianSum(s2, e2, sig2);
     }
+    factor1 = (factor1) / ((e1 - s1) / (2 * r1));
+    factor2 = (factor2) / ((e2 - s2) / (2 * r2));
 
-//    factor1 = (factor1) / ((e1 - s1) / (2 * r1));
-//    factor2 = (factor2) / ((e2 - s2) / (2 * r2));
-
-    return factor1 * factor2;
+    return 2*(factor1* factor2)/(factor1 + factor2);
 }
 
 double MDMLib::CircleIntersectionFactor(double conf1, double conf2, double d,
@@ -666,7 +665,17 @@ double MDMLib::EllipseEllipseIntersectionFactor(Coord pos1, Coord posConf1,
 //        impFactor = 1;
 //    }
 
-    double factor = impFactor * areaFactor;
+    //impFactor = 1;
+
+    double factor1 =  impFactor * areaFactor;
+    double factor2 =  areaFactor;
+
+    double factor = 1;
+    if(factor1>factor2){
+        factor = factor1;
+    }else{
+        factor = factor2;
+    }
 
     double maxFactor = 1
             - (((size1.x / 2) * (size1.y / 2) * PI)
@@ -676,4 +685,7 @@ double MDMLib::EllipseEllipseIntersectionFactor(Coord pos1, Coord posConf1,
     }
     return factor;
 }
+
+
+
 

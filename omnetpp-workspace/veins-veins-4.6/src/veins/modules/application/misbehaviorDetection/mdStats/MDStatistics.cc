@@ -9,21 +9,21 @@
  * All rights reserved.
  *******************************************************************************/
 
-#include "MDAuthority.h"
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDStatistics.h>
 
-MDAuthority::MDAuthority() {
+MDStatistics::MDStatistics() {
     char nameV1[32] = "mdaV1";
     char nameV2[32] = "mdaV2";
     registerNewBase(nameV1);
     registerNewBase(nameV2);
 }
 
-void MDAuthority::registerNewBase(char* baseName) {
+void MDStatistics::registerNewBase(char* baseName) {
     baseList[baseListNum].setName(baseName);
     baseListNum++;
 }
 
-void MDAuthority::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType,
+void MDStatistics::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType,
         double time) {
     switch (mbType) {
     case mbTypes::Genuine: {
@@ -41,7 +41,7 @@ void MDAuthority::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType,
     }
 }
 
-void MDAuthority::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType,
+void MDStatistics::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType,
         double time) {
 
     switch (mbType) {
@@ -61,7 +61,7 @@ void MDAuthority::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType,
 
 }
 
-void MDAuthority::sendReport(const char* baseName, MDReport report) {
+void MDStatistics::getReport(const char* baseName, MDReport report) {
     int index = -1;
     for (int var = 0; var < baseListNum; ++var) {
         if (strcmp(baseList[var].getName(), baseName) == 0) {
@@ -78,8 +78,7 @@ void MDAuthority::sendReport(const char* baseName, MDReport report) {
     }
 }
 
-void MDAuthority::treatReport(MDABase *base, int index, MDReport report) {
-
+void MDStatistics::treatReport(MDSBase *base, int index, MDReport report) {
     if (!report.getMbType().compare("Genuine")) {
         if (!base[index].alreadyReportedGenuine(report.getReportedPseudo())) {
             base[index].addReportedGenuine(report.getReportedPseudo(),
@@ -96,7 +95,7 @@ void MDAuthority::treatReport(MDABase *base, int index, MDReport report) {
 
 }
 
-void MDAuthority::saveLine(std::string path, std::string serial, double time) {
+void MDStatistics::saveLine(std::string path, std::string serial, double time) {
 
     char outChar[1024];
     char directoryPathGen[1024] = "";
@@ -129,7 +128,7 @@ void MDAuthority::saveLine(std::string path, std::string serial, double time) {
     }
 }
 
-void MDAuthority::resetAll() {
+void MDStatistics::resetAll() {
     for (int var = 0; var < baseListNum; ++var) {
         baseList[var].resetAll();
     }

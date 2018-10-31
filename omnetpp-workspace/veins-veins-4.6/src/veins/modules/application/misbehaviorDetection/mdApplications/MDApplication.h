@@ -15,7 +15,7 @@
 #include <tuple>
 #include <omnetpp.h>
 #include <veins/modules/application/misbehaviorDetection/baseClasses/NodeMDMHistory.h>
-
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDStatistics.h>
 #include "../baseClasses/NodeTable.h"
 #include "../baseClasses/InterTest.h"
 #include "../baseClasses/BsmCheck.h"
@@ -26,8 +26,6 @@
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #include "../mdReport/MDReport.h"
-#include "../mdAuthority/MDAuthority.h"
-
 #include "../supportClasses/AppPrintable.h"
 
 using namespace Veins;
@@ -61,7 +59,7 @@ public:
             BasicSafetyMessage bsm, BsmCheck bsmCheck,
             NodeTable detectedNodes)= 0;
 
-    void SendReport( MDAuthority* mdAuthority, MDReport mbReport);
+    void SendReport( MDStatistics* mdAuthority, MDReport mbReport);
 
     void saveLine( std::string path, std::string serial, double density,
             double deltaT);

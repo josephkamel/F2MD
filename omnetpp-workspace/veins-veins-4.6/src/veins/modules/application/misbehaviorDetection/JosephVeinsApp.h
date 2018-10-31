@@ -29,7 +29,7 @@ using namespace Veins;
 #include "veins/modules/mobility/traci/TraCIColor.h"
 
 #include "supportClasses/GeneralLib.h"
-#include "mdAuthority/MDAuthority.h"
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDStatistics.h>
 
 #include "mdApplications/MDApplication.h"
 #include "mdApplications/ThresholdApp.h"
@@ -59,12 +59,20 @@ using namespace Veins;
 #include "pcPolicies/PCPolicy.h"
 #include "mdAttacks/MDAttack.h"
 
+#include "supportClasses/HTTPRequest.h"
+
+#define mlPortV1 9997
+#define mlPortV2 9998
+
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
 static double targetClearTime = 0;
 static unsigned long accusedNodes[MAXACCUSEDLENGTH];
 static int accusedNodesLength = 0;
 static double accusedClearTime = 0;
+
+static bool linkInit = false;
+static LinkControl linkControl = LinkControl();
 
 class JosephVeinsApp: public BaseWaveApplLayer {
 private:
@@ -90,8 +98,11 @@ protected:
     mbTypes::Mbs induceMisbehavior(double attackers);
     void LocalMisbehaviorDetection(BasicSafetyMessage* bsm, int version);
 
-    void sendReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
+    void writeReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
             BasicSafetyMessage *bsm);
+
+    void sendReport(MDReport reportBase, std::string version,
+            BsmCheck bsmCheck, BasicSafetyMessage *bsm);
 
     void writeMdBsm(std::string version, BsmCheck bsmCheck,
             BasicSafetyMessage *bsm);
@@ -114,14 +125,14 @@ protected:
     AggrigationApp AggrV1 = AggrigationApp(1,0.5, 10.0, 10);
     AggrigationApp AggrV2 = AggrigationApp(2,0.5, 10.0, 10);
 
-    BehavioralApp BehaV1 = BehavioralApp(1, 10.0, 0.8);
-    BehavioralApp BehaV2 = BehavioralApp(2, 10.0, 0.8);
+    BehavioralApp BehaV1 = BehavioralApp(1, 0.5);
+    BehavioralApp BehaV2 = BehavioralApp(2, 0.5);
 
     ExperiApp ExperV1 = ExperiApp(1, 10.0, 10, 3);
     ExperiApp ExperV2 = ExperiApp(2, 10.0, 10, 3);
 
-    PyBridgeApp PybgV1 = PyBridgeApp(1, 9997, "localhost");
-    PyBridgeApp PybgV2 = PyBridgeApp(2, 9998, "localhost");
+    PyBridgeApp PybgV1 = PyBridgeApp(1, mlPortV1, "localhost");
+    PyBridgeApp PybgV2 = PyBridgeApp(2, mlPortV2, "localhost");
 
 public:
 

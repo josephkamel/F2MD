@@ -22,22 +22,21 @@
 using namespace Veins;
 using namespace omnetpp;
 
-#define MAX_DETECTED_NODES 100
+#define MAX_DETECTED_NODES 5000
 
 class BehavioralApp: public MDApplication {
 public:
 
-    int version = 0;
     double Threshold = 0.5;
-    double deltaTrustTime = 10;
     double minFactor = 1;
 
     unsigned long PseudonymsToTMO[MAX_DETECTED_NODES];
     unsigned long TimeOut[MAX_DETECTED_NODES];
+    unsigned long TimeOutEffected[MAX_DETECTED_NODES];
     double UpdatedTMO[MAX_DETECTED_NODES];
     int TimeOutNum = 0;
 
-    BehavioralApp(int version, double BehavioralApp, double Threshold);
+    BehavioralApp(int version, double Threshold);
 
     bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage bsm,
             BsmCheck bsmCheck, NodeTable detectedNodes);

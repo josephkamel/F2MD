@@ -9,9 +9,9 @@
  * All rights reserved.
  *******************************************************************************/
 
-#include "MDABase.h"
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDSBase.h>
 
-MDABase::MDABase() {
+MDSBase::MDSBase() {
     init = true;
     totalGenuineNum = 0;
     totalAttackerNum = 0;
@@ -27,7 +27,7 @@ MDABase::MDABase() {
 
 }
 
-MDABase::MDABase(const char * name) {
+MDSBase::MDSBase(const char * name) {
     strcpy(this->name, name);
     init = true;
     totalGenuineNum = 0;
@@ -43,15 +43,15 @@ MDABase::MDABase(const char * name) {
     CountReportedAttacker = 0;
 }
 
-char* MDABase::getName() {
+char* MDSBase::getName() {
     return this->name;
 }
 
-void MDABase::setName(const char * name) {
+void MDSBase::setName(const char * name) {
     strcpy(this->name, name);
 }
 
-void MDABase::resetAll() {
+void MDSBase::resetAll() {
     totalGenuineNum = 0;
     totalAttackerNum = 0;
     reportedGenuineNum = 0;
@@ -65,7 +65,7 @@ void MDABase::resetAll() {
     CountReportedAttacker = 0;
 }
 
-void MDABase::addTotalGenuine(unsigned long pseudo, double time) {
+void MDSBase::addTotalGenuine(unsigned long pseudo, double time) {
     if (totalGenuineNum >= TOTCARNUM) {
         removeOldestGenuine();
     }
@@ -76,7 +76,7 @@ void MDABase::addTotalGenuine(unsigned long pseudo, double time) {
     CountTotalGenuine++;
 }
 
-void MDABase::addTotalAttacker(unsigned long pseudo, double time) {
+void MDSBase::addTotalAttacker(unsigned long pseudo, double time) {
     if (totalAttackerNum >= TOTCARNUM) {
         removeOldestAttacker();
     }
@@ -87,7 +87,7 @@ void MDABase::addTotalAttacker(unsigned long pseudo, double time) {
     CountTotalAttacker++;
 }
 
-void MDABase::addReportedGenuine(unsigned long pseudo, double time) {
+void MDSBase::addReportedGenuine(unsigned long pseudo, double time) {
    int index = totalGenuineIndex(pseudo);
     if(index!=-1){
         reportedGenuineIdList[reportedGenuineNum] = pseudo;
@@ -106,7 +106,7 @@ void MDABase::addReportedGenuine(unsigned long pseudo, double time) {
 
 }
 
-void MDABase::addReportedAttacker(unsigned long pseudo, double time) {
+void MDSBase::addReportedAttacker(unsigned long pseudo, double time) {
     int index = totalAttackerIndex(pseudo);
 
     if(index!=-1){
@@ -128,7 +128,7 @@ void MDABase::addReportedAttacker(unsigned long pseudo, double time) {
 
 }
 
-void MDABase::writeFile(std::string path, char* printStr) {
+void MDSBase::writeFile(std::string path, char* printStr) {
     ofstream outFile;
     if (init) {
         outFile.open(path, std::ofstream::out);
@@ -143,7 +143,7 @@ void MDABase::writeFile(std::string path, char* printStr) {
     outFile.close();
 }
 
-bool MDABase::alreadyReportedGenuine(unsigned long pseudo) {
+bool MDSBase::alreadyReportedGenuine(unsigned long pseudo) {
     for (int var = 0; var < reportedGenuineNum; ++var) {
         if (pseudo == reportedGenuineIdList[var]) {
             return true;
@@ -152,7 +152,7 @@ bool MDABase::alreadyReportedGenuine(unsigned long pseudo) {
     return false;
 }
 
-bool MDABase::alreadyReportedAttacker(unsigned long pseudo) {
+bool MDSBase::alreadyReportedAttacker(unsigned long pseudo) {
     for (int var = 0; var < reportedAttackerNum; ++var) {
         if (pseudo == reportedAttackerIdList[var]) {
             return true;
@@ -161,7 +161,7 @@ bool MDABase::alreadyReportedAttacker(unsigned long pseudo) {
     return false;
 }
 
-int MDABase::totalGenuineIndex(unsigned long pseudo) {
+int MDSBase::totalGenuineIndex(unsigned long pseudo) {
     for (int var = 0; var < totalGenuineNum; ++var) {
         if (pseudo == totalGenuineIdList[var]) {
             return var;
@@ -170,7 +170,7 @@ int MDABase::totalGenuineIndex(unsigned long pseudo) {
     return -1;
 }
 
-int MDABase::totalAttackerIndex(unsigned long pseudo) {
+int MDSBase::totalAttackerIndex(unsigned long pseudo) {
     for (int var = 0; var < totalAttackerNum; ++var) {
         if (pseudo == totalAttackerIdList[var]) {
             return var;
@@ -179,7 +179,7 @@ int MDABase::totalAttackerIndex(unsigned long pseudo) {
     return -1;
 }
 
-void MDABase::removeOldestAttacker() {
+void MDSBase::removeOldestAttacker() {
     int oldestTotal = oldestTotalAttacker();
     int reportedIndex = reportedAttackerIndex(
             totalAttackerIdList[oldestTotal]);
@@ -189,7 +189,7 @@ void MDABase::removeOldestAttacker() {
     }
 }
 
-void MDABase::removeOldestGenuine() {
+void MDSBase::removeOldestGenuine() {
     int oldestTotal = oldestTotalGenuine();
     int reportedIndex = reportedGenuineIndex(totalGenuineIdList[oldestTotal]);
     removeTotalGenuine(oldestTotal);
@@ -212,7 +212,7 @@ void MDABase::removeOldestGenuine() {
 
 
 
-int MDABase::oldestTotalGenuine() {
+int MDSBase::oldestTotalGenuine() {
     int oldestIndex = 0;
     double oldestTime = totalGenuineTimeList[oldestIndex];
     for (int var = 0; var < totalGenuineNum; ++var) {
@@ -223,7 +223,7 @@ int MDABase::oldestTotalGenuine() {
     }
     return oldestIndex;
 }
-int MDABase::oldestTotalAttacker() {
+int MDSBase::oldestTotalAttacker() {
     int oldestIndex = 0;
     double oldestTime = totalAttackerTimeList[oldestIndex];
     for (int var = 0; var < totalAttackerNum; ++var) {
@@ -247,7 +247,7 @@ int MDABase::oldestTotalAttacker() {
 //    return oldestIndex;
 //}
 
-int MDABase::reportedGenuineIndex(unsigned long pseudo) {
+int MDSBase::reportedGenuineIndex(unsigned long pseudo) {
     for (int var = 0; var < reportedGenuineNum; ++var) {
         if (pseudo == reportedGenuineIdList[var]) {
             return var;
@@ -256,7 +256,7 @@ int MDABase::reportedGenuineIndex(unsigned long pseudo) {
     return -1;
 }
 
-int MDABase::reportedAttackerIndex(unsigned long pseudo) {
+int MDSBase::reportedAttackerIndex(unsigned long pseudo) {
     for (int var = 0; var < reportedAttackerNum; ++var) {
         if (pseudo == reportedAttackerIdList[var]) {
             return var;
@@ -267,7 +267,7 @@ int MDABase::reportedAttackerIndex(unsigned long pseudo) {
 
 
 
-void MDABase::removeTotalGenuine(int index) {
+void MDSBase::removeTotalGenuine(int index) {
     for (int var = index; var < totalGenuineNum; ++var) {
         totalGenuineIdList[var] = totalGenuineIdList[var + 1];
         totalGenuineTimeList[var] = totalGenuineTimeList[var + 1];
@@ -275,7 +275,7 @@ void MDABase::removeTotalGenuine(int index) {
     totalGenuineNum--;
 }
 
-void MDABase::removeTotalAttacker(int index) {
+void MDSBase::removeTotalAttacker(int index) {
     for (int var = index; var < totalAttackerNum; ++var) {
         totalAttackerIdList[var] = totalAttackerIdList[var + 1];
         totalAttackerTimeList[var] = totalAttackerTimeList[var + 1];
@@ -283,7 +283,7 @@ void MDABase::removeTotalAttacker(int index) {
     totalAttackerNum--;
 }
 
-void MDABase::removeReportedGenuine(int index) {
+void MDSBase::removeReportedGenuine(int index) {
     for (int var = index; var < reportedGenuineNum; ++var) {
         reportedGenuineIdList[var] = reportedGenuineIdList[var + 1];
         reportedGenuineTimeList[var] = reportedGenuineTimeList[var + 1];
@@ -291,7 +291,7 @@ void MDABase::removeReportedGenuine(int index) {
     reportedGenuineNum--;
 }
 
-void MDABase::removeReportedAttacker(int index) {
+void MDSBase::removeReportedAttacker(int index) {
     for (int var = index; var < reportedAttackerNum; ++var) {
         reportedAttackerIdList[var] = reportedAttackerIdList[var + 1];
         reportedAttackerTimeList[var] = reportedAttackerTimeList[var + 1];
@@ -299,7 +299,7 @@ void MDABase::removeReportedAttacker(int index) {
     reportedAttackerNum--;
 }
 
-void MDABase::getPrintable(char* outStr, double time) {
+void MDSBase::getPrintable(char* outStr, double time) {
 
     char line[1024] = "";
     char data[64] = "";

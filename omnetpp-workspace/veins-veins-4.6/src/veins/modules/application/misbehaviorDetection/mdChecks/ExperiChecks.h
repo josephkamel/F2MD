@@ -28,7 +28,7 @@
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #include "../mdReport/MDReport.h"
-#include "../mdAuthority/MDAuthority.h"
+#include "../mdStats/MDStatistics.h"
 
 using namespace Veins;
 using namespace omnetpp;
