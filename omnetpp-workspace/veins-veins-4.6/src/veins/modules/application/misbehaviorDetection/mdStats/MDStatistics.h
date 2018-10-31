@@ -12,30 +12,30 @@
 #ifndef __VEINS_MDAuthority_H_
 #define __VEINS_MDAuthority_H_
 
-#include "MDABase.h"
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDSBase.h>
 #include "../mdReport/MDReport.h"
 
 using namespace omnetpp;
 
 #define ABaseNbr 2
 
-class MDAuthority {
+class MDStatistics {
 private:
 
-    MDABase baseList[ABaseNbr];
+    MDSBase baseList[ABaseNbr];
 
     int baseListNum = 0;
-    void treatReport(MDABase* base, int index, MDReport report);
+    void treatReport(MDSBase* base, int index, MDReport report);
 
 
 public:
-    MDAuthority();
+    MDStatistics();
 
     void registerNewBase(char* baseName);
 
     void addNewNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
     void addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
-    void sendReport(const char* baseName, MDReport report);
+    void getReport(const char* baseName, MDReport report);
 
     void saveLine(std::string path, std::string serial,double time);
 

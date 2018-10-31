@@ -23,7 +23,7 @@ void PCPolicy::setMbType(mbTypes::Mbs mbType) {
     this->mbType = mbType;
 }
 
-void PCPolicy::setMdAuthority(MDAuthority* mdAuthority) {
+void PCPolicy::setMdAuthority(MDStatistics* mdAuthority) {
     this->mdAuthority = mdAuthority;
 }
 
@@ -46,13 +46,13 @@ void PCPolicy::setPseudoNum(int* pseudoNum) {
 unsigned long PCPolicy::getNextPseudonym() {
     (*pseudoNum)++;
     double simTimeDbl = simTime().dbl();
-    while (simTimeDbl > 99) {
+    while (simTimeDbl > 9) {
         simTimeDbl = simTimeDbl / 10;
     }
     simTimeDbl = (int) simTimeDbl;
-    unsigned long pseudo = (*myId) * 100 + simTimeDbl;
-    double digitNumber = (unsigned long) (log10(pseudo) + 1);
-    double pseudoNumAdd = (*pseudoNum) * pow(10, digitNumber + 1);
+    unsigned long pseudo = (*myId) * 10 + simTimeDbl;
+    unsigned long digitNumber = (unsigned long) (log10(pseudo) + 1);
+    unsigned long pseudoNumAdd = (*pseudoNum) * pow(10, digitNumber + 1);
     pseudo = pseudo + pseudoNumAdd;
 
     mdAuthority->addNewNode(pseudo, mbType, simTime().dbl());

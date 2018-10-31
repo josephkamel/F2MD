@@ -14,7 +14,7 @@
 
 #include <string.h>
 #include <omnetpp.h>
-#include "MDABase.h"
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDSBase.h>
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 #include "../mdReport/MDReport.h"
 
@@ -23,7 +23,7 @@ using namespace omnetpp;
 
 #define TOTCARNUM 100
 
-class MDABase {
+class MDSBase {
 private:
 
     char name[32];
@@ -57,8 +57,8 @@ private:
     double attackerAverageReportDelay = 0;
 
 public:
-    MDABase();
-    MDABase(const char *);
+    MDSBase();
+    MDSBase(const char *);
     void addTotalGenuine(unsigned long id, double time);
     void addReportedGenuine(unsigned long id, double time);
 

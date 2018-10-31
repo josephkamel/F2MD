@@ -4,14 +4,17 @@ from os.path import isfile, join
 import json
 import numpy as np
 from MLDataCollector import MlDataCollector
+from MLArrayStorage import MlArrayStorage
 from MLTrainer import MlTrainer
 from numpy import array
 import datetime
+from tqdm import tqdm
 from sklearn import datasets
 from sklearn.externals import joblib
 
 RTtrain = False
 RTcollectData = False
+RTreadDataFromFile = False
 RTpredict = True
 
 class MlMain:
@@ -20,12 +23,15 @@ class MlMain:
 	curDateStr = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
-	collectDur = 0
+	Storage = MlArrayStorage()
+	arrayLength = 1
 
+	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile'
+	savePath = './saveFile_ConstPosOffset'
+	dataPath = './MDBsms_ConstPosOffset'
 
 	def init(self, version, AIType):
 		self.savePath = self.savePath +'_'+ str(version)
@@ -37,6 +43,8 @@ class MlMain:
 		self.Trainer.setAIType(AIType)
 
 		self.trainedModelExists(AIType)
+		if RTreadDataFromFile:
+			self.ReadDataFromFile(version, AIType)
 
 	def mlMain(self, version, bsmJsonString, AIType):
 		if not self.initiated:
@@ -44,7 +52,7 @@ class MlMain:
 			self.initiated = True
 
 		bsmJsom = json.loads(bsmJsonString)
-		curArray = self.getArray(bsmJsom)
+		curArray = self.getNodeArray(bsmJsom)
 
 		if RTcollectData:
 			if self.collectDur < self.deltaCall:
@@ -63,7 +71,6 @@ class MlMain:
 					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
-
 		
 		if self.clf is None:
 			return False
@@ -101,8 +108,46 @@ class MlMain:
 				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
 
-	def getArray(self,bsmJsom):
+	def ReadDataFromFile(self, version, AIType):
+		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Started ..."
+		filesNames = [f for f in tqdm(listdir(self.dataPath+'_'+version)) if isfile(join(self.dataPath+'_'+version, f))]
+		print "bsmDataExists?"
 
+		ValuesData = []
+		TargetData = []
+
+		for i in tqdm(range(0,len(filesNames))):
+			s = filesNames[i]
+			if s.endswith(".bsm"):
+				bsmJsonString = open(self.dataPath+'_'+version+'/' +s, 'r').read()
+				bsmJsom = json.loads(bsmJsonString)
+				curArray = self.getNodeArray(bsmJsom)
+				ValuesData.append(curArray[0])
+				TargetData.append(curArray[1])
+		
+		self.DataCollector.initValuesData(ValuesData)
+		self.DataCollector.initTargetData(TargetData)
+
+		self.DataCollector.saveData()
+		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
+		self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+		self.Trainer.train()
+		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
+		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Finished!"
+
+	def getNodeArray(self,bsmJsom):
+		cur_array = self.getArray(bsmJsom)
+		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
+		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
+		self.Storage.add_array(pseudonym, time, cur_array)
+		returnArray = self.Storage.get_array(pseudonym, self.arrayLength)
+
+		#print "cur_array: " + str(cur_array)
+		#print "returnArray: " + str(returnArray)
+		return returnArray
+
+	def getArray(self,bsmJsom):
 		rP = bsmJsom['BsmPrint']['BsmCheck']['rP']
 		pP = bsmJsom['BsmPrint']['BsmCheck']['pP']
 		sP = bsmJsom['BsmPrint']['BsmCheck']['sP']

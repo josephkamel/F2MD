@@ -24,7 +24,6 @@ using namespace omnetpp;
 
 class ThresholdApp: public MDApplication {
 public:
-    int version = 0;
 
     double Threshold = 0;
     double minFactor = 1;

@@ -14,14 +14,12 @@
 
 #include <tuple>
 #include <omnetpp.h>
-
-
+#include <veins/modules/application/misbehaviorDetection/mdStats/MDStatistics.h>
 #include "../baseClasses/NodeTable.h"
 #include "../baseClasses/InterTest.h"
 #include "../baseClasses/BsmCheck.h"
 #include "../baseClasses/InterTest.h"
 
-#include "../mdAuthority/MDAuthority.h"
 #include "../supportClasses/MDMLib.h"
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
@@ -44,7 +42,7 @@ protected:
 
 
     mbTypes::Mbs mbType;
-    MDAuthority* mdAuthority;
+    MDStatistics* mdAuthority;
 
 public:
     unsigned long getNextPseudonym();
@@ -72,7 +70,7 @@ public:
     double randomPCP();
 
     void setMbType(mbTypes::Mbs mbType);
-    void setMdAuthority(MDAuthority* mdAuthority);
+    void setMdAuthority(MDStatistics* mdAuthority);
 
 };
 

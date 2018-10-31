@@ -1,6 +1,6 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
-* @email   josephekamel@gmail.com
+ * @email   josephekamel@gmail.com
  * @date    11/04/2018
  * @version 1.0
  *
@@ -56,6 +56,18 @@ protected:
 
     unsigned long targetNode = 0;
 
+    double ConstPosX;
+    double ConstPosY;
+
+    double ConstPosOffsetX;
+    double ConstPosOffsetY;
+
+    double ConstSpeedX;
+    double ConstSpeedY;
+
+    double ConstSpeedOffsetX;
+    double ConstSpeedOffsetY;
+
 public:
 
     MDAttack();
@@ -69,7 +81,7 @@ public:
     void setCurHeadingConfidence(Coord* curHeadingConfidence);
     void setCurPosition(Coord* curPosition);
     void setCurPositionConfidence(Coord* curPositionConfidence);
-    void setCurSpeed(Coord* curSpeed) ;
+    void setCurSpeed(Coord* curSpeed);
     void setCurSpeedConfidence(Coord* curSpeedConfidence);
     void setDetectedNodes(NodeTable* detectedNodes);
     void setMyBsm(BasicSafetyMessage* myBsm);

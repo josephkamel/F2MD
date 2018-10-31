@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 #include "PyBridgeApp.h"
-#include "../supportClasses/HTTPRequest.h"
+
 
 using namespace std;
 using namespace boost;

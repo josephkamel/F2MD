@@ -14,12 +14,24 @@
 MDAttack::MDAttack() {
 }
 
-void MDAttack::init(attackTypes::Attacks myAttackType){
+void MDAttack::init(attackTypes::Attacks myAttackType) {
     StopInitiated = false;
     DoSInitiated = false;
 
     SybilMyOldPseudo = (*myPseudonym);
     SybilVehSeq = 0;
+
+    ConstPosX = genLib.RandomDouble(0, RandomPosX);
+    ConstPosY = genLib.RandomDouble(0, RandomPosY);
+
+    ConstPosOffsetX = genLib.RandomDouble(0, RandomPosOffsetX);
+    ConstPosOffsetY = genLib.RandomDouble(0, RandomPosOffsetY);
+
+    ConstSpeedX = genLib.RandomDouble(0, RandomSpeedX);
+    ConstSpeedY = genLib.RandomDouble(0, RandomSpeedY);
+
+    ConstSpeedOffsetX = genLib.RandomDouble(0, RandomSpeedOffsetX);
+    ConstSpeedOffsetY = genLib.RandomDouble(0, RandomSpeedOffsetY);
 
     if (myAttackType == attackTypes::Sybil) {
         for (int var = 0; var < SybilVehNumber; ++var) {
@@ -80,7 +92,7 @@ void MDAttack::setMyWidth(double* myWidth) {
     this->myWidth = myWidth;
 }
 
-void MDAttack::setPcPolicy(PCPolicy* pcPolicy){
+void MDAttack::setPcPolicy(PCPolicy* pcPolicy) {
     this->pcPolicy = pcPolicy;
 }
 
@@ -102,7 +114,6 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
                 attackBsm.setSenderPseudonym(0);
             }
         }
-
     }
         break;
 
@@ -141,6 +152,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
 
         attackBsm.setSenderWidth(*myWidth);
         attackBsm.setSenderLength(*myLength);
+
     }
         break;
 
@@ -387,6 +399,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
                     beaconInterval->raw() / (SybilVehNumber + 1));
             DoSInitiated = true;
         }
+
         if (SybilMyOldPseudo != *myPseudonym) {
             SybilMyOldPseudo = *myPseudonym;
             for (int var = 0; var < SybilVehNumber; ++var) {
@@ -397,45 +410,85 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
         int SquareX = SybilVehSeq / 2;
         int SquareY = SybilVehSeq % 2;
 
-        double XOffset = -SquareX * (*myLength + SybilDistanceX);
-        double YOffset = -SquareY * (*myWidth + SybilDistanceY);
-        MDMLib mdmLib = MDMLib();
-        double curHeadingAngle = mdmLib.calculateHeadingAngle(*curHeading);
+        if(!SelfSybil){
+            if (detectedNodes->getNodesNum() > 0) {
+                attackBsm = nextAttackBsm;
+                attackBsm.setSenderPseudonym(*myPseudonym);
+                nextAttackBsm = detectedNodes->getNextAttackedBsm(*curPosition,
+                        nextAttackBsm.getSenderPseudonym(),
+                        nextAttackBsm.getArrivalTime().dbl());
+                targetNode = nextAttackBsm.getSenderPseudonym();
 
-        Coord relativePos = Coord(XOffset, YOffset, 0);
-        double DeltaAngle = mdmLib.calculateHeadingAngle(relativePos);
+                double sybDistXrand = genLib.RandomDouble(-0.5, 0.5);
+                double sybDistYrand = genLib.RandomDouble(-0.5, 0.5);
 
-        double newAngle = curHeadingAngle + DeltaAngle;
-        newAngle = std::fmod(newAngle, 360);
+                double XOffset = -SquareX * (attackBsm.getSenderLength() + SybilDistanceX) + sybDistXrand;
+                double YOffset = -SquareY * (attackBsm.getSenderWidth() + SybilDistanceY) + sybDistYrand;
+                MDMLib mdmLib = MDMLib();
+                double curHeadingAngle = mdmLib.calculateHeadingAngle(attackBsm.getSenderHeading());
 
-        newAngle = 360 - newAngle;
+                Coord relativePos = Coord(XOffset, YOffset, 0);
+                double DeltaAngle = mdmLib.calculateHeadingAngle(relativePos);
 
-        double DOffset = sqrt((pow(XOffset, 2)) + (pow(YOffset, 2)));
+                double newAngle = curHeadingAngle + DeltaAngle;
+                newAngle = std::fmod(newAngle, 360);
 
-        double relativeX = DOffset * cos(newAngle * PI / 180);
-        double relativeY = DOffset * sin(newAngle * PI / 180);
+                newAngle = 360 - newAngle;
 
-        attackBsm = myBsm[0];
+                double DOffset = sqrt((pow(XOffset, 2)) + (pow(YOffset, 2)));
+
+                double relativeX = DOffset * cos(newAngle * PI / 180);
+                double relativeY = DOffset * sin(newAngle * PI / 180);
+
+                attackBsm.setSenderPos(
+                        Coord(attackBsm.getSenderPos().x + relativeX,
+                                attackBsm.getSenderPos().y + relativeY, attackBsm.getSenderPos().z));
+            }
+        }else{
+
+            double sybDistXrand = genLib.RandomDouble(-0.5, +0.5);
+            double sybDistYrand = genLib.RandomDouble(-0.5, +0.5);
+
+            double XOffset = -SquareX * (*myLength + SybilDistanceX)+ sybDistXrand;
+            double YOffset = -SquareY * (*myWidth + SybilDistanceY) + sybDistYrand;
+            MDMLib mdmLib = MDMLib();
+            double curHeadingAngle = mdmLib.calculateHeadingAngle(*curHeading);
+
+            Coord relativePos = Coord(XOffset, YOffset, 0);
+            double DeltaAngle = mdmLib.calculateHeadingAngle(relativePos);
+
+            double newAngle = curHeadingAngle + DeltaAngle;
+            newAngle = std::fmod(newAngle, 360);
+
+            newAngle = 360 - newAngle;
+
+            double DOffset = sqrt((pow(XOffset, 2)) + (pow(YOffset, 2)));
+
+            double relativeX = DOffset * cos(newAngle * PI / 180);
+            double relativeY = DOffset * sin(newAngle * PI / 180);
+
+            attackBsm = myBsm[0];
+
+            attackBsm.setSenderPos(
+                    Coord((*curPosition).x + relativeX,
+                            (*curPosition).y + relativeY, (*curPosition).z));
+            attackBsm.setSenderPosConfidence(*curPositionConfidence);
+
+            attackBsm.setSenderSpeed(*curSpeed);
+            attackBsm.setSenderSpeedConfidence(*curSpeedConfidence);
+
+            attackBsm.setSenderHeading(*curHeading);
+            attackBsm.setSenderHeadingConfidence(*curHeadingConfidence);
+
+            attackBsm.setSenderWidth(*myWidth);
+            attackBsm.setSenderLength(*myLength);
+        }
 
         if (SybilVehSeq > 0) {
             attackBsm.setSenderPseudonym(SybilPseudonyms[SybilVehSeq - 1]);
         } else {
             attackBsm.setSenderPseudonym(*myPseudonym);
         }
-
-        attackBsm.setSenderPos(
-                Coord((*curPosition).x + relativeX,
-                        (*curPosition).y + relativeY, (*curPosition).z));
-        attackBsm.setSenderPosConfidence(*curPositionConfidence);
-
-        attackBsm.setSenderSpeed(*curSpeed);
-        attackBsm.setSenderSpeedConfidence(*curSpeedConfidence);
-
-        attackBsm.setSenderHeading(*curHeading);
-        attackBsm.setSenderHeadingConfidence(*curHeadingConfidence);
-
-        attackBsm.setSenderWidth(*myWidth);
-        attackBsm.setSenderLength(*myLength);
 
         if (SybilVehSeq < SybilVehNumber) {
             SybilVehSeq++;
@@ -449,7 +502,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
     return attackBsm;
 }
 
-unsigned long MDAttack::getTargetNode(){
+unsigned long MDAttack::getTargetNode() {
     return targetNode;
 }
 

@@ -18,14 +18,14 @@
 
 #include "../baseClasses/NodeTable.h"
 #include "../supportClasses/MDMLib.h"
+#include "../supportClasses/NetworkLinksLib/LinkControl.h"
 #include "../JosephVeinsApp.h"
 #include "veins/modules/obstacle/ObstacleControl.h"
 #include "veins/modules/obstacle/Obstacle.h"
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #include "../mdReport/MDReport.h"
-#include "../mdAuthority/MDAuthority.h"
-
+#include "../mdStats/MDStatistics.h"
 
 using namespace Veins;
 using namespace omnetpp;
@@ -41,6 +41,8 @@ private:
     Coord myHeading;
 
     MDMLib mdmLib;
+
+    LinkControl* LinkC;
 
     double RangePlausibilityCheck(Coord, Coord);
     double PositionConsistancyCheck(Coord, Coord, double);
@@ -62,7 +64,7 @@ private:
 
 public:
 
-    LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading);
+    LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading, LinkControl* LinkC);
     BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
 
 };

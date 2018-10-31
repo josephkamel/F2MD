@@ -44,4 +44,11 @@ class MlDataCollector:
 			self.valuesCollection = np.vstack([self.valuesCollection,bsmArray[0]])
 			self.targetCollection = np.concatenate([self.targetCollection,bsmArray[1]])
 
+	def initValuesData(self,New_Rows):
+		self.valuesCollection = np.vstack([row for row in New_Rows])
+
+	def initTargetData(self,New_Rows):
+		self.targetCollection  = np.concatenate([row for row in New_Rows])
+
+
 

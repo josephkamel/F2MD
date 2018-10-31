@@ -23,13 +23,14 @@ using namespace std;
 using namespace boost;
 
 CaTChChecks::CaTChChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence,
-        Coord myHeading, Coord myHeadingConfidence, Coord mySize) {
+        Coord myHeading, Coord myHeadingConfidence, Coord mySize, LinkControl* LinkC) {
     this->myPseudonym = myPseudonym;
     this->myPosition = myPosition;
     this->myPositionConfidence = myPositionConfidence;
     this->myHeading = myHeading;
     this->myHeadingConfidence = myHeadingConfidence;
     this->mySize = mySize;
+    this->LinkC = LinkC;
 }
 
 double CaTChChecks::RangePlausibilityCheck(Coord receiverPosition,
@@ -145,14 +146,14 @@ double CaTChChecks::PositionSpeedConsistancyCheckOld(Coord curPosition,
             factor = maxfactor;
         }
 
-        factor = (factor - 0.5) * 2;
-        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
-        if (factor > 0.75) {
-            factor = 1;
-        }
-        if (factor <0.001) {
-            factor = 0;
-        }
+//        factor = (factor - 0.5) * 2;
+//        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
+//        if (factor > 0.75) {
+//            factor = 1;
+//        }
+//        if (factor <0.001) {
+//            factor = 0;
+//        }
       //  std::cout << " Old Min:" << minfactor << " Max:" << maxfactor << '\n';
         return factor;
 
@@ -197,15 +198,15 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
             factor = maxfactor;
         }
 
-        factor = (factor - 0.5) * 2;
-        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
-        if (factor > 0.75) {
-            factor = 1;
-        }
-
-        if (factor <0.001) {
-            factor = 0;
-        }
+//        factor = (factor - 0.5) * 2;
+//        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
+//        if (factor > 0.75) {
+//            factor = 1;
+//        }
+//
+//        if (factor <0.001) {
+//            factor = 0;
+//        }
 
         double factorOld = PositionSpeedConsistancyCheckOld(curPosition,
                 curPositionConfidence, oldPosition, oldPositionConfidence,
@@ -368,11 +369,14 @@ double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
         Coord senderPositionConfidence, double senderSpeed,
         double senderSpeedConfidence) {
 
-    if (senderSpeed - senderSpeedConfidence <= MAX_NON_ROUTE_SPEED) {
-        return 1;
+    double speedd= senderSpeed - senderSpeedConfidence;
+    if(speedd<0){
+        speedd = 0;
     }
 
-    ObstacleControl* obstacles = ObstacleControlAccess().getIfExists();
+    if (speedd <= MAX_NON_ROUTE_SPEED) {
+        return 1;
+    }
 
     double resolution = senderPositionConfidence.x / 10;
     if (resolution < 1) {
@@ -380,8 +384,35 @@ double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
     }
     double resolutionDelta = resolution / 10;
 
+    double failedCount = 0;
+    double allCount = 1;
+
+    if(LinkC->calculateDistance(senderPosition, 100, 100) > MAX_DISTANCE_FROM_ROUTE){
+        failedCount ++;
+    }
+
+    for (double r = resolution; r < senderPositionConfidence.x;
+            r = r + resolution) {
+        int resolutionTheta = (int) (2 * PI * r / (resolution));
+        //std::cout << r<< "#" << resolution << "^" << resolutionTheta<<"-";
+        for (int t = 0; t < resolutionTheta; ++t) {
+            Coord p(senderPosition.x + r * cos(2 * PI * t / resolutionTheta),
+                    senderPosition.y + r * sin(2 * PI * t / resolutionTheta));
+
+            if(LinkC->calculateDistance(p, 100, 100) > MAX_DISTANCE_FROM_ROUTE){
+                failedCount ++;
+            }
+            allCount++;
+        }
+        resolution = resolution + resolutionDelta;
+    }
+
+    return (1 - (failedCount / allCount));
+
     double Intersection = 0;
     int count = 5;
+
+    ObstacleControl* obstacles = ObstacleControlAccess().getIfExists();
 
     Intersection = obstacles->calculateInsersion(senderPosition, resolution / 2,
             resolution / 2);
@@ -556,14 +587,14 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
 //     //   exit(0);
 //    }
 
-        factor = (factor - 0.5) * 2;
-        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
-        if (factor > 0.75) {
-            factor = 1;
-        }
-        if (factor <0.001) {
-            factor = 0;
-        }
+//        factor = (factor - 0.5) * 2;
+//        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
+//        if (factor > 0.75) {
+//            factor = 1;
+//        }
+//        if (factor <0.001) {
+//            factor = 0;
+//        }
 
         return factor;
     } else {
@@ -646,6 +677,8 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) 
             PositionPlausibilityCheck(senderPos, senderPosConfidence,
                     mdmLib.calculateSpeed(bsm.getSenderSpeed()),
                     mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
+
+
 
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 
