@@ -13,9 +13,9 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "FRM_Th-Ag_StaleMessages_WTPC"
+//#define serialNumber "FRM_Th-Ag_StaleMessages_WTPC"
 //#define serialNumber "FRM_Py-Be_StaleMessages_WTPC"
-//#define serialNumber "IRT-DEMO"
+#define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
 static bool randomConf = true;
@@ -41,13 +41,13 @@ static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         attackTypes::DoSDisruptive, attackTypes::Sybil };
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE attackTypes::StaleMessages
+#define ATTACK_TYPE attackTypes::ConstPosOffset
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
 // 13 DoS, 14 DoSRandom, 15 DoSDisruptive, 16 Sybil
 
-static bool EnablePC = true;
+static bool EnablePC = false;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
 
@@ -56,9 +56,9 @@ static bool EnableV1 = true;
 static bool EnableV2 = true;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::AggrigationApp;
+//static mdAppTypes::App appTypeV2 = mdAppTypes::AggrigationApp;
 //static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
-//static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
 
 static bool writeSelfMsg = false;
 
