@@ -17,11 +17,11 @@ Define_Module(JosephVeinsApp);
 //#define serialNumber "FRM_Py-Be_StaleMessages_NOPC"
 //#define serialNumber "IRT-Sybil-Py"
 
-//#define serialNumber "IRT-DEMO"
-//#define savePath "../../../../../mdmSave/ResultsCaTch/"
+#define serialNumber "IRT-DEMO"
+#define savePath "../../../../../mdmSave/ResultsCaTch/"
 
-#define serialNumber "IRT-ConstPosOffset-3-0.5-V1"
-#define savePath "/media/sca-team/Data/LinuxData/F2MD-Data/mdmSave/IRT-BSMS/"
+//#define serialNumber "IRT-ConstPosOffset-3-0.5-V1"
+//#define savePath "/media/sca-team/Data/LinuxData/F2MD-Data/mdmSave/IRT-BSMS/"
 
 static bool randomConf = false;
 #define confPos 3
@@ -70,13 +70,13 @@ static bool EnableV2 = false;
 //static mdAppTypes::App appTypeV2 = mdAppTypes::AggrigationApp;
 //static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
 
-static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
 static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 
 //writeBsms
-static bool writeBsmsV1 = true;
+static bool writeBsmsV1 = false;
 static bool writeBsmsV2 = false;
 //writeReport
 static bool writeReportsV1 = false;

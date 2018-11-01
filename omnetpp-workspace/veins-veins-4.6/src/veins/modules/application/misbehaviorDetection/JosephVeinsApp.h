@@ -61,7 +61,7 @@ using namespace Veins;
 
 #include "supportClasses/HTTPRequest.h"
 
-#define mlPortV1 9997
+#define mlPortV1 9995
 #define mlPortV2 9998
 
 static unsigned long targetNodes[MAXTARGETLENGTH];
