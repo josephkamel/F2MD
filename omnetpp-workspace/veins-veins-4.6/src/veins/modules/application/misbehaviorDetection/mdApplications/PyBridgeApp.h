@@ -41,7 +41,7 @@ public:
     PyBridgeApp(int version ,int port, std::string host);
 
     bool CheckNodeForReport(unsigned long myPseudonym,
-            BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
+            BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes);
 
 
     double getMinFactor();

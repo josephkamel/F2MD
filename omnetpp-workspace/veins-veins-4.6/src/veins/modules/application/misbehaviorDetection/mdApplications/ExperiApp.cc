@@ -32,29 +32,29 @@ ExperiApp::ExperiApp(int version, double deltaTrustTime,
 }
 
 bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
-        BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
+        BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes) {
 
     bool checkFailed = false;
     MDReport mbReport;
 
-    prntApp->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
-    prntAppInst->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntApp->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
+    prntAppInst->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
 
     double temp = 0;
 
-    unsigned long senderId = bsm.getSenderPseudonym();
+    unsigned long senderId = bsm->getSenderPseudonym();
 
-    MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
-    NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
+    MDMHistory * mdmHist = detectedNodes->getMDMHistoryAddr(senderId);
+    NodeHistory * nodeHist = detectedNodes->getNodeHistoryAddr(senderId);
 
     BsmCheck bsmCheckList[maxBsmTrustNum];
     int bsmCheckListSize = 0;
 
-    for (int var = 0; var < nodeHist.getBSMNum(); ++var) {
+    for (int var = 0; var < nodeHist->getBSMNum(); ++var) {
         if (bsmCheckListSize < maxBsmTrustNum) {
-            if (mdmLib.calculateDeltaTime(bsm, nodeHist.getBSM(var))
+            if (mdmLib.calculateDeltaTime(bsm, nodeHist->getBSMAddr(var))
                     < deltaTrustTime) {
-                bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var,
+                bsmCheckList[bsmCheckListSize] = mdmHist->getBsmCheck(var,
                         version);
                 bsmCheckListSize++;
             }
@@ -81,9 +81,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::RangePlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::RangePlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionConsistancy" << '\n';
@@ -100,9 +100,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::PositionConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
@@ -117,9 +117,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "SpeedConsistancy" << '\n';
@@ -134,9 +134,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::SpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "SpeedPlausibility" << '\n';
@@ -151,9 +151,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::SpeedPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionPlausibility" << '\n';
@@ -168,9 +168,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::PositionPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "BeaconFrequency" << '\n';
@@ -185,9 +185,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::BeaconFrequency,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::BeaconFrequency,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "SuddenAppearence" << '\n';
@@ -201,9 +201,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (temp < Threshold) {
         prntApp->incFlags(mdChecksTypes::SuddenAppearence,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SuddenAppearence,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionHeadingConsistancy" << '\n';
@@ -218,9 +218,9 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     if (temp < Threshold) {
         checkFailed = true;
         prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     for (int var = 0; var < bsmCheckListSize; ++var) {
@@ -250,40 +250,40 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         if (temp < Threshold) {
             checkFailed = true;
             prntApp->incFlags(mdChecksTypes::Intersection,
-                    mbTypes::intMbs[bsm.getSenderMbType()]);
+                    mbTypes::intMbs[bsm->getSenderMbType()]);
             prntAppInst->incFlags(mdChecksTypes::Intersection,
-                    mbTypes::intMbs[bsm.getSenderMbType()]);
+                    mbTypes::intMbs[bsm->getSenderMbType()]);
         }
     }
 
     if (checkFailed) {
-        prntApp->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
 
         bsmCheck.setReported(true);
     }
     return checkFailed;
 }
 
-std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage bsm,
-        BsmCheck bsmCheck, NodeTable detectedNodes) {
+std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage * bsm,
+        BsmCheck bsmCheck, NodeTable * detectedNodes) {
 
     double zeroSum = 0;
     int zeroCount = 0;
 
-    int senderId = bsm.getSenderPseudonym();
+    int senderId = bsm->getSenderPseudonym();
 
-    MDMHistory mdmHist = detectedNodes.getMDMHistory(senderId);
-    NodeHistory nodeHist = detectedNodes.getNodeHistory(senderId);
+    MDMHistory * mdmHist = detectedNodes->getMDMHistoryAddr(senderId);
+    NodeHistory * nodeHist = detectedNodes->getNodeHistoryAddr(senderId);
 
     BsmCheck bsmCheckList[maxBsmTrustNum];
     int bsmCheckListSize = 0;
 
-    for (int var = 0; var < nodeHist.getBSMNum(); ++var) {
+    for (int var = 0; var < nodeHist->getBSMNum(); ++var) {
         if (bsmCheckListSize < maxBsmTrustNum) {
-            if (mdmLib.calculateDeltaTime(bsm, nodeHist.getBSM(var))
+            if (mdmLib.calculateDeltaTime(bsm, nodeHist->getBSMAddr(var))
                     < deltaTrustTime) {
-                bsmCheckList[bsmCheckListSize] = mdmHist.getBsmCheck(var,
+                bsmCheckList[bsmCheckListSize] = mdmHist->getBsmCheck(var,
                         version);
                 bsmCheckListSize++;
             }

@@ -1,6 +1,6 @@
 import os
-from os import listdir
-from os.path import isfile, join
+#from os import scandir
+from os.path import join
 import json
 import numpy as np
 from MLDataCollector import MlDataCollector
@@ -22,14 +22,16 @@ class MlMain:
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
 	Storage = MlArrayStorage()
-	arrayLength = 1
+	arrayLength = 5
 
 	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile_Sybil'
-	dataPath = '/media/sca-team/Data/LinuxData/F2MD-Data/mdmSave/IRT-BSMS/IRT-Sybil-3-0.5-V2/MDBsms_2018-10-31_18:7:17'
+	savePath = './saveFile/saveFile_Mix'
+	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/Test'
+	dataPath = '/media/sca-team/DATA/DataF2MD/IRT-BSMS-MIX-V1/MDBsms_2018-11-6_19:19:15'
+	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/IRT-BSMS-MIX-V2/MDBsms_2018-11-5_15:22:52'
 
 	def init(self, version, AIType):
 
@@ -46,7 +48,7 @@ class MlMain:
 			self.ReadDataFromFile( AIType)
 
 	def mlMain(self):
-		version = "V2"
+		version = "V1"
 		AIType = "neural_network"
 		if not self.initiated:
 			self.init(version,AIType)
@@ -55,14 +57,15 @@ class MlMain:
 
 
 	def trainedModelExists(self, AIType):
-		filesNames = [f for f in listdir(self.savePath) if isfile(join(self.savePath, f))]
-		print "trainedModelExists?"
+		#filesNames = [f.name  for f in scandir(self.savePath) if isfile(join(self.savePath, f.name))]
+		filesNames = [f for f in tqdm(os.listdir(self.savePath)) if os.path.isfile(join(self.savePath, f))]
 
+		print ("trainedModelExists?")
 		for s in filesNames:
 			if s.startswith('clf_'+AIType) and s.endswith(".pkl"):
 				self.curDateStr = s[-23:-4]
 
-				print "Loading " +AIType + " "+ self.curDateStr+ " ..."
+				print ("Loading " +AIType + " "+ self.curDateStr+ " ...")
 				self.clf = joblib.load(self.savePath+'/'+s)
 				self.DataCollector.setCurDateSrt(self.curDateStr)
 				self.Trainer.setCurDateSrt(self.curDateStr)
@@ -71,12 +74,14 @@ class MlMain:
 				self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
  
 				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
+				print ("Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!")
 
 	def ReadDataFromFile(self, AIType):
-		print "DataSave And Training " + str(self.dataPath) + " Started ..."
-		filesNames = [f for f in tqdm(listdir(self.dataPath)) if isfile(join(self.dataPath, f))]
-		print "bsmDataExists?"
+		print ("DataSave And Training " + str(self.dataPath) + " Started ...")
+
+		#filesNames = [f.name for f in tqdm(scandir(self.dataPath)) if f.is_file()]
+		filesNames = [f for f in tqdm(os.listdir(self.dataPath)) if os.path.isfile(join(self.dataPath, f))]
+		print ("bsmDataExists?")
 
 		ValuesData = []
 		TargetData = []
@@ -99,7 +104,7 @@ class MlMain:
 		self.Trainer.train()
 		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-		print "DataSave And Training " + str(self.dataPath) + " Finished!"
+		print ("DataSave And Training " + str(self.dataPath) + " Finished!")
 
 	def getNodeArray(self,bsmJsom):
 		cur_array = self.getArray(bsmJsom)

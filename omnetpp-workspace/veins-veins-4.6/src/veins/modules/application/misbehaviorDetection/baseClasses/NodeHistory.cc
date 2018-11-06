@@ -27,18 +27,25 @@ NodeHistory::NodeHistory(unsigned long pseudo, BasicSafetyMessage bsm) {
     addBSM(bsm);
 }
 
-BasicSafetyMessage NodeHistory::getLatestBSM() {
-    return bsmList[0];
+BasicSafetyMessage* NodeHistory::getLatestBSMAddr() {
+    return &bsmList[0];
 }
 
-BasicSafetyMessage NodeHistory::getSecondLatestBSM() {
-    return bsmList[1];
-}
+//BasicSafetyMessage NodeHistory::getLatestBSM() {
+//    return bsmList[0];
+//}
+//
+//BasicSafetyMessage NodeHistory::getSecondLatestBSM() {
+//    return bsmList[1];
+//}
+//
+//BasicSafetyMessage NodeHistory::getBSM(int index) {
+//    return bsmList[index];
+//}
 
-BasicSafetyMessage NodeHistory::getBSM(int index) {
-    return bsmList[index];
+BasicSafetyMessage* NodeHistory::getBSMAddr(int index) {
+    return &bsmList[index];
 }
-
 
 double NodeHistory::getArrivalTime(int index) {
     return bsmList[index].getArrivalTime().dbl();

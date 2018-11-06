@@ -22,9 +22,9 @@ double MDMLib::calculateSpeed(Coord Speed) {
     return sqrt(pow(Speed.x, 2.0) + pow(Speed.y, 2.0) + pow(Speed.z, 2.0));
 }
 
-double MDMLib::calculateDeltaTime(BasicSafetyMessage bsm1,
-        BasicSafetyMessage bsm2) {
-    return fabs(bsm1.getArrivalTime().dbl() - bsm2.getArrivalTime().dbl());
+double MDMLib::calculateDeltaTime(BasicSafetyMessage * bsm1,
+        BasicSafetyMessage * bsm2) {
+    return fabs(bsm1->getArrivalTime().dbl() - bsm2->getArrivalTime().dbl());
 }
 
 double MDMLib::calculatePolynom(long double coof[], const int coofNum,

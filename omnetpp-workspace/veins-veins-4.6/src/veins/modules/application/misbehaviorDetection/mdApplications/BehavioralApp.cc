@@ -30,17 +30,17 @@ BehavioralApp::BehavioralApp(int version,
 }
 
 bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
-        BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes) {
+        BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes) {
 
     MDReport mbReport;
 
     double tempFactor = 0;
     minFactor = 1;
 
-    prntApp->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
-    prntAppInst->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntApp->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
+    prntAppInst->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
 
-    unsigned long senderId = bsm.getSenderPseudonym();
+    unsigned long senderId = bsm->getSenderPseudonym();
 
     int bsmCheckListSize = 0;
 
@@ -54,9 +54,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::RangePlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::RangePlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionConsistancy" << '\n';
@@ -66,9 +66,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
@@ -79,9 +79,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "SpeedConsistancy" << '\n';
@@ -92,9 +92,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::SpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "SpeedPlausibility" << '\n';
@@ -105,9 +105,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::SpeedPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionPlausibility" << '\n';
@@ -118,9 +118,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionPlausibility,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "BeaconFrequency" << '\n';
@@ -131,9 +131,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::BeaconFrequency,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::BeaconFrequency,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "SuddenAppearence" << '\n';
@@ -144,9 +144,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::SuddenAppearence,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SuddenAppearence,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     //std::cout<< "PositionHeadingConsistancy" << '\n';
@@ -157,9 +157,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
     if (tempFactor < Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy,
-                mbTypes::intMbs[bsm.getSenderMbType()]);
+                mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     InterTest inter = bsmCheck.getIntersection();
@@ -172,9 +172,9 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
         }
         if (tempFactor < Threshold) {
             prntApp->incFlags(mdChecksTypes::Intersection,
-                    mbTypes::intMbs[bsm.getSenderMbType()]);
+                    mbTypes::intMbs[bsm->getSenderMbType()]);
             prntAppInst->incFlags(mdChecksTypes::Intersection,
-                    mbTypes::intMbs[bsm.getSenderMbType()]);
+                    mbTypes::intMbs[bsm->getSenderMbType()]);
         }
     }
 
@@ -229,8 +229,8 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     if (indexTMO >= 0) {
         if (TimeOut[indexTMO] > 0) {
-            prntApp->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
-            prntAppInst->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+            prntApp->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
+            prntAppInst->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
             bsmCheck.setReported(true);
             checkFailed = true;
             TimeOut[indexTMO] = TimeOut[indexTMO] - 1;

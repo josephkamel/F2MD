@@ -21,12 +21,11 @@
 #include <vector>
 #include <algorithm>    // std::max
 
-
 using namespace std;
 using namespace boost;
 
-LegacyChecks::LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed, Coord mySize,
-        Coord myHeading, LinkControl* LinkC) {
+LegacyChecks::LegacyChecks(unsigned long myPseudonym, Coord myPosition,
+        Coord mySpeed, Coord mySize, Coord myHeading, LinkControl* LinkC) {
     this->myPseudonym = myPseudonym;
     this->myPosition = myPosition;
     this->mySpeed = mySpeed;
@@ -48,8 +47,8 @@ double LegacyChecks::RangePlausibilityCheck(Coord senderPosition,
     }
 }
 
-double LegacyChecks::PositionConsistancyCheck(Coord curPosition, Coord oldPosition,
-        double time) {
+double LegacyChecks::PositionConsistancyCheck(Coord curPosition,
+        Coord oldPosition, double time) {
     double distance = mdmLib.calculateDistance(curPosition, oldPosition);
 
     if (distance < MAX_CONSISTANT_DISTANCE * time) {
@@ -64,8 +63,8 @@ double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
 
     double speedDelta = curSpeed - oldspeed;
 
-    double attFact = mdmLib.gaussianSum(1, 1/3);
-    if(time>=1){
+    double attFact = mdmLib.gaussianSum(1, 1 / 3);
+    if (time >= 1) {
         attFact = time;
     }
 
@@ -152,77 +151,59 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
 
 }
 
-InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
-        BasicSafetyMessage bsm) {
 
-    unsigned long senderPseudonym = bsm.getSenderPseudonym();
-    Coord senderPos = bsm.getSenderPos();
+InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
+        BasicSafetyMessage * bsm) {
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
-    NodeHistory varNode;
+    unsigned long senderPseudonym = bsm->getSenderPseudonym();
+    Coord senderPos = bsm->getSenderPos();
 
-    std::map<std::string, unsigned long> resultPseudo;
-    std::map<std::string, double> resultCheck;
-    double INTScore = 0;
+    NodeHistory *senderNode = detectedNodes->getNodeHistoryAddr(senderPseudonym);
+    NodeHistory *varNode;
+
+    const  int maxInterNum = 100;
+     unsigned long resultPseudo[maxInterNum];
+     double resultCheck[maxInterNum];
+
     int INTNum = 0;
+    double INTScore = 1;
 
     INTScore = IntersectionCheck(myPosition, mySize, myHeading, senderPos,
-            Coord(bsm.getSenderWidth(), bsm.getSenderLength()),
-            bsm.getSenderHeading());
-    if (INTScore < 1) {
-        resultPseudo["INTId_0"] = myPseudonym;
-        resultCheck["INTCheck_0"] = INTScore;
+            Coord(bsm->getSenderWidth(), bsm->getSenderLength()),
+            bsm->getSenderHeading());
 
+    if (INTScore < 1 && INTNum<maxInterNum) {
+        resultPseudo[INTNum] = myPseudonym;
+        resultCheck[INTNum] = INTScore;
         INTNum++;
     }
 
-    char num_string[32];
-    char INTId_string[64] = "INTId_";
-    char INTCheck_string[64] = "INTCheck_";
+    for (int var = 0; var < detectedNodes->getNodesNum(); ++var) {
+        if (detectedNodes->getNodePseudo(var) != senderPseudonym) {
+            varNode = detectedNodes->getNodeHistoryAddr(
+                    detectedNodes->getNodePseudo(var));
 
-    for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
-        if (detectedNodes.getNodePseudo(var) != senderPseudonym) {
-            varNode = detectedNodes.getNodeHistory(
-                    detectedNodes.getNodePseudo(var));
-
-            if (mdmLib.calculateDeltaTime(varNode.getLatestBSM(),
+            if (mdmLib.calculateDeltaTime(varNode->getLatestBSMAddr(),
                     bsm) < MAX_DELTA_INTER) {
 
-                INTScore = IntersectionCheck(varNode.getSenderPos(0),
-                        varNode.getSenderSize(0), varNode.getSenderHeading(0),
+                INTScore = IntersectionCheck(varNode->getSenderPos(0),
+                        varNode->getSenderSize(0), varNode->getSenderHeading(0),
                         senderPos,
-                        Coord(bsm.getSenderWidth(), bsm.getSenderLength()),
-                        bsm.getSenderHeading());
-                if (INTScore < 1) {
-                    sprintf(num_string, "%d", INTNum);
-                    strcat(INTId_string, num_string);
-                    strcat(INTCheck_string, num_string);
-                    resultPseudo[INTId_string] = detectedNodes.getNodePseudo(var);
-                    resultCheck[INTCheck_string] = INTScore;
-
-                    strncpy(INTId_string, "INTId_", sizeof(INTId_string));
-                    strncpy(INTCheck_string, "INTCheck_",
-                            sizeof(INTCheck_string));
-
+                        Coord(bsm->getSenderWidth(), bsm->getSenderLength()),
+                        bsm->getSenderHeading());
+                if (INTScore < 1 && INTNum<maxInterNum) {
+                    resultPseudo[INTNum] = detectedNodes->getNodePseudo(var);
+                    resultCheck[INTNum] = INTScore;
                     INTNum++;
                 }
             }
         }
     }
 
-
     InterTest intertTest = InterTest(INTNum);
 
     for (int var = 0; var < INTNum; ++var) {
-        sprintf(num_string, "%d", var);
-        strcat(INTId_string, num_string);
-        strcat(INTCheck_string, num_string);
-
-        intertTest.addInterValue(resultPseudo.find(INTId_string)->second,
-                resultCheck.find(INTCheck_string)->second);
-
-        strncpy(INTId_string, "INTId_", sizeof(INTId_string));
-        strncpy(INTCheck_string, "INTCheck_", sizeof(INTCheck_string));
+        intertTest.addInterValue(resultPseudo[var], resultCheck[var]);
     }
 
     return intertTest;
@@ -245,11 +226,11 @@ double LegacyChecks::PositionPlausibilityCheck(Coord senderPosition,
         return 1;
     }
 
-    double distance = LinkC->calculateDistance(senderPosition, 100, 100);
+    double distance = LinkC->calculateDistance(senderPosition, 50, 50);
 
-    if(distance > MAX_DISTANCE_FROM_ROUTE){
+    if (distance > MAX_DISTANCE_FROM_ROUTE) {
         return 0;
-    }else{
+    } else {
         return 1;
     }
 
@@ -308,59 +289,63 @@ double LegacyChecks::PositionHeadingConsistancyCheck(Coord curHeading,
     }
 }
 
-BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
-
+BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage *bsm,
+        NodeTable *detectedNodes) {
     BsmCheck bsmCheck = BsmCheck();
 
-    unsigned long senderPseudonym = bsm.getSenderPseudonym();
-    Coord senderPos = bsm.getSenderPos();
-    Coord senderPosConfidence = bsm.getSenderPosConfidence();
+    unsigned long senderPseudonym = bsm->getSenderPseudonym();
+    Coord senderPos = bsm->getSenderPos();
+    Coord senderPosConfidence = bsm->getSenderPosConfidence();
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
+    NodeHistory * senderNode = detectedNodes->getNodeHistoryAddr(senderPseudonym);
 
     bsmCheck.setRangePlausibility(
-            RangePlausibilityCheck(myPosition, bsm.getSenderPos()));
+            RangePlausibilityCheck(myPosition, bsm->getSenderPos()));
 
     bsmCheck.setSpeedPlausibility(
             SpeedPlausibilityCheck(
-                    mdmLib.calculateSpeed(bsm.getSenderSpeed())));
+                    mdmLib.calculateSpeed(bsm->getSenderSpeed())));
 
-    if (detectedNodes.getNodeHistory(senderPseudonym).getBSMNum() > 0) {
+
+    if (detectedNodes->getNodeHistoryAddr(senderPseudonym)->getBSMNum() > 0) {
 
         bsmCheck.setPositionConsistancy(
                 PositionConsistancyCheck(senderPos,
-                        senderNode.getLatestBSM().getSenderPos(),
+                        senderNode->getLatestBSMAddr()->getSenderPos(),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode->getLatestBSMAddr())));
 
         bsmCheck.setSpeedConsistancy(
                 SpeedConsistancyCheck(
-                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
                         mdmLib.calculateSpeed(
-                                senderNode.getLatestBSM().getSenderSpeed()),
+                                senderNode->getLatestBSMAddr()->getSenderSpeed()),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode->getLatestBSMAddr())));
 
         bsmCheck.setPositionSpeedConsistancy(
                 PositionSpeedConsistancyCheck(senderPos,
-                        senderNode.getLatestBSM().getSenderPos(),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
+                        senderNode->getLatestBSMAddr()->getSenderPos(),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
                         mdmLib.calculateSpeed(
-                                senderNode.getLatestBSM().getSenderSpeed()),
+                                senderNode->getLatestBSMAddr()->getSenderSpeed()),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode->getLatestBSMAddr())));
 
         bsmCheck.setBeaconFrequency(
-                BeaconFrequencyCheck(bsm.getArrivalTime().dbl(),
-                        senderNode.getLatestBSM().getArrivalTime().dbl()));
+                BeaconFrequencyCheck(bsm->getArrivalTime().dbl(),
+                        senderNode->getLatestBSMAddr()->getArrivalTime().dbl()));
 
         bsmCheck.setPositionHeadingConsistancy(
-                PositionHeadingConsistancyCheck(bsm.getSenderHeading(),
-                        bsm.getSenderPos(),
-                        senderNode.getLatestBSM().getSenderPos(),
+                PositionHeadingConsistancyCheck(bsm->getSenderHeading(),
+                        bsm->getSenderPos(),
+                        senderNode->getLatestBSMAddr()->getSenderPos(),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM()),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeed())));
+                                senderNode->getLatestBSMAddr()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeed())));
+
+
+
 
     } else {
         bsmCheck.setSuddenAppearence(
@@ -369,7 +354,8 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes)
 
     bsmCheck.setPositionPlausibility(
             PositionPlausibilityCheck(senderPos,
-                    mdmLib.calculateSpeed(bsm.getSenderSpeed())));
+                    mdmLib.calculateSpeed(bsm->getSenderSpeed())));
+
 
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 

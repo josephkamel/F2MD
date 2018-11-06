@@ -98,7 +98,7 @@ void EvidenceReport::addEvidence(BasicSafetyMessage myBsm,
     }
 
     for (int var = 0; var < eviNum - 1; ++var) {
-        addBsmToList(detectedNodes.getNodeHistory(reportedPseudo).getBSM(var));
+        addBsmToList(*detectedNodes.getNodeHistoryAddr(reportedPseudo)->getBSMAddr(var));
     }
 
     for (int var = 0; var < reportedCheck.getIntersection().getInterNum();
@@ -112,8 +112,8 @@ void EvidenceReport::addEvidence(BasicSafetyMessage myBsm,
 
             } else {
                 addBsmToList(
-                        detectedNodes.getNodeHistory(
-                                reportedCheck.getIntersection().getInterId(var)).getLatestBSM());
+                        *detectedNodes.getNodeHistoryAddr(
+                                reportedCheck.getIntersection().getInterId(var))->getLatestBSMAddr());
             }
         }
     }

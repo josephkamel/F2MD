@@ -26,6 +26,9 @@ private:
     MDMHistory mdmHistoryList[MAXNODESLENGTH];
     unsigned long nodePseudos[MAXNODESLENGTH];
 
+    NodeHistory nullNode;
+    MDMHistory nullMDMNode;
+
     int getOldestNode();
 
 public:
@@ -34,8 +37,8 @@ public:
     NodeHistory* getNodeHistoryList();
     unsigned long getNodePseudo(int);
     void put(unsigned long, NodeHistory, MDMHistory);
-    NodeHistory getNodeHistory(int);
-    MDMHistory getMDMHistory(unsigned long nodePseudonym);
+    NodeHistory* getNodeHistoryAddr(int);
+    MDMHistory* getMDMHistoryAddr(unsigned long nodePseudonym);
 
     void setNodeHistory(int index,NodeHistory);
     void setMDMHistory(int index,MDMHistory);
@@ -44,8 +47,8 @@ public:
 
     double getDeltaTime(unsigned long nodePseudo1, unsigned long nodePseudo2);
 
-    BasicSafetyMessage getRandomBSM();
-    BasicSafetyMessage getNextAttackedBsm(Coord myPosition, int bsmNode, double bsmTime);
+    BasicSafetyMessage* getRandomBSM();
+    BasicSafetyMessage* getNextAttackedBsm(Coord myPosition, int bsmNode, double bsmTime);
 };
 
 #endif

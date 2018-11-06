@@ -82,7 +82,7 @@ public:
 
     double calculatePolynom(long double coof[],const int coofNum, double x);
     double calculateHeadingAngle(Coord heading);
-    double calculateDeltaTime(BasicSafetyMessage bsm1, BasicSafetyMessage bsm2);
+    double calculateDeltaTime(BasicSafetyMessage * bsm1, BasicSafetyMessage * bsm2);
     double calculateCircleSegment(double radius, double intDistance);
     double calculateCircleCircleIntersection(double r1, double r2, double d);
     double SegmentSegmentFactor(double d, double r1, double r2, double range);
