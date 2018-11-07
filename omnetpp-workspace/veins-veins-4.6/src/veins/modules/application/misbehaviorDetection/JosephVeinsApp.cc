@@ -13,19 +13,18 @@
 
 Define_Module(JosephVeinsApp);
 
-//#define serialNumber "FRM_Th-Ag_StaleMessages_WTPC"
 
-#define serialNumber "IRT-ConstPosOffset-I-Py"
+#define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
+//#define serialNumber "IRT-BSMS-MIX-V1"
+//#define savePath "/media/sca-team/DATA/DataF2MD/"
 
 static bool randomConf = false;
 #define confPos 3
 #define confSpd 0.5
 #define confHea 0
-//#define confPos 0
-//#define confSpd 0
-//#define confHea 0
+
 #define SAVE_PERIOD 1 //60 seconds
 
 #define START_SAVE 0 //60 seconds
@@ -33,7 +32,7 @@ static bool randomConf = false;
 
 #define REPORT_VERSION reportTypes::EvidenceReport
 
-static bool MixAttacks = false;
+static bool MixAttacks = true;
 static bool RandomMix = false;
 static int LastAttackIndex = -1;
 static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
@@ -59,8 +58,9 @@ static bool EnablePC = false;
 
 //Detection Application
 static bool EnableV1 = true;
-static bool EnableV2 = true;
-
+static bool EnableV2 = false;
+static bool SaveStatsV1 = false;
+static bool SaveStatsV2 = false;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
 static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
@@ -328,17 +328,17 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         }
         detectedNodes.put(senderPseudonym, newNode, newMDM);
     } else {
-        NodeHistory existingNode = detectedNodes.getNodeHistory(
+        NodeHistory * existingNode = detectedNodes.getNodeHistoryAddr(
                 senderPseudonym);
-        existingNode.addBSM(*bsm);
-        MDMHistory existingMDM = detectedNodes.getMDMHistory(senderPseudonym);
+        existingNode->addBSM(*bsm);
+        MDMHistory * existingMDM = detectedNodes.getMDMHistoryAddr(senderPseudonym);
         if (EnableV1) {
-            existingMDM.addBsmCheck(bsmCheckV1, 1);
+            existingMDM->addBsmCheck(bsmCheckV1, 1);
         }
         if (EnableV2) {
-            existingMDM.addBsmCheck(bsmCheckV2, 2);
+            existingMDM->addBsmCheck(bsmCheckV2, 2);
         }
-        detectedNodes.put(senderPseudonym, existingNode, existingMDM);
+        //detectedNodes.put(senderPseudonym, existingNode, existingMDM);
     }
 
     if (EnablePC) {
@@ -399,6 +399,7 @@ static bool initV1 = false;
 static bool initV2 = false;
 void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         int version) {
+
     unsigned long senderPseudo = bsm->getSenderPseudonym();
 
     switch (version) {
@@ -408,9 +409,11 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 Coord(myWidth, myLength), curHeading, &linkControl);
 //        CaTChChecks mdm-c(myPseudonym, curPosition, curPositionConfidence,
 //                curHeading, curHeadingConfidence, Coord(myWidth, myLength));
-        bsmCheckV1 = mdm.CheckBSM(*bsm, detectedNodes);
-        bool result = AppV1->CheckNodeForReport(myPseudonym, *bsm, bsmCheckV1,
-                detectedNodes);
+        bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
+
+
+        bool result = AppV1->CheckNodeForReport(myPseudonym, bsm, bsmCheckV1,
+                &detectedNodes);
 
         if (result) {
             MDReport reportBase;
@@ -450,7 +453,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         if ((simTime().dbl() - deltaTV1) > SAVE_PERIOD) {
             deltaTV1 = simTime().dbl();
 
-            if (simTime().dbl() > START_SAVE) {
+            if ((simTime().dbl() > START_SAVE) && SaveStatsV1) {
                 AppV1->saveLine(savePath, serialNumber,
                         mobility->getManager()->getManagedHosts().size(),
                         deltaTV1);
@@ -469,10 +472,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         std::string mdv = "V2";
         CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
                 curHeading, curHeadingConfidence, Coord(myWidth, myLength), &linkControl);
-        BsmCheck bsmCheckV2 = mdmV2.CheckBSM(*bsm, detectedNodes);
+        BsmCheck bsmCheckV2 = mdmV2.CheckBSM(bsm, &detectedNodes);
 
-        bool result = AppV2->CheckNodeForReport(myPseudonym, *bsm, bsmCheckV2,
-                detectedNodes);
+        bool result = AppV2->CheckNodeForReport(myPseudonym, bsm, bsmCheckV2,
+                &detectedNodes);
         if (result) {
 
             MDReport reportBase;
@@ -514,7 +517,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         if ((simTime().dbl() - deltaTV2) > SAVE_PERIOD) {
             deltaTV2 = simTime().dbl();
 
-            if (simTime().dbl() > START_SAVE) {
+            if ((simTime().dbl() > START_SAVE) && SaveStatsV2) {
                 AppV2->saveLine(savePath, serialNumber,
                         mobility->getManager()->getManagedHosts().size(),
                         deltaTV2);
@@ -740,4 +743,3 @@ bool JosephVeinsApp::isAccusedNode(unsigned long id) {
     }
     return false;
 }
-

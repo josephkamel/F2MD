@@ -29,8 +29,8 @@ ThresholdApp::ThresholdApp(int version ,double Threshold):
     this->Threshold = Threshold;
 }
 
-bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessage bsm,
-        BsmCheck bsmCheck, NodeTable detectedNodes){
+bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessage * bsm,
+        BsmCheck bsmCheck, NodeTable * detectedNodes){
 
     bool checkFailed = false;
 
@@ -38,18 +38,18 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
 
     minFactor = 1;
 
-    prntApp->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
-    prntAppInst->incAll(mbTypes::intMbs[bsm.getSenderMbType()]);
+    prntApp->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
+    prntAppInst->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
 
-    unsigned long senderId = bsm.getSenderPseudonym();
+    unsigned long senderId = bsm->getSenderPseudonym();
 
     if(bsmCheck.getRangePlausibility()<minFactor){
         minFactor = bsmCheck.getRangePlausibility();
     }
     if (bsmCheck.getRangePlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if(bsmCheck.getRangePlausibility()<minFactor){
@@ -57,8 +57,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getPositionConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
 
@@ -67,8 +67,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getPositionSpeedConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if(bsmCheck.getSpeedConsistancy()<minFactor){
@@ -76,8 +76,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getSpeedConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if(bsmCheck.getSpeedPlausibility()<minFactor){
@@ -85,8 +85,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getSpeedPlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if(bsmCheck.getPositionPlausibility()<minFactor){
@@ -94,8 +94,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getPositionPlausibility() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if(bsmCheck.getBeaconFrequency()<minFactor){
@@ -103,8 +103,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getBeaconFrequency() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if(bsmCheck.getSuddenAppearence()<minFactor){
@@ -112,8 +112,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getSuddenAppearence() <= Threshold) {
    //     checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     if( bsmCheck.getPositionHeadingConsistancy()<minFactor){
@@ -121,8 +121,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
     if (bsmCheck.getPositionHeadingConsistancy() <= Threshold) {
         checkFailed = true;
-        prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
     bool maxInterFound = false;
@@ -140,8 +140,8 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
         if (IT <= Threshold) {
             checkFailed = true;
             if (!minInterFound) {
-                prntApp->incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm.getSenderMbType()]);
-                prntAppInst->incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm.getSenderMbType()]);
+                prntApp->incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm->getSenderMbType()]);
+                prntAppInst->incFlags(mdChecksTypes::Intersection, mbTypes::intMbs[bsm->getSenderMbType()]);
                 minInterFound = true;
             }
         }
@@ -149,10 +149,10 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym,BasicSafetyMessa
     }
 
     if (checkFailed) {
-        prntApp->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
-        prntAppInst->incCumulFlags(mbTypes::intMbs[bsm.getSenderMbType()]);
+        prntApp->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
+        prntAppInst->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
 
-//        if(bsm.getSenderMbType() == 0){
+//        if(bsm->getSenderMbType() == 0){
 //            prntApp->printOutDebug();
 //        }
 

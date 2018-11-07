@@ -271,17 +271,17 @@ double ExperiChecks::IntersectionCheck(Coord nodePosition1,
 
 }
 
-InterTest ExperiChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
-        BasicSafetyMessage bsm) {
-    unsigned long senderPseudonym = bsm.getSenderPseudonym();
-    Coord senderPos = bsm.getSenderPos();
-    Coord senderPosConfidence = bsm.getSenderPosConfidence();
-    Coord senderHeading = bsm.getSenderHeading();
+InterTest ExperiChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
+        BasicSafetyMessage * bsm) {
+    unsigned long senderPseudonym = bsm->getSenderPseudonym();
+    Coord senderPos = bsm->getSenderPos();
+    Coord senderPosConfidence = bsm->getSenderPosConfidence();
+    Coord senderHeading = bsm->getSenderHeading();
 
-    Coord senderSize = Coord(bsm.getSenderWidth(), bsm.getSenderLength());
+    Coord senderSize = Coord(bsm->getSenderWidth(), bsm->getSenderLength());
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
-    NodeHistory varNode;
+    NodeHistory * senderNode = detectedNodes->getNodeHistoryAddr(senderPseudonym);
+    NodeHistory * varNode;
 
     std::map<std::string, unsigned long> resultPseudo;
     std::map<std::string, double> resultCheck;
@@ -300,28 +300,28 @@ InterTest ExperiChecks::MultipleIntersectionCheck(NodeTable detectedNodes,
     char INTId_string[64] = "INTId_";
     char INTCheck_string[64] = "INTCheck_";
 
-    for (int var = 0; var < detectedNodes.getNodesNum(); ++var) {
-        if (detectedNodes.getNodePseudo(var) != senderPseudonym) {
-            varNode = detectedNodes.getNodeHistory(
-                    detectedNodes.getNodePseudo(var));
+    for (int var = 0; var < detectedNodes->getNodesNum(); ++var) {
+        if (detectedNodes->getNodePseudo(var) != senderPseudonym) {
+            varNode = detectedNodes->getNodeHistoryAddr(
+                    detectedNodes->getNodePseudo(var));
 
-            if (mdmLib.calculateDeltaTime(varNode.getLatestBSM(),
+            if (mdmLib.calculateDeltaTime(varNode->getLatestBSMAddr(),
                     bsm) < MAX_DELTA_INTER) {
 
-                Coord varSize = Coord(varNode.getLatestBSM().getSenderWidth(),
-                        varNode.getLatestBSM().getSenderLength());
+                Coord varSize = Coord(varNode->getLatestBSMAddr()->getSenderWidth(),
+                        varNode->getLatestBSMAddr()->getSenderLength());
 
                 INTScore = IntersectionCheck(
-                        varNode.getLatestBSM().getSenderPos(),
-                        varNode.getLatestBSM().getSenderPosConfidence(),
+                        varNode->getLatestBSMAddr()->getSenderPos(),
+                        varNode->getLatestBSMAddr()->getSenderPosConfidence(),
                         senderPos, senderPosConfidence,
-                        varNode.getLatestBSM().getSenderHeading(),
+                        varNode->getLatestBSMAddr()->getSenderHeading(),
                         senderHeading, varSize, senderSize);
                 if (INTScore < 1) {
                     sprintf(num_string, "%d", INTNum);
                     strcat(INTId_string, num_string);
                     strcat(INTCheck_string, num_string);
-                    resultPseudo[INTId_string] = detectedNodes.getNodePseudo(var);
+                    resultPseudo[INTId_string] = detectedNodes->getNodePseudo(var);
                     resultCheck[INTCheck_string] = INTScore;
 
                     strncpy(INTId_string, "INTId_", sizeof(INTId_string));
@@ -592,70 +592,70 @@ double ExperiChecks::PositionHeadingConsistancyCheck(Coord curHeading,
     }
 }
 
-BsmCheck ExperiChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes) {
+BsmCheck ExperiChecks::CheckBSM(BasicSafetyMessage * bsm, NodeTable * detectedNodes) {
 
     BsmCheck bsmCheck = BsmCheck();
 
-    unsigned long senderPseudonym = bsm.getSenderPseudonym();
-    Coord senderPos = bsm.getSenderPos();
-    Coord senderPosConfidence = bsm.getSenderPosConfidence();
+    unsigned long senderPseudonym = bsm->getSenderPseudonym();
+    Coord senderPos = bsm->getSenderPos();
+    Coord senderPosConfidence = bsm->getSenderPosConfidence();
 
-    NodeHistory senderNode = detectedNodes.getNodeHistory(senderPseudonym);
+    NodeHistory * senderNode = detectedNodes->getNodeHistoryAddr(senderPseudonym);
 
     bsmCheck.setRangePlausibility(
             RangePlausibilityCheck(myPosition, myPositionConfidence, senderPos,
                     senderPosConfidence));
 
     bsmCheck.setSpeedPlausibility(
-            SpeedPlausibilityCheck(mdmLib.calculateSpeed(bsm.getSenderSpeed()),
-                    mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
+            SpeedPlausibilityCheck(mdmLib.calculateSpeed(bsm->getSenderSpeed()),
+                    mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
 
-    if (detectedNodes.getNodeHistory(senderPseudonym).getBSMNum() > 0) {
+    if (detectedNodes->getNodeHistoryAddr(senderPseudonym)->getBSMNum() > 0) {
         bsmCheck.setPositionConsistancy(
                 PositionConsistancyCheck(senderPos, senderPosConfidence,
-                        senderNode.getLatestBSM().getSenderPos(),
-                        senderNode.getLatestBSM().getSenderPosConfidence(),
+                        senderNode->getLatestBSMAddr()->getSenderPos(),
+                        senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode->getLatestBSMAddr())));
 
         bsmCheck.setSpeedConsistancy(
                 SpeedConsistancyCheck(
-                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence()),
                         mdmLib.calculateSpeed(
-                                senderNode.getLatestBSM().getSenderSpeed()),
+                                senderNode->getLatestBSMAddr()->getSenderSpeed()),
                         mdmLib.calculateSpeed(
-                                senderNode.getLatestBSM().getSenderSpeedConfidence()),
+                                senderNode->getLatestBSMAddr()->getSenderSpeedConfidence()),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode->getLatestBSMAddr())));
 
         bsmCheck.setPositionSpeedConsistancy(
                 PositionSpeedConsistancyCheck(senderPos, senderPosConfidence,
-                        senderNode.getLatestBSM().getSenderPos(),
-                        senderNode.getLatestBSM().getSenderPosConfidence(),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence()),
+                        senderNode->getLatestBSMAddr()->getSenderPos(),
+                        senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence()),
                         mdmLib.calculateSpeed(
-                                senderNode.getLatestBSM().getSenderSpeed()),
+                                senderNode->getLatestBSMAddr()->getSenderSpeed()),
                         mdmLib.calculateSpeed(
-                                senderNode.getLatestBSM().getSenderSpeedConfidence()),
+                                senderNode->getLatestBSMAddr()->getSenderSpeedConfidence()),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM())));
+                                senderNode->getLatestBSMAddr())));
 
         bsmCheck.setBeaconFrequency(
-                BeaconFrequencyCheck(bsm.getArrivalTime().dbl(),
-                        senderNode.getLatestBSM().getArrivalTime().dbl()));
+                BeaconFrequencyCheck(bsm->getArrivalTime().dbl(),
+                        senderNode->getLatestBSMAddr()->getArrivalTime().dbl()));
 
         bsmCheck.setPositionHeadingConsistancy(
-                PositionHeadingConsistancyCheck(bsm.getSenderHeading(),
-                        bsm.getSenderHeadingConfidence(),
-                        senderNode.getLatestBSM().getSenderPos(),
-                        senderNode.getLatestBSM().getSenderPosConfidence(),
-                        bsm.getSenderPos(), bsm.getSenderPosConfidence(),
+                PositionHeadingConsistancyCheck(bsm->getSenderHeading(),
+                        bsm->getSenderHeadingConfidence(),
+                        senderNode->getLatestBSMAddr()->getSenderPos(),
+                        senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
+                        bsm->getSenderPos(), bsm->getSenderPosConfidence(),
                         mdmLib.calculateDeltaTime(bsm,
-                                senderNode.getLatestBSM()),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeed()),
-                        mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
+                                senderNode->getLatestBSMAddr()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
+                        mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
 
     } else {
         bsmCheck.setSuddenAppearence(
@@ -665,8 +665,8 @@ BsmCheck ExperiChecks::CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes)
 
     bsmCheck.setPositionPlausibility(
             PositionPlausibilityCheck(senderPos, senderPosConfidence,
-                    mdmLib.calculateSpeed(bsm.getSenderSpeed()),
-                    mdmLib.calculateSpeed(bsm.getSenderSpeedConfidence())));
+                    mdmLib.calculateSpeed(bsm->getSenderSpeed()),
+                    mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
 
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 

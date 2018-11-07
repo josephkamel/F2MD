@@ -36,7 +36,7 @@ class Link {
 		const Coord getBboxP1() const;
 		const Coord getBboxP2() const;
 
-		double getDistance(const Coord& pos) const;
+		double getDistance(const Coord * pos) const;
 
 	protected:
 

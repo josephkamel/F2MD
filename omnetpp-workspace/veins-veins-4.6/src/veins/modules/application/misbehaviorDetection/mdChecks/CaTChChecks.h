@@ -63,8 +63,8 @@ private:
             Coord nodePositionConfidence1, Coord nodePosition2,
             Coord nodePositionConfidence2, Coord nodeHeading1, Coord nodeHeading2,
             Coord nodeSize1, Coord nodeSize2);
-    InterTest MultipleIntersectionCheck(NodeTable detectedNodes,
-            BasicSafetyMessage bsm);
+    InterTest MultipleIntersectionCheck(NodeTable * detectedNodes,
+            BasicSafetyMessage * bsm);
 
     double PositionSpeedConsistancyCheck(Coord curPosition,
             Coord curPositionConfidence, Coord oldPosition,
@@ -93,7 +93,7 @@ private:
 
 public:
     CaTChChecks(unsigned long myPseudonym, Coord myPosition, Coord myPositionConfidence, Coord myHeading, Coord myHeadingConfidence, Coord mySize, LinkControl* LinkC);
-    BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
+    BsmCheck CheckBSM(BasicSafetyMessage * bsm, NodeTable * detectedNodes);
 
 };
 

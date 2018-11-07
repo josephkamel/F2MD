@@ -38,8 +38,8 @@ public:
 
     BehavioralApp(int version, double Threshold);
 
-    bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage bsm,
-            BsmCheck bsmCheck, NodeTable detectedNodes);
+    bool CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMessage * bsm,
+            BsmCheck bsmCheck, NodeTable * detectedNodes);
 
     int addPseudoTMO(unsigned long pseudo);
     void removeOldestPseudoTMO();

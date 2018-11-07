@@ -114,6 +114,7 @@ double LinkControl::calculateDistance(const Coord& pos, double deltaX, double de
     std::set<Link*> processedLinks;
 
     double distance = DBL_MAX;
+    double localD = 0;
     for (size_t col = fromCol; col <= toCol; ++col) {
         if (col >= Links.size())
             break;
@@ -125,10 +126,12 @@ double LinkControl::calculateDistance(const Coord& pos, double deltaX, double de
                     k != cell.end(); ++k) {
 
                 Link* o = *k;
-                double localD = o->getDistance(pos);
-
+                localD = o->getDistance(&pos);
                 if(localD<distance){
                     distance = localD;
+                    if(localD<MAX_DISTANCE_FROM_ROUTE){
+                        return localD;
+                    }
                 }
             }
         }

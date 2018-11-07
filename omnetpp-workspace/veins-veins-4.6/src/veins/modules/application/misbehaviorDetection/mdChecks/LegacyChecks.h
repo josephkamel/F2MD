@@ -59,13 +59,13 @@ private:
     double PositionHeadingConsistancyCheck(Coord curHeading,
             Coord curPosition, Coord oldPosition, double deltaTime, double curSpeed);
 
-    InterTest MultipleIntersectionCheck(NodeTable detectedNodes,
-            BasicSafetyMessage bsm);
+    InterTest MultipleIntersectionCheck(NodeTable * detectedNodes,
+            BasicSafetyMessage * bsm);
 
 public:
 
     LegacyChecks(unsigned long myPseudonym, Coord myPosition, Coord mySpeed,Coord mySize, Coord myHeading, LinkControl* LinkC);
-    BsmCheck CheckBSM(BasicSafetyMessage bsm, NodeTable detectedNodes);
+    BsmCheck CheckBSM(BasicSafetyMessage * bsm, NodeTable * detectedNodes);
 
 };
 

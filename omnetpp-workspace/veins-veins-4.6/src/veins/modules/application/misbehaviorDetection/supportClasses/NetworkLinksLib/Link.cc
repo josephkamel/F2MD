@@ -131,64 +131,131 @@ namespace {
       return sqrt(dx * dx + dy * dy);
     }
 
-    double DistanceFromLine(double cx, double cy, double ax, double ay ,
-                          double bx, double by)
-    {
 
-        double distanceSegment = 0;
-        double distanceLine = 0;
 
-        double r_numerator = (cx-ax)*(bx-ax) + (cy-ay)*(by-ay);
-        double r_denomenator = (bx-ax)*(bx-ax) + (by-ay)*(by-ay);
-        double r = r_numerator / r_denomenator;
-    //
-        double px = ax + r*(bx-ax);
-        double py = ay + r*(by-ay);
-    //
-        double s =  ((ay-cy)*(bx-ax)-(ax-cx)*(by-ay) ) / r_denomenator;
+    // LUT for fast sqrt of floats. Table will be consist of 2 parts, half for sqrt(X) and half for sqrt(2X).
+    const int nBitsForSQRTprecision = 11;                       // Use only 11 most sagnificant bits from the 23 of float. We can use 15 bits instead. It will produce less error but take more place in a memory.
+    const int nUnusedBits   = 23 - nBitsForSQRTprecision;       // Amount of bits we will disregard
+    const int tableSize     = (1 << (nBitsForSQRTprecision+1)); // 2^nBits*2 because we have 2 halves of the table.
+    static short sqrtTab[tableSize];
+    static unsigned char is_sqrttab_initialized = false;        // Once initialized will be true
 
-        distanceLine = fabs(s)*sqrt(r_denomenator);
+    // Table of precalculated sqrt() for future fast calculation. Approximates the exact with an error of about 0.5%
+    // Note: To access the bits of a float in C quickly we must misuse pointers.
+    // More info in: http://en.wikipedia.org/wiki/Single_precision
+    void build_fsqrt_table(void){
+        unsigned short i;
+        float f;
+        uint32_t *fi = (uint32_t*)&f;
 
-    //
-    // (xx,yy) is the point on the lineSegment closest to (cx,cy)
-    //
-        double xx = px;
-        double yy = py;
+        if (is_sqrttab_initialized)
+            return;
 
-        if ( (r >= 0) && (r <= 1) )
-        {
-            distanceSegment = distanceLine;
+        const int halfTableSize = (tableSize>>1);
+        for (i=0; i < halfTableSize; i++){
+             *fi = 0;
+             *fi = (i << nUnusedBits) | (127 << 23); // Build a float with the bit pattern i as mantissa, and an exponent of 0, stored as 127
+
+             // Take the square root then strip the first 'nBitsForSQRTprecision' bits of the mantissa into the table
+             f = sqrtf(f);
+             sqrtTab[i] = (short)((*fi & 0x7fffff) >> nUnusedBits);
+
+             // Repeat the process, this time with an exponent of 1, stored as 128
+             *fi = 0;
+             *fi = (i << nUnusedBits) | (128 << 23);
+             f = sqrtf(f);
+             sqrtTab[i+halfTableSize] = (short)((*fi & 0x7fffff) >> nUnusedBits);
         }
-        else
-        {
-
-            double dist1 = (cx-ax)*(cx-ax) + (cy-ay)*(cy-ay);
-            double dist2 = (cx-bx)*(cx-bx) + (cy-by)*(cy-by);
-            if (dist1 < dist2)
-            {
-                xx = ax;
-                yy = ay;
-                distanceSegment = sqrt(dist1);
-            }
-            else
-            {
-                xx = bx;
-                yy = by;
-                distanceSegment = sqrt(dist2);
-            }
-
-
-        }
-
-        return distanceSegment;
+        is_sqrttab_initialized = true;
     }
+
+    // Calculation of a square root. Divide the exponent of float by 2 and sqrt() its mantissa using the precalculated table.
+    float fsqrt(float n){
+        if (n <= 0.f)
+            return 0.f;                           // On 0 or negative return 0.
+        uint32_t *num = (uint32_t*)&n;
+        short e;                                  // Exponent
+        e = (*num >> 23) - 127;                   // In 'float' the exponent is stored with 127 added.
+        *num &= 0x7fffff;                         // leave only the mantissa
+
+        // If the exponent is odd so we have to look it up in the second half of the lookup table, so we set the high bit.
+        const int halfTableSize = (tableSize>>1);
+        const int secondHalphTableIdBit = halfTableSize << nUnusedBits;
+        if (e & 0x01)
+            *num |= secondHalphTableIdBit;
+        e >>= 1;                                  // Divide the exponent by two (note that in C the shift operators are sign preserving for signed operands
+
+        // Do the table lookup, based on the quaternary mantissa, then reconstruct the result back into a float
+        *num = ((sqrtTab[*num >> nUnusedBits]) << nUnusedBits) | ((e + 127) << 23);
+        return n;
+    }
+
+    void DistanceFromLine(double cx, double cy, double ax, double ay ,
+                            double bx, double by, double * distanceSegment)
+      {
+
+          double distanceLine = 0;
+
+          double r_numerator = (cx-ax)*(bx-ax) + (cy-ay)*(by-ay);
+          double r_denomenator = (bx-ax)*(bx-ax) + (by-ay)*(by-ay);
+          double r = r_numerator / r_denomenator;
+      //
+          double px = ax + r*(bx-ax);
+          double py = ay + r*(by-ay);
+
+
+      //
+          double s =  ((ay-cy)*(bx-ax)-(ax-cx)*(by-ay) ) / r_denomenator;
+
+
+
+          distanceLine = fabs(s)*sqrt(r_denomenator);
+
+      //
+      // (xx,yy) is the point on the lineSegment closest to (cx,cy)
+      //
+          double xx = px;
+          double yy = py;
+
+          if ( (r >= 0) && (r <= 1) )
+          {
+              *distanceSegment = distanceLine;
+
+          }
+          else
+          {
+              double dist1 = (cx-ax)*(cx-ax) + (cy-ay)*(cy-ay);
+              double dist2 = (cx-bx)*(cx-bx) + (cy-by)*(cy-by);
+              if (dist1 < dist2)
+              {
+                  xx = ax;
+                  yy = ay;
+                  *distanceSegment = sqrt(dist1);
+              }
+              else
+              {
+                  xx = bx;
+                  yy = by;
+                  *distanceSegment = sqrt(dist2);
+              }
+
+
+          }
+
+         // return 0;
+
+      }
 
 }
 
-double Link::getDistance(const Coord& pos) const{
-    double dist = DBL_MAX;
+
+
+double Link::getDistance(const Coord * pos) const{
+    double dist = 10000;
     const Coord* oldCd = NULL;
     bool firstelem = true;
+
+    double localdist = 0;
    for (const Coord& cd : coords) {
        if(firstelem){
            oldCd = &cd;
@@ -196,9 +263,10 @@ double Link::getDistance(const Coord& pos) const{
        }else{
           // double localdist1 = pointToLineDistC(pos, *oldCd, cd);
           // double localdist2 = pDistance(pos.x,pos.y, oldCd->x,oldCd->y,cd.x,cd.y);
-           double localdist3 = DistanceFromLine(pos.x,pos.y, oldCd->x,oldCd->y,cd.x,cd.y);
-           if(localdist3< dist){
-               dist = localdist3;
+            DistanceFromLine(pos->x,pos->y, oldCd->x,oldCd->y,cd.x,cd.y, &localdist);
+
+           if(localdist< dist){
+               dist = localdist;
            }
            oldCd = &cd;
        }

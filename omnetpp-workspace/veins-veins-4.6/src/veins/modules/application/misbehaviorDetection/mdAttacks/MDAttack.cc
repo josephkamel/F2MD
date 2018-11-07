@@ -317,7 +317,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
         if (detectedNodes->getNodesNum() > 0) {
             attackBsm = nextAttackBsm;
             attackBsm.setSenderPseudonym(*myPseudonym);
-            nextAttackBsm = detectedNodes->getRandomBSM();
+            nextAttackBsm = *detectedNodes->getRandomBSM();
             targetNode = nextAttackBsm.getSenderPseudonym();
         }
     }
@@ -327,7 +327,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
         if (detectedNodes->getNodesNum() > 0) {
             attackBsm = nextAttackBsm;
             attackBsm.setSenderPseudonym(*myPseudonym);
-            nextAttackBsm = detectedNodes->getNextAttackedBsm(*curPosition,
+            nextAttackBsm = *detectedNodes->getNextAttackedBsm(*curPosition,
                     nextAttackBsm.getSenderPseudonym(),
                     nextAttackBsm.getArrivalTime().dbl());
             targetNode = nextAttackBsm.getSenderPseudonym();
@@ -386,7 +386,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
         if (detectedNodes->getNodesNum() > 0) {
             attackBsm = nextAttackBsm;
             attackBsm.setSenderPseudonym(*myPseudonym);
-            nextAttackBsm = detectedNodes->getRandomBSM();
+            nextAttackBsm = *detectedNodes->getRandomBSM();
             targetNode = nextAttackBsm.getSenderPseudonym();
         }
     }
@@ -414,7 +414,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
             if (detectedNodes->getNodesNum() > 0) {
                 attackBsm = nextAttackBsm;
                 attackBsm.setSenderPseudonym(*myPseudonym);
-                nextAttackBsm = detectedNodes->getNextAttackedBsm(*curPosition,
+                nextAttackBsm = *detectedNodes->getNextAttackedBsm(*curPosition,
                         nextAttackBsm.getSenderPseudonym(),
                         nextAttackBsm.getArrivalTime().dbl());
                 targetNode = nextAttackBsm.getSenderPseudonym();

@@ -37,7 +37,7 @@ public:
             int maxBsmTrustNum);
 
     bool CheckNodeForReport(unsigned long myPseudonym,
-            BasicSafetyMessage bsm, BsmCheck bsmCheck, NodeTable detectedNodes);
+            BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes);
 
     double AggregateFactorsListDouble(double curFactor, double *factorList,
             int factorListSize);

@@ -31,9 +31,12 @@ class NodeHistory {
         NodeHistory(unsigned long);
         NodeHistory(unsigned long, BasicSafetyMessage);
         void addBSM(BasicSafetyMessage bsm);
-        BasicSafetyMessage getLatestBSM();
-        BasicSafetyMessage getSecondLatestBSM();
-        BasicSafetyMessage getBSM(int index) ;
+        //BasicSafetyMessage getLatestBSM();
+        //BasicSafetyMessage getSecondLatestBSM();
+        //BasicSafetyMessage getBSM(int index) ;
+
+        BasicSafetyMessage* getBSMAddr(int index);
+        BasicSafetyMessage* getLatestBSMAddr();
 
         Coord getSenderPos(int);
         Coord getSenderSize(int);

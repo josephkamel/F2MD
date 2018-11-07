@@ -56,8 +56,8 @@ public:
     MDApplication(int version);
 
     virtual bool CheckNodeForReport(unsigned long myPseudonym,
-            BasicSafetyMessage bsm, BsmCheck bsmCheck,
-            NodeTable detectedNodes)= 0;
+            BasicSafetyMessage * bsm, BsmCheck bsmCheck,
+            NodeTable * detectedNodes)= 0;
 
     void SendReport( MDStatistics* mdAuthority, MDReport mbReport);
 
