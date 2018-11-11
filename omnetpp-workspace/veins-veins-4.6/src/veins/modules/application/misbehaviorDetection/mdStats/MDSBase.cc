@@ -299,7 +299,7 @@ void MDSBase::removeReportedAttacker(int index) {
     reportedAttackerNum--;
 }
 
-void MDSBase::getPrintable(char* outStr, double time) {
+void MDSBase::getPrintable(char* outStr, double time, bool printOut) {
 
     char line[1024] = "";
     char data[64] = "";
@@ -330,11 +330,15 @@ void MDSBase::getPrintable(char* outStr, double time) {
         outStr[i] = line[i];
     }
 
-    std::cout << "=*-=*-=*-=*- " << name << " =*-=*-=*-=*- Genuine:"
-            << CountReportedGenuine << "/" << CountTotalGenuine << " "
-            << (double) CountReportedGenuine / (double) CountTotalGenuine * 100
-            << "% " << genuineAverageReportDelay << "s |Attacker:"
-            << CountReportedAttacker << "/" << CountTotalAttacker << " "
-            << (double) CountReportedAttacker / (double) CountTotalAttacker
-                    * 100 << "% " << attackerAverageReportDelay << "s" << '\n';
+
+    if(printOut){
+        std::cout << "=*-=*-=*-=*- " << name << " =*-=*-=*-=*- Genuine:"
+                << CountReportedGenuine << "/" << CountTotalGenuine << " "
+                << (double) CountReportedGenuine / (double) CountTotalGenuine * 100
+                << "% " << genuineAverageReportDelay << "s |Attacker:"
+                << CountReportedAttacker << "/" << CountTotalAttacker << " "
+                << (double) CountReportedAttacker / (double) CountTotalAttacker
+                        * 100 << "% " << attackerAverageReportDelay << "s" << '\n';
+    }
+
 }

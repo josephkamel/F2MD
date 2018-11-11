@@ -19,6 +19,8 @@ PyBridgeApp::PyBridgeApp(int version,int port, std::string host):
                 MDApplication(version)  {
     this->port = port;
     this->host = host;
+    httpr = HTTPRequest(port, "localhost");
+    bsmPrint = BsmPrintable();
 }
 
 bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
@@ -111,16 +113,18 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
             minFactor = IT;
         }
     }
-    HTTPRequest httpr = HTTPRequest(port, "localhost");
 
-    BsmPrintable bsmPrint = BsmPrintable();
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);
 
-    std::string bsmJsonStr = bsmPrint.getBsmPrintableJson();
+    std::string s = bsmPrint.getBsmPrintableJson();
 
-    std::string response = httpr.Request(bsmJsonStr);
+    s.erase(std::remove(s.begin(), s.end(), '\t'), s.end());
+    s.erase(std::remove(s.begin(), s.end(), '\n'), s.end());
+    s.erase(std::remove(s.begin(), s.end(), ' '), s.end());
+
+    std::string response = httpr.Request(s);
 
     //std::cout << "response:" << response << "\n";
 

@@ -28,13 +28,11 @@ MDApplication::MDApplication(int version) {
     this->version = version;
 
     if(version == 1){
-
         this->prntApp = &prntAppV1;
         this->prntAppInst = &prntAppInstV1;
 
         this->prntApp->setName(AppV1Name);
         this->prntAppInst->setName(AppV1Name);
-
     }else{
 
         this->prntApp = &prntAppV2;
@@ -55,8 +53,8 @@ void MDApplication::SendReport(MDStatistics* mdAuthority, MDReport mbReport) {
 
 }
 
-void MDApplication::saveLine( std::string path, std::string serial, double density,
-        double deltaT){
+void MDApplication::saveLine(std::string path, std::string serial, double density,
+        double deltaT, bool printOut){
 
     char fileNameApp[64];
     char fileNameAppInst[64];
@@ -94,15 +92,16 @@ void MDApplication::saveLine( std::string path, std::string serial, double densi
     strcat(filePathGen, "/");
     strcat(filePathGen, fileNameApp);
 
-    prntApp->getPrintable(outChar, density, deltaT);
+    prntApp->getPrintable(outChar, density, deltaT, printOut);
     prntApp->writeFile(filePathGen, outChar);
 
     strcpy(filePathGen, directoryPathGen);
     strcat(filePathGen, "/");
     strcat(filePathGen, fileNameAppInst);
 
-    prntAppInst->getPrintable(outChar, density, deltaT);
+    prntAppInst->getPrintable(outChar, density, deltaT, printOut);
     prntAppInst->writeFile(filePathGen, outChar);
+
 }
 
 

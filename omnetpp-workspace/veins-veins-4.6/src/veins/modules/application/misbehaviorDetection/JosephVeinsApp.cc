@@ -13,8 +13,8 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "IRT-DEMO"
-#define savePath "../../../../../mdmSave/"
+#define serialNumber "IRT-Mix-Train-D5-V2"
+#define savePath "../../../../../mdmSave/MachineLearning/"
 
 //#define serialNumber "IRT-BSMS-MIX-V1"
 //#define savePath "/media/sca-team/DATA/DataF2MD/"
@@ -25,6 +25,7 @@ static bool randomConf = false;
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
+#define PRINT_PERIOD 60 //60 seconds
 
 #define START_SAVE 0 //60 seconds
 #define START_ATTACK 10 //60 seconds
@@ -34,6 +35,9 @@ static bool randomConf = false;
 static bool MixAttacks = true;
 static bool RandomMix = false;
 static int LastAttackIndex = -1;
+//static attackTypes::Attacks MixAttacksList[] = { attackTypes::DataReplay,
+//        attackTypes::StaleMessages, attackTypes::Sybil };
+
 static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstPosOffset, attackTypes::RandomPos,
         attackTypes::RandomPosOffset, attackTypes::ConstSpeed,
@@ -45,7 +49,7 @@ static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         };
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE attackTypes::ConstPosOffset
+#define ATTACK_TYPE attackTypes::Sybil
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
@@ -54,15 +58,14 @@ static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
 static bool EnablePC = false;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
-
 //Detection Application
-static bool EnableV1 = true;
-static bool EnableV2 = false;
+static bool EnableV1 = false;
+static bool EnableV2 = true;
 static bool SaveStatsV1 = false;
-static bool SaveStatsV2 = false;
+static bool SaveStatsV2 = true;
 
-static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
 
 static bool writeSelfMsg = false;
 
@@ -81,13 +84,25 @@ int maPortV2 = 9981;
 
 static MDStatistics mdStats = MDStatistics();
 
+static bool enableVarThreV1 = false;
+static bool enableVarThreV2 = false;
+static VarThrePrintable varThrePrintableV1 = VarThrePrintable("AppV1");
+static VarThrePrintable varThrePrintableV2 = VarThrePrintable("AppV2");
+
 static bool setDate = false;
 static std::string curDate;
+
+double  meanTimeV1 = 0;
+long  numTimeV1 = 0;
+
+double  meanTimeV2 = 0;
+long  numTimeV2 = 0;
+
 
 void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
-    if(!linkInit){
+    if (!linkInit) {
         linkControl.initialize(traci);
         linkInit = true;
     }
@@ -153,28 +168,28 @@ void JosephVeinsApp::initialize(int stage) {
                 int AtLiSize = sizeof(MixAttacksList)
                         / sizeof(MixAttacksList[0]);
                 int attackIndex = 0;
-                if(RandomMix){
+                if (RandomMix) {
                     attackIndex = genLib.RandomInt(0, AtLiSize - 1);
-                }else{
-                    if(LastAttackIndex<(AtLiSize-1)){
+                } else {
+                    if (LastAttackIndex < (AtLiSize - 1)) {
                         attackIndex = LastAttackIndex + 1;
                         LastAttackIndex = attackIndex;
-                    }else{
+                    } else {
                         attackIndex = 0;
                         LastAttackIndex = 0;
                     }
                 }
 
                 myAttackType = MixAttacksList[attackIndex];
-                std::cout
-                        << "##############################################################NEW ATTACKER:"
-                        << myPseudonym << "\n";
-                std::cout
-                        << "##############################################################AttackType:"
-                        << attackTypes::AttackNames[myAttackType] << "\n";
             } else {
                 myAttackType = ATTACK_TYPE;
             }
+            std::cout
+            << "=+#=+#=+#=+#=+#=+#=+#=+#+#=+#=+#=+#=+#=+#=+#=+#=+#=+#=+#=+#=+# "<<"\n";
+            std::cout
+            << "=+#=+#=+#=+#=+#=+#=+#=+# NEW ATTACKER =+#=+#=+#=+#=+#=+#=+#=+# "
+            << myPseudonym << " : " <<attackTypes::AttackNames[myAttackType]<<"\n";
+            std::cout << "=+#=+#=+#=+#=+#=+#=+#=+#+#=+#=+#=+#=+#=+#=+#=+#=+#=+#=+#=+#=+# "<<"\n";
 
             mdAttack = MDAttack();
 
@@ -330,7 +345,8 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         NodeHistory * existingNode = detectedNodes.getNodeHistoryAddr(
                 senderPseudonym);
         existingNode->addBSM(*bsm);
-        MDMHistory * existingMDM = detectedNodes.getMDMHistoryAddr(senderPseudonym);
+        MDMHistory * existingMDM = detectedNodes.getMDMHistoryAddr(
+                senderPseudonym);
         if (EnableV1) {
             existingMDM->addBsmCheck(bsmCheckV1, 1);
         }
@@ -393,6 +409,8 @@ void JosephVeinsApp::treatAttackFlags() {
 
 static double deltaTV1 = 0;
 static double deltaTV2 = 0;
+static double deltaTVS1 = 0;
+static double deltaTVS2 = 0;
 
 static bool initV1 = false;
 static bool initV2 = false;
@@ -408,11 +426,27 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 Coord(myWidth, myLength), curHeading, &linkControl);
 //        CaTChChecks mdm-c(myPseudonym, curPosition, curPositionConfidence,
 //                curHeading, curHeadingConfidence, Coord(myWidth, myLength));
+
         bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
 
 
+        clock_t begin = clock();
+
         bool result = AppV1->CheckNodeForReport(myPseudonym, bsm, bsmCheckV1,
                 &detectedNodes);
+
+
+        clock_t end = clock();
+        double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+       meanTimeV1 = (numTimeV1*meanTimeV1 + elapsed_secs)/(numTimeV1 + 1);
+       numTimeV1 = numTimeV1 + 1;
+
+        if (enableVarThreV1) {
+            varThrePrintableV1.registerMessage(
+                    mbTypes::intMbs[bsm->getSenderMbType()],
+                    AppV1->getMinFactor());
+        }
 
         if (result) {
             MDReport reportBase;
@@ -450,14 +484,27 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
 
         if ((simTime().dbl() - deltaTV1) > SAVE_PERIOD) {
+            bool printOut = false;
+            if ((simTime().dbl() - deltaTVS1) > PRINT_PERIOD) {
+                deltaTVS1 = simTime().dbl();
+                printOut = true;
+                std::cout<<"-_-_-_-_-_-_-_-_-_-_-_-_-"<<" meanTimeV1:"<< meanTimeV1<< " "<< numTimeV1 <<"\n";
+            }
+
             deltaTV1 = simTime().dbl();
 
             if ((simTime().dbl() > START_SAVE) && SaveStatsV1) {
                 AppV1->saveLine(savePath, serialNumber,
                         mobility->getManager()->getManagedHosts().size(),
-                        deltaTV1);
+                        deltaTV1, printOut);
 
-                mdStats.saveLine(savePath, serialNumber, deltaTV1);
+                mdStats.saveLine(savePath, serialNumber, deltaTV1, printOut);
+                if (enableVarThreV1) {
+                    varThrePrintableV1.saveFile(savePath, serialNumber,
+                            printOut);
+                }
+
+
             }
             AppV1->resetInstFlags();
         }
@@ -470,11 +517,29 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
     case 2: {
         std::string mdv = "V2";
         CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
-                curHeading, curHeadingConfidence, Coord(myWidth, myLength), &linkControl);
+                curHeading, curHeadingConfidence, Coord(myWidth, myLength),
+                &linkControl);
+
+
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(bsm, &detectedNodes);
+
+       clock_t begin = clock();
 
         bool result = AppV2->CheckNodeForReport(myPseudonym, bsm, bsmCheckV2,
                 &detectedNodes);
+
+        clock_t end = clock();
+        double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+       meanTimeV2 = (numTimeV2*meanTimeV2 + elapsed_secs)/(numTimeV2 + 1);
+       numTimeV2 = numTimeV2 + 1;
+
+        if (enableVarThreV2) {
+            varThrePrintableV2.registerMessage(
+                    mbTypes::intMbs[bsm->getSenderMbType()],
+                    AppV2->getMinFactor());
+        }
+
         if (result) {
 
             MDReport reportBase;
@@ -514,14 +579,26 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
 
         if ((simTime().dbl() - deltaTV2) > SAVE_PERIOD) {
+            bool printOut = false;
+            if ((simTime().dbl() - deltaTVS2) > PRINT_PERIOD) {
+                deltaTVS2 = simTime().dbl();
+                printOut = true;
+                std::cout<<"-_-_-_-_-_-_-_-_-_-_-_-_-"<<" meanTimeV2:"<< meanTimeV2<< " "<< numTimeV2 <<"\n";
+            }
+
             deltaTV2 = simTime().dbl();
 
             if ((simTime().dbl() > START_SAVE) && SaveStatsV2) {
                 AppV2->saveLine(savePath, serialNumber,
                         mobility->getManager()->getManagedHosts().size(),
-                        deltaTV2);
+                        deltaTV2, printOut);
 
-                mdStats.saveLine(savePath, serialNumber, deltaTV2);
+                mdStats.saveLine(savePath, serialNumber, deltaTV2, printOut);
+                if (enableVarThreV2) {
+                    varThrePrintableV2.saveFile(savePath, serialNumber,
+                            printOut);
+                }
+
             }
             AppV2->resetInstFlags();
         }
@@ -598,12 +675,12 @@ void JosephVeinsApp::sendReport(MDReport reportBase, std::string version,
         break;
     }
 
-    if(!version.compare("V1")){
+    if (!version.compare("V1")) {
         HTTPRequest httpr = HTTPRequest(maPortV1, "localhost");
         std::string response = httpr.Request(reportStr);
     }
 
-    if(!version.compare("V2")){
+    if (!version.compare("V2")) {
         HTTPRequest httpr = HTTPRequest(maPortV2, "localhost");
         std::string response = httpr.Request(reportStr);
     }

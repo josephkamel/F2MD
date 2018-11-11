@@ -44,6 +44,9 @@ using namespace Veins;
 #include <veins/modules/application/misbehaviorDetection/mdReport/EvidenceReport.h>
 #include <veins/modules/application/misbehaviorDetection/mdReport/BasicCheckReport.h>
 
+#include <ctime>
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <linux/limits.h>
@@ -60,8 +63,8 @@ using namespace Veins;
 
 #include "supportClasses/HTTPRequest.h"
 
-#define mlPortV1 9997
-#define mlPortV2 9998
+#define mlPortV1 9992
+#define mlPortV2 9991
 
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;

@@ -247,7 +247,7 @@ void AppPrintable::writeFile(std::string path, char* printStr) {
     outFile.close();
 }
 
-void AppPrintable::getPrintable(char* outStr, double density, double deltaT) {
+void AppPrintable::getPrintable(char* outStr, double density, double deltaT, bool printOut) {
     char line[1024] = "";
     char data[64] = "";
 
@@ -334,6 +334,11 @@ void AppPrintable::getPrintable(char* outStr, double density, double deltaT) {
         outStr[i] = line[i];
     }
 
+
+    if(printOut){
+std::cout << "+++++++++++ " << name << " +++++++++++" << " Genuine:"<< cumulFlags_1 <<"/"<< allTests_1<<" "
+                    << cumulFlags_1 / allTests_1 * 100 << "% Attackers:"<< cumulFlags_2 <<"/"<< allTests_2<<" " << cumulFlags_2 / allTests_2 * 100 << "%" << '\n';
+
 //    std::cout << "+++++++++++ " << name << " +++++++++++" << " Factor_1:"
 //            << cumulFlags_1 / allTests_1 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++"
@@ -395,6 +400,6 @@ void AppPrintable::getPrintable(char* outStr, double density, double deltaT) {
 //            << flagsIntersection_2 / allTests_2 * 100 << "%" << '\n';
 //    std::cout << "++++++++++ " << name << " ++++++++++" << " flagsSuddenAppearence_2:"
 //            << flagsSuddenAppearence_2 / allTests_2 * 100 << "%" << '\n';
-
+    }
 }
 
