@@ -22,15 +22,15 @@ class MlMain:
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
 	Storage = MlArrayStorage()
-	arrayLength = 5
+	arrayLength = 20
 
 	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile/saveFile_Mix'
+	savePath = './saveFile/saveFile_Mix_D20'
 	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/Test'
-	dataPath = '/media/sca-team/DATA/DataF2MD/IRT-BSMS-MIX-V1/MDBsms_2018-11-6_19:19:15'
+	dataPath = '/media/joseph/Windows/DataF2MD/IRT-MIX-V2/MDBsms_2018-11-7_6:17:43'
 	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/IRT-BSMS-MIX-V2/MDBsms_2018-11-5_15:22:52'
 
 	def init(self, version, AIType):
@@ -48,7 +48,7 @@ class MlMain:
 			self.ReadDataFromFile( AIType)
 
 	def mlMain(self):
-		version = "V1"
+		version = "V2"
 		AIType = "neural_network"
 		if not self.initiated:
 			self.init(version,AIType)

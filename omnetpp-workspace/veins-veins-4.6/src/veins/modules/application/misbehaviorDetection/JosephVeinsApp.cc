@@ -14,8 +14,10 @@
 Define_Module(JosephVeinsApp);
 
 
-#define serialNumber "IRT-DEMO"
-#define savePath "../../../../../mdmSave/"
+#define serialNumber "IRT-MIX-V1"
+#define savePath "/media/joseph/Windows/DataF2MD/"
+
+//#define savePath "../../../../../mdmSave/"
 
 //#define serialNumber "IRT-BSMS-MIX-V1"
 //#define savePath "/media/sca-team/DATA/DataF2MD/"
@@ -59,19 +61,19 @@ static bool EnablePC = false;
 //Detection Application
 static bool EnableV1 = true;
 static bool EnableV2 = false;
-static bool SaveStatsV1 = false;
+static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = false;
 
-static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
+static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 
 //writeBsms
-static bool writeBsmsV1 = false;
+static bool writeBsmsV1 = true;
 static bool writeBsmsV2 = false;
 //writeReport
-static bool writeReportsV1 = false;
+static bool writeReportsV1 = true;
 static bool writeReportsV2 = false;
 
 //sendReport
