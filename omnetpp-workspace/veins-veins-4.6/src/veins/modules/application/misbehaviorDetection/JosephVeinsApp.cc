@@ -13,11 +13,11 @@
 
 Define_Module(JosephVeinsApp);
 
-#define serialNumber "IRT-Mix-Train-D5-V2"
-#define savePath "../../../../../mdmSave/MachineLearning/"
+//#define serialNumber "IRT-Th-240"
+//#define savePath "../../../../../mdmSave/ResultsF2MD/MA/"
 
-//#define serialNumber "IRT-BSMS-MIX-V1"
-//#define savePath "/media/sca-team/DATA/DataF2MD/"
+#define serialNumber "IRT-Reports-Mix-V1"
+#define savePath "/media/sca-team/DATA/DataF2MD/"
 
 static bool randomConf = false;
 #define confPos 3
@@ -35,8 +35,10 @@ static bool randomConf = false;
 static bool MixAttacks = true;
 static bool RandomMix = false;
 static int LastAttackIndex = -1;
-//static attackTypes::Attacks MixAttacksList[] = { attackTypes::DataReplay,
-//        attackTypes::StaleMessages, attackTypes::Sybil };
+//static attackTypes::Attacks MixAttacksList[] =
+//        { attackTypes::Disruptive, attackTypes::ConstSpeed,
+//                attackTypes::ConstPosOffset, attackTypes::Sybil,
+//                attackTypes::DataReplay, attackTypes::StaleMessages };
 
 static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstPosOffset, attackTypes::RandomPos,
@@ -44,28 +46,27 @@ static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstSpeedOffset, attackTypes::RandomSpeed,
         attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
         attackTypes::Disruptive, attackTypes::DataReplay,
-        attackTypes::StaleMessages,attackTypes::Sybil,
-        attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
-        };
+        attackTypes::StaleMessages, attackTypes::Sybil, attackTypes::DoS,
+        attackTypes::DoSRandom, attackTypes::DoSDisruptive };
 
 #define ATTACKER_PROB 0.1
-#define ATTACK_TYPE attackTypes::Sybil
+#define ATTACK_TYPE attackTypes::Disruptive
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
 // 13 DoS, 14 DoSRandom, 15 DoSDisruptive, 16 Sybil
 
-static bool EnablePC = false;
+static bool EnablePC = true;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
 //Detection Application
-static bool EnableV1 = false;
-static bool EnableV2 = true;
-static bool SaveStatsV1 = false;
-static bool SaveStatsV2 = true;
+static bool EnableV1 = true;
+static bool EnableV2 = false;
+static bool SaveStatsV1 = true;
+static bool SaveStatsV2 = false;
 
-static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
+static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 
@@ -73,14 +74,14 @@ static bool writeSelfMsg = false;
 static bool writeBsmsV1 = false;
 static bool writeBsmsV2 = false;
 //writeReport
-static bool writeReportsV1 = false;
+static bool writeReportsV1 = true;
 static bool writeReportsV2 = false;
 
 //sendReport
 static bool sendReportsV1 = false;
 static bool sendReportsV2 = false;
 int maPortV1 = 9980;
-int maPortV2 = 9981;
+int maPortV2 = 9987;
 
 static MDStatistics mdStats = MDStatistics();
 
@@ -92,12 +93,11 @@ static VarThrePrintable varThrePrintableV2 = VarThrePrintable("AppV2");
 static bool setDate = false;
 static std::string curDate;
 
-double  meanTimeV1 = 0;
-long  numTimeV1 = 0;
+double meanTimeV1 = 0;
+long numTimeV1 = 0;
 
-double  meanTimeV2 = 0;
-long  numTimeV2 = 0;
-
+double meanTimeV2 = 0;
+long numTimeV2 = 0;
 
 void JosephVeinsApp::initialize(int stage) {
 
@@ -429,18 +429,16 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
 
         bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
 
-
         clock_t begin = clock();
 
         bool result = AppV1->CheckNodeForReport(myPseudonym, bsm, bsmCheckV1,
                 &detectedNodes);
 
-
         clock_t end = clock();
         double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
-       meanTimeV1 = (numTimeV1*meanTimeV1 + elapsed_secs)/(numTimeV1 + 1);
-       numTimeV1 = numTimeV1 + 1;
+        meanTimeV1 = (numTimeV1 * meanTimeV1 + elapsed_secs) / (numTimeV1 + 1);
+        numTimeV1 = numTimeV1 + 1;
 
         if (enableVarThreV1) {
             varThrePrintableV1.registerMessage(
@@ -488,7 +486,8 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             if ((simTime().dbl() - deltaTVS1) > PRINT_PERIOD) {
                 deltaTVS1 = simTime().dbl();
                 printOut = true;
-                std::cout<<"-_-_-_-_-_-_-_-_-_-_-_-_-"<<" meanTimeV1:"<< meanTimeV1<< " "<< numTimeV1 <<"\n";
+                std::cout << "-_-_-_-_-_-_-_-_-_-_-_-_-" << " meanTimeV1:"
+                        << meanTimeV1 << " " << numTimeV1 << "\n";
             }
 
             deltaTV1 = simTime().dbl();
@@ -503,7 +502,6 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                     varThrePrintableV1.saveFile(savePath, serialNumber,
                             printOut);
                 }
-
 
             }
             AppV1->resetInstFlags();
@@ -520,10 +518,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 curHeading, curHeadingConfidence, Coord(myWidth, myLength),
                 &linkControl);
 
-
         BsmCheck bsmCheckV2 = mdmV2.CheckBSM(bsm, &detectedNodes);
 
-       clock_t begin = clock();
+        clock_t begin = clock();
 
         bool result = AppV2->CheckNodeForReport(myPseudonym, bsm, bsmCheckV2,
                 &detectedNodes);
@@ -531,8 +528,8 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         clock_t end = clock();
         double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
-       meanTimeV2 = (numTimeV2*meanTimeV2 + elapsed_secs)/(numTimeV2 + 1);
-       numTimeV2 = numTimeV2 + 1;
+        meanTimeV2 = (numTimeV2 * meanTimeV2 + elapsed_secs) / (numTimeV2 + 1);
+        numTimeV2 = numTimeV2 + 1;
 
         if (enableVarThreV2) {
             varThrePrintableV2.registerMessage(
@@ -583,7 +580,8 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             if ((simTime().dbl() - deltaTVS2) > PRINT_PERIOD) {
                 deltaTVS2 = simTime().dbl();
                 printOut = true;
-                std::cout<<"-_-_-_-_-_-_-_-_-_-_-_-_-"<<" meanTimeV2:"<< meanTimeV2<< " "<< numTimeV2 <<"\n";
+                std::cout << "-_-_-_-_-_-_-_-_-_-_-_-_-" << " meanTimeV2:"
+                        << meanTimeV2 << " " << numTimeV2 << "\n";
             }
 
             deltaTV2 = simTime().dbl();
@@ -648,6 +646,7 @@ void JosephVeinsApp::writeReport(MDReport reportBase, std::string version,
 
 void JosephVeinsApp::sendReport(MDReport reportBase, std::string version,
         BsmCheck bsmCheck, BasicSafetyMessage *bsm) {
+
     std::string reportStr = "";
 
     switch (myReportType) {

@@ -60,8 +60,8 @@ std::string HTTPRequest::formaliseString(std::string arg){
     return arg;
 }
 
-char message[2048];
-char response[2048];
+char message[16384];
+char response[16384];
 
 std::string HTTPRequest::Request(std::string requestArg) {
     /* first what are we going to send and where are we going to send it? */
@@ -90,6 +90,7 @@ std::string HTTPRequest::Request(std::string requestArg) {
     server = gethostbyname(host);
     if (server == NULL)
         printf("ERROR, no such host");
+
 
     /* fill in the structure */
     memset(&serv_addr, 0, sizeof(serv_addr));

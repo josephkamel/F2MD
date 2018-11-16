@@ -24,14 +24,14 @@ void MDAttack::init(attackTypes::Attacks myAttackType) {
     ConstPosX = genLib.RandomDouble(0, RandomPosX);
     ConstPosY = genLib.RandomDouble(0, RandomPosY);
 
-    ConstPosOffsetX = genLib.RandomDouble(0, RandomPosOffsetX);
-    ConstPosOffsetY = genLib.RandomDouble(0, RandomPosOffsetY);
+    ConstPosOffsetX = genLib.RandomDouble(RandomPosOffsetX/5, RandomPosOffsetX);
+    ConstPosOffsetY = genLib.RandomDouble(RandomPosOffsetY/5, RandomPosOffsetY);
 
     ConstSpeedX = genLib.RandomDouble(0, RandomSpeedX);
     ConstSpeedY = genLib.RandomDouble(0, RandomSpeedY);
 
-    ConstSpeedOffsetX = genLib.RandomDouble(0, RandomSpeedOffsetX);
-    ConstSpeedOffsetY = genLib.RandomDouble(0, RandomSpeedOffsetY);
+    ConstSpeedOffsetX = genLib.RandomDouble(RandomSpeedOffsetX/5, RandomSpeedOffsetX);
+    ConstSpeedOffsetY = genLib.RandomDouble(RandomSpeedOffsetY/5, RandomSpeedOffsetY);
 
     if (myAttackType == attackTypes::Sybil) {
         for (int var = 0; var < SybilVehNumber; ++var) {

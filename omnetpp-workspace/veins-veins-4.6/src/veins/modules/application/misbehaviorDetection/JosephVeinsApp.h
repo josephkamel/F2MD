@@ -32,7 +32,7 @@ using namespace Veins;
 
 #include "mdApplications/MDApplication.h"
 #include "mdApplications/ThresholdApp.h"
-#include "mdApplications/AggrigationApp.h"
+#include <veins/modules/application/misbehaviorDetection/mdApplications/AggregationApp.h>
 #include "mdApplications/BehavioralApp.h"
 #include "mdApplications/PyBridgeApp.h"
 #include <veins/modules/application/misbehaviorDetection/mdApplications/ExperiApp.h>
@@ -63,8 +63,8 @@ using namespace Veins;
 
 #include "supportClasses/HTTPRequest.h"
 
-#define mlPortV1 9992
-#define mlPortV2 9991
+#define mlPortV1 9991
+#define mlPortV2 9990
 
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;

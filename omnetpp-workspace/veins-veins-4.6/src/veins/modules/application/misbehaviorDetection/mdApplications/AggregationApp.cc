@@ -14,11 +14,11 @@
 #include <boost/algorithm/string.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <veins/modules/application/misbehaviorDetection/mdApplications/AggregationApp.h>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "AggrigationApp.h"
 
 using namespace std;
 using namespace boost;
@@ -258,46 +258,46 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     return checkFailed;
 }
 
-double AggrigationApp::AggregateFactorsListDouble(double curFactor,
-        double *factorList, int factorListSize) {
-    double averageFactor = curFactor;
-    double divValue = 1;
-    for (int var = 0; var < factorListSize; ++var) {
-        double decValue =  pow(devValue, var+1);
-        averageFactor = averageFactor + factorList[var]*decValue;
-        divValue = divValue + decValue;
-    }
-    averageFactor = averageFactor / divValue;
-    return averageFactor;
-}
+//double AggrigationApp::AggregateFactorsListDouble(double curFactor,
+//        double *factorList, int factorListSize) {
+//    double averageFactor = curFactor;
+//    double divValue = 1;
+//    for (int var = 0; var < factorListSize; ++var) {
+//        double decValue =  pow(devValue, var+1);
+//        averageFactor = averageFactor + factorList[var]*decValue;
+//        divValue = divValue + decValue;
+//    }
+//    averageFactor = averageFactor / divValue;
+//    return averageFactor;
+//}
 
 double AggrigationApp::getMinFactor() {
     return minFactor;
 }
 
-//double AggrigationApp::AggregateFactorsListDouble(double curFactor, double *factorList,
-//        int factorListSize) {
-//    if (version == 1) {
-//        double averageFactor = curFactor;
-//        for (int var = 0; var < factorListSize; ++var) {
-//            averageFactor = averageFactor + factorList[var];
-//        }
-//        averageFactor = averageFactor / (factorListSize + 1);
-//
-//        return averageFactor;
-//    } else {
-//        if (curFactor <= 0) {
-//            return 0;
-//        } else {
-//            double averageFactor = curFactor;
-//            for (int var = 0; var < factorListSize; ++var) {
-//                averageFactor = averageFactor + factorList[var];
-//            }
-//            averageFactor = averageFactor / (factorListSize + 1);
-//            return averageFactor;
-//        }
-//    }
-//}
+double AggrigationApp::AggregateFactorsListDouble(double curFactor, double *factorList,
+        int factorListSize) {
+    if (version == 1) {
+        double averageFactor = curFactor;
+        for (int var = 0; var < factorListSize; ++var) {
+            averageFactor = averageFactor + factorList[var];
+        }
+        averageFactor = averageFactor / (factorListSize + 1);
+
+        return averageFactor;
+    } else {
+        if (curFactor <= 0) {
+            return 0;
+        } else {
+            double averageFactor = curFactor;
+            for (int var = 0; var < factorListSize; ++var) {
+                averageFactor = averageFactor + factorList[var];
+            }
+            averageFactor = averageFactor / (factorListSize + 1);
+            return averageFactor;
+        }
+    }
+}
 
 //best rate / faulty
 //bool AggrigationApp::AggregateFactorsList(double curFactor, double *factorList,
