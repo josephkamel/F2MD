@@ -340,7 +340,21 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
             beaconInterval->setRaw(beaconInterval->raw() / DosMultipleFreq);
             DoSInitiated = true;
         }
-        attackBsm.setSenderPseudonym(0);
+
+        attackBsm = myBsm[0];
+        attackBsm.setSenderPseudonym(*myPseudonym);
+
+        attackBsm.setSenderPos(*curPosition);
+        attackBsm.setSenderPosConfidence(*curPositionConfidence);
+
+        attackBsm.setSenderSpeed(*curSpeed);
+        attackBsm.setSenderSpeedConfidence(*curSpeedConfidence);
+
+        attackBsm.setSenderHeading(*curHeading);
+        attackBsm.setSenderHeadingConfidence(*curHeadingConfidence);
+
+        attackBsm.setSenderWidth(*myWidth);
+        attackBsm.setSenderLength(*myLength);
     }
         break;
 
@@ -497,6 +511,7 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
         }
     }
         break;
+
     }
 
     return attackBsm;

@@ -60,6 +60,7 @@ using namespace Veins;
 
 #include "pcPolicies/PCPolicy.h"
 #include "mdAttacks/MDAttack.h"
+#include "mdAttacks/MDGlobalAttack.h"
 
 #include "supportClasses/HTTPRequest.h"
 
@@ -97,7 +98,7 @@ protected:
     virtual void handleSelfMsg(cMessage* msg);
     virtual void handlePositionUpdate(cObject* obj);
 
-    mbTypes::Mbs induceMisbehavior(double attackers);
+    mbTypes::Mbs induceMisbehavior(double localAttacker, double globalAttacker);
     void LocalMisbehaviorDetection(BasicSafetyMessage* bsm, int version);
 
     void writeReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
@@ -113,6 +114,7 @@ protected:
 
     void treatAttackFlags();
     MDAttack mdAttack;
+    MDGlobalAttack mdGlobalAttack;
 
     pseudoChangeTypes::PseudoChange myPcType;
     PCPolicy pcPolicy;

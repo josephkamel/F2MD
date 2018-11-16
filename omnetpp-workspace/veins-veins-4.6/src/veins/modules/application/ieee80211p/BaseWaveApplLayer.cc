@@ -226,7 +226,7 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
         addMyBsm(*bsm);
         // Genuine
 
-        if(myMdType == mbTypes::Attacker){
+        if(myMdType == mbTypes::LocalAttacker){
             if (attackBsm.getSenderPseudonym() != 0) {
                 bsm->setSenderPseudonym(attackBsm.getSenderPseudonym());
 
@@ -265,6 +265,9 @@ void BaseWaveApplLayer::populateWSM(WaveShortMessage* wsm, int rcvId,
 
                 bsm->setSenderWidth(myWidth);
                 bsm->setSenderLength(myLength);
+
+                bsm->setSenderMbType(mbTypes::Genuine);
+                bsm->setSenderAttackType(attackTypes::Genuine);
             }
         }
 
