@@ -8,6 +8,6 @@ All contributions are welcome.
 
 ## Project Diagram
 
- ![alt text](https://github.com/josephkamel/F2MD/blob/master/F2MD-Diagram.png)
+ ![alt text](https://github.com/josephkamel/F2MD/blob/master/F2MD-Diagram.jpg)
 
 
