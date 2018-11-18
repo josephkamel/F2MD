@@ -12,10 +12,14 @@ from tqdm import tqdm
 from sklearn import datasets
 from sklearn.externals import joblib
 
-RTtrain = True
-RTcollectData = True
+import time
+
+RTtrain = False
+RTcollectData = False
 RTreadDataFromFile = False
 RTpredict = True
+
+
 
 class MlMain:
 	initiated = False
@@ -27,11 +31,16 @@ class MlMain:
 	arrayLength = 20
 
 	collectDur = 0
-	deltaCall = 1000
+	deltaCall = 500000
 
 	clf = None
 	savePath = './saveFile/saveFile_Mix_D20'
 	dataPath = './MDBsms_Mix'
+
+	meanRuntime = 0
+	numRuntime = 0
+	printRuntime = 10000
+	printRuntimeCnt = 0
 
 	def init(self, version, AIType):
 		self.savePath = self.savePath +'_'+ str(version)
@@ -51,6 +60,9 @@ class MlMain:
 			self.init(version,AIType)
 			self.initiated = True
 
+
+		start_time = time.time()
+
 		bsmJsom = json.loads(bsmJsonString)
 		curArray = self.getNodeArray(bsmJsom)
 
@@ -69,24 +81,38 @@ class MlMain:
 					print self.Trainer.valuesCollection.shape
 					self.Trainer.train()
 					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
-					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+					#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
 		
+
+		return_value = False
+
 		if self.clf is None:
-			return False
+			return_value = False
 		else:
 			if RTpredict:
 				prediction = self.clf.predict(array([curArray[0]]))
 				#print "========================================"
 				if prediction[0] == 0.0:
-					return False
+					return_value = False
 				else:
-					return True
+					return_value = True
 			#print prediction
 			#print curArray[1]
 			#print "========================================"
 
-		return False
+		end_time = time.time()
+		self.meanRuntime = (self.numRuntime*self.meanRuntime + (end_time-start_time))/(self.numRuntime+1)
+		self.numRuntime = self.numRuntime + 1
+		if self.printRuntimeCnt > self.printRuntime:
+			self.printRuntimeCnt = 0
+			print 'meanRuntime: ' + str(self.meanRuntime) + ' ' + str(self.numRuntime)
+		else:
+			self.printRuntimeCnt = self.printRuntimeCnt + 1
+
+
+
+		return return_value
 
 
 	def trainedModelExists(self, AIType):

@@ -31,8 +31,14 @@ void MDStatistics::addNewNode(unsigned long pseudo, mbTypes::Mbs mbType,
             baseList[var].addTotalGenuine(pseudo, time);
         }
     }
+    break;
+    case mbTypes::GlobalAttacker: {
+        for (int var = 0; var < baseListNum; ++var) {
+            baseList[var].addTotalGenuine(pseudo, time);
+        }
+    }
         break;
-    case mbTypes::Attacker: {
+    case mbTypes::LocalAttacker: {
         for (int var = 0; var < baseListNum; ++var) {
             baseList[var].addTotalAttacker(pseudo, time);
         }
@@ -50,8 +56,14 @@ void MDStatistics::addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType,
             baseList[var].addReportedGenuine(pseudo, time);
         }
     }
+    break;
+    case mbTypes::GlobalAttacker: {
+        for (int var = 0; var < baseListNum; ++var) {
+            baseList[var].addReportedGenuine(pseudo, time);
+        }
+    }
         break;
-    case mbTypes::Attacker: {
+    case mbTypes::LocalAttacker: {
         for (int var = 0; var < baseListNum; ++var) {
             baseList[var].addReportedAttacker(pseudo, time);
         }

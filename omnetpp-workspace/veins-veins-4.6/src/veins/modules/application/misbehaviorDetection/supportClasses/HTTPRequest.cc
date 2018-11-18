@@ -91,6 +91,7 @@ std::string HTTPRequest::Request(std::string requestArg) {
     if (server == NULL)
         printf("ERROR, no such host");
 
+
     /* fill in the structure */
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;

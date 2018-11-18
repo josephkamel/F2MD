@@ -85,7 +85,11 @@ void AppPrintable::incAll(mbTypes::Mbs mbType) {
         allTests_1++;
     }
         break;
-    case mbTypes::Attacker: {
+    case mbTypes::GlobalAttacker: {
+        allTests_1++;
+    }
+        break;
+    case mbTypes::LocalAttacker: {
         allTests_2++;
     }
         break;
@@ -99,7 +103,11 @@ void AppPrintable::incCumulFlags(mbTypes::Mbs mbType) {
         cumulFlags_1++;
     }
         break;
-    case mbTypes::Attacker: {
+    case mbTypes::GlobalAttacker: {
+        cumulFlags_1++;
+    }
+        break;
+    case mbTypes::LocalAttacker: {
         cumulFlags_2++;
     }
         break;
@@ -164,7 +172,42 @@ void AppPrintable::incFlags(mdChecksTypes::Checks check, mbTypes::Mbs mbType) {
         }
     }
         break;
-    case mbTypes::Attacker: {
+    case mbTypes::GlobalAttacker: {
+        switch (check) {
+        case mdChecksTypes::RangePlausibility:
+            flagsRangePlausibility_1++;
+            break;
+        case mdChecksTypes::PositionPlausibility:
+            flagsPositionPlausibility_1++;
+            break;
+        case mdChecksTypes::SpeedPlausibility:
+            flagsSpeedPlausibility_1++;
+            break;
+        case mdChecksTypes::PositionConsistancy:
+            flagsPositionConsistancy_1++;
+            break;
+        case mdChecksTypes::PositionSpeedConsistancy:
+            flagsPositionSpeedConsistancy_1++;
+            break;
+        case mdChecksTypes::SpeedConsistancy:
+            flagsSpeedConsistancy_1++;
+            break;
+        case mdChecksTypes::BeaconFrequency:
+            flagsBeaconFrequency_1++;
+            break;
+        case mdChecksTypes::Intersection:
+            flagsIntersection_1++;
+            break;
+        case mdChecksTypes::SuddenAppearence:
+            flagsSuddenAppearence_1++;
+            break;
+        case mdChecksTypes::PositionHeadingConsistancy:
+            flagsPositionHeadingConsistancy_1++;
+            break;
+        }
+    }
+        break;
+    case mbTypes::LocalAttacker: {
         switch (check) {
         case mdChecksTypes::RangePlausibility:
             flagsRangePlausibility_2++;

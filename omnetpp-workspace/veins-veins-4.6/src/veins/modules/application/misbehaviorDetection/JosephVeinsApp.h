@@ -32,7 +32,7 @@ using namespace Veins;
 
 #include "mdApplications/MDApplication.h"
 #include "mdApplications/ThresholdApp.h"
-#include "mdApplications/AggrigationApp.h"
+#include <veins/modules/application/misbehaviorDetection/mdApplications/AggregationApp.h>
 #include "mdApplications/BehavioralApp.h"
 #include "mdApplications/PyBridgeApp.h"
 #include <veins/modules/application/misbehaviorDetection/mdApplications/ExperiApp.h>
@@ -60,11 +60,12 @@ using namespace Veins;
 
 #include "pcPolicies/PCPolicy.h"
 #include "mdAttacks/MDAttack.h"
+#include "mdAttacks/MDGlobalAttack.h"
 
 #include "supportClasses/HTTPRequest.h"
 
-#define mlPortV1 9992
-#define mlPortV2 9991
+#define mlPortV1 9991
+#define mlPortV2 9990
 
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
@@ -97,7 +98,7 @@ protected:
     virtual void handleSelfMsg(cMessage* msg);
     virtual void handlePositionUpdate(cObject* obj);
 
-    mbTypes::Mbs induceMisbehavior(double attackers);
+    mbTypes::Mbs induceMisbehavior(double localAttacker, double globalAttacker);
     void LocalMisbehaviorDetection(BasicSafetyMessage* bsm, int version);
 
     void writeReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
@@ -113,6 +114,7 @@ protected:
 
     void treatAttackFlags();
     MDAttack mdAttack;
+    MDGlobalAttack mdGlobalAttack;
 
     pseudoChangeTypes::PseudoChange myPcType;
     PCPolicy pcPolicy;

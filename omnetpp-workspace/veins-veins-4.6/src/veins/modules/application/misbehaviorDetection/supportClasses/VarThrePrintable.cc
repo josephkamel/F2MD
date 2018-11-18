@@ -28,19 +28,25 @@ void VarThrePrintable::registerMessage(mbTypes::Mbs mbType, double minFactor) {
         if (minFactor <= var) {
 
             switch (mbType) {
-            case mbTypes::Attacker:
+            case mbTypes::LocalAttacker:
                 TP[index]++;
                 break;
             case mbTypes::Genuine:
                 FP[index]++;
                 break;
+            case mbTypes::GlobalAttacker:
+                FP[index]++;
+                break;
             }
         } else {
             switch (mbType) {
-            case mbTypes::Attacker:
+            case mbTypes::LocalAttacker:
                 FN[index]++;
                 break;
             case mbTypes::Genuine:
+                TN[index]++;
+                break;
+            case mbTypes::GlobalAttacker:
                 TN[index]++;
                 break;
             }
