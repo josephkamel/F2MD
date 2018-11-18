@@ -13,16 +13,9 @@
 
 Define_Module(JosephVeinsApp);
 
-<<<<<<< HEAD
 
-#define serialNumber "IRT-MIX-V1"
-#define savePath "/media/joseph/Windows/DataF2MD/"
-
-//#define savePath "../../../../../mdmSave/"
-=======
-#define serialNumber "IRT-Mix-Train-D5-V2"
-#define savePath "../../../../../mdmSave/MachineLearning/"
->>>>>>> 8dde4dbbb7e676bd61cd562c0fc51b3a2a3366f5
+#define serialNumber "IRT-MA"
+#define savePath "../../../../../mdmSave/ResultsF2MD/MA/"
 
 //#define serialNumber "IRT-BSMS-MIX-V1"
 //#define savePath "/media/sca-team/DATA/DataF2MD/"
@@ -53,7 +46,7 @@ static attackTypes::Attacks MixAttacksList[] = { attackTypes::ConstPos,
         attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
         attackTypes::Disruptive, attackTypes::DataReplay,
         attackTypes::StaleMessages,attackTypes::Sybil,
-        attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
+      //  attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
         };
 
 #define ATTACKER_PROB 0.1
@@ -67,32 +60,26 @@ static bool EnablePC = false;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
 //Detection Application
-<<<<<<< HEAD
-static bool EnableV1 = true;
-static bool EnableV2 = false;
-static bool SaveStatsV1 = true;
-static bool SaveStatsV2 = false;
-=======
-static bool EnableV1 = false;
-static bool EnableV2 = true;
-static bool SaveStatsV1 = false;
-static bool SaveStatsV2 = true;
->>>>>>> 8dde4dbbb7e676bd61cd562c0fc51b3a2a3366f5
 
-static mdAppTypes::App appTypeV1 = mdAppTypes::PyBridgeApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
+static bool EnableV1 = true;
+static bool EnableV2 = true;
+static bool SaveStatsV1 = true;
+static bool SaveStatsV2 = true;
+
+static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 
 //writeBsms
-static bool writeBsmsV1 = true;
+static bool writeBsmsV1 = false;
 static bool writeBsmsV2 = false;
 //writeReport
-static bool writeReportsV1 = true;
+static bool writeReportsV1 = false;
 static bool writeReportsV2 = false;
 
 //sendReport
-static bool sendReportsV1 = false;
+static bool sendReportsV1 = true;
 static bool sendReportsV2 = false;
 int maPortV1 = 9980;
 int maPortV2 = 9981;
