@@ -60,6 +60,9 @@ std::string HTTPRequest::formaliseString(std::string arg){
     return arg;
 }
 
+char message[2048];
+char response[2048];
+
 std::string HTTPRequest::Request(std::string requestArg) {
     /* first what are we going to send and where are we going to send it? */
     int portno = portInt;
@@ -69,7 +72,7 @@ std::string HTTPRequest::Request(std::string requestArg) {
     struct hostent *server;
     struct sockaddr_in serv_addr;
     int sockfd, bytes, sent, received, total;
-    char message[16384], response[16384];
+
     response[0] = '0';
 
     std::string arg = formaliseString(requestArg);

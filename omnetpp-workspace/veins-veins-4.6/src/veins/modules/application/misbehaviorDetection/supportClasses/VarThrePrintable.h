@@ -54,9 +54,9 @@ public:
     void registerMessage(mbTypes::Mbs mbType, double minFactor);
 
     void resetAll();
-    void getVarThrePrintable(char* outStr);
+    void getVarThrePrintable(char* outStr, bool printOut);
     void writeFile(std::string path, char* printStr);
-    void saveFile(std::string path, std::string serial);
+    void saveFile(std::string path, std::string serial, bool printOut);
 };
 
 #endif

@@ -68,7 +68,7 @@ void VarThrePrintable::writeFile(std::string path, char* printStr) {
     outFile.close();
 }
 
-void VarThrePrintable::getVarThrePrintable(char* outStr) {
+void VarThrePrintable::getVarThrePrintable(char* outStr, bool printOut) {
     char line[1024] = "";
     char data[64] = "";
 
@@ -95,20 +95,26 @@ void VarThrePrintable::getVarThrePrintable(char* outStr) {
         index++;
     }
 
+
+
     for (int i = 0; i < 1024; ++i) {
         outStr[i] = line[i];
     }
-    index = 0;
-    std::cout << name << "        TP        FP      TN      FN" << '\n';
-    for (double var = THRE_MIN; var <= THRE_MAX; var = var + THRE_STEP) {
-        std::cout << var << "        " << TP[index] << "       " << FP[index]
-                << "       " << TN[index] << "     " << FN[index] << '\n';
-        index++;
+
+    if(printOut){
+        index = 0;
+        std::cout << name << "        TP        FP      TN      FN" << '\n';
+        for (double var = THRE_MIN; var <= THRE_MAX; var = var + THRE_STEP) {
+            std::cout << var << "        " << TP[index] << "       " << FP[index]
+                    << "       " << TN[index] << "     " << FN[index] << '\n';
+            index++;
+        }
     }
+
 
 }
 
-void VarThrePrintable::saveFile(std::string path, std::string serial) {
+void VarThrePrintable::saveFile(std::string path, std::string serial, bool printOut) {
 
     char fileNameApp[64];
 
@@ -137,7 +143,7 @@ void VarThrePrintable::saveFile(std::string path, std::string serial) {
     strcat(filePathGen, "/");
     strcat(filePathGen, fileNameApp);
 
-    getVarThrePrintable(outChar);
+    getVarThrePrintable(outChar, printOut);
     writeFile(filePathGen, outChar);
 
 }

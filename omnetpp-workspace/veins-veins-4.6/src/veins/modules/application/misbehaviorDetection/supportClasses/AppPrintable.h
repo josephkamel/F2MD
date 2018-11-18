@@ -74,7 +74,7 @@ public:
     void incCumulFlags(mbTypes::Mbs mbType);
     void incFlags(mdChecksTypes::Checks check, mbTypes::Mbs mbType);
     void resetAll();
-    void getPrintable(char* outStr, double density,double deltaT);
+    void getPrintable(char* outStr, double density,double deltaT, bool printOut);
 
     void writeFile(std::string path, char* printStr);
 };

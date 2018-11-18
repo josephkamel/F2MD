@@ -77,7 +77,7 @@ public:
     int totalGenuineIndex(unsigned long id);
     int totalAttackerIndex(unsigned long id);
 
-    void getPrintable(char* outStr, double time);
+    void getPrintable(char* outStr, double time, bool printOut);
     void writeFile(std::string path, char* printStr);
 
     char* getName();

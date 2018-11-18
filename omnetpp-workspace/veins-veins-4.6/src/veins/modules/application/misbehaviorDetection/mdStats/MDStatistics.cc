@@ -95,7 +95,7 @@ void MDStatistics::treatReport(MDSBase *base, int index, MDReport report) {
 
 }
 
-void MDStatistics::saveLine(std::string path, std::string serial, double time) {
+void MDStatistics::saveLine(std::string path, std::string serial, double time, bool printOut) {
 
     char outChar[1024];
     char directoryPathGen[1024] = "";
@@ -123,9 +123,10 @@ void MDStatistics::saveLine(std::string path, std::string serial, double time) {
         strcat(filePathGen, "/");
         strcat(filePathGen, fileName);
 
-        baseList[var].getPrintable(outChar, time);
+        baseList[var].getPrintable(outChar, time, printOut);
         baseList[var].writeFile(filePathGen, outChar);
     }
+
 }
 
 void MDStatistics::resetAll() {

@@ -59,10 +59,12 @@ public:
             BasicSafetyMessage * bsm, BsmCheck bsmCheck,
             NodeTable * detectedNodes)= 0;
 
+    virtual double getMinFactor()= 0;
+
     void SendReport( MDStatistics* mdAuthority, MDReport mbReport);
 
     void saveLine( std::string path, std::string serial, double density,
-            double deltaT);
+            double deltaT, bool printOut);
     void resetInstFlags();
     void resetAllFlags();
 };

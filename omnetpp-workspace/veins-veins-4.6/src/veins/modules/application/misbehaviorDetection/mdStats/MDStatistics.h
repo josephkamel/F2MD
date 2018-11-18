@@ -37,7 +37,7 @@ public:
     void addReportedNode(unsigned long pseudo, mbTypes::Mbs mbType, double time);
     void getReport(const char* baseName, MDReport report);
 
-    void saveLine(std::string path, std::string serial,double time);
+    void saveLine(std::string path, std::string serial,double time, bool printOut);
 
     void resetAll();
 

@@ -12,8 +12,8 @@ from tqdm import tqdm
 from sklearn import datasets
 from sklearn.externals import joblib
 
-RTtrain = False
-RTcollectData = False
+RTtrain = True
+RTcollectData = True
 RTreadDataFromFile = False
 RTpredict = True
 
@@ -24,14 +24,14 @@ class MlMain:
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
 	Storage = MlArrayStorage()
-	arrayLength = 1
+	arrayLength = 20
 
 	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile_ConstPosOffset'
-	dataPath = './MDBsms_ConstPosOffset'
+	savePath = './saveFile/saveFile_Mix_D20'
+	dataPath = './MDBsms_Mix'
 
 	def init(self, version, AIType):
 		self.savePath = self.savePath +'_'+ str(version)
@@ -105,7 +105,7 @@ class MlMain:
 				self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
 				self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
  
-				self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+				#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
 
 	def ReadDataFromFile(self, version, AIType):
@@ -122,18 +122,14 @@ class MlMain:
 				bsmJsonString = open(self.dataPath+'_'+version+'/' +s, 'r').read()
 				bsmJsom = json.loads(bsmJsonString)
 				curArray = self.getNodeArray(bsmJsom)
-				ValuesData.append(curArray[0])
-				TargetData.append(curArray[1])
-		
-		self.DataCollector.initValuesData(ValuesData)
-		self.DataCollector.initTargetData(TargetData)
+				self.DataCollector.collectData(curArray)
 
 		self.DataCollector.saveData()
 		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
 		self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
 		self.Trainer.train()
 		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
-		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+		#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Finished!"
 
 	def getNodeArray(self,bsmJsom):
@@ -172,12 +168,17 @@ class MlMain:
 		else:
 			numLabel = 1.0
 		
+<<<<<<< HEAD
 		#hack
 		if pP<1.0:
 			pP = pP - 0
 			if pP < 0:
 				pP = 0
 		valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
+=======
+		#valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
+		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
+>>>>>>> 8dde4dbbb7e676bd61cd562c0fc51b3a2a3366f5
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 

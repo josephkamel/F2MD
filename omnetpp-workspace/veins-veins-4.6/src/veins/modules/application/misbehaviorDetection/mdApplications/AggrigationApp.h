@@ -31,8 +31,6 @@ public:
     int maxBsmTrustNum = 5;
     double minFactor = 1;
 
-
-
     AggrigationApp(int version, double devValue ,double deltaTrustTime,
             int maxBsmTrustNum);
 
