@@ -44,6 +44,10 @@ class MlTrainer:
 			X, y = self.valuesCollection, self.targetCollection
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
 			clf.fit(X, y)
+		if(self.AIType == 'neural_network_3L15N'):
+			X, y = self.valuesCollection, self.targetCollection
+			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,15,15,), random_state=1)
+			clf.fit(X, y)
 
 		joblib.dump(clf, self.savePath + '/clf_' + self.AIType + '_'+self.curDateStr+'.pkl')
 

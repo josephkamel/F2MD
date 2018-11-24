@@ -64,8 +64,8 @@ using namespace Veins;
 
 #include "supportClasses/HTTPRequest.h"
 
-#define mlPortV1 9991
-#define mlPortV2 9990
+#define mlPortV1 9997
+#define mlPortV2 9998
 
 static unsigned long targetNodes[MAXTARGETLENGTH];
 static int targetNodesLength = 0;
@@ -104,10 +104,16 @@ protected:
     void writeReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
             BasicSafetyMessage *bsm);
 
+    void writeListReport(MDReport reportBase, std::string version, BsmCheck bsmCheck,
+            BasicSafetyMessage *bsm);
+
     void sendReport(MDReport reportBase, std::string version,
             BsmCheck bsmCheck, BasicSafetyMessage *bsm);
 
     void writeMdBsm(std::string version, BsmCheck bsmCheck,
+            BasicSafetyMessage *bsm);
+
+    void writeMdListBsm(std::string version, BsmCheck bsmCheck,
             BasicSafetyMessage *bsm);
 
     void writeSelfBsm(BasicSafetyMessage bsm);

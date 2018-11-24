@@ -13,11 +13,11 @@
 
 Define_Module(JosephVeinsApp);
 
-//#define serialNumber "IRT-DEMO"
-//#define savePath "../../../../../mdmSave/"
+#define serialNumber "IRT-DEMO"
+#define savePath "../../../../../mdmSave/"
 
-#define serialNumber "IRT-Reports-Mix-V2"
-#define savePath "/media/sca-team/DATA/DataF2MD/"
+//#define serialNumber "IRT-Reports-Mix-V2-List"
+//#define savePath "/media/sca-team/DATA/DataF2MD/"
 
 static bool randomConf = false;
 #define confPos 3
@@ -56,7 +56,7 @@ static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
 // 13 DoS, 14 DoSRandom, 15 DoSDisruptive, 16 Sybil
 
-#define GLOBAL_ATTACKER_PROB 0.1
+#define GLOBAL_ATTACKER_PROB 0.0
 #define GLOBAL_ATTACK_TYPE attackTypes::MAStress
 // 1 MAStress
 
@@ -64,9 +64,9 @@ static bool EnablePC = false;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
 //Detection Application
-static bool EnableV1 = false;
+static bool EnableV1 = true;
 static bool EnableV2 = true;
-static bool SaveStatsV1 = false;
+static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
@@ -77,15 +77,20 @@ static bool writeSelfMsg = false;
 //writeBsms
 static bool writeBsmsV1 = false;
 static bool writeBsmsV2 = false;
+static bool writeListBsmsV1 = false;
+static bool writeListBsmsV2 = false;
 //writeReport
 static bool writeReportsV1 = false;
-static bool writeReportsV2 = true;
+static bool writeReportsV2 = false;
+
+static bool writeListReportsV1 = false;
+static bool writeListReportsV2 = false;
 
 //sendReport
 static bool sendReportsV1 = false;
-static bool sendReportsV2 = false;
+static bool sendReportsV2 = true;
 int maPortV1 = 9980;
-int maPortV2 = 9987;
+int maPortV2 = 9981;
 
 static MDStatistics mdStats = MDStatistics();
 
@@ -493,6 +498,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 writeReport(reportBase, mdv, bsmCheckV1, bsm);
             }
 
+            if (writeListReportsV1) {
+                writeListReport(reportBase, mdv, bsmCheckV1, bsm);
+            }
+
             if (sendReportsV1) {
                 sendReport(reportBase, mdv, bsmCheckV1, bsm);
             }
@@ -511,6 +520,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
 
         if (writeBsmsV1) {
             writeMdBsm(mdv, bsmCheckV1, bsm);
+        }
+        if (writeListBsmsV1) {
+            writeMdListBsm(mdv, bsmCheckV1, bsm);
         }
 
         if (!initV1) {
@@ -596,6 +608,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 writeReport(reportBase, mdv, bsmCheckV2, bsm);
             }
 
+            if (writeListReportsV2) {
+                writeListReport(reportBase, mdv, bsmCheckV2, bsm);
+            }
+
             if (sendReportsV2) {
                 sendReport(reportBase, mdv, bsmCheckV2, bsm);
             }
@@ -607,6 +623,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 writeReport(reportBase, mdv, bsmCheckV2, bsm);
             }
 
+            if (writeListReportsV2) {
+                writeListReport(reportBase, mdv, bsmCheckV2, bsm);
+            }
+
             if (sendReportsV2) {
                 sendReport(reportBase, mdv, bsmCheckV2, bsm);
             }
@@ -615,6 +635,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
 
         if (writeBsmsV2) {
             writeMdBsm(mdv, bsmCheckV2, bsm);
+        }
+
+        if (writeListBsmsV2) {
+            writeMdListBsm(mdv, bsmCheckV2, bsm);
         }
 
         if (!initV2) {
@@ -692,6 +716,37 @@ void JosephVeinsApp::writeReport(MDReport reportBase, std::string version,
     }
 }
 
+void JosephVeinsApp::writeListReport(MDReport reportBase, std::string version,
+        BsmCheck bsmCheck, BasicSafetyMessage *bsm) {
+    switch (myReportType) {
+    case reportTypes::BasicCheckReport: {
+        BasicCheckReport bcr = BasicCheckReport(reportBase);
+        bcr.setReportedCheck(bsmCheck);
+        bcr.writeStrToFileList(savePath, serialNumber, version,
+                bcr.getReportPrintableJson(), curDate);
+    }
+        break;
+
+    case reportTypes::OneMessageReport: {
+        OneMessageReport omr = OneMessageReport(reportBase);
+        omr.setReportedBsm(*bsm);
+        omr.setReportedCheck(bsmCheck);
+        omr.writeStrToFileList(savePath, serialNumber, version,
+                omr.getReportPrintableJson(), curDate);
+    }
+        break;
+    case reportTypes::EvidenceReport: {
+        EvidenceReport evr = EvidenceReport(reportBase);
+        evr.addEvidence(myBsm[0], bsmCheck, *bsm, detectedNodes);
+        evr.writeStrToFileList(savePath, serialNumber, version,
+                evr.getReportPrintableJson(), curDate);
+    }
+        break;
+    default:
+        break;
+    }
+}
+
 void JosephVeinsApp::sendReport(MDReport reportBase, std::string version,
         BsmCheck bsmCheck, BasicSafetyMessage *bsm) {
 
@@ -741,6 +796,16 @@ void JosephVeinsApp::writeMdBsm(std::string version, BsmCheck bsmCheck,
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);
     bsmPrint.writeStrToFile(savePath, serialNumber, version,
+            bsmPrint.getBsmPrintableJson(), curDate);
+}
+
+void JosephVeinsApp::writeMdListBsm(std::string version, BsmCheck bsmCheck,
+        BasicSafetyMessage *bsm) {
+    BsmPrintable bsmPrint = BsmPrintable();
+    bsmPrint.setReceiverPseudo(myPseudonym);
+    bsmPrint.setBsm(*bsm);
+    bsmPrint.setBsmCheck(bsmCheck);
+    bsmPrint.writeStrToFileList(savePath, serialNumber, version,
             bsmPrint.getBsmPrintableJson(), curDate);
 }
 

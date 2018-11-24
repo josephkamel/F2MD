@@ -232,11 +232,67 @@ bool BsmPrintable::writeStrToFile(const std::string strFileCnst,
 
     outFile.open(strFile);
     if (outFile.is_open()) {
-
         outFile << outStr;
-
         outFile.close();
     }
+
+    return true;
+}
+
+
+bool BsmPrintable::writeStrToFileList(const std::string strFileCnst,
+        const std::string serial, const std::string version,
+        const std::string outStr, const std::string curDate) {
+
+    int gentime = bsm.getArrivalTime().dbl();
+    int gentime0000 = (bsm.getArrivalTime().dbl() - gentime) * 10000;
+
+    std::string upperDirName = strFileCnst + serial;
+    const char* upperDirNameConst = upperDirName.c_str();
+    struct stat info;
+    if (stat(upperDirNameConst, &info) != 0) {
+        mkdir(upperDirNameConst, 0777);
+    } else if (info.st_mode & S_IFDIR) {
+    } else {
+        mkdir(upperDirNameConst, 0777);
+    }
+
+    std::string dirnameStr = strFileCnst + serial + "/MDBsmsList_" + curDate;
+    const char* dirnameConst = dirnameStr.c_str();
+
+    struct stat info2;
+    if (stat(dirnameConst, &info2) != 0) {
+        mkdir(dirnameConst, 0777);
+    } else if (info2.st_mode & S_IFDIR) {
+    } else {
+        mkdir(dirnameConst, 0777);
+    }
+
+    std::string strFile = strFileCnst + serial + "/MDBsmsList_" + curDate
+            + "/MDBsm_" + version + "_" + std::to_string(receiverPseudo)
+            + ".lbsm";
+
+    std::fstream checkFile(strFile);
+    if (checkFile.is_open()) {
+        checkFile.seekp(0,ios::end);
+        long pos = checkFile.tellp();
+        checkFile.seekp (pos-1);
+        checkFile << ",";
+        checkFile << outStr << "\n";
+        checkFile << "\n";
+        checkFile << "]";
+    }else{
+        std::ofstream outFile;
+        outFile.open(strFile);
+        if (outFile.is_open()) {
+            outFile << "[";
+            outFile << outStr;
+            outFile << "\n";
+            outFile << "]";
+            outFile.close();
+        }
+    }
+
 
     return true;
 }

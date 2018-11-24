@@ -196,3 +196,53 @@ bool MDReport::writeStrToFile(const std::string strFileCnst,
 
 }
 
+bool MDReport::writeStrToFileList(const std::string strFileCnst,
+        const std::string serial, const std::string version,
+        const std::string outStr,const std::string curDate) {
+    int gentime = generationTime;
+    int gentime0000 = (generationTime - gentime) * 10000;
+
+    std::string dirnameStr = strFileCnst + serial + "/MDReportsList_" + curDate;
+    const char* dirnameConst = dirnameStr.c_str();
+
+    struct stat info;
+    if (stat(dirnameConst, &info) != 0) {
+        mkdir(dirnameConst, 0777);
+    } else if (info.st_mode & S_IFDIR) {
+    } else {
+        mkdir(dirnameConst, 0777);
+    }
+
+    std::string strFile = strFileCnst + serial + "/MDReportsList_" + curDate
+            + "/MDReport_" + version + "_" + std::to_string(senderPseudonym) + ".lrep";
+
+
+    std::fstream checkFile(strFile);
+    if (checkFile.is_open()) {
+        checkFile.seekp(0,ios::end);
+        long pos = checkFile.tellp();
+        checkFile.seekp (pos-1);
+        checkFile << ",";
+        checkFile << outStr << "\n";
+        checkFile << "\n";
+        checkFile << "]";
+    }else{
+        std::ofstream outFile;
+        outFile.open(strFile);
+        if (outFile.is_open()) {
+            outFile << "[";
+            outFile << outStr;
+            outFile << "\n";
+            outFile << "]";
+            outFile.close();
+        }
+    }
+
+    return true;
+
+}
+
+
+
+
+

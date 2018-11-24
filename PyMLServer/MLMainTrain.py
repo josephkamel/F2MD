@@ -12,7 +12,8 @@ from tqdm import tqdm
 from sklearn import datasets
 from sklearn.externals import joblib
 
-RTreadDataFromFile = True
+RTreadDataFromFile = False
+RTtrainData = True
 RTpredict = True
 
 class MlMain:
@@ -24,14 +25,14 @@ class MlMain:
 	Storage = MlArrayStorage()
 	arrayLength = 20
 
+
 	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile/saveFile_Mix_D20'
+	savePath = './saveFile/saveFile_Mix_D20_3L15N'
 	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/Test'
-	dataPath = '/media/sca-team/DATA/DataF2MD/IRT-BSMS-MIX-V1/MDBsms_2018-11-6_19:19:15'
-	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/IRT-BSMS-MIX-V2/MDBsms_2018-11-5_15:22:52'
+	dataPath = '/media/sca-team/DATA/DataF2MD/IRT-Reports-Mix-V2-List/MDBsmsList_2018-11-20_17:35:42'
 
 	def init(self, version, AIType):
 
@@ -46,10 +47,12 @@ class MlMain:
 		self.trainedModelExists(AIType)
 		if RTreadDataFromFile:
 			self.ReadDataFromFile( AIType)
+		if RTtrainData:
+			self.TrainData(AIType)
 
 	def mlMain(self):
-		version = "V1"
-		AIType = "neural_network"
+		version = "V2"
+		AIType = "neural_network_3L15N"
 		if not self.initiated:
 			self.init(version,AIType)
 			self.initiated = True
@@ -77,7 +80,7 @@ class MlMain:
 				print ("Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!")
 
 	def ReadDataFromFile(self, AIType):
-		print ("DataSave And Training " + str(self.dataPath) + " Started ...")
+		print ("DataLoad " + str(self.dataPath) + " Started ...")
 
 		#filesNames = [f.name for f in tqdm(scandir(self.dataPath)) if f.is_file()]
 		filesNames = [f for f in tqdm(os.listdir(self.dataPath)) if os.path.isfile(join(self.dataPath, f))]
@@ -87,24 +90,31 @@ class MlMain:
 		TargetData = []
 
 		for i in tqdm(range(0,len(filesNames))):
+		#for i in tqdm(range(0,100)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
 				bsmJsom = json.loads(bsmJsonString)
 				curArray = self.getNodeArray(bsmJsom)
-				ValuesData.append(curArray[0])
-				TargetData.append(curArray[1])
-		
-		self.DataCollector.initValuesData(ValuesData)
-		self.DataCollector.initTargetData(TargetData)
+				self.DataCollector.collectData(curArray)
+			if s.endswith(".lbsm"):
+				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
+				bsmJsom = json.loads(bsmJsonString)
+				for bsmItem in bsmJsom:
+					curArray = self.getNodeArray(bsmItem)
+					self.DataCollector.collectData(curArray)
 
 		self.DataCollector.saveData()
+		print ("DataLoad " + str(self.dataPath) + " Finished!")
+
+	def TrainData(self, AIType):
+		print ("Training " + str(self.dataPath) + " Started ...")
 		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
 		self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
 		self.Trainer.train()
 		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-		print ("DataSave And Training " + str(self.dataPath) + " Finished!")
+		print ("Training " + str(self.dataPath) + " Finished!")
 
 	def getNodeArray(self,bsmJsom):
 		cur_array = self.getArray(bsmJsom)
@@ -116,6 +126,7 @@ class MlMain:
 		#print "cur_array: " + str(cur_array)
 		#print "returnArray: " + str(returnArray)
 		return returnArray
+
 
 	def getArray(self,bsmJsom):
 		rP = bsmJsom['BsmPrint']['BsmCheck']['rP']
@@ -142,7 +153,8 @@ class MlMain:
 		else:
 			numLabel = 1.0
 		
-		valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
+		#valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
+		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 

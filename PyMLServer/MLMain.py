@@ -19,8 +19,6 @@ RTcollectData = False
 RTreadDataFromFile = False
 RTpredict = True
 
-
-
 class MlMain:
 	initiated = False
 
@@ -34,7 +32,7 @@ class MlMain:
 	deltaCall = 500000
 
 	clf = None
-	savePath = './saveFile/saveFile_Mix_D20'
+	savePath = './saveFile/saveFile_Mix_D20_3L15N'
 	dataPath = './MDBsms_Mix'
 
 	meanRuntime = 0
@@ -81,7 +79,7 @@ class MlMain:
 					print self.Trainer.valuesCollection.shape
 					self.Trainer.train()
 					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
-					#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
 		
 
