@@ -192,8 +192,17 @@ class MlMain:
 		else:
 			numLabel = 1.0
 		
+<<<<<<< HEAD
+		#hack
+		if pP<1.0:
+			pP = pP - 0
+			if pP < 0:
+				pP = 0
+		valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
+=======
 		#valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
 		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
+>>>>>>> 8dde4dbbb7e676bd61cd562c0fc51b3a2a3366f5
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 

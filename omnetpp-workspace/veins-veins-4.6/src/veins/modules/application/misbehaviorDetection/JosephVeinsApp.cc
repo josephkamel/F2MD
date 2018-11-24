@@ -13,6 +13,7 @@
 
 Define_Module(JosephVeinsApp);
 
+
 #define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
@@ -46,8 +47,10 @@ static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstSpeedOffset, attackTypes::RandomSpeed,
         attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
         attackTypes::Disruptive, attackTypes::DataReplay,
-        attackTypes::StaleMessages, attackTypes::Sybil, attackTypes::DoS,
-        attackTypes::DoSRandom, attackTypes::DoSDisruptive };
+        attackTypes::StaleMessages,attackTypes::Sybil,
+      //  attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
+        };
+
 
 #define LOCAL_ATTACKER_PROB 0.1
 #define LOCAL_ATTACK_TYPE attackTypes::Disruptive
@@ -64,6 +67,7 @@ static bool EnablePC = false;
 #define PC_TYPE pseudoChangeTypes::Periodical
 // Periodical, Disposable, DistanceBased, Random
 //Detection Application
+
 static bool EnableV1 = true;
 static bool EnableV2 = true;
 static bool SaveStatsV1 = true;
@@ -86,9 +90,9 @@ static bool writeReportsV2 = false;
 static bool writeListReportsV1 = false;
 static bool writeListReportsV2 = false;
 
-//sendReport
+
 static bool sendReportsV1 = false;
-static bool sendReportsV2 = true;
+static bool sendReportsV2 = false;
 int maPortV1 = 9980;
 int maPortV2 = 9981;
 
