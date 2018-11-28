@@ -17,21 +17,27 @@
 #include "enumTypes/MbTypes.h"
 #include "enumTypes/MdAppTypes.h"
 
-
-
-
+#define NETWORK 0
+// 0 IRT Network
+// 1 LuST Network
 
 //Detection Parameters
+#if NETWORK == 0
+    #define MAX_CONSISTANT_DISTANCE 25 // 25 for TB || 47.22 for LUST
+    #define MAX_PLAUSIBLE_SPEED 25 // 25 for TB || 47.22 for LUST
+#else
+    #define MAX_CONSISTANT_DISTANCE 47.22 // 25 for TB || 47.22 for LUST
+    #define MAX_PLAUSIBLE_SPEED 47.22 // 25 for TB || 47.22 for LUST
+#endif
+
 #define MAX_CONFIDENCE_RANGE 10 //3
 #define MAX_PLAUSIBLE_RANGE 417 // 415
 #define MIN_INT_DIST 0.9 // 3.292091
-#define MIN_PSS -0.712046 //   -0.712046 for TB || -4.07843 for LUST
-#define MAX_PSS 8.37598 // 8.37598 for TB || 6.08384 for LUST
+
 #define MAX_TIME_DELTA 1.1
 #define MAX_DELTA_INTER 0.4 //1.001
 #define MAX_SA_RANGE 210 // 420/2
-#define MAX_CONSISTANT_DISTANCE 25 // 25 for TB || 47.22 for LUST
-#define MAX_PLAUSIBLE_SPEED 25 // 25 for TB || 47.22 for LUST
+
 #define MAX_PLAUSIBLE_ACCEL 3.0 // 3.0
 #define MAX_PLAUSIBLE_DECEL 4.501 // 4.5
 #define MAX_BEACON_FREQUENCY 0.99 //0.99998

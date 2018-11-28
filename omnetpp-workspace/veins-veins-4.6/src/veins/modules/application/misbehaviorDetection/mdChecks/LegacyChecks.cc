@@ -108,8 +108,10 @@ double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
 
 }
 
-static double PSCminDeltaMax = 10;
-static double PSCmaxDeltaMin = 0;
+
+static double saveMin = 0;
+static double saveMax = 0;
+
 
 double LegacyChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         Coord oldPosition, double curSpeed, double oldspeed, double time) {
@@ -123,20 +125,21 @@ double LegacyChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         double deltaMax = maxspeed - theoreticalSpeed;
         double deltaMin = minspeed - theoreticalSpeed;
 
-        if (deltaMax < PSCminDeltaMax) {
-            PSCminDeltaMax = deltaMax;
+        if (deltaMax > saveMax) {
+            saveMax = deltaMax;
         }
-        if (deltaMin > PSCmaxDeltaMin) {
-            PSCmaxDeltaMin = deltaMin;
+        if ((-deltaMin) > saveMin) {
+            saveMin = -deltaMin;
         }
 
-//        std::cout<<"minDeltaMax:"<<minDeltaMax<<'\n';
-//        std::cout<<"maxDeltaMin:"<<maxDeltaMin<<'\n';
+//        std::cout<< "saveMax"<< saveMax <<"\n";
+//        std::cout<< "saveMin"<< saveMin <<"\n";
 
-        if (deltaMax < MIN_PSS) {
+
+        if (deltaMax >  MAX_PLAUSIBLE_DECEL*time) {
             return 0; // deltaMax - MIN_PSS
         } else {
-            if (deltaMin > MAX_PSS) {
+            if (deltaMin >  MAX_PLAUSIBLE_ACCEL*time) {
                 return 0; // deltaMin - MAX_PSS
             } else {
                 return 1;

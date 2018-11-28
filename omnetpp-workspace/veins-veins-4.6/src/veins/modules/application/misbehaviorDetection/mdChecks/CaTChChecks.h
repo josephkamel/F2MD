@@ -71,12 +71,6 @@ private:
             double curSpeedConfidence, double oldspeed,
             double oldSpeedConfidence, double time);
 
-    double PositionSpeedConsistancyCheckOld(Coord curPosition,
-            Coord curPositionConfidence, Coord oldPosition,
-            Coord oldPositionConfidence, double curSpeed,
-            double curSpeedConfidence, double oldspeed,
-            double oldSpeedConfidence, double time);
-
     double PositionHeadingConsistancyCheck(Coord curHeading,
             Coord curHeadingConfidence, Coord oldPosition,
             Coord oldPositionConfidence, Coord curPositionConfidence,
