@@ -236,6 +236,7 @@ double MDMLib::SegmentSegmentFactor(double d, double r1, double r2,
         }
     }
 
+
     double factor = (overlap1 + overlap2) / (2 * r1 + 2 * r2);
     return factor;
 }

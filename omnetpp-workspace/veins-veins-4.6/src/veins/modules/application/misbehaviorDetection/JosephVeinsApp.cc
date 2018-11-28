@@ -13,16 +13,15 @@
 
 Define_Module(JosephVeinsApp);
 
-
 #define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
-//#define serialNumber "IRT-Reports-Mix-V2-List"
+//#define serialNumber "IRT-BSMs-Mix-V2-List"
 //#define savePath "/media/sca-team/DATA/DataF2MD/"
 
 static bool randomConf = false;
-#define confPos 3
-#define confSpd 0.5
+#define confPos 3.0
+#define confSpd 3.0/6.0
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
@@ -48,12 +47,12 @@ static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
         attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
         attackTypes::Disruptive, attackTypes::DataReplay,
         attackTypes::StaleMessages,attackTypes::Sybil,
-      //  attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
+        attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
         };
 
 
 #define LOCAL_ATTACKER_PROB 0.1
-#define LOCAL_ATTACK_TYPE attackTypes::Disruptive
+#define LOCAL_ATTACK_TYPE attackTypes::EventualStop
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
@@ -74,7 +73,7 @@ static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
 
 static bool writeSelfMsg = false;
 
@@ -92,7 +91,7 @@ static bool writeListReportsV2 = false;
 
 
 static bool sendReportsV1 = false;
-static bool sendReportsV2 = false;
+static bool sendReportsV2 = true;
 int maPortV1 = 9980;
 int maPortV2 = 9981;
 
@@ -516,6 +515,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 writeReport(reportBase, mdv, bsmCheckV1, bsm);
             }
 
+            if (writeListReportsV1) {
+                writeListReport(reportBase, mdv, bsmCheckV1, bsm);
+            }
+
             if (sendReportsV1) {
                 sendReport(reportBase, mdv, bsmCheckV1, bsm);
             }
@@ -796,6 +799,7 @@ void JosephVeinsApp::sendReport(MDReport reportBase, std::string version,
 void JosephVeinsApp::writeMdBsm(std::string version, BsmCheck bsmCheck,
         BasicSafetyMessage *bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
+    bsmPrint.setReceiverId(myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);
@@ -806,6 +810,7 @@ void JosephVeinsApp::writeMdBsm(std::string version, BsmCheck bsmCheck,
 void JosephVeinsApp::writeMdListBsm(std::string version, BsmCheck bsmCheck,
         BasicSafetyMessage *bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
+    bsmPrint.setReceiverId(myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);
@@ -815,7 +820,8 @@ void JosephVeinsApp::writeMdListBsm(std::string version, BsmCheck bsmCheck,
 
 void JosephVeinsApp::writeSelfBsm(BasicSafetyMessage bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
-    bsmPrint.setReceiverPseudo(myId);
+    bsmPrint.setReceiverId(myId);
+    bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(bsm);
     bsmPrint.writeSelfStrToFile(savePath, serialNumber,
             bsmPrint.getSelfBsmPrintableJson(), curDate);

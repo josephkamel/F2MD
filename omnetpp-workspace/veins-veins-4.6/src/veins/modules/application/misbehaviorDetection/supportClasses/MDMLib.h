@@ -23,19 +23,19 @@
 #define MAX_PLAUSIBLE_RANGE 417 // 415
 #define MIN_INT_DIST 0.9 // 3.292091
 
-#define MIN_PSS -5.1 // -5.0377 position speed shift
-#define MAX_PSS 5.8 // 5.73402
+#define MIN_PSS -0.712046 //   -0.712046 for TB || -4.07843 for LUST
+#define MAX_PSS 8.37598 // 8.37598 for TB || 6.08384 for LUST
 #define MAX_TIME_DELTA 1.1
 
 #define MAX_DELTA_INTER 0.4 //1.001
 
-#define SUDDEN_APPEARENCE_RANGE 210 // AggrigationApp420/2
+#define SUDDEN_APPEARENCE_RANGE 210 // 420/2
 
-#define MAX_CONSISTANT_DISTANCE 43 // 42.77
-#define MAX_PLAUSIBLE_SPEED 43 // 42.77
+#define MAX_CONSISTANT_DISTANCE 25 // 25 for TB || 47.22 for LUST
+#define MAX_PLAUSIBLE_SPEED 25 // 25 for TB || 47.22 for LUST
 
 #define MAX_PLAUSIBLE_ACCEL 3.0 // 3.0
-#define MAX_PLAUSIBLE_DECEL 4.5 // 4.5
+#define MAX_PLAUSIBLE_DECEL 4.501 // 4.5
 
 #define MAX_BEACON_FREQUENCY 0.99 //0.99998
 
@@ -60,7 +60,6 @@
 
 #define MAXACCUSEDLENGTH 1000
 #define MAXACCUSEDTTIME 2
-
 
 #define MAX_SYBIL_NUM 10
 

@@ -78,7 +78,7 @@ double CaTChChecks::SpeedConsistancyCheck(double curSpeed,
                 oldSpeedConfidence,
                 MAX_PLAUSIBLE_ACCEL * attFact);
     } else {
-        factor = mdmLib.SegmentSegmentFactor(speedDelta, curSpeedConfidence,
+        factor = mdmLib.SegmentSegmentFactor(fabs(speedDelta), curSpeedConfidence,
                 oldSpeedConfidence,
                 MAX_PLAUSIBLE_DECEL * attFact);
     }

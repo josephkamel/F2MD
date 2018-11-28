@@ -31,6 +31,7 @@ class BsmPrintable {
 private:
     BsmCheck bsmCheck;
     BasicSafetyMessage bsm;
+    int receiverId;
     unsigned long receiverPseudo;
 
     std::string getBsmPrintHead();
@@ -42,7 +43,9 @@ public:
     BsmPrintable();
     void setBsmCheck(BsmCheck check);
     void setBsm(BasicSafetyMessage bsm);
+    void setReceiverId(int receiverId);
     void setReceiverPseudo(unsigned long receiverPseudo);
+
 
     std::string getBsmPrintableXml();
     std::string getBsmPrintableJson();
@@ -53,8 +56,6 @@ public:
 
 
     std::string getSelfBsmPrintableJson();
-
-
 
     bool writeSelfStrToFile(const std::string strFileCnst,
             const std::string serial, const std::string outStr,

@@ -21,6 +21,11 @@ void BsmPrintable::setBsmCheck(BsmCheck Check) {
 void BsmPrintable::setBsm(BasicSafetyMessage bsm) {
     this->bsm = bsm;
 }
+
+void BsmPrintable::setReceiverId(int receiverId) {
+    this->receiverId = receiverId;
+}
+
 void BsmPrintable::setReceiverPseudo(unsigned long receiverPseudo) {
     this->receiverPseudo = receiverPseudo;
 }
@@ -33,7 +38,9 @@ std::string BsmPrintable::getBsmPrintableXml() {
     xml.init();
     xml.writeHeader();
 
-    std::string tempStr = "receiverPseudo=\"";
+    std::string tempStr = "receiverId=\"";
+    tempStr = tempStr + std::to_string(receiverId);
+    tempStr = tempStr + " receiverPseudo=\"";
     tempStr = tempStr + std::to_string(receiverPseudo);
     tempStr = tempStr + " mbType=\"";
     tempStr = tempStr + mbTypes::mbNames[bsm.getSenderMbType()];
@@ -91,7 +98,11 @@ std::string BsmPrintable::getSelfBsmPrintHead() {
 
     jw.openJsonElement("Metadata", false);
 
-    tempStr = jw.getSimpleTag("realId", std::to_string(receiverPseudo),
+    tempStr = jw.getSimpleTag("receiverId", std::to_string(receiverId),
+            true);
+    jw.addTagToElement("Metadata", tempStr);
+
+    tempStr = jw.getSimpleTag("receiverPseudo", std::to_string(receiverPseudo),
             true);
     jw.addTagToElement("Metadata", tempStr);
 
@@ -111,6 +122,10 @@ std::string BsmPrintable::getBsmPrintHead() {
     JsonWriter jw;
 
     jw.openJsonElement("Metadata", false);
+
+    tempStr = jw.getSimpleTag("receiverId", std::to_string(receiverId),
+            true);
+    jw.addTagToElement("Metadata", tempStr);
 
     tempStr = jw.getSimpleTag("receiverPseudo", std::to_string(receiverPseudo),
             true);

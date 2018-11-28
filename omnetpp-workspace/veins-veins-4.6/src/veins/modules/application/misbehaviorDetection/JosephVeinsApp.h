@@ -141,8 +141,8 @@ protected:
     ExperiApp ExperV1 = ExperiApp(1, 10.0, 10, 3);
     ExperiApp ExperV2 = ExperiApp(2, 10.0, 10, 3);
 
-    PyBridgeApp PybgV1 = PyBridgeApp(1, mlPortV1, "localhost");
-    PyBridgeApp PybgV2 = PyBridgeApp(2, mlPortV2, "localhost");
+    PyBridgeApp PybgV1 = PyBridgeApp(1, mlPortV1, "localhost", &myId);
+    PyBridgeApp PybgV2 = PyBridgeApp(2, mlPortV2, "localhost", &myId);
 
 public:
 

@@ -31,7 +31,7 @@ class S(BaseHTTPRequestHandler):
 		#requestStr = urllib2.unquote((self.path));
 		#requestStr = unquote(self.path)
 
-		pred = self.globalMlMain.mlMain(version,self.path, 'neural_network_3L15N')
+		pred = self.globalMlMain.mlMain(version,self.path, 'MLP_L3N15')
 		
 	   	# the response
 		self.wfile.write(pred)

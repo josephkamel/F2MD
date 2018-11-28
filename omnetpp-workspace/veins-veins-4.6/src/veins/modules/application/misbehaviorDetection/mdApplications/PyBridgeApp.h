@@ -37,11 +37,13 @@ public:
     std::string host = "localhost";
     double minFactor = 1;
 
+    int * myId;
+
     HTTPRequest httpr = HTTPRequest(8888, "localhost");
 
     BsmPrintable bsmPrint;
 
-    PyBridgeApp(int version ,int port, std::string host);
+    PyBridgeApp(int version ,int port, std::string host, int * myId);
 
     bool CheckNodeForReport(unsigned long myPseudonym,
             BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes);

@@ -35,16 +35,16 @@ class MlTrainer:
 
 	def train(self):
 
-		if(self.AIType == 'svm'):
+		if(self.AIType == 'SVM'):
 			X, y = self.valuesCollection, self.targetCollection
 			clf = SVC(gamma=0.001, C=100.)
 			clf.fit(X, y)
 
-		if(self.AIType == 'neural_network'):
+		if(self.AIType == 'MLP_L1N15'):
 			X, y = self.valuesCollection, self.targetCollection
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
 			clf.fit(X, y)
-		if(self.AIType == 'neural_network_3L15N'):
+		if(self.AIType == 'MLP_L3N15'):
 			X, y = self.valuesCollection, self.targetCollection
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,15,15,), random_state=1)
 			clf.fit(X, y)

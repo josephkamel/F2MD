@@ -4,7 +4,7 @@ from os.path import isfile, join
 import json
 import numpy as np
 from MLDataCollector import MlDataCollector
-from MLArrayStorage import MlArrayStorage
+from MLNodeStorage import MlNodeStorage
 from MLTrainer import MlTrainer
 from numpy import array
 import datetime
@@ -25,14 +25,14 @@ class MlMain:
 	curDateStr = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
-	Storage = MlArrayStorage()
+	Storage = MlNodeStorage()
 	arrayLength = 20
 
 	collectDur = 0
-	deltaCall = 500000
+	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile/saveFile_Mix_D20_3L15N'
+	savePath = './saveFile/saveFile_D20'
 	dataPath = './MDBsms_Mix'
 
 	meanRuntime = 0
@@ -80,6 +80,7 @@ class MlMain:
 					self.Trainer.train()
 					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+					#self.deltaCall = 10000000
 				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
 		
 
@@ -158,10 +159,11 @@ class MlMain:
 
 	def getNodeArray(self,bsmJsom):
 		cur_array = self.getArray(bsmJsom)
+		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
 		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		self.Storage.add_array(pseudonym, time, cur_array)
-		returnArray = self.Storage.get_array(pseudonym, self.arrayLength)
+		self.Storage.add_array(receiverId,pseudonym, time, cur_array)
+		returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
 
 		#print "cur_array: " + str(cur_array)
 		#print "returnArray: " + str(returnArray)
@@ -192,17 +194,7 @@ class MlMain:
 		else:
 			numLabel = 1.0
 		
-<<<<<<< HEAD
-		#hack
-		if pP<1.0:
-			pP = pP - 0
-			if pP < 0:
-				pP = 0
-		valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
-=======
-		#valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
 		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
->>>>>>> 8dde4dbbb7e676bd61cd562c0fc51b3a2a3366f5
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 

@@ -42,6 +42,8 @@ class MlDataCollector:
 	def loadData(self):
 		self.valuesCollection = np.load(self.savePath+'/valuesSave_'+self.curDateStr +'.npy' )
 		self.targetCollection = np.load(self.savePath+'/targetSave_'+self.curDateStr +'.npy')
+		#print(self.valuesCollection[0:2])
+		#print(self.targetCollection[0:2])
 		self.initCollection = True	
 
 	def collectData(self,bsmArray):

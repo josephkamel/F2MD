@@ -15,10 +15,11 @@
 using namespace std;
 using namespace boost;
 
-PyBridgeApp::PyBridgeApp(int version,int port, std::string host):
+PyBridgeApp::PyBridgeApp(int version,int port, std::string host, int * myId):
                 MDApplication(version)  {
     this->port = port;
     this->host = host;
+    this->myId = myId;
     httpr = HTTPRequest(port, "localhost");
     bsmPrint = BsmPrintable();
 }
@@ -114,6 +115,7 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
         }
     }
 
+    bsmPrint.setReceiverId(*myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);

@@ -1,15 +1,15 @@
                                                                 
 version 2
-run General-0-20181124-21:29:37-25340
+run General-0-20181126-16:16:01-30800
 attr configname General
-attr datetime 20181124-21:29:37
+attr datetime 20181126-16:16:01
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network LuSTScenario
-attr processid 25340
+attr processid 30800
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -325,4 +325,762 @@ vector 250 LuSTScenario.node[50].veinsmobility posx ETV
 vector 251 LuSTScenario.node[50].veinsmobility posy ETV
 vector 252 LuSTScenario.node[50].veinsmobility speed ETV
 vector 253 LuSTScenario.node[50].veinsmobility acceleration ETV
-vector 254 LuST
+vector 254 LuSTScenario.node[50].veinsmobility co2emission ETV
+38	33524 4006 839 163792 14 175 162 0.973 12.948013026286 539.65810760385 3250.8663172795
+37	37530 4870 839 163792 14 175 162 -4.5 2.9847931596138 0.5907608033767 530.92723632026
+34	42400 4710 726 163792 13 175 163 4.5448714226726e-14 18.975046155156 1748.8966748681 24458.714423568
+31	47110 4659 622 163792 12 175 164 6074.1218149883 7285.5705436999 1099915.8497723 7404693887.7326
+30	51769 4647 622 163792 12 175 164 7713.0270617168 8039.2926551335 1286740.4462321 10097261074.843
+vector 255 LuSTScenario.node[51].veinsmobility posx ETV
+vector 256 LuSTScenario.node[51].veinsmobility posy ETV
+vector 257 LuSTScenario.node[51].veinsmobility speed ETV
+vector 258 LuSTScenario.node[51].veinsmobility acceleration ETV
+vector 259 LuSTScenario.node[51].veinsmobility co2emission ETV
+vector 260 LuSTScenario.node[52].veinsmobility posx ETV
+vector 261 LuSTScenario.node[52].veinsmobility posy ETV
+vector 262 LuSTScenario.node[52].veinsmobility speed ETV
+vector 263 LuSTScenario.node[52].veinsmobility acceleration ETV
+vector 264 LuSTScenario.node[52].veinsmobility co2emission ETV
+vector 265 LuSTScenario.node[53].veinsmobility posx ETV
+vector 266 LuSTScenario.node[53].veinsmobility posy ETV
+vector 267 LuSTScenario.node[53].veinsmobility speed ETV
+vector 268 LuSTScenario.node[53].veinsmobility acceleration ETV
+vector 269 LuSTScenario.node[53].veinsmobility co2emission ETV
+vector 270 LuSTScenario.node[54].veinsmobility posx ETV
+vector 271 LuSTScenario.node[54].veinsmobility posy ETV
+vector 272 LuSTScenario.node[54].veinsmobility speed ETV
+vector 273 LuSTScenario.node[55].veinsmobility posx ETV
+vector 274 LuSTScenario.node[55].veinsmobility posy ETV
+vector 275 LuSTScenario.node[56].veinsmobility posx ETV
+vector 276 LuSTScenario.node[56].veinsmobility posy ETV
+vector 277 LuSTScenario.node[54].veinsmobility acceleration ETV
+vector 278 LuSTScenario.node[54].veinsmobility co2emission ETV
+vector 279 LuSTScenario.node[55].veinsmobility speed ETV
+vector 280 LuSTScenario.node[56].veinsmobility speed ETV
+vector 281 LuSTScenario.node[55].veinsmobility acceleration ETV
+vector 282 LuSTScenario.node[55].veinsmobility co2emission ETV
+vector 283 LuSTScenario.node[56].veinsmobility acceleration ETV
+vector 284 LuSTScenario.node[56].veinsmobility co2emission ETV
+vector 285 LuSTScenario.node[57].veinsmobility posx ETV
+vector 286 LuSTScenario.node[57].veinsmobility posy ETV
+vector 287 LuSTScenario.node[57].veinsmobility speed ETV
+vector 288 LuSTScenario.node[58].veinsmobility posx ETV
+vector 289 LuSTScenario.node[58].veinsmobility posy ETV
+vector 290 LuSTScenario.node[57].veinsmobility acceleration ETV
+vector 291 LuSTScenario.node[57].veinsmobility co2emission ETV
+vector 292 LuSTScenario.node[59].veinsmobility posx ETV
+vector 293 LuSTScenario.node[59].veinsmobility posy ETV
+vector 294 LuSTScenario.node[58].veinsmobility speed ETV
+vector 295 LuSTScenario.node[58].veinsmobility acceleration ETV
+vector 296 LuSTScenario.node[58].veinsmobility co2emission ETV
+vector 297 LuSTScenario.node[59].veinsmobility speed ETV
+vector 298 LuSTScenario.node[60].veinsmobility posx ETV
+vector 299 LuSTScenario.node[60].veinsmobility posy ETV
+vector 300 LuSTScenario.node[59].veinsmobility acceleration ETV
+vector 301 LuSTScenario.node[59].veinsmobility co2emission ETV
+vector 302 LuSTScenario.node[61].veinsmobility posx ETV
+vector 303 LuSTScenario.node[61].veinsmobility posy ETV
+vector 304 LuSTScenario.node[60].veinsmobility speed ETV
+vector 305 LuSTScenario.node[60].veinsmobility acceleration ETV
+vector 306 LuSTScenario.node[60].veinsmobility co2emission ETV
+vector 307 LuSTScenario.node[61].veinsmobility speed ETV
+vector 308 LuSTScenario.node[61].veinsmobility acceleration ETV
+vector 309 LuSTScenario.node[61].veinsmobility co2emission ETV
+vector 310 LuSTScenario.node[62].veinsmobility posx ETV
+vector 311 LuSTScenario.node[62].veinsmobility posy ETV
+vector 312 LuSTScenario.node[63].veinsmobility posx ETV
+vector 313 LuSTScenario.node[63].veinsmobility posy ETV
+vector 314 LuSTScenario.node[62].veinsmobility speed ETV
+vector 315 LuSTScenario.node[62].veinsmobility acceleration ETV
+vector 316 LuSTScenario.node[62].veinsmobility co2emission ETV
+vector 317 LuSTScenario.node[63].veinsmobility speed ETV
+vector 318 LuSTScenario.node[64].veinsmobility posx ETV
+vector 319 LuSTScenario.node[64].veinsmobility posy ETV
+vector 320 LuSTScenario.node[63].veinsmobility acceleration ETV
+vector 321 LuSTScenario.node[63].veinsmobility co2emission ETV
+vector 322 LuSTScenario.node[64].veinsmobility speed ETV
+vector 323 LuSTScenario.node[64].veinsmobility acceleration ETV
+vector 324 LuSTScenario.node[64].veinsmobility co2emission ETV
+vector 325 LuSTScenario.node[65].veinsmobility posx ETV
+vector 326 LuSTScenario.node[65].veinsmobility posy ETV
+vector 327 LuSTScenario.node[65].veinsmobility speed ETV
+vector 328 LuSTScenario.node[66].veinsmobility posx ETV
+vector 329 LuSTScenario.node[66].veinsmobility posy ETV
+vector 330 LuSTScenario.node[65].veinsmobility acceleration ETV
+vector 331 LuSTScenario.node[65].veinsmobility co2emission ETV
+vector 332 LuSTScenario.node[66].veinsmobility speed ETV
+vector 333 LuSTScenario.node[66].veinsmobility acceleration ETV
+vector 334 LuSTScenario.node[66].veinsmobility co2emission ETV
+vector 335 LuSTScenario.node[67].veinsmobility posx ETV
+vector 336 LuSTScenario.node[67].veinsmobility posy ETV
+vector 337 LuSTScenario.node[68].veinsmobility posx ETV
+vector 338 LuSTScenario.node[68].veinsmobility posy ETV
+vector 339 LuSTScenario.node[67].veinsmobility speed ETV
+vector 340 LuSTScenario.node[68].veinsmobility speed ETV
+vector 341 LuSTScenario.node[67].veinsmobility acceleration ETV
+vector 342 LuSTScenario.node[67].veinsmobility co2emission ETV
+vector 343 LuSTScenario.node[68].veinsmobility acceleration ETV
+vector 344 LuSTScenario.node[68].veinsmobility co2emission ETV
+vector 345 LuSTScenario.node[69].veinsmobility posx ETV
+vector 346 LuSTScenario.node[69].veinsmobility posy ETV
+vector 347 LuSTScenario.node[69].veinsmobility speed ETV
+106	61913 5056 9636 281999 42 229 188 0.973 9.6458548008748 392.76374828454 1194.7775124781
+105	66969 5203 9636 281999 42 229 188 -3.3661243567867 2.3507160449526 11.500548411553 91.483421661775
+98	72172 4746 9079 281999 41 229 189 0 15.519523713236 1913.7297743859 28740.063163703
+93	76918 5531 8522 281999 40 229 190 2261.8531032165 3418.3409600691 530224.54076868 1499294525.0241
+92	82449 5530 8522 281999 40 229 190 8882.2900404513 10373.606125266 1852306.2973681 18088714466.45
+vector 348 LuSTScenario.node[69].veinsmobility acceleration ETV
+vector 349 LuSTScenario.node[69].veinsmobility co2emission ETV
+vector 350 LuSTScenario.node[70].veinsmobility posx ETV
+vector 351 LuSTScenario.node[70].veinsmobility posy ETV
+vector 352 LuSTScenario.node[71].veinsmobility posx ETV
+vector 353 LuSTScenario.node[71].veinsmobility posy ETV
+vector 354 LuSTScenario.node[70].veinsmobility speed ETV
+vector 355 LuSTScenario.node[70].veinsmobility acceleration ETV
+vector 356 LuSTScenario.node[70].veinsmobility co2emission ETV
+vector 357 LuSTScenario.node[71].veinsmobility speed ETV
+vector 358 LuSTScenario.node[72].veinsmobility posx ETV
+vector 359 LuSTScenario.node[72].veinsmobility posy ETV
+vector 360 LuSTScenario.node[71].veinsmobility acceleration ETV
+vector 361 LuSTScenario.node[71].veinsmobility co2emission ETV
+vector 362 LuSTScenario.node[73].veinsmobility posx ETV
+vector 363 LuSTScenario.node[73].veinsmobility posy ETV
+vector 364 LuSTScenario.node[72].veinsmobility speed ETV
+vector 365 LuSTScenario.node[74].veinsmobility posx ETV
+vector 366 LuSTScenario.node[74].veinsmobility posy ETV
+vector 367 LuSTScenario.node[72].veinsmobility acceleration ETV
+vector 368 LuSTScenario.node[72].veinsmobility co2emission ETV
+vector 369 LuSTScenario.node[73].veinsmobility speed ETV
+vector 370 LuSTScenario.node[73].veinsmobility acceleration ETV
+vector 371 LuSTScenario.node[73].veinsmobility co2emission ETV
+vector 372 LuSTScenario.node[74].veinsmobility speed ETV
+vector 373 LuSTScenario.node[74].veinsmobility acceleration ETV
+vector 374 LuSTScenario.node[74].veinsmobility co2emission ETV
+vector 375 LuSTScenario.node[75].veinsmobility posx ETV
+vector 376 LuSTScenario.node[75].veinsmobility posy ETV
+vector 377 LuSTScenario.node[76].veinsmobility posx ETV
+vector 378 LuSTScenario.node[76].veinsmobility posy ETV
+vector 379 LuSTScenario.node[75].veinsmobility speed ETV
+vector 380 LuSTScenario.node[75].veinsmobility acceleration ETV
+vector 381 LuSTScenario.node[75].veinsmobility co2emission ETV
+vector 382 LuSTScenario.node[76].veinsmobility speed ETV
+vector 383 LuSTScenario.node[76].veinsmobility acceleration ETV
+vector 384 LuSTScenario.node[76].veinsmobility co2emission ETV
+vector 385 LuSTScenario.node[77].veinsmobility posx ETV
+vector 386 LuSTScenario.node[77].veinsmobility posy ETV
+vector 387 LuSTScenario.node[77].veinsmobility speed ETV
+vector 388 LuSTScenario.node[77].veinsmobility acceleration ETV
+vector 389 LuSTScenario.node[77].veinsmobility co2emission ETV
+vector 390 LuSTScenario.node[78].veinsmobility posx ETV
+vector 391 LuSTScenario.node[78].veinsmobility posy ETV
+vector 392 LuSTScenario.node[78].veinsmobility speed ETV
+vector 393 LuSTScenario.node[78].veinsmobility acceleration ETV
+vector 394 LuSTScenario.node[78].veinsmobility co2emission ETV
+vector 395 LuSTScenario.node[79].veinsmobility posx ETV
+vector 396 LuSTScenario.node[79].veinsmobility posy ETV
+vector 397 LuSTScenario.node[79].veinsmobility speed ETV
+vector 398 LuSTScenario.node[79].veinsmobility acceleration ETV
+vector 399 LuSTScenario.node[79].veinsmobility co2emission ETV
+vector 400 LuSTScenario.node[80].veinsmobility posx ETV
+vector 401 LuSTScenario.node[80].veinsmobility posy ETV
+vector 402 LuSTScenario.node[80].veinsmobility speed ETV
+vector 403 LuSTScenario.node[81].veinsmobility posx ETV
+vector 404 LuSTScenario.node[81].veinsmobility posy ETV
+vector 405 LuSTScenario.node[80].veinsmobility acceleration ETV
+vector 406 LuSTScenario.node[80].veinsmobility co2emission ETV
+vector 407 LuSTScenario.node[81].veinsmobility speed ETV
+vector 408 LuSTScenario.node[81].veinsmobility acceleration ETV
+vector 409 LuSTScenario.node[81].veinsmobility co2emission ETV
+vector 410 LuSTScenario.node[82].veinsmobility posx ETV
+vector 411 LuSTScenario.node[82].veinsmobility posy ETV
+vector 412 LuSTScenario.node[82].veinsmobility speed ETV
+vector 413 LuSTScenario.node[82].veinsmobility acceleration ETV
+vector 414 LuSTScenario.node[82].veinsmobility co2emission ETV
+vector 415 LuSTScenario.node[83].veinsmobility posx ETV
+vector 416 LuSTScenario.node[83].veinsmobility posy ETV
+vector 417 LuSTScenario.node[83].veinsmobility speed ETV
+vector 418 LuSTScenario.node[83].veinsmobility acceleration ETV
+vector 419 LuSTScenario.node[83].veinsmobility co2emission ETV
+vector 420 LuSTScenario.node[84].veinsmobility posx ETV
+vector 421 LuSTScenario.node[84].veinsmobility posy ETV
+vector 422 LuSTScenario.node[85].veinsmobility posx ETV
+vector 423 LuSTScenario.node[85].veinsmobility posy ETV
+vector 424 LuSTScenario.node[84].veinsmobility speed ETV
+vector 425 LuSTScenario.node[85].veinsmobility speed ETV
+vector 426 LuSTScenario.node[84].veinsmobility acceleration ETV
+vector 427 LuSTScenario.node[84].veinsmobility co2emission ETV
+vector 428 LuSTScenario.node[85].veinsmobility acceleration ETV
+vector 429 LuSTScenario.node[85].veinsmobility co2emission ETV
+vector 430 LuSTScenario.node[86].veinsmobility posx ETV
+vector 431 LuSTScenario.node[86].veinsmobility posy ETV
+vector 432 LuSTScenario.node[87].veinsmobility posx ETV
+vector 433 LuSTScenario.node[87].veinsmobility posy ETV
+vector 434 LuSTScenario.node[86].veinsmobility speed ETV
+vector 435 LuSTScenario.node[86].veinsmobility acceleration ETV
+vector 436 LuSTScenario.node[86].veinsmobility co2emission ETV
+vector 437 LuSTScenario.node[87].veinsmobility speed ETV
+vector 438 LuSTScenario.node[87].veinsmobility acceleration ETV
+vector 439 LuSTScenario.node[87].veinsmobility co2emission ETV
+vector 440 LuSTScenario.node[88].veinsmobility posx ETV
+vector 441 LuSTScenario.node[88].veinsmobility posy ETV
+vector 442 LuSTScenario.node[89].veinsmobility posx ETV
+vector 443 LuSTScenario.node[89].veinsmobility posy ETV
+vector 444 LuSTScenario.node[88].veinsmobility speed ETV
+vector 445 LuSTScenario.node[90].veinsmobility posx ETV
+vector 446 LuSTScenario.node[90].veinsmobility posy ETV
+vector 447 LuSTScenario.node[88].veinsmobility acceleration ETV
+vector 448 LuSTScenario.node[88].veinsmobility co2emission ETV
+vector 449 LuSTScenario.node[89].veinsmobility speed ETV
+vector 450 LuSTScenario.node[91].veinsmobility posx ETV
+vector 451 LuSTScenario.node[91].veinsmobility posy ETV
+vector 452 LuSTScenario.node[89].veinsmobility acceleration ETV
+vector 453 LuSTScenario.node[89].veinsmobility co2emission ETV
+vector 454 LuSTScenario.node[90].veinsmobility speed ETV
+vector 455 LuSTScenario.node[90].veinsmobility acceleration ETV
+vector 456 LuSTScenario.node[90].veinsmobility co2emission ETV
+vector 457 LuSTScenario.node[91].veinsmobility speed ETV
+vector 458 LuSTScenario.node[91].veinsmobility acceleration ETV
+vector 459 LuSTScenario.node[91].veinsmobility co2emission ETV
+116	94618 8092 11401 604740 45 313 269 0.973 21.214690012445 1325.1322821754 10940.934255372
+115	102710 8747 11401 604740 45 313 269 -4.5 2.1215034845798 15.641399787719 211.02524970114
+114	111457 8206 10785 604740 44 313 270 17.382020822237 33.04860705298 6496.9687407447 170432.08462966
+108	119663 8229 10206 604740 43 313 271 7474.8951880141 9744.4892091966 2287660.1536053 19423458953.157
+107	127892 8230 10206 604740 43 313 271 3331.4028979545 6945.7735667342 1413694.8729174 7750005727.4443
+154	136122 7499 27282 609553 66 314 249 0.96984629689715 24.283148862123 1413.08051498 13427.863475479
+153	143621 8088 27282 609553 66 314 249 -4.5 2.0858968372434 16.697580236002 228.67001374324
+152	151709 7622 26395 609553 65 314 250 17.405689662066 36.116808893724 6494.3118323634 183819.46993468
+151	159331 7634 25508 609553 64 314 251 7475.0653897857 9744.4791811797 2120795.3937592 18024934019.81
+150	166965 7651 25508 609553 64 314 251 3331.4260746718 6944.9059099711 1309323.8251796 7180605033.7093
+vector 460 LuSTScenario.node[92].veinsmobility posx ETV
+vector 461 LuSTScenario.node[92].veinsmobility posy ETV
+vector 462 LuSTScenario.node[93].veinsmobility posx ETV
+vector 463 LuSTScenario.node[93].veinsmobility posy ETV
+vector 464 LuSTScenario.node[92].veinsmobility speed ETV
+vector 465 LuSTScenario.node[93].veinsmobility speed ETV
+vector 466 LuSTScenario.node[92].veinsmobility acceleration ETV
+vector 467 LuSTScenario.node[92].veinsmobility co2emission ETV
+vector 468 LuSTScenario.node[93].veinsmobility acceleration ETV
+vector 469 LuSTScenario.node[93].veinsmobility co2emission ETV
+104	175208 7127 9636 628922 42 318 277 0.973 8.093559541605 501.14794445864 1268.4863135088
+103	182335 9187 9636 628922 42 318 277 -4.5 2.2805940337436 8.4779991389431 183.82141268913
+97	191522 8523 9079 628922 41 318 278 0 12.483364639158 1907.1708981363 22659.249074205
+91	200045 8199 8522 628922 40 318 279 2234.4040333952 3391.7720275258 749329.847917 2042857250.4124
+90	208244 8197 8522 628922 40 318 279 8885.3732685821 10369.402908132 2745502.3205472 27062058876.569
+vector 470 LuSTScenario.node[94].veinsmobility posx ETV
+vector 471 LuSTScenario.node[94].veinsmobility posy ETV
+vector 472 LuSTScenario.node[94].veinsmobility speed ETV
+vector 473 LuSTScenario.node[94].veinsmobility acceleration ETV
+vector 474 LuSTScenario.node[94].veinsmobility co2emission ETV
+vector 475 LuSTScenario.node[95].veinsmobility posx ETV
+vector 476 LuSTScenario.node[95].veinsmobility posy ETV
+vector 477 LuSTScenario.node[95].veinsmobility speed ETV
+vector 478 LuSTScenario.node[95].veinsmobility acceleration ETV
+vector 479 LuSTScenario.node[95].veinsmobility co2emission ETV
+vector 480 LuSTScenario.node[96].veinsmobility posx ETV
+vector 481 LuSTScenario.node[96].veinsmobility posy ETV
+vector 482 LuSTScenario.node[96].veinsmobility speed ETV
+vector 483 LuSTScenario.node[96].veinsmobility acceleration ETV
+vector 484 LuSTScenario.node[96].veinsmobility co2emission ETV
+vector 485 LuSTScenario.node[97].veinsmobility posx ETV
+vector 486 LuSTScenario.node[97].veinsmobility posy ETV
+79	217441 8373 5045 766381 30 345 316 0.973 10.296570549292 713.12421233283 2447.0091325454
+78	225814 9590 5045 766381 30 345 316 -4.5 2.3028198491223 -1.3862152781147 423.64375442825
+77	235404 9132 4704 766381 29 345 317 0 17.91067406542 3003.9607919879 36743.423434954
+74	244536 9323 4363 766381 28 345 318 2072.6352039582 4208.0821700178 1007928.8336557 3339007740.715
+73	253859 9316 4363 766381 28 345 318 7031.1972683342 7676.5929256394 2326201.2097704 17023033971.444
+vector 487 LuSTScenario.node[97].veinsmobility speed ETV
+vector 488 LuSTScenario.node[97].veinsmobility acceleration ETV
+vector 489 LuSTScenario.node[97].veinsmobility co2emission ETV
+vector 490 LuSTScenario.node[98].veinsmobility posx ETV
+vector 491 LuSTScenario.node[98].veinsmobility posy ETV
+vector 492 LuSTScenario.node[98].veinsmobility speed ETV
+vector 493 LuSTScenario.node[99].veinsmobility posx ETV
+vector 494 LuSTScenario.node[99].veinsmobility posy ETV
+vector 495 LuSTScenario.node[98].veinsmobility acceleration ETV
+vector 496 LuSTScenario.node[98].veinsmobility co2emission ETV
+vector 497 LuSTScenario.node[99].veinsmobility speed ETV
+vector 498 LuSTScenario.node[99].veinsmobility acceleration ETV
+vector 499 LuSTScenario.node[99].veinsmobility co2emission ETV
+vector 500 LuSTScenario.node[100].veinsmobility posx ETV
+vector 501 LuSTScenario.node[100].veinsmobility posy ETV
+419	264065 1799 482646 848445 286 360 75 0.973 11.356666918504 186.77685850001 985.92504541617
+418	265864 2523 482646 848445 286 360 75 -4.3819154879825 2.8497303243843 -0.1652491159594 178.66090637648
+417	268387 2488 478615 848445 285 360 76 4.5409790253402e-14 17.444483437242 433.86550129566 5894.2351929583
+416	270875 2383 474580 848445 284 360 77 3314.513398236 3426.0266465039 261617.78522295 889001067.08586
+415	273258 2383 474580 848445 284 360 77 3539.1651443691 3732.041869045 276309.98388586 991796048.24141
+vector 502 LuSTScenario.node[100].veinsmobility speed ETV
+vector 503 LuSTScenario.node[101].veinsmobility posx ETV
+vector 504 LuSTScenario.node[101].veinsmobility posy ETV
+vector 505 LuSTScenario.node[100].veinsmobility acceleration ETV
+vector 506 LuSTScenario.node[100].veinsmobility co2emission ETV
+59	275942 10052 1627 859500 18 362 345 0.973 27.48086529354 2450.2098454251 22402.672628372
+58	285994 10906 1627 859500 18 362 345 -4.5 2.4480138684623 19.112309326234 154.37959402254
+57	296900 10105 1394 859500 17 362 346 18.13156670915 37.359551040549 11324.593302749 389757.50911146
+48	307005 10143 1161 859500 16 362 347 1597.7320667291 9574.9271226555 2234031.697891 16296069265.211
+47	317148 10144 1161 859500 16 362 347 6479.1695719599 11384.907072156 3124087.9268232 29160430060.833
+vector 507 LuSTScenario.node[101].veinsmobility speed ETV
+vector 508 LuSTScenario.node[101].veinsmobility acceleration ETV
+vector 509 LuSTScenario.node[101].veinsmobility co2emission ETV
+45	327479 10139 973 870739 15 364 350 0.973 30.300311607451 2574.5147409647 25823.718144193
+44	337618 11047 973 870739 15 364 350 -4.5 2.6045778466738 20.9044864195 252.91291092939
+39	348665 10260 839 870739 14 364 351 4.4725034280245 39.272368195227 11292.174811636 393199.83863708
+33	358925 10278 726 870739 13 364 352 2171.0731581433 9606.7142404517 2237885.67252 16218735605.84
+32	369203 10287 726 870739 13 364 352 1875.7815118487 6965.3893826149 1706583.4448861 9068346435.3119
+vector 510 LuSTScenario.node[102].veinsmobility posx ETV
+vector 511 LuSTScenario.node[102].veinsmobility posy ETV
+vector 512 LuSTScenario.node[102].veinsmobility speed ETV
+vector 513 LuSTScenario.node[102].veinsmobility acceleration ETV
+vector 514 LuSTScenario.node[102].veinsmobility co2emission ETV
+vector 515 LuSTScenario.node[103].veinsmobility posx ETV
+vector 516 LuSTScenario.node[103].veinsmobility posy ETV
+vector 517 LuSTScenario.node[103].veinsmobility speed ETV
+vector 518 LuSTScenario.node[103].veinsmobility acceleration ETV
+vector 519 LuSTScenario.node[103].veinsmobility co2emission ETV
+vector 520 LuSTScenario.node[104].veinsmobility posx ETV
+vector 521 LuSTScenario.node[104].veinsmobility posy ETV
+vector 522 LuSTScenario.node[104].veinsmobility speed ETV
+vector 523 LuSTScenario.node[104].veinsmobility acceleration ETV
+vector 524 LuSTScenario.node[104].veinsmobility co2emission ETV
+121	380393 10128 12017 956126 46 379 334 0.973 26.406344887689 2542.5985582862 24507.518848014
+120	390521 10958 12017 956126 46 379 334 -4.5 2.2637829236104 20.96004860303 150.03590797698
+117	401479 10206 11401 956126 45 379 335 17.639546840333 38.675191185761 11318.360889925 402406.64662377
+111	411685 10242 10785 956126 44 379 336 1596.0419453363 9567.0562139576 2160037.2759592 15750263842.589
+110	421927 10235 10785 956126 44 379 336 6479.5120692582 11381.732178019 3025507.914109 28244389605.137
+vector 525 LuSTScenario.node[105].veinsmobility posx ETV
+vector 526 LuSTScenario.node[105].veinsmobility posy ETV
+vector 527 LuSTScenario.node[105].veinsmobility speed ETV
+vector 528 LuSTScenario.node[106].veinsmobility posx ETV
+vector 529 LuSTScenario.node[106].veinsmobility posy ETV
+vector 530 LuSTScenario.node[105].veinsmobility acceleration ETV
+vector 531 LuSTScenario.node[105].veinsmobility co2emission ETV
+vector 532 LuSTScenario.node[106].veinsmobility speed ETV
+vector 533 LuSTScenario.node[106].veinsmobility acceleration ETV
+vector 534 LuSTScenario.node[106].veinsmobility co2emission ETV
+206	432764 8073 83324 997337 122 386 265 0.973 23.128875904391 1334.331403908 11396.883072912
+205	440837 8758 83324 997337 122 386 265 -4.5 2.2606060213654 15.694661740202 216.02967032209
+204	449595 8209 82111 997337 121 386 266 17.832974569586 33.528527549641 6490.0578454143 172600.86478139
+201	457804 8229 80919 997337 120 386 267 7474.7186933514 9744.0429217162 2253413.193692 19128334194.493
+200	466033 8240 80919 997337 120 386 267 3332.4343560116 6944.098472599 1392590.9773258 7632443124.811
+124	474273 10308 13275 1003295 48 387 340 0.973 22.922927916354 2115.2299185206 16427.415421458
+123	484581 11162 13275 1003295 48 387 340 -4.5 2.2593918567477 16.849492344725 127.81241122745
+122	495743 10394 12646 1003295 47 387 341 17.593609713176 34.550151694104 10494.433165373 337635.68348322
+119	506137 10421 12017 1003295 46 387 342 1625.963463704 9606.4792536976 2194396.7741248 16008578530.98
+118	516558 10439 12017 1003295 46 387 342 6736.8237073322 11368.619047208 3143247.8196715 29780543232.751
+vector 535 LuSTScenario.node[107].veinsmobility posx ETV
+vector 536 LuSTScenario.node[107].veinsmobility posy ETV
+224	527111 7888 96093 1015028 132 389 258 0.973 22.67031092896 1372.0683660844 12267.900577666
+223	534999 8543 96093 1015028 132 389 258 -4.5 2.1748409031215 16.869394601338 221.01593232993
+222	543542 8009 94745 1015028 131 389 259 17.598363136051 34.475804142968 6474.1318865604 176381.67162431
+219	551551 8039 93405 1015028 130 389 260 7474.7580901029 9744.4755908715 2194319.2904176 18626795896.166
+218	559590 8024 93405 1015028 130 389 260 3331.4343725797 6939.7480950294 1354308.9814683 7413934295.0233
+vector 537 LuSTScenario.node[108].veinsmobility posx ETV
+vector 538 LuSTScenario.node[108].veinsmobility posy ETV
+vector 539 LuSTScenario.node[107].veinsmobility speed ETV
+vector 540 LuSTScenario.node[107].veinsmobility acceleration ETV
+vector 541 LuSTScenario.node[107].veinsmobility co2emission ETV
+vector 542 LuSTScenario.node[108].veinsmobility speed ETV
+vector 543 LuSTScenario.node[108].veinsmobility acceleration ETV
+vector 544 LuSTScenario.node[108].veinsmobility co2emission ETV
+vector 545 LuSTScenario.node[109].veinsmobility posx ETV
+vector 546 LuSTScenario.node[109].veinsmobility posy ETV
+vector 547 LuSTScenario.node[109].veinsmobility speed ETV
+vector 548 LuSTScenario.node[109].veinsmobility acceleration ETV
+vector 549 LuSTScenario.node[109].veinsmobility co2emission ETV
+vector 550 LuSTScenario.node[110].veinsmobility posx ETV
+vector 551 LuSTScenario.node[110].veinsmobility posy ETV
+vector 552 LuSTScenario.node[110].veinsmobility speed ETV
+vector 553 LuSTScenario.node[110].veinsmobility acceleration ETV
+vector 554 LuSTScenario.node[110].veinsmobility co2emission ETV
+vector 555 LuSTScenario.node[111].veinsmobility posx ETV
+vector 556 LuSTScenario.node[111].veinsmobility posy ETV
+vector 557 LuSTScenario.node[111].veinsmobility speed ETV
+vector 558 LuSTScenario.node[111].veinsmobility acceleration ETV
+vector 559 LuSTScenario.node[111].veinsmobility co2emission ETV
+vector 560 LuSTScenario.node[112].veinsmobility posx ETV
+vector 561 LuSTScenario.node[112].veinsmobility posy ETV
+vector 562 LuSTScenario.node[112].veinsmobility speed ETV
+vector 563 LuSTScenario.node[112].veinsmobility acceleration ETV
+vector 564 LuSTScenario.node[112].veinsmobility co2emission ETV
+176	569306 9823 57782 1201945 99 419 321 0.973 24.673513399229 1976.5440997823 15820.820619622
+175	579129 10658 57782 1201945 99 419 321 -4.5 2.7391699100705 16.735701180506 208.72327281512
+170	589787 9948 56773 1201945 98 419 322 3.9436646451604 34.54784607709 9566.4719770065 302916.48131315
+168	599735 9977 55772 1201945 97 419 323 2171.0704139063 9744.6457608071 1872190.8935544 12680007113.23
+167	609712 9959 55772 1201945 97 419 323 1868.6554225235 4158.3791145276 1186431.8979152 4437188914.5868
+vector 565 LuSTScenario.node[113].veinsmobility posx ETV
+vector 566 LuSTScenario.node[113].veinsmobility posy ETV
+vector 567 LuSTScenario.node[113].veinsmobility speed ETV
+vector 568 LuSTScenario.node[113].veinsmobility acceleration ETV
+vector 569 LuSTScenario.node[113].veinsmobility co2emission ETV
+vector 570 LuSTScenario.node[114].veinsmobility posx ETV
+vector 571 LuSTScenario.node[114].veinsmobility posy ETV
+vector 572 LuSTScenario.node[114].veinsmobility speed ETV
+174	620144 10241 57782 1274778 99 430 332 0.973 18.336781460225 1687.7957543236 10125.374325266
+173	630385 11099 57782 1274778 99 430 332 -4.487671534621 1.8599434539734 12.525235093976 90.221777292659
+169	641484 10282 56773 1274778 98 430 333 17.386182513234 29.999613552262 9398.5437230946 270708.53997693
+166	651766 10320 55772 1274778 97 430 334 2181.2032351971 9712.5426318221 1858650.5220175 12327228273.568
+165	662086 10323 55772 1274778 97 430 334 1835.2725402433 4083.0712007357 1204831.5070284 4441279433.4721
+vector 573 LuSTScenario.node[114].veinsmobility acceleration ETV
+vector 574 LuSTScenario.node[114].veinsmobility co2emission ETV
+vector 575 LuSTScenario.node[115].veinsmobility posx ETV
+vector 576 LuSTScenario.node[115].veinsmobility posy ETV
+vector 577 LuSTScenario.node[115].veinsmobility speed ETV
+vector 578 LuSTScenario.node[116].veinsmobility posx ETV
+vector 579 LuSTScenario.node[116].veinsmobility posy ETV
+vector 580 LuSTScenario.node[115].veinsmobility acceleration ETV
+vector 581 LuSTScenario.node[115].veinsmobility co2emission ETV
+vector 582 LuSTScenario.node[116].veinsmobility speed ETV
+282	673011 7649 199419 1363810 195 443 249 0.52684401071016 27.68398821851 1437.7098195636 15486.071280812
+281	680660 8260 199419 1363810 195 443 249 -4.5 2.5088129309588 18.305042055933 255.20719566934
+279	688920 7786 197458 1363810 194 443 250 18.107257125699 36.454985490611 6499.5954616575 182948.13387327
+274	696706 7818 195493 1363810 193 443 251 7475.0442953444 9744.5940891396 2119428.3186875 18000619802.02
+273	704524 7812 195493 1363810 193 443 251 3331.1604997986 6945.1393533635 1303464.5247039 7117586948.521
+vector 583 LuSTScenario.node[116].veinsmobility acceleration ETV
+vector 584 LuSTScenario.node[116].veinsmobility co2emission ETV
+496	712465 2781 798344 1377599 351 445 95 0.973 7.8727391602343 286.03081065802 1299.7398414492
+495	715246 3110 798344 1377599 351 445 95 -4.5 2.4389769071643 -0.0040604292552295 295.82254241939
+492	718356 3027 792886 1377599 350 445 96 3.548825789355 12.732603911158 958.69385657259 10506.033543558
+491	721383 3051 787436 1377599 349 445 97 6312.58120818 6656.7431433116 629390.38638075 4084806881.6202
+490	724434 3059 787436 1377599 349 445 97 7879.6606682117 8403.9497856518 795313.85283231 6524033672.8915
+vector 585 LuSTScenario.node[117].veinsmobility posx ETV
+vector 586 LuSTScenario.node[117].veinsmobility posy ETV
+vector 587 LuSTScenario.node[118].veinsmobility posx ETV
+vector 588 LuSTScenario.node[118].veinsmobility posy ETV
+221	727721 8711 93405 1384431 130 446 317 0.973 9.708393645879 814.7041891054 3506.9185985897
+220	736432 10486 93405 1384431 130 446 317 -4.5 2.7295078385249 -2.0939736872254 608.85411341508
+217	746918 10042 92106 1384431 129 446 318 0 15.077790220578 3125.0053147549 42603.329126132
+216	756960 9874 90803 1384431 128 446 319 2669.9363935986 4601.6428561703 1181597.2281639 4472890258.2529
+215	766834 9922 90803 1384431 128 446 319 4908.6286726762 5636.0735957577 1665901.2778157 8718616148.9133
+vector 589 LuSTScenario.node[117].veinsmobility speed ETV
+vector 590 LuSTScenario.node[118].veinsmobility speed ETV
+vector 591 LuSTScenario.node[117].veinsmobility acceleration ETV
+vector 592 LuSTScenario.node[117].veinsmobility co2emission ETV
+vector 593 LuSTScenario.node[118].veinsmobility acceleration ETV
+vector 594 LuSTScenario.node[118].veinsmobility co2emission ETV
+vector 595 LuSTScenario.node[119].veinsmobility posx ETV
+vector 596 LuSTScenario.node[119].veinsmobility posy ETV
+vector 597 LuSTScenario.node[119].veinsmobility speed ETV
+vector 598 LuSTScenario.node[119].veinsmobility acceleration ETV
+vector 599 LuSTScenario.node[119].veinsmobility co2emission ETV
+244	777431 9476 119354 1431742 148 453 306 0.973 24.373602465257 1871.5244254324 14862.189439618
+243	786907 10234 119354 1431742 148 453 306 -4.495128680882 2.5310115967062 15.458114369055 137.71432437745
+242	797141 9546 117806 1431742 147 453 307 18.016197087636 33.739013721936 9428.8350369548 298225.08230539
+241	806687 9582 116246 1431742 146 453 308 2181.1758504181 9722.1413866784 1715184.9918922 11368532979.417
+240	816269 9587 116246 1431742 146 453 308 1832.9301671949 4083.0641935834 1112468.624771 4105538955.1407
+54	825856 12974 1394 1458795 17 457 441 0.973 28.745703213317 3581.2255481475 35532.53021452
+53	838830 13989 1394 1458795 17 457 441 -4.5 2.2368411964458 22.765100522125 168.96092539396
+51	852819 13049 1161 1458795 16 457 442 17.765270441112 40.64230177751 15862.47977241 585636.71575331
+41	865868 13075 973 1458795 15 457 443 1595.4496657573 9705.080869782 2945098.3970415 21579376920.232
+40	878943 13067 973 1458795 15 457 443 3374.1368623774 11382.47803878 3364510.1521048 29115418930.098
+214	892010 10335 87057 1465535 125 458 334 0.973 23.89510210034 2154.330656083 17474.34042142
+213	902345 11174 87057 1465535 125 458 334 -4.5 2.2886697775591 16.76515914816 134.91132856025
+212	913519 10411 85799 1465535 124 458 335 18.351258522929 35.148719441757 10494.696799962 343610.28141671
+209	923930 10447 84541 1465535 123 458 336 1626.5930381033 9606.7530935007 2155410.0693558 15720505939.689
+208	934377 10441 84541 1465535 123 458 336 6736.9104227066 11367.817209398 3088475.4338906 29264487670.664
+vector 600 LuSTScenario.node[120].veinsmobility posx ETV
+vector 601 LuSTScenario.node[120].veinsmobility posy ETV
+vector 602 LuSTScenario.node[121].veinsmobility posx ETV
+vector 603 LuSTScenario.node[121].veinsmobility posy ETV
+vector 604 LuSTScenario.node[122].veinsmobility posx ETV
+vector 605 LuSTScenario.node[122].veinsmobility posy ETV
+vector 606 LuSTScenario.node[120].veinsmobility speed ETV
+vector 607 LuSTScenario.node[120].veinsmobility acceleration ETV
+vector 608 LuSTScenario.node[120].veinsmobility co2emission ETV
+vector 609 LuSTScenario.node[121].veinsmobility speed ETV
+vector 610 LuSTScenario.node[122].veinsmobility speed ETV
+vector 611 LuSTScenario.node[123].veinsmobility posx ETV
+vector 612 LuSTScenario.node[123].veinsmobility posy ETV
+vector 613 LuSTScenario.node[124].veinsmobility posx ETV
+vector 614 LuSTScenario.node[124].veinsmobility posy ETV
+vector 615 LuSTScenario.node[121].veinsmobility acceleration ETV
+vector 616 LuSTScenario.node[121].veinsmobility co2emission ETV
+vector 617 LuSTScenario.node[122].veinsmobility acceleration ETV
+vector 618 LuSTScenario.node[122].veinsmobility co2emission ETV
+vector 619 LuSTScenario.node[123].veinsmobility speed ETV
+vector 620 LuSTScenario.node[124].veinsmobility speed ETV
+vector 621 LuSTScenario.node[123].veinsmobility acceleration ETV
+vector 622 LuSTScenario.node[123].veinsmobility co2emission ETV
+vector 623 LuSTScenario.node[124].veinsmobility acceleration ETV
+vector 624 LuSTScenario.node[124].veinsmobility co2emission ETV
+13	946323 11061 40 1535045 3 468 466 0.93715014173119 12.409645137807 1061.8558662558 4843.1611599562
+12	957384 12963 40 1535045 3 468 466 -4.5 2.7865803032764 -1.7821549623856 797.18839144672
+5	970347 12045 21 1535045 2 468 467 0 18.136930422773 3265.1741505605 45884.67600188
+3	982392 13299 2 1535045 1 468 468 5408.4505298984 7099.9247254094 2699171.8930365 15674621641.519
+2	995691 13188 2 1535045 1 468 468 6659.3449174508 8005.8922437394 3481191.5081462 25961853471.878
+vector 625 LuSTScenario.node[125].veinsmobility posx ETV
+vector 626 LuSTScenario.node[125].veinsmobility posy ETV
+453	1008993 4976 561251 1549166 304 470 167 0.973 8.556941117504 446.70950384623 1736.3342634848
+452	1013969 5546 561251 1549166 304 470 167 -4.4911283204084 2.1776658875123 0.67100585228945 308.44096824368
+449	1019515 5271 556551 1549166 303 470 168 0.78726209769256 16.21123014493 1934.3009622611 24056.510823311
+443	1024786 5295 551892 1549166 302 470 169 4906.8246439783 6301.7182132794 950206.29879146 5376097703.852
+442	1030081 5309 551892 1549166 302 470 169 7797.4555649427 8453.1425075518 1365878.0571677 11045452978.061
+vector 627 LuSTScenario.node[126].veinsmobility posx ETV
+vector 628 LuSTScenario.node[126].veinsmobility posy ETV
+vector 629 LuSTScenario.node[125].veinsmobility speed ETV
+vector 630 LuSTScenario.node[125].veinsmobility acceleration ETV
+vector 631 LuSTScenario.node[125].veinsmobility co2emission ETV
+vector 632 LuSTScenario.node[126].veinsmobility speed ETV
+vector 633 LuSTScenario.node[126].veinsmobility acceleration ETV
+vector 634 LuSTScenario.node[126].veinsmobility co2emission ETV
+vector 635 LuSTScenario.node[127].veinsmobility posx ETV
+vector 636 LuSTScenario.node[127].veinsmobility posy ETV
+301	1035992 7226 212035 1577258 201 474 274 0.973 10.706846575182 773.53740543072 3938.7965491163
+300	1043218 9150 212035 1577258 201 474 274 -4.4956122050359 2.7964205169911 0.17685339916008 647.71512170292
+297	1052368 8872 209823 1577258 200 474 275 4.5408909961044e-14 16.614863917192 2474.3688210349 35461.96532661
+293	1061240 8624 207605 1577258 199 474 276 5601.1989954812 6704.5782091913 1715487.1283526 10713125619.047
+292	1069864 8621 207605 1577258 199 474 276 6311.0221386015 7446.7790654926 1923103.3125439 13431522441.396
+vector 637 LuSTScenario.node[128].veinsmobility posx ETV
+vector 638 LuSTScenario.node[128].veinsmobility posy ETV
+vector 639 LuSTScenario.node[127].veinsmobility speed ETV
+381	1078657 7098 334278 1584683 246 475 230 0.51015332490104 28.696076949009 1549.7038337868 18104.472610963
+380	1085755 7667 334278 1584683 246 475 230 -4.5 2.3652864214732 21.293497054225 259.98788907831
+379	1093422 7225 330962 1584683 245 475 231 17.628811859996 39.045939449344 6475.7033344162 197627.33988449
+376	1100647 7248 327679 1584683 244 475 232 7474.9543858058 9744.4816072548 1959673.2982148 16650674983.246
+375	1107895 7253 327679 1584683 244 475 232 3331.4204675357 6938.4335668051 1206532.7454896 6597848739.875
+vector 640 LuSTScenario.node[127].veinsmobility acceleration ETV
+vector 641 LuSTScenario.node[127].veinsmobility co2emission ETV
+vector 642 LuSTScenario.node[128].veinsmobility speed ETV
+vector 643 LuSTScenario.node[128].veinsmobility acceleration ETV
+vector 644 LuSTScenario.node[128].veinsmobility co2emission ETV
+vector 645 LuSTScenario.node[129].veinsmobility posx ETV
+vector 646 LuSTScenario.node[129].veinsmobility posy ETV
+vector 647 LuSTScenario.node[130].veinsmobility posx ETV
+vector 648 LuSTScenario.node[130].veinsmobility posy ETV
+vector 649 LuSTScenario.node[131].veinsmobility posx ETV
+vector 650 LuSTScenario.node[131].veinsmobility posy ETV
+vector 651 LuSTScenario.node[129].veinsmobility speed ETV
+vector 652 LuSTScenario.node[130].veinsmobility speed ETV
+vector 653 LuSTScenario.node[132].veinsmobility posx ETV
+vector 654 LuSTScenario.node[132].veinsmobility posy ETV
+vector 655 LuSTScenario.node[129].veinsmobility acceleration ETV
+vector 656 LuSTScenario.node[129].veinsmobility co2emission ETV
+vector 657 LuSTScenario.node[130].veinsmobility acceleration ETV
+vector 658 LuSTScenario.node[130].veinsmobility co2emission ETV
+vector 659 LuSTScenario.node[131].veinsmobility speed ETV
+vector 660 LuSTScenario.node[131].veinsmobility acceleration ETV
+vector 661 LuSTScenario.node[131].veinsmobility co2emission ETV
+vector 662 LuSTScenario.node[132].veinsmobility speed ETV
+vector 663 LuSTScenario.node[132].veinsmobility acceleration ETV
+vector 664 LuSTScenario.node[132].veinsmobility co2emission ETV
+19	1116668 12988 130 1721031 5 493 489 0.69844800063705 11.346121708406 1256.4824293528 5098.4318905984
+18	1129656 14292 130 1721031 5 493 489 -4.5 2.3071768552354 12.778492541668 603.57833793735
+15	1143948 13516 85 1721031 4 493 490 0 19.958800970642 5719.8346199968 91685.209095609
+9	1157464 14014 40 1721031 3 493 491 2262.8134114566 4968.9701148862 1892243.9639297 7608274982.5579
+8	1171478 13997 40 1721031 3 493 491 6976.2669370659 10372.47729092 4175624.3792784 36208020306.336
+vector 665 LuSTScenario.node[133].veinsmobility posx ETV
+vector 666 LuSTScenario.node[133].veinsmobility posy ETV
+vector 667 LuSTScenario.node[133].veinsmobility speed ETV
+229	1185647 11142 101587 1736363 136 495 360 0.973 25.958198697771 2491.155336714 22541.144175563
+228	1196789 12073 101587 1736363 136 495 360 -4.5 2.2430839671404 20.446900961173 219.19635308477
+227	1208862 11256 100198 1736363 135 495 361 4.3683872776158 38.250826727685 11291.015020756 382499.4976002
+226	1220118 11285 98813 1736363 134 495 362 2171.0740874098 9606.4228657964 2303157.5725856 16701342198.054
+225	1231403 11291 98813 1736363 134 495 362 1875.7924426438 6965.3130416559 1756173.667803 9336980984.0849
+vector 668 LuSTScenario.node[133].veinsmobility acceleration ETV
+vector 669 LuSTScenario.node[133].veinsmobility co2emission ETV
+vector 670 LuSTScenario.node[134].veinsmobility posx ETV
+vector 671 LuSTScenario.node[134].veinsmobility posy ETV
+vector 672 LuSTScenario.node[134].veinsmobility speed ETV
+vector 673 LuSTScenario.node[134].veinsmobility acceleration ETV
+vector 674 LuSTScenario.node[134].veinsmobility co2emission ETV
+29	1243124 14490 535 1782477 11 501 491 0.973 23.946348015527 3157.1891129908 24069.911085393
+28	1257614 15693 535 1782477 11 501 491 -4.5 2.2047450208338 16.939008051824 134.90611487277
+27	1273307 14569 448 1782477 10 501 492 18.022854093448 34.969930087916 15863.176845199 526445.92612528
+26	1287876 14587 361 1782477 9 501 493 1595.1911700692 9707.8930240013 3302917.7352346 24315439190.351
+25	1302463 14586 361 1782477 9 501 493 3368.2085902678 11382.803563747 3694159.3253346 31657361848.536
+vector 675 LuSTScenario.node[135].veinsmobility posx ETV
+vector 676 LuSTScenario.node[135].veinsmobility posy ETV
+vector 677 LuSTScenario.node[136].veinsmobility posx ETV
+vector 678 LuSTScenario.node[136].veinsmobility posy ETV
+vector 679 LuSTScenario.node[135].veinsmobility speed ETV
+vector 680 LuSTScenario.node[135].veinsmobility acceleration ETV
+vector 681 LuSTScenario.node[135].veinsmobility co2emission ETV
+vector 682 LuSTScenario.node[136].veinsmobility speed ETV
+vector 683 LuSTScenario.node[136].veinsmobility acceleration ETV
+vector 684 LuSTScenario.node[136].veinsmobility co2emission ETV
+321	1317651 9381 228281 1836552 208 508 301 0.973 27.787642491415 2409.3252230805 24140.852918676
+320	1327032 10147 228281 1836552 208 508 301 -4.49140965953 2.2773460655334 20.916559887215 141.57937149079
+317	1337179 9448 225909 1836552 207 508 302 18.17999595074 39.199260381617 10502.127945232 382215.33796987
+313	1346627 9469 223533 1836552 206 508 303 1625.8737003112 9606.8797454299 1948308.8828338 14242045872.403
+312	1356096 9478 223533 1836552 206 508 303 6737.0161430977 11368.733371555 2781642.3008025 26329782756.99
+vector 685 LuSTScenario.node[137].veinsmobility posx ETV
+vector 686 LuSTScenario.node[137].veinsmobility posy ETV
+374	1365688 8460 321155 1875327 242 513 272 0.70900917540399 29.091728198401 2165.7280798707 23380.789022031
+373	1374148 9123 321155 1875327 242 513 272 -3.9735082970094 2.479494855681 20.775623735239 152.30658102395
+372	1383271 8563 317901 1875327 241 513 273 17.788282967002 39.266214943117 9418.9544874025 340921.5900254
+366	1391834 8584 314655 1875327 240 513 274 2177.9407940839 9720.2808276221 1542284.9746612 10261517722.344
+365	1400418 8583 314655 1875327 240 513 274 1832.9029988334 4086.3618949566 990076.19813775 3657577021.8032
+vector 687 LuSTScenario.node[137].veinsmobility speed ETV
+vector 688 LuSTScenario.node[138].veinsmobility posx ETV
+vector 689 LuSTScenario.node[138].veinsmobility posy ETV
+vector 690 LuSTScenario.node[137].veinsmobility acceleration ETV
+vector 691 LuSTScenario.node[137].veinsmobility co2emission ETV
+vector 692 LuSTScenario.node[138].veinsmobility speed ETV
+vector 693 LuSTScenario.node[139].veinsmobility posx ETV
+vector 694 LuSTScenario.node[139].veinsmobility posy ETV
+vector 695 LuSTScenario.node[138].veinsmobility acceleration ETV
+vector 696 LuSTScenario.node[138].veinsmobility co2emission ETV
+vector 697 LuSTScenario.node[139].veinsmobility speed ETV
+278	1409661 10112 195493 1916342 193 518 326 0.973 21.29424887019 1941.7290448207 14940.657692753
+277	1419773 10943 195493 1916342 193 518 326 -4.5 2.5183477779571 16.06417116219 202.58607104515
+272	1430716 10226 193606 1916342 192 518 327 3.9221149346562 33.945381500025 9556.4311012071 297560.00743802
+271	1440942 10268 191727 1916342 191 518 328 2171.0700114009 9744.6322744951 1901087.1670415 12871988662.117
+270	1451210 10257 191727 1916342 191 518 328 1878.1847671897 4158.4182165728 1205349.4309939 4509123053.4458
+vector 698 LuSTScenario.node[139].veinsmobility acceleration ETV
+vector 699 LuSTScenario.node[139].veinsmobility co2emission ETV
+331	1461596 9527 252661 1949025 218 522 305 0.973 24.090891403322 1866.8502648048 14067.123145302
+330	1471123 10245 252661 1949025 218 522 305 -4.5 2.3381646039896 15.553179729257 126.77362597094
+327	1481368 9587 250145 1949025 217 522 306 17.624339295863 33.27766470642 9405.1785318921 298116.7120732
+326	1490955 9612 247653 1949025 216 522 307 2181.1578993669 9712.1422230095 1715081.268175 11394677798.002
+325	1500567 9624 247653 1949025 216 522 307 1832.8210137374 4083.0640740918 1108221.6471807 4089192320.9809
+vector 700 LuSTScenario.node[140].veinsmobility posx ETV
+vector 701 LuSTScenario.node[140].veinsmobility posy ETV
+vector 702 LuSTScenario.node[140].veinsmobility speed ETV
+179	1510363 13165 59866 1965393 101 524 424 0.973 29.376129546647 3717.1577388077 38943.716105346
+178	1523528 14187 59866 1965393 101 524 424 -4.5 2.188367778107 18.833716873097 168.08126680593
+177	1537715 13226 58824 1965393 100 524 425 17.528314450691 40.666474148692 15892.577933837 613034.97794686
+172	1550941 13265 57782 1965393 99 524 426 1595.4123344028 9719.7193877232 2859042.0655479 21129266614.38
+171	1564206 13262 57782 1965393 99 524 426 3342.76619339 11382.525050349 3175534.3313354 27140225297.349
+vector 703 LuSTScenario.node[140].veinsmobility acceleration ETV
+vector 704 LuSTScenario.node[140].veinsmobility co2emission ETV
+414	1577597 7822 439086 1973597 275 525 251 0.86267974071568 25.250199724441 1388.5388304864 14046.859653336
+413	1585419 8428 439086 1973597 275 525 251 -4.5 2.3299273234233 18.557796246907 226.41827089937
+412	1593847 7917 435212 1973597 274 525 252 17.226369809139 36.478424029023 6482.9312696877 180158.25702253
+411	1601764 7957 431350 1973597 273 525 253 7474.7822058466 9744.6274522363 2134857.1746747 18118204029.053
+410	1609721 7957 431350 1973597 273 525 253 3331.0833911268 6940.5794564217 1310106.6525423 7134020290.4819
+vector 705 LuSTScenario.node[141].veinsmobility posx ETV
+vector 706 LuSTScenario.node[141].veinsmobility posy ETV
+vector 707 LuSTScenario.node[141].veinsmobility speed ETV
+vector 708 LuSTScenario.node[141].veinsmobility acceleration ETV
+vector 709 LuSTScenario.node[141].veinsmobility co2emission ETV
+11	1617979 15620 40 2021806 3 531 529 -1.2548096145467 20.52666537516 2949.2310467199 19086.386461072
+10	1633599 16991 40 2021806 3 531 529 -4.4991551593132 2.0622536508925 14.608240366906 116.50124029467
+4	1650590 15169 21 2021806 2 531 530 17.218082070507 32.220364233227 15894.278086915 490562.78134351
+1	1665759 15189 2 2021806 1 531 531 1595.4087927963 9722.3307461522 3570611.4180489 26363249975.866
+0	1680948 15177 2 2021806 1 531 531 3336.7858956251 11382.529510312 3960672.5510081 33824062121.948
+254	1696125 11852 143308 2109993 163 542 380 0.973 22.820455674558 2221.476130967 16575.667100167
+253	1707977 12808 143308 2109993 163 542 380 -4.4905292394082 2.1496008274704 16.499892666929 129.31386531461
+252	1720785 11933 141636 2109993 162 542 381 17.582743856662 34.179459122031 11338.66827131 354154.09994544
+251	1732718 11951 139964 2109993 161 542 382 1595.4821780051 9592.3542926762 2458978.4794072 17916276273.357
+250	1744669 11962 139964 2109993 161 542 382 6479.5500900098 11382.437095937 3440626.6887422 32121336812.742
+vector 710 LuSTScenario.node[142].veinsmobility posx ETV
+vector 711 LuSTScenario.node[142].veinsmobility posy ETV
+vector 712 LuSTScenario.node[142].veinsmobility speed ETV
+vector 713 LuSTScenario.node[143].veinsmobility posx ETV
+vector 714 LuSTScenario.node[143].veinsmobility posy ETV
+vector 715 LuSTScenario.node[142].veinsmobility acceleration ETV
+vector 716 LuSTScenario.node[142].veinsmobility co2emission ETV
+vector 717 LuSTScenario.node[143].veinsmobility speed ETV
+361	1757104 9626 308358 2157600 238 548 311 0.973 27.208699089887 1807.4264401919 17892.237911694
+360	1766730 10425 308358 2157600 238 548 311 -4.5 2.1959146166081 19.966832200477 331.9613415556
+357	1777155 9796 305307 2157600 237 548 312 3.5315400023938 37.521023650278 8103.7414466608 233176.19199308
+353	1786951 9832 302256 2157600 236 548 313 6959.6549406063 9718.9527167481 2575972.9668652 21355270710.911
+352	1796783 9835 302256 2157600 236 548 313 3344.5219541724 6965.3358899863 1651311.4289978 9204168971.6167
+vector 718 LuSTScenario.node[143].veinsmobility acceleration ETV
+vector 719 LuSTScenario.node[143].veinsmobility co2emission ETV
+vector 720 LuSTScenario.node[144].veinsmobility posx ETV
+vector 721 LuSTScenario.node[144].veinsmobility posy ETV
+vector 722 LuSTScenario.node[144].veinsmobility speed ETV
+vector 723 LuSTScenario.node[144].veinsmobility acceleration ETV
+vector 724 LuSTScenario.node[144].veinsmobility co2emission ETV
+368	1807048 9986 314655 2237444 240 558 319 0.36078054728172 26.94105665178 2446.4018816607 25881.369757594
+367	1817034 10719 314655 2237444 240 558 319 -4.5 2.1302290927246 22.377336983333 173.30860989091
+364	1827753 10047 311480 2237444 239 558 320 17.766226216017 40.207872924846 10713.365794912 379307.69997621
+359	1837800 10089 308358 2237444 238 558 321 2181.1353332239 9567.8134661966 1948188.329234 13708842295.416
+358	1847889 10091 308358 2237444 238 558 321 1833.2993426022 6937.8879243033 1457906.4148414 7279820848.7987
+vector 725 LuSTScenario.node[145].veinsmobility posx ETV
+vector 726 LuSTScenario.node[145].veinsmobility posy ETV
+vector 727 LuSTScenario.node[145].veinsmobility speed ETV
+vector 728 LuSTScenario.node[145].veinsmobility acceleration ETV
+vector 729 LuSTScenario.node[145].veinsmobility co2emission ETV
+vector 730 LuSTScenario.node[146].veinsmobility posx ETV
+vector 731 LuSTScenario.node[146].veinsmobility posy ETV
+371	1858395 10293 317901 2348267 241 572 332 0.973 26.187448580316 1671.3836315207 15018.322653159
+370	1868688 11162 317901 2348267 241 572 332 -4.4656997579528 2.575397633866 16.416506911202 306.75923182362
+369	1879850 10479 314655 2348267 240 572 333 3.9373077517597 34.669669580055 8073.2486550111 216335.34356966
+363	1890329 10499 311480 2348267 239 572 334 6959.8091430695 9707.9895258409 2746348.4931984 22745894234.672
+362	1900828 10506 311480 2348267 239 572 334 3368.0051557762 6965.4109084127 1760618.5971992 9804712556.7869
+vector 732 LuSTScenario.node[146].veinsmobility speed ETV
+vector 733 LuSTScenario.node[146].veinsmobility acceleration ETV
+vector 734 LuSTScenario.node[146].veinsmobility co2emission ETV
+vector 735 LuSTScenario.node[147].veinsmobility posx ETV
+vector 736 LuSTScenario.node[147].veinsmobility posy ETV
+vector 737 LuSTScenario.node[148].veinsmobility posx ETV
+vector 738 LuSTScenario.node[148].veinsmobility posy ETV
+vector 739 LuSTScenario.node[147].veinsmobility speed ETV
+vector 740 LuSTScenario.node[148].veinsmobility speed ETV
+vector 741 LuSTScenario.node[147].veinsmobility acceleration ETV
+vector 742 LuSTScenario.node[147].veinsmobility co2emission ETV
+vector 743 LuSTScenario.node[148].veinsmobility acceleration ETV
+vector 744 LuSTScenario.node[148].veinsmobility co2emission ETV
+vector 745 LuSTScenario.node[149].veinsmobility posx ETV
+vector 746 LuSTScenario.node[149].veinsmobility posy ETV
+vector 747 LuSTScenario.node[149].veinsmobility speed ETV
+vector 748 LuSTScenario.node[150].veinsmobility posx ETV
+vector 749 LuSTScenario.node[150].veinsmobility posy ETV
+vector 750 LuSTScenario.node[149].veinsmobility acceleration ETV
+vector 751 LuSTScenario.node[149].veinsmobility co2emission ETV
+vector 752 LuSTScenario.node[150].veinsmobility speed ETV
+vector 753 LuSTScenario.node[150].veinsmobility acceleration ETV
+vector 754 LuSTScenario.node[150].veinsmobility co2emission ETV
+vector 755 LuSTScenario.node[151].veinsmobility posx ETV
+vector 756 LuSTScenario.node[151].veinsmobility posy ETV
+vector 757 LuSTScenario.node[151].veinsmobility speed ETV
+vector 758 LuSTScenario.node[151].veinsmobility acceleration ETV
+vector 759 LuSTScenario.node[151].veinsmobility co2emission ETV
+vector 760 LuSTScenario.node[152].veinsmobility posx ETV
+vector 761 LuSTScenario.node[152].veinsmobility posy ETV
+vector 762 LuSTScenario.node[153].veinsmobility posx ETV
+vector 763 LuSTScenario.node[153].veinsmobility posy ETV
+vector 764 LuSTScenario.node[154].veinsmobility posx ETV
+vector 765 LuSTScenario.node[154].veinsmobility posy ETV
+vector 766 LuSTScenario.node[152].veinsmobility speed ETV
+vector 767 LuSTScenario.node[155].veinsmobility posx ETV
+vector 768 LuSTScenario.node[155].veinsmobility posy ETV
+vector 769 LuSTScenario.node[152].veinsmobility acceleration ETV
+vector 770 LuSTScenario.node[152].veinsmobility co2emission ETV
+vector 771 LuSTScenario.node[153].veinsmobility speed ETV
+vector 772 LuSTScenario.node[154].veinsmobility speed ETV
+456	1913785 9093 566068 2526507 305 593 289 0.973 22.674283718895 1986.4038139494 16627.885820289
+455	1922878 9810 566068 2526507 305 593 289 -4.5 2.1111134619266 17.295360346223 132.19828050834
+454	1932688 9168 561251 2526507 304 593 290 17.965405688032 35.287220046527 9428.172455967 316325.1332582
+446	1941856 9193 556551 2526507 303 593 291 2181.1423776807 9720.416301733 1626645.0569753 10821021082.563
+445	1951049 9191 556551 2526507 303 593 291 1833.2445678279 4083.0405980688 1049360.7181965 3869540063.5389
+vector 773 LuSTScenario.node[153].veinsmobility acceleration ETV
+vector 774 LuSTScenario.node[153].veinsmobility co2emission ETV
+vector 775 LuSTScenario.node[154].veinsmobility acceleration ETV
+vector 776 LuSTScenario.node[154].veinsmobility co2emission ETV
+vector 777 LuSTScenario.node[155].veinsmobility speed ETV
+vector 778 LuSTScenario.node[156].veinsmobility posx ETV
+vector 779 LuSTScenario.node[156].veinsmobility posy ETV
+vector 780 LuSTScenario.node[155].veinsmobility acceleration ETV
+vector 781 LuSTScenario.node[155].veinsmobility co2emission ETV
+vector 782 LuSTScenario.node[157].veinsmobility posx ETV
+vector 783 LuSTScenario.node[157].veinsmobility posy ETV
+vector 784 LuSTScenario.node[156].veinsmobility speed ETV
+vector 785 LuSTScenario.node[156].veinsmobility acceleration ETV
+vector 786 LuSTScenario.node[156].veinsmobility co2emission ETV
+vector 787 LuSTScenario.node[157].veinsmobility speed ETV
+vector 788 LuSTScenario.node[157].veinsmobility acceleration ETV
+vector 789 LuSTScenario.node[157].veinsmobility co2emission ETV
+429	1961287 8540 507542 2628590 292 604 313 0.973 9.6768093988443 669.75971470151 2460.107495957
+428	1969827 10253 507542 2628590 292 604 313 -4.4773394152227 2.995942963881 0.18349477798612 449.97192256772
+425	1980080 9846 503245 2628590 291 604 314 0 14.497821506475 2416.9875075261 28724.258590077
+423	1989926 9954 498952 2628590 290 604 315 4630.6682806543 6249.4153782706 1726543.5337105 9535215225.086
+422	1999880 9912 498952 2628590 290 604 315 7031.8043421267 8002.5994005254 2392716.6100426 18190603229.693
+389	2009792 11214 351146 2655851 251 607 357 0.973 22.798778423386 2159.188391088 16899.331748832
+388	2021006 12099 351146 2655851 251 607 357 -4.5 2.3125771660195 17.039302208197 132.70570032238
+387	2033105 11274 347721 2655851 250 607 358 17.862444687688 34.95374701068 10732.929055781 340682.95355555
+386	2044379 11312 344296 2655851 249 607 359 2181.1313818831 9594.4240311843 2189086.2078585 15483520230.291
+385	2055691 11308 344296 2655851 249 607 359 1833.2721817455 6944.691431249 1642440.4328846 8250919472.5822
+vector 790 LuSTScenario.node[158].veinsmobility posx ETV
+vector 791 LuSTScenario.node[158].veinsmobility posy ETV
+vector 792 LuSTScenario.node[158].veinsmobility speed ETV
+vector 793 LuSTScenario.node[158].veinsmobility acceleration ETV
+vector 794 LuSTScenario.node[158].veinsmobility co2emission ETV
+vector 795 LuSTScenario.node[159].veinsmobility posx ETV
+vector 796 LuSTScenario.node[159].veinsmobility posy ETV
+vector 797 LuSTScenario.node[159].veinsmobility speed ETV
+409	2067472 10951 419851 2764499 270 619 350 0.973 21.058347017288 1817.7769010997 12067.733160995
+408	2078423 11871 419851 2764499 270 619 350 -4.5 2.243637804077 14.159245386643 179.3066759053
+407	2090294 11075 416040 2764499 269 619 351 4.1964242741508 31.571813705459 9575.2531809219 277714.59095636
+404	2101369 11109 412249 2764499 268 619 352 2171.0716939225 9744.4920920083 2034818.3173475 13755338788.716
+403	2112478 11116 412249 2764499 268 619 352 1855.6764886483 4158.3886046465 1292249.1571735 4831851713.5021

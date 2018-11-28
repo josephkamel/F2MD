@@ -16,6 +16,8 @@ GeneralLib::GeneralLib(){
 
 Coord GeneralLib::TypeToSize(std::string type){
 
+    return Coord(1.8,2,0);
+
     //lust
     if (type == "passenger1")
         return Coord(1.8,5.0 - 1.5 -0,0);

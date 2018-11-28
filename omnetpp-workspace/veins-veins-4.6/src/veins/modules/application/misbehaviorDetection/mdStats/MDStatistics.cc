@@ -98,7 +98,7 @@ void MDStatistics::treatReport(MDSBase *base, int index, MDReport report) {
         }
     }
 
-    if (!report.getMbType().compare("Attacker")) {
+    if (!report.getMbType().compare("LocalAttacker")) {
         if (!base[index].alreadyReportedAttacker(report.getReportedPseudo())) {
             base[index].addReportedAttacker(report.getReportedPseudo(),
                     report.getGenerationTime());
