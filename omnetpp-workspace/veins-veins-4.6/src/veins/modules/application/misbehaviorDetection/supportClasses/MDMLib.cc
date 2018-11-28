@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -235,6 +235,7 @@ double MDMLib::SegmentSegmentFactor(double d, double r1, double r2,
             return 1;
         }
     }
+
 
     double factor = (overlap1 + overlap2) / (2 * r1 + 2 * r2);
     return factor;

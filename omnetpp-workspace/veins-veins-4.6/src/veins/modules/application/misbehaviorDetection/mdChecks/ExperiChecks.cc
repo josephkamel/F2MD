@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -119,68 +119,6 @@ double ExperiChecks::SpeedPlausibilityCheck(double speed,
     }
 }
 
-double ExperiChecks::PositionSpeedConsistancyCheckOld(Coord curPosition,
-        Coord curPositionConfidence, Coord oldPosition,
-        Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
-        double oldspeed, double oldSpeedConfidence, double time) {
-
-    MDMLib mdmLib;
-
-    if (time < MAX_TIME_DELTA) {
-
-        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
-        double theoreticalSpeed = distance / time;
-        double maxspeed = std::max(curSpeed, oldspeed);
-        double minspeed = std::min(curSpeed, oldspeed);
-
-        double curR = curPositionConfidence.x / time + curSpeedConfidence;
-        double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
-
-        double minfactor;
-
-        minfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed, curR,
-                oldR, maxspeed - MIN_PSS);
-
-//        std::cout << " theoreticalSpeed:" << theoreticalSpeed << " curR:" << curR
-//                << " oldR:" << oldR << " maxspeed - MIN_PSS:" << maxspeed - MIN_PSS
-//                << '\n';
-
-        double maxfactor;
-
-        if (minspeed - MAX_PSS < 0) {
-            maxfactor = 1;
-        } else {
-            maxfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed,
-                    curR, oldR, minspeed - MAX_PSS);
-            maxfactor = 1 - maxfactor;
-        }
-
-//        std::cout << " minfactor:" << minfactor << " maxfactor:" << maxfactor
-//                << " theoreticalSpeed:" << theoreticalSpeed << " maxspeed:" << maxspeed
-//                << " minspeed:" << minspeed << '\n';
-
-        double factor = 1;
-
-        if (minfactor < maxfactor) {
-            factor = minfactor;
-        } else {
-            factor = maxfactor;
-        }
-
-        factor = (factor - 0.5) * 2;
-        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
-        if (factor > 0.75) {
-            factor = 1;
-        }
-      //  std::cout << " Old Min:" << minfactor << " Max:" << maxfactor << '\n';
-
-        return factor;
-
-    } else {
-        return 1;
-    }
-}
-
 double ExperiChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         Coord curPositionConfidence, Coord oldPosition,
         Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
@@ -199,17 +137,17 @@ double ExperiChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
 
         double maxfactor = mdmLib.OneSidedCircleSegmentFactor(
-                maxspeed - theoreticalSpeed, curR, oldR, MAX_PSS);
+                maxspeed - theoreticalSpeed, curR, oldR, MAX_PLAUSIBLE_DECEL*time);
 
         if(maxfactor<=0){
-            maxfactor = -AUG_FACTOR * (2*mdmLib.gaussianSum((maxspeed - theoreticalSpeed - curR - oldR),2*(MAX_PSS)/3)-1);
+            maxfactor = -AUG_FACTOR * (2*mdmLib.gaussianSum((maxspeed - theoreticalSpeed - curR - oldR),2*(MAX_PLAUSIBLE_DECEL*time)/3)-1);
         }
 
         double minfactor = mdmLib.OneSidedCircleSegmentFactor(
-                theoreticalSpeed - minspeed, curR, oldR, - MIN_PSS);
+                theoreticalSpeed - minspeed, curR, oldR,  MAX_PLAUSIBLE_ACCEL*time);
 
         if(minfactor<=0){
-            minfactor = -AUG_FACTOR * (2*mdmLib.gaussianSum((theoreticalSpeed - minspeed - curR - oldR),2*(- MIN_PSS)/3)-1);
+            minfactor = -AUG_FACTOR * (2*mdmLib.gaussianSum((theoreticalSpeed - minspeed - curR - oldR),2*(MAX_PLAUSIBLE_ACCEL*time)/3)-1);
         }
 
         double factor = 1;
@@ -225,19 +163,6 @@ double ExperiChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         if (factor > 0.75) {
             factor = 1;
         }
-
-        double factorOld = PositionSpeedConsistancyCheckOld(curPosition,
-                curPositionConfidence, oldPosition, oldPositionConfidence,
-                curSpeed, curSpeedConfidence, oldspeed, oldSpeedConfidence,
-                time);
-
-//        std::cout << " Min:" << minfactor << " Max:" << maxfactor << '\n';
-//
-//        if(factorOld !=factor){
-//            std::cout << " factorOld:" << factorOld << " factor:" << factor << '\n';
-//            std::cout << "============================================" << '\n';
-//        }
-
 
         return factor;
 
@@ -357,12 +282,12 @@ double ExperiChecks::SuddenAppearenceCheck(Coord receiverPosition,
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
     double r1 = senderPositionConfidence.x;
-    double r2 = SUDDEN_APPEARENCE_RANGE + receiverPositionConfidence.x;
+    double r2 = MAX_SA_RANGE + receiverPositionConfidence.x;
 
     double factor = 0;
     if (r1 <= 0) {
         if (distance
-                < (SUDDEN_APPEARENCE_RANGE + receiverPositionConfidence.x)) {
+                < (MAX_SA_RANGE + receiverPositionConfidence.x)) {
             factor = 0;
         } else {
             factor = 1;

@@ -1,28 +1,24 @@
 /*******************************************************************************
  * @author  Joseph Kamel
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
  * All rights reserved.
  *******************************************************************************/
 
-#include "JosephVeinsApp.h"
+#include "F2MDVeinsApp.h"
 
 Define_Module(JosephVeinsApp);
-
-
+//Simulation Parameters
 #define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
-//#define serialNumber "IRT-Reports-Mix-V2-List"
-//#define savePath "/media/sca-team/DATA/DataF2MD/"
-
-static bool randomConf = false;
+#define randomConf false
 #define confPos 3
-#define confSpd 0.5
+#define confSpd 3/6.0
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
@@ -36,10 +32,6 @@ static bool randomConf = false;
 static bool MixLocalAttacks = true;
 static bool RandomLocalMix = false;
 static int LastLocalAttackIndex = -1;
-//static attackTypes::Attacks MixAttacksList[] =
-//        { attackTypes::Disruptive, attackTypes::ConstSpeed,
-//                attackTypes::ConstPosOffset, attackTypes::Sybil,
-//                attackTypes::DataReplay, attackTypes::StaleMessages };
 
 static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstPosOffset, attackTypes::RandomPos,
@@ -48,12 +40,12 @@ static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
         attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
         attackTypes::Disruptive, attackTypes::DataReplay,
         attackTypes::StaleMessages,attackTypes::Sybil,
-      //  attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
+        attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
         };
 
 
 #define LOCAL_ATTACKER_PROB 0.1
-#define LOCAL_ATTACK_TYPE attackTypes::Disruptive
+#define LOCAL_ATTACK_TYPE attackTypes::RandomPos
 // 1 ConstPos, 2 ConstPosOffset, 3 RandomPos, 4 RandomPosOffset,
 // 5 ConstSpeed, 6 ConstSpeedOffset, 7 RandomSpeed, 8 RandomSpeedOffset,
 // 9 EventualStop, 10 Disruptive, 11 DataReplay, 12 StaleMessages,
@@ -90,28 +82,14 @@ static bool writeReportsV2 = false;
 static bool writeListReportsV1 = false;
 static bool writeListReportsV2 = false;
 
-
 static bool sendReportsV1 = false;
 static bool sendReportsV2 = false;
-int maPortV1 = 9980;
-int maPortV2 = 9981;
-
-static MDStatistics mdStats = MDStatistics();
+static int maPortV1 = 9980;
+static int maPortV2 = 9981;
 
 static bool enableVarThreV1 = false;
 static bool enableVarThreV2 = false;
-static VarThrePrintable varThrePrintableV1 = VarThrePrintable("AppV1");
-static VarThrePrintable varThrePrintableV2 = VarThrePrintable("AppV2");
-
-static bool setDate = false;
-static std::string curDate;
-
-double meanTimeV1 = 0;
-long numTimeV1 = 0;
-
-double meanTimeV2 = 0;
-long numTimeV2 = 0;
-
+//Simulation Parameters
 void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
@@ -119,6 +97,7 @@ void JosephVeinsApp::initialize(int stage) {
         linkControl.initialize(traci);
         linkInit = true;
     }
+
     if (stage == 0) {
 
         //joseph
@@ -432,12 +411,12 @@ void JosephVeinsApp::treatAttackFlags() {
         }
     }
 
-    if ((simTime().dbl() - targetClearTime) > MAXTARGETTIME) {
+    if ((simTime().dbl() - targetClearTime) > MAX_TARGET_TIME) {
         targetClearTime = simTime().dbl();
         clearTargetNodes();
     }
 
-    if ((simTime().dbl() - accusedClearTime) > MAXACCUSEDTTIME) {
+    if ((simTime().dbl() - accusedClearTime) > MAX_ACCUSED_TIME) {
         accusedClearTime = simTime().dbl();
         clearAccusedNodes();
     }
@@ -514,6 +493,10 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
 
             if (writeReportsV1) {
                 writeReport(reportBase, mdv, bsmCheckV1, bsm);
+            }
+
+            if (writeListReportsV1) {
+                writeListReport(reportBase, mdv, bsmCheckV1, bsm);
             }
 
             if (sendReportsV1) {
@@ -796,6 +779,7 @@ void JosephVeinsApp::sendReport(MDReport reportBase, std::string version,
 void JosephVeinsApp::writeMdBsm(std::string version, BsmCheck bsmCheck,
         BasicSafetyMessage *bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
+    bsmPrint.setReceiverId(myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);
@@ -806,6 +790,7 @@ void JosephVeinsApp::writeMdBsm(std::string version, BsmCheck bsmCheck,
 void JosephVeinsApp::writeMdListBsm(std::string version, BsmCheck bsmCheck,
         BasicSafetyMessage *bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
+    bsmPrint.setReceiverId(myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);
@@ -815,7 +800,8 @@ void JosephVeinsApp::writeMdListBsm(std::string version, BsmCheck bsmCheck,
 
 void JosephVeinsApp::writeSelfBsm(BasicSafetyMessage bsm) {
     BsmPrintable bsmPrint = BsmPrintable();
-    bsmPrint.setReceiverPseudo(myId);
+    bsmPrint.setReceiverId(myId);
+    bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(bsm);
     bsmPrint.writeSelfStrToFile(savePath, serialNumber,
             bsmPrint.getSelfBsmPrintableJson(), curDate);

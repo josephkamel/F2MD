@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -78,7 +78,7 @@ double CaTChChecks::SpeedConsistancyCheck(double curSpeed,
                 oldSpeedConfidence,
                 MAX_PLAUSIBLE_ACCEL * attFact);
     } else {
-        factor = mdmLib.SegmentSegmentFactor(speedDelta, curSpeedConfidence,
+        factor = mdmLib.SegmentSegmentFactor(fabs(speedDelta), curSpeedConfidence,
                 oldSpeedConfidence,
                 MAX_PLAUSIBLE_DECEL * attFact);
     }
@@ -99,69 +99,6 @@ double CaTChChecks::SpeedPlausibilityCheck(double speed,
     }
 }
 
-double CaTChChecks::PositionSpeedConsistancyCheckOld(Coord curPosition,
-        Coord curPositionConfidence, Coord oldPosition,
-        Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
-        double oldspeed, double oldSpeedConfidence, double time) {
-
-    MDMLib mdmLib;
-
-    if (time < MAX_TIME_DELTA) {
-
-        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
-        double theoreticalSpeed = distance / time;
-        double maxspeed = std::max(curSpeed, oldspeed);
-        double minspeed = std::min(curSpeed, oldspeed);
-
-        double curR = curPositionConfidence.x / time + curSpeedConfidence;
-        double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
-
-        double minfactor;
-
-        minfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed, curR,
-                oldR, maxspeed - MIN_PSS);
-
-//        std::cout << " theoreticalSpeed:" << theoreticalSpeed << " curR:" << curR
-//                << " oldR:" << oldR << " maxspeed - MIN_PSS:" << maxspeed - MIN_PSS
-//                << '\n';
-
-        double maxfactor;
-
-        if (minspeed - MAX_PSS < 0) {
-            maxfactor = 1;
-        } else {
-            maxfactor = mdmLib.OneSidedCircleSegmentFactor(theoreticalSpeed,
-                    curR, oldR, minspeed - MAX_PSS);
-            maxfactor = 1 - maxfactor;
-        }
-
-//        std::cout << " minfactor:" << minfactor << " maxfactor:" << maxfactor
-//                << " theoreticalSpeed:" << theoreticalSpeed << " maxspeed:" << maxspeed
-//                << " minspeed:" << minspeed << '\n';
-
-        double factor = 1;
-
-        if (minfactor < maxfactor) {
-            factor = minfactor;
-        } else {
-            factor = maxfactor;
-        }
-
-//        factor = (factor - 0.5) * 2;
-//        factor = mdmLib.gaussianSum(factor, (1.0 / 4.5));
-//        if (factor > 0.75) {
-//            factor = 1;
-//        }
-//        if (factor <0.001) {
-//            factor = 0;
-//        }
-        //  std::cout << " Old Min:" << minfactor << " Max:" << maxfactor << '\n';
-        return factor;
-
-    } else {
-        return 1;
-    }
-}
 
 double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         Coord curPositionConfidence, Coord oldPosition,
@@ -186,10 +123,11 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
 
         double maxfactor = mdmLib.OneSidedCircleSegmentFactor(
-                maxspeed - theoreticalSpeed, curR, oldR, MAX_PSS);
+                maxspeed - theoreticalSpeed, curR, oldR, MAX_PLAUSIBLE_DECEL*time);
 
         double minfactor = mdmLib.OneSidedCircleSegmentFactor(
-                theoreticalSpeed - minspeed, curR, oldR, - MIN_PSS);
+                theoreticalSpeed - minspeed, curR, oldR, MAX_PLAUSIBLE_ACCEL*time);
+
 
         double factor = 1;
 
@@ -209,24 +147,22 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
 //            factor = 0;
 //        }
 
-        double factorOld = PositionSpeedConsistancyCheckOld(curPosition,
-                curPositionConfidence, oldPosition, oldPositionConfidence,
-                curSpeed, curSpeedConfidence, oldspeed, oldSpeedConfidence,
-                time);
-
         if (factor < 0) {
+            std::cout << "=======================================" << '\n';
+        std::cout << " maxspeed - theoreticalSpeed:" << maxspeed - theoreticalSpeed << '\n';
+        std::cout << " theoreticalSpeed - minspeed:" << theoreticalSpeed - minspeed << '\n';
+        std::cout << " curR:" << - curR << '\n';
+        std::cout << " oldR:" << oldR << '\n';
+
             std::cout << " Min:" << minfactor << " Max:" << maxfactor << '\n';
             std::cout << " time:" << time << '\n';
             std::cout << " MaxSpeed:" << maxspeed << '\n';
             std::cout << " minspeed:" << minspeed << '\n';
             std::cout << " theoreticalSpeed:" << theoreticalSpeed << '\n';
+            std::cout << " maxfactor:" << maxfactor << '\n';
+            std::cout << " minfactor:" << minfactor << '\n';
 
-            if (factorOld != factor) {
-                std::cout << " factorOld:" << factorOld << " factor:" << factor
-                        << '\n';
-                std::cout << "============================================"
-                        << '\n';
-            }
+
         }
 
         return factor;
@@ -333,12 +269,12 @@ double CaTChChecks::SuddenAppearenceCheck(Coord receiverPosition,
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
     double r1 = senderPositionConfidence.x;
-    double r2 = SUDDEN_APPEARENCE_RANGE + receiverPositionConfidence.x;
+    double r2 = MAX_SA_RANGE + receiverPositionConfidence.x;
 
     double factor = 0;
     if (r1 <= 0) {
         if (distance
-                < (SUDDEN_APPEARENCE_RANGE + receiverPositionConfidence.x)) {
+                < (MAX_SA_RANGE + receiverPositionConfidence.x)) {
             factor = 0;
         } else {
             factor = 1;
@@ -400,8 +336,10 @@ double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
         resolution = resolution + resolutionDelta;
     }
 
+
     return (1 - (failedCount / allCount));
 
+    /********************************************
     double Intersection = 0;
     int count = 5;
 
@@ -446,6 +384,8 @@ double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
     double factor = (1 - (Intersection / count));
 
     return factor;
+
+    *************************************************************/
 }
 
 double CaTChChecks::BeaconFrequencyCheck(double timeNew, double timeOld) {
@@ -678,7 +618,7 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage * bsm,
                     mdmLib.calculateSpeed(bsm->getSenderSpeed()),
                     mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
 
-//    PrintBsmCheck(senderPseudonym, bsmCheck);
+    //PrintBsmCheck(senderPseudonym, bsmCheck);
 
     return bsmCheck;
 }

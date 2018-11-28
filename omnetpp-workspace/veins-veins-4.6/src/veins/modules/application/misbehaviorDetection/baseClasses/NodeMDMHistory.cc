@@ -1,8 +1,8 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
 * @email   josephekamel@gmail.com 
-* @date    11/04/2018
-* @version 1.0
+* @date    28/11/2018
+* @version 2.0
 *
 * SCA (Secure Cooperative Autonomous systems)
 * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -59,7 +59,7 @@ void MDMHistory::addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2) {
 void MDMHistory::addBsmCheck(BsmCheck bsmCheck, int version) {
     switch (version) {
         case 1:{
-            if (BSMNumV1 < MAXMDMLENGTH) {
+            if (BSMNumV1 < MAX_MDM_LENGTH) {
                 BSMNumV1++;
             }
             for (int var = BSMNumV1 - 1; var > 0; --var) {
@@ -70,7 +70,7 @@ void MDMHistory::addBsmCheck(BsmCheck bsmCheck, int version) {
         }
 
         case 2:{
-            if (BSMNumV2 < MAXMDMLENGTH) {
+            if (BSMNumV2 < MAX_MDM_LENGTH) {
                 BSMNumV2++;
             }
             for (int var = BSMNumV2 - 1; var > 0; --var) {

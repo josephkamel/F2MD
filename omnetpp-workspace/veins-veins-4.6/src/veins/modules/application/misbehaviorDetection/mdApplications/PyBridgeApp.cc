@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -15,10 +15,11 @@
 using namespace std;
 using namespace boost;
 
-PyBridgeApp::PyBridgeApp(int version,int port, std::string host):
+PyBridgeApp::PyBridgeApp(int version,int port, std::string host, int * myId):
                 MDApplication(version)  {
     this->port = port;
     this->host = host;
+    this->myId = myId;
     httpr = HTTPRequest(port, "localhost");
     bsmPrint = BsmPrintable();
 }
@@ -114,6 +115,7 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
         }
     }
 
+    bsmPrint.setReceiverId(*myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
     bsmPrint.setBsmCheck(bsmCheck);

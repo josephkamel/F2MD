@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <title>Misbehavior Authority Gui</title>
+    <meta http-equiv="refresh" content="2"> <!-- See the difference? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+  </head>
+  <body>
+
+<center>
+    <table style="position: relative; width:98vw" cellspacing="0" cellpadding="0">
+        <tr>
+            <td colspan="2">
+                <div class="chart-container-0">
+                    <canvas id="chart-0"  style="position: relative; height:25vw; width:98vw"></canvas>
+                </div>       
+            </td>
+        <tr>
+        <th>
+            <div class="chart-container-1">
+                <canvas id="chart-1"  style="position: relative;width:49vw"></canvas>
+            </div>
+        </th>
+        <th>
+            <div class="chart-containr-2" >
+                <canvas id="chart-2" style="position: relative;width:49vw"></canvas>
+            </div>
+        </th>
+      </tr>
+    </table>
+</center>
+
+<script>
+
+var config = {
+    type: 'bar',
+    data: {
+        labels: #labelsTime#,
+        datasets: [{
+            type: 'bar',
+            label: 'Accurate',
+            backgroundColor: #bg_colors_acc#,
+            borderColor: #border_colors_acc#,
+            data: #data_acc#,
+        }, {
+            type: 'bar',
+            label: 'Not Accurate',
+            backgroundColor: #bg_colors_nacc#,
+            borderColor: #border_colors_nacc#,
+            data: #data_nacc#,
+        }, {
+            type: 'line',
+            label: 'Instantaneous Rate',
+            backgroundColor: #bg_colors_rate#,
+            borderColor: #border_colors_rate#,
+            fill: false,
+            data: #data_rate#,
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: '#test# #test2#',
+            fontSize: 30
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
+                }
+            }]
+        },
+        animation: {
+            duration: 0
+        },
+    }
+};
+
+var ctx0 = document.getElementById("chart-0").getContext('2d');
+var barChart = new Chart(ctx0, config);
+
+
+var ctx1 = document.getElementById("chart-1").getContext('2d');
+var barChart = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+        labels: #labels1#,
+        datasets: [{
+            data: #data1#,
+            backgroundColor: #bgcolor1#,
+            borderColor: #bordercolor1#,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            text: 'Number of Received'
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
+        animation: {
+            duration: 100
+        },
+        legend: {
+            display: false
+        }
+    }
+});
+var ctx2 = document.getElementById("chart-2").getContext('2d');
+var radarChart = new Chart(ctx2, {
+    type: 'radar',
+    data: {
+        labels: #labels2#,
+        datasets: [#datasets2#]
+    },
+    options: {
+        scales: {
+            yAxes: {
+                display: false
+            },
+        },
+        animation: {
+            duration: 100
+        }
+    }
+
+});
+
+
+
+
+</script>
+
+  </body>
+</html>

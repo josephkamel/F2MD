@@ -1,3 +1,16 @@
+"""
+/*******************************************************************************
+ * @author  Joseph Kamel
+ * @email   josephekamel@gmail.com
+ * @date    28/11/2018
+ * @version 2.0
+ *
+ * SCA (Secure Cooperative Autonomous systems)
+ * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+ * All rights reserved.
+ *******************************************************************************/
+"""
+
 import os
 import json
 import numpy as np
@@ -42,6 +55,8 @@ class MlDataCollector:
 	def loadData(self):
 		self.valuesCollection = np.load(self.savePath+'/valuesSave_'+self.curDateStr +'.npy' )
 		self.targetCollection = np.load(self.savePath+'/targetSave_'+self.curDateStr +'.npy')
+		#print(self.valuesCollection[0:2])
+		#print(self.targetCollection[0:2])
 		self.initCollection = True	
 
 	def collectData(self,bsmArray):

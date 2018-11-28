@@ -1,8 +1,8 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
 * @email   josephekamel@gmail.com
-* @date    11/04/2018
-* @version 1.0
+* @date    28/11/2018
+* @version 2.0
 *
 * SCA (Secure Cooperative Autonomous systems)
 * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -17,15 +17,15 @@
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 using namespace omnetpp;
-#include "../supportClasses/MDMLib.h"
+#include <veins/modules/application/misbehaviorDetection/F2MDParameters.h>
 
 class MDMHistory {
     private:
     unsigned long nodePseudonym;
         int BSMNumV1;
         int BSMNumV2;
-        BsmCheck bsmCheckListV1[MAXMDMLENGTH];
-        BsmCheck bsmCheckListV2[MAXMDMLENGTH];
+        BsmCheck bsmCheckListV1[MAX_MDM_LENGTH];
+        BsmCheck bsmCheckListV2[MAX_MDM_LENGTH];
 
         void addBsmCheck(BsmCheck bsmCheckV1, BsmCheck bsmCheckV2);
         void setBsmCheck(int index, BsmCheck bsmCheckV1,BsmCheck bsmCheckV2);

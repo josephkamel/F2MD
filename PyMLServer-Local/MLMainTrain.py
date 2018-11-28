@@ -1,10 +1,23 @@
+"""
+/*******************************************************************************
+ * @author  Joseph Kamel
+ * @email   josephekamel@gmail.com
+ * @date    28/11/2018
+ * @version 2.0
+ *
+ * SCA (Secure Cooperative Autonomous systems)
+ * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
+ * All rights reserved.
+ *******************************************************************************/
+"""
+
 import os
 #from os import scandir
 from os.path import join
 import json
 import numpy as np
 from MLDataCollector import MlDataCollector
-from MLArrayStorage import MlArrayStorage
+from MLNodeStorage import MlNodeStorage
 from MLTrainer import MlTrainer
 from numpy import array
 import datetime
@@ -12,7 +25,7 @@ from tqdm import tqdm
 from sklearn import datasets
 from sklearn.externals import joblib
 
-RTreadDataFromFile = False
+RTreadDataFromFile = True
 RTtrainData = True
 RTpredict = True
 
@@ -22,7 +35,7 @@ class MlMain:
 	curDateStr = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
-	Storage = MlArrayStorage()
+	Storage = MlNodeStorage()
 	arrayLength = 20
 
 
@@ -30,7 +43,9 @@ class MlMain:
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile/saveFile_Mix_D20'
+
+	savePath = './saveFile/saveFile_D20'
+	dataPath = '/home/sca-team/Projects/F2MD/mdmSave/IRT-BSMs-Mix-V2-List/MDBsmsList_2018-11-27_12:47:34'
 
 	def init(self, version, AIType):
 
@@ -50,7 +65,11 @@ class MlMain:
 
 	def mlMain(self):
 		version = "V2"
+<<<<<<< HEAD:PyMLServer/MLMainTrain.py
 		AIType = "neural_network"
+=======
+		AIType = "MLP_L3N15"
+>>>>>>> 020e57c5ff416ec252eb2460b4728b62d04c3ba7:PyMLServer-Local/MLMainTrain.py
 
 		if not self.initiated:
 			self.init(version,AIType)
@@ -87,7 +106,7 @@ class MlMain:
 
 		ValuesData = []
 		TargetData = []
-
+		
 		for i in tqdm(range(0,len(filesNames))):
 		#for i in tqdm(range(0,100)):
 			s = filesNames[i]
@@ -117,10 +136,11 @@ class MlMain:
 
 	def getNodeArray(self,bsmJsom):
 		cur_array = self.getArray(bsmJsom)
+		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
 		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		self.Storage.add_array(pseudonym, time, cur_array)
-		returnArray = self.Storage.get_array(pseudonym, self.arrayLength)
+		self.Storage.add_array(receiverId,pseudonym, time, cur_array)
+		returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
 
 		#print "cur_array: " + str(cur_array)
 		#print "returnArray: " + str(returnArray)
@@ -152,7 +172,6 @@ class MlMain:
 		else:
 			numLabel = 1.0
 		
-		#valuesArray = array([rP,pP,sP,pC,sC,psC,phC,sA,bF,inT])
 		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
