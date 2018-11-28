@@ -2,7 +2,7 @@
  * @author  Joseph Kamel
  * @email   josephekamel@gmail.com
  * @date    28/11/2018
- * @version 1.1
+ * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -66,7 +66,7 @@ static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
 
 static bool writeSelfMsg = false;
 
@@ -83,7 +83,7 @@ static bool writeListReportsV1 = false;
 static bool writeListReportsV2 = false;
 
 static bool sendReportsV1 = false;
-static bool sendReportsV2 = false;
+static bool sendReportsV2 = true;
 static int maPortV1 = 9980;
 static int maPortV2 = 9981;
 
