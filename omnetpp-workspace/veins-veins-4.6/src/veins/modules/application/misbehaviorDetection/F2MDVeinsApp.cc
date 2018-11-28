@@ -1,25 +1,22 @@
 /*******************************************************************************
  * @author  Joseph Kamel
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 1.1
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
  * All rights reserved.
  *******************************************************************************/
 
-#include "JosephVeinsApp.h"
+#include "F2MDVeinsApp.h"
 
 Define_Module(JosephVeinsApp);
-
+//Simulation Parameters
 #define serialNumber "IRT-DEMO"
 #define savePath "../../../../../mdmSave/"
 
-//#define serialNumber "IRT-BSMs-Mix-V2-List"
-//#define savePath "/media/sca-team/DATA/DataF2MD/"
-
-static bool randomConf = false;
+#define randomConf false
 #define confPos 3.0
 #define confSpd 3.0/6.0
 #define confHea 0
@@ -35,10 +32,6 @@ static bool randomConf = false;
 static bool MixLocalAttacks = true;
 static bool RandomLocalMix = false;
 static int LastLocalAttackIndex = -1;
-//static attackTypes::Attacks MixAttacksList[] =
-//        { attackTypes::Disruptive, attackTypes::ConstSpeed,
-//                attackTypes::ConstPosOffset, attackTypes::Sybil,
-//                attackTypes::DataReplay, attackTypes::StaleMessages };
 
 static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstPosOffset, attackTypes::RandomPos,
@@ -73,7 +66,7 @@ static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 
@@ -89,28 +82,14 @@ static bool writeReportsV2 = false;
 static bool writeListReportsV1 = false;
 static bool writeListReportsV2 = false;
 
-
 static bool sendReportsV1 = false;
-static bool sendReportsV2 = true;
-int maPortV1 = 9980;
-int maPortV2 = 9981;
-
-static MDStatistics mdStats = MDStatistics();
+static bool sendReportsV2 = false;
+static int maPortV1 = 9980;
+static int maPortV2 = 9981;
 
 static bool enableVarThreV1 = false;
 static bool enableVarThreV2 = false;
-static VarThrePrintable varThrePrintableV1 = VarThrePrintable("AppV1");
-static VarThrePrintable varThrePrintableV2 = VarThrePrintable("AppV2");
-
-static bool setDate = false;
-static std::string curDate;
-
-double meanTimeV1 = 0;
-long numTimeV1 = 0;
-
-double meanTimeV2 = 0;
-long numTimeV2 = 0;
-
+//Simulation Parameters
 void JosephVeinsApp::initialize(int stage) {
 
     BaseWaveApplLayer::initialize(stage);
@@ -431,12 +410,12 @@ void JosephVeinsApp::treatAttackFlags() {
         }
     }
 
-    if ((simTime().dbl() - targetClearTime) > MAXTARGETTIME) {
+    if ((simTime().dbl() - targetClearTime) > MAX_TARGET_TIME) {
         targetClearTime = simTime().dbl();
         clearTargetNodes();
     }
 
-    if ((simTime().dbl() - accusedClearTime) > MAXACCUSEDTTIME) {
+    if ((simTime().dbl() - accusedClearTime) > MAX_ACCUSED_TIME) {
         accusedClearTime = simTime().dbl();
         clearAccusedNodes();
     }

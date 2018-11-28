@@ -1,8 +1,8 @@
 /*******************************************************************************
 * @author  Joseph Kamel 
 * @email   josephekamel@gmail.com
-* @date    11/04/2018
-* @version 1.0
+* @date    28/11/2018
+* @version 1.1
 *
 * SCA (Secure Cooperative Autonomous systems)
 * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -22,9 +22,9 @@ class NodeTable {
 
 private:
     int nodesNum;
-    NodeHistory nodeHistoryList[MAXNODESLENGTH];
-    MDMHistory mdmHistoryList[MAXNODESLENGTH];
-    unsigned long nodePseudos[MAXNODESLENGTH];
+    NodeHistory nodeHistoryList[MAX_NODES_LENGTH];
+    MDMHistory mdmHistoryList[MAX_NODES_LENGTH];
+    unsigned long nodePseudos[MAX_NODES_LENGTH];
 
     NodeHistory nullNode;
     MDMHistory nullMDMNode;

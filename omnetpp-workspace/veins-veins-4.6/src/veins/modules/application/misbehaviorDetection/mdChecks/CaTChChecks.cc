@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel 
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 1.1
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -333,12 +333,12 @@ double CaTChChecks::SuddenAppearenceCheck(Coord receiverPosition,
     double distance = mdmLib.calculateDistance(senderPosition,
             receiverPosition);
     double r1 = senderPositionConfidence.x;
-    double r2 = SUDDEN_APPEARENCE_RANGE + receiverPositionConfidence.x;
+    double r2 = MAX_SA_RANGE + receiverPositionConfidence.x;
 
     double factor = 0;
     if (r1 <= 0) {
         if (distance
-                < (SUDDEN_APPEARENCE_RANGE + receiverPositionConfidence.x)) {
+                < (MAX_SA_RANGE + receiverPositionConfidence.x)) {
             factor = 0;
         } else {
             factor = 1;

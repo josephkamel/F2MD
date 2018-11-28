@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 1.1
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -50,11 +50,6 @@ using namespace Veins;
 #include <stdlib.h>
 #include <stdio.h>
 #include <linux/limits.h>
-#include "enumTypes/AttackTypes.h"
-#include "enumTypes/PseudoChangeTypes.h"
-#include "enumTypes/ReportTypes.h"
-#include "enumTypes/MbTypes.h"
-#include "enumTypes/MdAppTypes.h"
 
 #include "supportClasses/BsmPrintable.h"
 
@@ -67,15 +62,28 @@ using namespace Veins;
 #define mlPortV1 9997
 #define mlPortV2 9998
 
-static unsigned long targetNodes[MAXTARGETLENGTH];
+static unsigned long targetNodes[MAX_TARGET_LENGTH];
 static int targetNodesLength = 0;
 static double targetClearTime = 0;
-static unsigned long accusedNodes[MAXACCUSEDLENGTH];
+static unsigned long accusedNodes[MAX_ACCUSED_LENGTH];
 static int accusedNodesLength = 0;
 static double accusedClearTime = 0;
 
 static bool linkInit = false;
 static LinkControl linkControl = LinkControl();
+
+static bool setDate = false;
+static std::string curDate;
+
+double meanTimeV1 = 0;
+long numTimeV1 = 0;
+
+double meanTimeV2 = 0;
+long numTimeV2 = 0;
+
+static MDStatistics mdStats = MDStatistics();
+static VarThrePrintable varThrePrintableV1 = VarThrePrintable("AppV1");
+static VarThrePrintable varThrePrintableV2 = VarThrePrintable("AppV2");
 
 class JosephVeinsApp: public BaseWaveApplLayer {
 private:

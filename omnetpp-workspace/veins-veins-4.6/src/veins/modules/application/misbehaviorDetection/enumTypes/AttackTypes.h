@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author  Joseph Kamel
  * @email   josephekamel@gmail.com
- * @date    11/04/2018
- * @version 1.0
+ * @date    28/11/2018
+ * @version 1.1
  *
  * SCA (Secure Cooperative Autonomous systems)
  * Copyright (c) 2013, 2018 Institut de Recherche Technologique SystemX
@@ -15,29 +15,6 @@
 #include <iostream>
 
 namespace attackTypes {
-
-#define RandomPosX 3900
-#define RandomPosY 1700
-
-#define RandomPosOffsetX 70
-#define RandomPosOffsetY 70
-
-#define RandomSpeedX 40
-#define RandomSpeedY 40
-
-#define RandomSpeedOffsetX 7
-#define RandomSpeedOffsetY 7
-
-#define StopProb 0.01
-
-#define StaleMessages_Buffer 5 //less than 10
-
-#define DosMultipleFreq 4 // times faster
-
-#define SybilVehNumber 5 // max 10
-#define SelfSybil false // max 10
-#define SybilDistanceX 5 // meters
-#define SybilDistanceY 2 // meters
 
 enum Attacks {
     Genuine = 0,
