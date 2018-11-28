@@ -30,14 +30,7 @@ class MlMain:
 	deltaCall = 1000
 
 	clf = None
-	savePath = './saveFile/saveFile_Mix_D20_3L15N'
-	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/Test'
-<<<<<<< HEAD
-	dataPath = '/media/sca-team/DATA/DataF2MD/IRT-Reports-Mix-V2-List/MDBsmsList_2018-11-20_17:35:42'
-=======
-	dataPath = '/media/joseph/Windows/DataF2MD/IRT-MIX-V2/MDBsms_2018-11-7_6:17:43'
-	#dataPath = '/media/sca-team/ef5ca73c-c8ef-4e03-a88c-a54bcbb15b0e/DataF2MD/IRT-BSMS-MIX-V2/MDBsms_2018-11-5_15:22:52'
->>>>>>> 55f2460382f1506909d14701d91df4cbb08f2d0c
+	savePath = './saveFile/saveFile_Mix_D20'
 
 	def init(self, version, AIType):
 
@@ -57,11 +50,8 @@ class MlMain:
 
 	def mlMain(self):
 		version = "V2"
-<<<<<<< HEAD
-		AIType = "neural_network_3L15N"
-=======
 		AIType = "neural_network"
->>>>>>> 55f2460382f1506909d14701d91df4cbb08f2d0c
+
 		if not self.initiated:
 			self.init(version,AIType)
 			self.initiated = True
