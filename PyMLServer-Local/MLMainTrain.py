@@ -65,11 +65,7 @@ class MlMain:
 
 	def mlMain(self):
 		version = "V2"
-<<<<<<< HEAD:PyMLServer/MLMainTrain.py
-		AIType = "neural_network"
-=======
 		AIType = "MLP_L3N15"
->>>>>>> 020e57c5ff416ec252eb2460b4728b62d04c3ba7:PyMLServer-Local/MLMainTrain.py
 
 		if not self.initiated:
 			self.init(version,AIType)

@@ -27,8 +27,8 @@ from sklearn.externals import joblib
 
 import time
 
-RTtrain = False
-RTcollectData = False
+RTtrain = True
+RTcollectData = True
 RTreadDataFromFile = False
 RTpredict = True
 
@@ -75,7 +75,7 @@ class MlMain:
 		start_time = time.time()
 
 		bsmJsom = json.loads(bsmJsonString)
-		curArray = self.getNodeArray(bsmJsom)
+		curArray = self.getNodeArray(bsmJsom,AIType)
 
 		if RTcollectData:
 			if self.collectDur < self.deltaCall:
@@ -104,8 +104,8 @@ class MlMain:
 		else:
 			if RTpredict:
 				prediction = self.clf.predict(array([curArray[0]]))
-				#print "========================================"
-				if prediction[0] == 0.0:
+				#print "======================================== " + str(prediction) + str(prediction[0][0]) + str(prediction[0][1])
+				if prediction[0][0]>prediction[0][1] :
 					return_value = False
 				else:
 					return_value = True
@@ -159,7 +159,7 @@ class MlMain:
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'_'+version+'/' +s, 'r').read()
 				bsmJsom = json.loads(bsmJsonString)
-				curArray = self.getNodeArray(bsmJsom)
+				curArray = self.getNodeArray(bsmJsom,AIType)
 				self.DataCollector.collectData(curArray)
 
 		self.DataCollector.saveData()
@@ -170,13 +170,20 @@ class MlMain:
 		#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Finished!"
 
-	def getNodeArray(self,bsmJsom):
+	def getNodeArray(self,bsmJsom,AIType):
 		cur_array = self.getArray(bsmJsom)
 		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
 		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
 		self.Storage.add_array(receiverId,pseudonym, time, cur_array)
-		returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'SVM'):
+			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'MLP_L1N15'):
+			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'MLP_L3N15'):
+			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'LSTM'):
+			returnArray = self.Storage.get_array_lstm(receiverId,pseudonym, self.arrayLength)
 
 		#print "cur_array: " + str(cur_array)
 		#print "returnArray: " + str(returnArray)
@@ -207,7 +214,7 @@ class MlMain:
 		else:
 			numLabel = 1.0
 		
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
+		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 

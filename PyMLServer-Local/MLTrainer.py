@@ -18,6 +18,14 @@ from os import listdir
 from os.path import isfile, join
 import numpy as np
 
+from keras.models import Sequential  
+from keras.layers.core import Dense, Activation, Dropout  
+from keras.layers.recurrent import LSTM
+
+from keras.models import load_model
+
+from keras.utils import to_categorical
+
 class MlTrainer:
 
 	AIType = 'NotSet'
@@ -49,20 +57,35 @@ class MlTrainer:
 
 		if(self.AIType == 'SVM'):
 			X, y = self.valuesCollection, self.targetCollection
+			y = to_categorical(y)
 			clf = SVC(gamma=0.001, C=100.)
 			clf.fit(X, y)
 
 		if(self.AIType == 'MLP_L1N15'):
 			X, y = self.valuesCollection, self.targetCollection
+			y = to_categorical(y)
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
 			clf.fit(X, y)
 		if(self.AIType == 'MLP_L3N15'):
 			X, y = self.valuesCollection, self.targetCollection
+			y = to_categorical(y)
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,15,15,), random_state=1)
 			clf.fit(X, y)
 
-		joblib.dump(clf, self.savePath + '/clf_' + self.AIType + '_'+self.curDateStr+'.pkl')
+		if(self.AIType == 'LSTM'):
+			print self.valuesCollection.shape
+			print self.targetCollection.shape
+			X, y = self.valuesCollection, self.targetCollection
+			y = to_categorical(y)
+			clf = Sequential()  
+			clf.add(LSTM(128, return_sequences=True, input_shape=(X.shape[1], X.shape[2])))
+			clf.add(LSTM(128, return_sequences=True))
+			clf.add(LSTM(128, return_sequences=False))
+			clf.add(Dense(y.shape[1],activation='softmax'))  
+			clf.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['accuracy'])
+			clf.fit(X, y,epochs=30, batch_size=64)  
 
+		joblib.dump(clf, self.savePath + '/clf_' + self.AIType + '_'+self.curDateStr+'.pkl')
 
 	def loadData(self):
 		self.valuesCollection = np.load(self.savePath + '/' +self.valuesFileStr)

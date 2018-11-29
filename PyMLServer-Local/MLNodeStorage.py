@@ -38,6 +38,9 @@ class MlNodeStorage:
 	def get_array(self,my_id, test_id, batch_size):
 		index = self.id_index.index(my_id)
 		return self.id_storage[index].get_array(test_id, batch_size)
+	def get_array_lstm(self,my_id, test_id, batch_size):
+		index = self.id_index.index(my_id)
+		return self.id_storage[index].get_array_lstm(test_id, batch_size)
 
 	def get_latest_time(self,my_id,test_id):
 		try:

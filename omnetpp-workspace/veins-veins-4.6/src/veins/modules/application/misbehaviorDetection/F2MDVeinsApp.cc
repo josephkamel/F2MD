@@ -17,8 +17,8 @@ Define_Module(JosephVeinsApp);
 #define savePath "../../../../../mdmSave/"
 
 #define randomConf false
-#define confPos 3
-#define confSpd 3/6.0
+#define confPos 3.0
+#define confSpd 0.5
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
@@ -66,7 +66,7 @@ static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
 
 static bool writeSelfMsg = false;
 

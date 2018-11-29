@@ -60,23 +60,28 @@ class MlDataCollector:
 		self.initCollection = True	
 
 	def collectData(self,bsmArray):
-		self.ValuesData.append(bsmArray[0])
-		self.TargetData.append(bsmArray[1])
-
-	def collectDataOld(self,bsmArray):
-		if not self.initCollection:
-			self.initCollection = True
-			self.valuesCollection = np.array([bsmArray[0]])
-			self.targetCollection = bsmArray[1]
-		else:
-			self.valuesCollection = np.vstack([self.valuesCollection,bsmArray[0]])
-			self.targetCollection = np.concatenate([self.targetCollection,bsmArray[1]])
+		self.ValuesData.append([array(bsmArray[0])])
+		self.TargetData.append([array(bsmArray[1])])
 
 	def initValuesData(self,New_Rows):
+		if self.valuesCollection.shape[0] == 0:
+			self.valuesCollection = np.concatenate([row for row in New_Rows])
+		else:
+			addTargetCollection = np.concatenate([row for row in New_Rows])
+			self.valuesCollection  = np.concatenate([self.valuesCollection, addTargetCollection])
+		
+
+	def initValuesData_old(self,New_Rows):
 		if self.valuesCollection.shape[0] == 0:
 			self.valuesCollection = np.vstack([row for row in New_Rows])
 		else:
 			self.valuesCollection = np.vstack([self.valuesCollection, [row for row in New_Rows]])
+
+	def initTargetData_old(self,New_Rows):
+		if self.targetCollection.shape[0] == 0:
+			self.targetCollection = np.vstack([row for row in New_Rows])
+		else:
+			self.targetCollection = np.vstack([self.targetCollection, [row for row in New_Rows]])
 
 	def initTargetData(self,New_Rows):
 		if self.targetCollection.shape[0] == 0:

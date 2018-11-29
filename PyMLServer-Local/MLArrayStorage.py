@@ -69,10 +69,35 @@ class MlArrayStorage:
 	def get_array(self, id, batch_size):
 		index = self.id_index.index(id)
 		list_X = self.id_array_x[index][-batch_size:]
-		ret_array = [sum(x) for x in zip(*list_X)]
 
+		app_ary = array([[len(list_X)]])
+		for i in range(0,len(list_X)-1):
+			app_ary = np.append(app_ary.tolist(),[[len(list_X)]],axis=0)
+		list_X = np.append(list_X,app_ary,axis=1)
+		
+		ret_array = [sum(x) for x in zip(*list_X)]
 		list_Y = self.id_array_y[index][-batch_size:]
 		return array([array(ret_array),list_Y[-1]])
+
+	def get_array_lstm(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X = self.id_array_x[index][-batch_size:]
+
+		if len(list_X)<batch_size:
+			list_X_Ret = [0,0,0,0,0,0,0,0,0,0]
+			for i in range(0,batch_size-len(list_X) - 1):
+				list_X_Ret = np.vstack((list_X_Ret,[0,0,0,0,0,0,0,0,0,0]))
+			#print list_X_Ret
+			list_X_Ret = np.vstack((list_X_Ret,list_X))
+			list_X = list_X_Ret
+
+		#nx , ny = np.array(list_X).shape
+		#list_X = np.array(list_X).reshape((nx*ny))
+
+		list_Y = self.id_array_y[index][-batch_size:]
+		ret_array = array([list_X,list_Y[-1]])
+		#print ret_array
+		return ret_array
 
 	def get_latest_time(self,id): 
 		try:
