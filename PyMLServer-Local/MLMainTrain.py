@@ -38,14 +38,13 @@ class MlMain:
 	Storage = MlNodeStorage()
 	arrayLength = 20
 
-
 	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
 
 	savePath = './saveFile/saveFile_D20'
-	dataPath = '/home/sca-team/Projects/F2MD/mdmSave/IRT-BSMs-Mix-V2-List/MDBsmsList_2018-11-27_12:47:34'
+	dataPath = '/home/sca-team/Projects/F2MD/mdmSave/IRT-BSMs-Reports-V2/MDBsmsList_2018-11-29_18:18:23'
 
 	def init(self, version, AIType):
 
@@ -59,13 +58,13 @@ class MlMain:
 
 		self.trainedModelExists(AIType)
 		if RTreadDataFromFile:
-			self.ReadDataFromFile( AIType)
+			self.ReadDataFromFile(AIType)
 		if RTtrainData:
 			self.TrainData(AIType)
 
 	def mlMain(self):
 		version = "V2"
-		AIType = "MLP_L3N15"
+		AIType = "LSTM"
 
 		if not self.initiated:
 			self.init(version,AIType)
@@ -103,19 +102,19 @@ class MlMain:
 		ValuesData = []
 		TargetData = []
 		
-		for i in tqdm(range(0,len(filesNames))):
-		#for i in tqdm(range(0,100)):
+		#for i in tqdm(range(0,len(filesNames))):
+		for i in tqdm(range(0,3000)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
 				bsmJsom = json.loads(bsmJsonString)
-				curArray = self.getNodeArray(bsmJsom)
+				curArray = self.getNodeArray(bsmJsom,AIType)
 				self.DataCollector.collectData(curArray)
 			if s.endswith(".lbsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
 				bsmJsom = json.loads(bsmJsonString)
 				for bsmItem in bsmJsom:
-					curArray = self.getNodeArray(bsmItem)
+					curArray = self.getNodeArray(bsmItem,AIType)
 					self.DataCollector.collectData(curArray)
 
 		self.DataCollector.saveData()
@@ -130,51 +129,25 @@ class MlMain:
 		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 		print ("Training " + str(self.dataPath) + " Finished!")
 
-	def getNodeArray(self,bsmJsom):
-		cur_array = self.getArray(bsmJsom)
+
+	def getNodeArray(self,bsmJsom,AIType):
 		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
 		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		self.Storage.add_array(receiverId,pseudonym, time, cur_array)
-		returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+		self.Storage.add_bsm(receiverId,pseudonym, time, bsmJsom)
+		if(AIType == 'SVM'):
+			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'MLP_L1N15'):
+			returnArray = self.Storage.get_array_MLP_L1N15(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'MLP_L3N25'):
+			returnArray = self.Storage.get_array_MLP_L3N25(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'LSTM'):
+			returnArray = self.Storage.get_array_lstm(receiverId,pseudonym, self.arrayLength)
 
 		#print "cur_array: " + str(cur_array)
 		#print "returnArray: " + str(returnArray)
 		return returnArray
 
-
-	def getArray(self,bsmJsom):
-		rP = bsmJsom['BsmPrint']['BsmCheck']['rP']
-		pP = bsmJsom['BsmPrint']['BsmCheck']['pP']
-		sP = bsmJsom['BsmPrint']['BsmCheck']['sP']
-		pC = bsmJsom['BsmPrint']['BsmCheck']['pC']
-		sC = bsmJsom['BsmPrint']['BsmCheck']['sC']
-		psC = bsmJsom['BsmPrint']['BsmCheck']['psC']
-		phC = bsmJsom['BsmPrint']['BsmCheck']['phC']
-		sA = bsmJsom['BsmPrint']['BsmCheck']['sA']
-		#sA = 1
-		bF = bsmJsom['BsmPrint']['BsmCheck']['bF']
-		inT = 1
-		for x in bsmJsom['BsmPrint']['BsmCheck']['inT']:
-			if inT>x['uVal']:
-				inT = x['uVal']
-
-		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		label = bsmJsom['BsmPrint']['Metadata']['mbType']
-
-		#label = 0
-		if(label == 'Genuine'):
-			numLabel = 0.0
-		else:
-			numLabel = 1.0
-		
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT,1])
-		targetArray = array([numLabel])
-		returnArray = array([valuesArray,targetArray])
-
-		#print "returnArray: " + str(returnArray)
-		#returnArray = returnArray.astype(np.float)
-		return returnArray
 
 
 def main():

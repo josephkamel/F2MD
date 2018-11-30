@@ -14,6 +14,7 @@
 Define_Module(JosephVeinsApp);
 //Simulation Parameters
 #define serialNumber "IRT-DEMO"
+//#define savePath "/media/sca-team/DATA/DataF2MD/"
 #define savePath "../../../../../mdmSave/"
 
 #define randomConf false
@@ -39,10 +40,8 @@ static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
         attackTypes::ConstSpeedOffset, attackTypes::RandomSpeed,
         attackTypes::RandomSpeedOffset, attackTypes::EventualStop,
         attackTypes::Disruptive, attackTypes::DataReplay,
-        attackTypes::StaleMessages,attackTypes::Sybil,
-        attackTypes::DoS, attackTypes::DoSRandom, attackTypes::DoSDisruptive
-        };
-
+        attackTypes::StaleMessages, attackTypes::Sybil, attackTypes::DoS,
+        attackTypes::DoSRandom, attackTypes::DoSDisruptive };
 
 #define LOCAL_ATTACKER_PROB 0.1
 #define LOCAL_ATTACK_TYPE attackTypes::RandomPos
@@ -65,8 +64,15 @@ static bool EnableV2 = true;
 static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
+static mdChecksVersionTypes::ChecksVersion checksVersionV1 =
+        mdChecksVersionTypes::CatchChecks;
+static mdChecksVersionTypes::ChecksVersion checksVersionV2 =
+        mdChecksVersionTypes::CatchChecks;
+
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::PyBridgeApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
+
+
 
 static bool writeSelfMsg = false;
 
@@ -78,7 +84,6 @@ static bool writeListBsmsV2 = false;
 //writeReport
 static bool writeReportsV1 = false;
 static bool writeReportsV2 = false;
-
 static bool writeListReportsV1 = false;
 static bool writeListReportsV2 = false;
 
@@ -304,7 +309,8 @@ void JosephVeinsApp::setMDApp(mdAppTypes::App appTypeV1,
 static double totalGenuine = 0;
 static double totalLocalAttacker = 0;
 static double totalGlobalAttacker = 0;
-mbTypes::Mbs JosephVeinsApp::induceMisbehavior(double localAttacker, double globalAttacker) {
+mbTypes::Mbs JosephVeinsApp::induceMisbehavior(double localAttacker,
+        double globalAttacker) {
 
     if (simTime().dbl() < START_ATTACK) {
         return mbTypes::Genuine;
@@ -315,16 +321,18 @@ mbTypes::Mbs JosephVeinsApp::induceMisbehavior(double localAttacker, double glob
         return mbTypes::Genuine;
     }
 
-    double realFactor = totalLocalAttacker / (totalGenuine + totalLocalAttacker);
+    double realFactor = totalLocalAttacker
+            / (totalGenuine + totalLocalAttacker);
     if (localAttacker > realFactor) {
         totalLocalAttacker++;
         return mbTypes::LocalAttacker;
     } else {
-        double realGFactor = totalGlobalAttacker / (totalGenuine + totalGlobalAttacker);
+        double realGFactor = totalGlobalAttacker
+                / (totalGenuine + totalGlobalAttacker);
         if (globalAttacker > realGFactor) {
             totalGlobalAttacker++;
             return mbTypes::GlobalAttacker;
-        }else{
+        } else {
             totalGenuine++;
             return mbTypes::Genuine;
         }
@@ -437,12 +445,27 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
     switch (version) {
     case 1: {
         std::string mdv = "V1";
-        LegacyChecks mdm(myPseudonym, curPosition, curSpeed,
-                Coord(myWidth, myLength), curHeading, &linkControl);
-//        CaTChChecks mdm-c(myPseudonym, curPosition, curPositionConfidence,
-//                curHeading, curHeadingConfidence, Coord(myWidth, myLength));
-
-        bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
+        switch (checksVersionV1) {
+        case mdChecksVersionTypes::LegacyChecks: {
+            LegacyChecks mdm(myPseudonym, curPosition, curSpeed,
+                    Coord(myWidth, myLength), curHeading, &linkControl);
+            bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
+        }
+            break;
+        case mdChecksVersionTypes::CatchChecks: {
+            CaTChChecks mdm(myPseudonym, curPosition, curPositionConfidence,
+                    curHeading, curHeadingConfidence, Coord(myWidth, myLength),
+                    &linkControl);
+            bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
+        }
+            break;
+        default: {
+            LegacyChecks mdm(myPseudonym, curPosition, curSpeed,
+                    Coord(myWidth, myLength), curHeading, &linkControl);
+            bsmCheckV1 = mdm.CheckBSM(bsm, &detectedNodes);
+        }
+            break;
+        }
 
         clock_t begin = clock();
 
@@ -488,8 +511,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             if (sendReportsV1) {
                 sendReport(reportBase, mdv, bsmCheckV1, bsm);
             }
-        } else if(myMdType==mbTypes::GlobalAttacker){
-            MDReport reportBase = mdGlobalAttack.launchAttack(myAttackType, bsm);
+        } else if (myMdType == mbTypes::GlobalAttacker) {
+            MDReport reportBase = mdGlobalAttack.launchAttack(myAttackType,
+                    bsm);
 
             if (writeReportsV1) {
                 writeReport(reportBase, mdv, bsmCheckV1, bsm);
@@ -551,11 +575,36 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
     }
     case 2: {
         std::string mdv = "V2";
-        CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
-                curHeading, curHeadingConfidence, Coord(myWidth, myLength),
-                &linkControl);
 
-        BsmCheck bsmCheckV2 = mdmV2.CheckBSM(bsm, &detectedNodes);
+        BsmCheck bsmCheckV2;
+
+        switch (checksVersionV2) {
+        case mdChecksVersionTypes::LegacyChecks: {
+            LegacyChecks mdm(myPseudonym, curPosition, curSpeed,
+                    Coord(myWidth, myLength), curHeading, &linkControl);
+            bsmCheckV2 = mdm.CheckBSM(bsm, &detectedNodes);
+        }
+            break;
+        case mdChecksVersionTypes::CatchChecks: {
+            CaTChChecks mdm(myPseudonym, curPosition, curPositionConfidence,
+                    curHeading, curHeadingConfidence, Coord(myWidth, myLength),
+                    &linkControl);
+            bsmCheckV2 = mdm.CheckBSM(bsm, &detectedNodes);
+        }
+            break;
+        default: {
+            LegacyChecks mdm(myPseudonym, curPosition, curSpeed,
+                    Coord(myWidth, myLength), curHeading, &linkControl);
+            bsmCheckV2 = mdm.CheckBSM(bsm, &detectedNodes);
+        }
+            break;
+        }
+
+//        CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
+//                curHeading, curHeadingConfidence, Coord(myWidth, myLength),
+//                &linkControl);
+//
+//       BsmCheck bsmCheckV2  = mdmV2.CheckBSM(bsm, &detectedNodes);
 
         clock_t begin = clock();
 
@@ -603,8 +652,9 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                 sendReport(reportBase, mdv, bsmCheckV2, bsm);
             }
 
-        }else if(myMdType==mbTypes::GlobalAttacker){
-            MDReport reportBase = mdGlobalAttack.launchAttack(myAttackType, bsm);
+        } else if (myMdType == mbTypes::GlobalAttacker) {
+            MDReport reportBase = mdGlobalAttack.launchAttack(myAttackType,
+                    bsm);
 
             if (writeReportsV2) {
                 writeReport(reportBase, mdv, bsmCheckV2, bsm);

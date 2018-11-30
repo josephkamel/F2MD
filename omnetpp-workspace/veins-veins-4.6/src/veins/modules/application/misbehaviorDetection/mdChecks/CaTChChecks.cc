@@ -109,7 +109,7 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
 
     double attFact = mdmLib.gaussianSum(1, 1 / 3);
     if (time >= 1) {
-        attFact = 1;
+        attFact = time;
     }
 
     if (time < MAX_TIME_DELTA) {
@@ -147,22 +147,13 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
 //            factor = 0;
 //        }
 
-        if (factor < 0) {
+
+
+        if (factor < 00) {
             std::cout << "=======================================" << '\n';
-        std::cout << " maxspeed - theoreticalSpeed:" << maxspeed - theoreticalSpeed << '\n';
-        std::cout << " theoreticalSpeed - minspeed:" << theoreticalSpeed - minspeed << '\n';
-        std::cout << " curR:" << - curR << '\n';
-        std::cout << " oldR:" << oldR << '\n';
-
-            std::cout << " Min:" << minfactor << " Max:" << maxfactor << '\n';
-            std::cout << " time:" << time << '\n';
-            std::cout << " MaxSpeed:" << maxspeed << '\n';
-            std::cout << " minspeed:" << minspeed << '\n';
-            std::cout << " theoreticalSpeed:" << theoreticalSpeed << '\n';
-            std::cout << " maxfactor:" << maxfactor << '\n';
-            std::cout << " minfactor:" << minfactor << '\n';
-
-
+            std::cout <<" time:" << time << " distance:" << distance << '\n';
+            std::cout << " maxspeed:" << maxspeed << " minspeed:" << minspeed << " theoreticalSpeed:" << theoreticalSpeed << '\n';
+        std::cout << " maxfactor:" << maxfactor << " minfactor:" << minfactor<<  '\n';
         }
 
         return factor;
@@ -555,6 +546,15 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage * bsm,
             SpeedPlausibilityCheck(mdmLib.calculateSpeed(bsm->getSenderSpeed()),
                     mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
 
+    bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
+
+
+
+    bsmCheck.setPositionPlausibility(
+            PositionPlausibilityCheck(senderPos, senderPosConfidence,
+                    mdmLib.calculateSpeed(bsm->getSenderSpeed()),
+                    mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
+
     if (detectedNodes->getNodeHistoryAddr(senderPseudonym)->getBSMNum() > 0) {
         bsmCheck.setPositionConsistancy(
                 PositionConsistancyCheck(senderPos, senderPosConfidence,
@@ -609,16 +609,9 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage * bsm,
                         myPosition, myPositionConfidence));
     }
 
-    bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 
 
-
-    bsmCheck.setPositionPlausibility(
-            PositionPlausibilityCheck(senderPos, senderPosConfidence,
-                    mdmLib.calculateSpeed(bsm->getSenderSpeed()),
-                    mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
-
-    //PrintBsmCheck(senderPseudonym, bsmCheck);
+   // PrintBsmCheck(senderPseudonym, bsmCheck);
 
     return bsmCheck;
 }

@@ -27,8 +27,8 @@ from sklearn.externals import joblib
 
 import time
 
-RTtrain = True
-RTcollectData = True
+RTtrain = False
+RTcollectData = False
 RTreadDataFromFile = False
 RTpredict = True
 
@@ -171,17 +171,16 @@ class MlMain:
 		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Finished!"
 
 	def getNodeArray(self,bsmJsom,AIType):
-		cur_array = self.getArray(bsmJsom)
 		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
 		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		self.Storage.add_array(receiverId,pseudonym, time, cur_array)
+		self.Storage.add_bsm(receiverId,pseudonym, time, bsmJsom)
 		if(AIType == 'SVM'):
 			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
 		if(AIType == 'MLP_L1N15'):
-			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
-		if(AIType == 'MLP_L3N15'):
-			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
+			returnArray = self.Storage.get_array_MLP_L1N15(receiverId,pseudonym, self.arrayLength)
+		if(AIType == 'MLP_L3N25'):
+			returnArray = self.Storage.get_array_MLP_L3N25(receiverId,pseudonym, self.arrayLength)
 		if(AIType == 'LSTM'):
 			returnArray = self.Storage.get_array_lstm(receiverId,pseudonym, self.arrayLength)
 
@@ -189,35 +188,3 @@ class MlMain:
 		#print "returnArray: " + str(returnArray)
 		return returnArray
 
-	def getArray(self,bsmJsom):
-		rP = bsmJsom['BsmPrint']['BsmCheck']['rP']
-		pP = bsmJsom['BsmPrint']['BsmCheck']['pP']
-		sP = bsmJsom['BsmPrint']['BsmCheck']['sP']
-		pC = bsmJsom['BsmPrint']['BsmCheck']['pC']
-		sC = bsmJsom['BsmPrint']['BsmCheck']['sC']
-		psC = bsmJsom['BsmPrint']['BsmCheck']['psC']
-		phC = bsmJsom['BsmPrint']['BsmCheck']['phC']
-		sA = bsmJsom['BsmPrint']['BsmCheck']['sA']
-		#sA = 1
-		bF = bsmJsom['BsmPrint']['BsmCheck']['bF']
-		inT = 1
-		for x in bsmJsom['BsmPrint']['BsmCheck']['inT']:
-			if inT>x['uVal']:
-				inT = x['uVal']
-
-		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		label = bsmJsom['BsmPrint']['Metadata']['mbType']
-
-		#label = 0
-		if(label == 'Genuine'):
-			numLabel = 0.0
-		else:
-			numLabel = 1.0
-		
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT])
-		targetArray = array([numLabel])
-		returnArray = array([valuesArray,targetArray])
-
-		#print "returnArray: " + str(returnArray)
-		#returnArray = returnArray.astype(np.float)
-		return returnArray

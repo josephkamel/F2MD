@@ -123,7 +123,7 @@ double LegacyChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         double minspeed = std::min(curSpeed, oldspeed);
 
         double deltaMax = maxspeed - theoreticalSpeed;
-        double deltaMin = minspeed - theoreticalSpeed;
+        double deltaMin = theoreticalSpeed - minspeed ;
 
         if (deltaMax > saveMax) {
             saveMax = deltaMax;
@@ -311,7 +311,7 @@ double LegacyChecks::BeaconFrequencyCheck(double timeNew, double timeOld) {
 double LegacyChecks::PositionHeadingConsistancyCheck(Coord curHeading,
         Coord curPosition, Coord oldPosition, double deltaTime,
         double curSpeed) {
-    if (deltaTime < 1.1) {
+    if (deltaTime < POS_HEADING_TIME) {
         double distance = mdmLib.calculateDistance(curPosition, oldPosition);
         if (distance < 1) {
             return 1;
@@ -356,6 +356,14 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage *bsm,
     bsmCheck.setSpeedPlausibility(
             SpeedPlausibilityCheck(
                     mdmLib.calculateSpeed(bsm->getSenderSpeed())));
+
+    bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
+
+    bsmCheck.setPositionPlausibility(
+            PositionPlausibilityCheck(senderPos,
+                    mdmLib.calculateSpeed(bsm->getSenderSpeed())));
+
+
 
 
     if (detectedNodes->getNodeHistoryAddr(senderPseudonym)->getBSMNum() > 0) {
@@ -403,12 +411,7 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage *bsm,
                 SuddenAppearenceCheck(senderPos, myPosition));
     }
 
-    bsmCheck.setPositionPlausibility(
-            PositionPlausibilityCheck(senderPos,
-                    mdmLib.calculateSpeed(bsm->getSenderSpeed())));
 
-
-    bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 /*
     std::cout<<"-------------------------------------------------------"<<"\n";
     std::cout<<"maxRange:"<<maxRange<<"\n";

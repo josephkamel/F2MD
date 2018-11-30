@@ -16,7 +16,7 @@
 #include "enumTypes/ReportTypes.h"
 #include "enumTypes/MbTypes.h"
 #include "enumTypes/MdAppTypes.h"
-
+#include "enumTypes/MdChecksVersionTypes.h"
 #define NETWORK 0
 // 0 IRT Network
 // 1 LuST Network

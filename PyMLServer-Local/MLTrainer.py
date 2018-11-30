@@ -64,12 +64,12 @@ class MlTrainer:
 		if(self.AIType == 'MLP_L1N15'):
 			X, y = self.valuesCollection, self.targetCollection
 			y = to_categorical(y)
-			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
+			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(25,), random_state=1)
 			clf.fit(X, y)
-		if(self.AIType == 'MLP_L3N15'):
+		if(self.AIType == 'MLP_L3N25'):
 			X, y = self.valuesCollection, self.targetCollection
 			y = to_categorical(y)
-			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,15,15,), random_state=1)
+			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(25,25,25,), random_state=1)
 			clf.fit(X, y)
 
 		if(self.AIType == 'LSTM'):
@@ -83,7 +83,7 @@ class MlTrainer:
 			clf.add(LSTM(128, return_sequences=False))
 			clf.add(Dense(y.shape[1],activation='softmax'))  
 			clf.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['accuracy'])
-			clf.fit(X, y,epochs=30, batch_size=64)  
+			clf.fit(X, y,epochs=10, batch_size=64)  
 
 		joblib.dump(clf, self.savePath + '/clf_' + self.AIType + '_'+self.curDateStr+'.pkl')
 

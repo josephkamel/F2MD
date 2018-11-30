@@ -45,7 +45,7 @@ class S(BaseHTTPRequestHandler):
 		#requestStr = urllib2.unquote((self.path));
 		#requestStr = unquote(self.path)
 
-		pred = self.globalMlMain.mlMain(version,self.path, 'MLP_L3N15')
+		pred = self.globalMlMain.mlMain(version,self.path, 'MLP_L3N25')
 		
 	   	# the response
 		self.wfile.write(pred)

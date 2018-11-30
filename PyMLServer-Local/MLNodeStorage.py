@@ -23,29 +23,27 @@ class MlNodeStorage:
 		self.id_index = []
 		self.id_storage = []
 	
-	def add_array(self,my_id, test_id, time, cur_array):
+	def add_bsm(self,my_id, test_id, time, cur_bsm):
 		index = 0
 		try:
 			index = self.id_index.index(my_id)
-			self.id_storage[index].add_array(test_id, time, cur_array)
+			self.id_storage[index].add_bsm(test_id, time, cur_bsm)
 
 		except ValueError:
 			self.id_index.append(my_id)
 			Storage = MlArrayStorage()
-			Storage.add_array(test_id, time, cur_array)
+			Storage.add_bsm(test_id, time, cur_bsm)
 			self.id_storage.append(Storage)
 
-	def get_array(self,my_id, test_id, batch_size):
+	def get_array(self,my_id, test_id):
 		index = self.id_index.index(my_id)
-		return self.id_storage[index].get_array(test_id, batch_size)
+		return self.id_storage[index].get_array(test_id)
+	def get_array_MLP_L1N15(self,my_id, test_id, batch_size):
+		index = self.id_index.index(my_id)
+		return self.id_storage[index].get_array_MLP_L1N15(test_id, batch_size)
+	def get_array_MLP_L3N25(self,my_id, test_id, batch_size):
+		index = self.id_index.index(my_id)
+		return self.id_storage[index].get_array_MLP_L3N25(test_id, batch_size)
 	def get_array_lstm(self,my_id, test_id, batch_size):
 		index = self.id_index.index(my_id)
 		return self.id_storage[index].get_array_lstm(test_id, batch_size)
-
-	def get_latest_time(self,my_id,test_id):
-		try:
-			index = self.id_index.index(my_id)
-			return self.id_storage[index].get_latest_time(test_id)
-		except ValueError:
-			return 0
-
