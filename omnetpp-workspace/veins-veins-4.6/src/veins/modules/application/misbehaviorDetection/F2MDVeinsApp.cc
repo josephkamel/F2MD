@@ -55,8 +55,8 @@ static attackTypes::Attacks MixLocalAttacksList[] = { attackTypes::ConstPos,
 // 1 MAStress
 
 static bool EnablePC = false;
-#define PC_TYPE pseudoChangeTypes::Periodical
-// Periodical, Disposable, DistanceBased, Random
+#define PC_TYPE pseudoChangeTypes::Car2car
+// Periodical, Disposable, DistanceBased, Random, Car2car
 //Detection Application
 
 static bool EnableV1 = true;
@@ -65,14 +65,12 @@ static bool SaveStatsV1 = true;
 static bool SaveStatsV2 = true;
 
 static mdChecksVersionTypes::ChecksVersion checksVersionV1 =
-        mdChecksVersionTypes::CatchChecks;
+        mdChecksVersionTypes::LegacyChecks;
 static mdChecksVersionTypes::ChecksVersion checksVersionV2 =
         mdChecksVersionTypes::CatchChecks;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
-
-
+static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 
@@ -121,7 +119,7 @@ void JosephVeinsApp::initialize(int stage) {
         myPcType = PC_TYPE;
         pseudoNum = 0;
 
-        pcPolicy = PCPolicy();
+        pcPolicy = PCPolicy(mobility->getCurrentPosition());
 
         pcPolicy.setMbType(myMdType);
         pcPolicy.setMdAuthority(&mdStats);
@@ -484,7 +482,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                     AppV1->getMinFactor());
         }
 
-        if (result) {
+        if (result && (myMdType == mbTypes::Genuine)) {
             MDReport reportBase;
             reportBase.setGenerationTime(simTime().dbl());
             reportBase.setSenderPseudo(myPseudonym);
@@ -623,7 +621,7 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
                     AppV2->getMinFactor());
         }
 
-        if (result) {
+        if (result && (myMdType == mbTypes::Genuine)) {
             MDReport reportBase;
             reportBase.setGenerationTime(simTime().dbl());
             reportBase.setSenderPseudo(myPseudonym);

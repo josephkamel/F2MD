@@ -28,8 +28,8 @@ Author: Lara CODECA [codeca@gmail.com]
     </output>
     
     <time>
-        <begin value="0"/>
-        <end value="100000"/>
+        <begin value="25200"/>
+        <end value="32400"/>
         <step-length value="0.1"/>
     </time>
 

@@ -11,12 +11,20 @@
 
 #include "PCPolicy.h"
 
-
 PCPolicy::PCPolicy() {
     messageToleranceBuffer = 0;
     lastChangeTime = simTime().dbl();
     cumulativeDistance = 0;
-    lastPos = Coord(0, 0, 0);
+    lastPos = Coord(0,0,0);
+}
+
+
+PCPolicy::PCPolicy(Coord curPos) {
+    messageToleranceBuffer = 0;
+    lastChangeTime = simTime().dbl();
+    cumulativeDistance = 0;
+    lastPos = curPos;
+
 }
 
 void PCPolicy::setMbType(mbTypes::Mbs mbType) {
@@ -74,6 +82,9 @@ void PCPolicy::checkPseudonymChange(pseudoChangeTypes::PseudoChange myPcType) {
     case pseudoChangeTypes::Random:
         randomPCP();
         break;
+    case pseudoChangeTypes::Car2car:
+        car2carPCP();
+        break;
     default:
         break;
     }
@@ -96,7 +107,6 @@ double PCPolicy::disposablePCP() {
 }
 
 double PCPolicy::distanceBasedPCP() {
-    MDMLib mdmLib = MDMLib();
     double stepDistance = mdmLib.calculateDistance(lastPos, (*curPosition));
     lastPos = (*curPosition);
 
@@ -104,6 +114,36 @@ double PCPolicy::distanceBasedPCP() {
     if (cumulativeDistance > Period_Change_Distance) {
         (*myPseudonym) = getNextPseudonym();
         cumulativeDistance = 0;
+    }
+}
+
+double PCPolicy::car2carPCP() {
+    double stepDistance = mdmLib.calculateDistance(lastPos, (*curPosition));
+    lastPos = (*curPosition);
+    cumulativeDistance = cumulativeDistance + stepDistance;
+    if(firstChange){
+        if(!randDistanceSet){
+           randDistance = genLib.RandomDouble(800, 1500);
+           randDistanceSet = true;
+        }
+        if (cumulativeDistance > randDistance) {
+            (*myPseudonym) = getNextPseudonym();
+            cumulativeDistance = 0;
+            firstChange = false;
+        }
+    }else{
+        if (cumulativeDistance > 800) {
+            if(!randTimeSet){
+               randTime = genLib.RandomDouble(120, 360);
+               changeTimerStart = simTime().dbl();
+               randTimeSet = true;
+            }
+            if ((simTime().dbl() - changeTimerStart) > randTime) {
+                (*myPseudonym) = getNextPseudonym();
+                cumulativeDistance = 0;
+                randTimeSet = false;
+            }
+        }
     }
 }
 

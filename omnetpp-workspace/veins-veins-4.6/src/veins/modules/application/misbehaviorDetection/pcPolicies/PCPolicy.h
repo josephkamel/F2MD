@@ -34,6 +34,7 @@ using namespace omnetpp;
 class PCPolicy {
 protected:
     GeneralLib genLib = GeneralLib();
+    MDMLib mdmLib = MDMLib();
 
     Coord* curPosition;
     int* myId;
@@ -48,8 +49,8 @@ public:
     unsigned long getNextPseudonym();
 
 public:
-
     PCPolicy();
+    PCPolicy(Coord curPos);
     void setCurPosition(Coord* curPosition);
     void setMyId(int* myId);
     void setMyPseudonym(unsigned long* myPseudonym);
@@ -66,6 +67,15 @@ public:
     double cumulativeDistance = 0;
     Coord lastPos = Coord(0, 0, 0);
     double distanceBasedPCP();
+
+    bool firstChange = true;
+    bool randDistanceSet = false;
+    double randDistance = 800;
+    bool randTimeSet = false;
+    double randTime = 120;
+    double changeTimerStart = 0;
+    double car2carPCP();
+
 
     double randomPCP();
 

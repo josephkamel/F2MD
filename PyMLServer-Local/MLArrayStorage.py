@@ -124,7 +124,28 @@ class MlArrayStorage:
 		else:
 			numLabel = 1.0
 
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
+		zeros = 0
+		if rP==0:
+			zeros=zeros+1
+		if pP==0:
+			zeros=zeros+1
+		if sP==0:
+			zeros=zeros+1
+		if pC==0:
+			zeros=zeros+1
+		if sC==0:
+			zeros=zeros+1
+		if psC==0:
+			zeros=zeros+1
+		if phC==0:
+			zeros=zeros+1
+		if bF==0:
+			zeros=zeros+1
+		if inT==0:
+			zeros=zeros+1
+
+		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT, zeros, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
+		#valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
 		#valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT])
 		#valuesArray = array([0,0,0,0,0,0,0,0,0,0, DeltaPos, PosConfidence,Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
 		targetArray = array([numLabel])

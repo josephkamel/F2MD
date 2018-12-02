@@ -36,14 +36,14 @@ class MlMain:
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
 	Storage = MlNodeStorage()
-	arrayLength = 20
+	arrayLength = 40
 
 	collectDur = 0
 	deltaCall = 1000
 
 	clf = None
 
-	savePath = './saveFile/saveFile_D20'
+	savePath = './saveFile/saveFile_D40'
 	dataPath = '/home/sca-team/Projects/F2MD/mdmSave/IRT-BSMs-Reports-V2/MDBsmsList_2018-11-29_18:18:23'
 
 	def init(self, version, AIType):
@@ -64,7 +64,7 @@ class MlMain:
 
 	def mlMain(self):
 		version = "V2"
-		AIType = "LSTM"
+		AIType = "MLP_L3N25"
 
 		if not self.initiated:
 			self.init(version,AIType)
@@ -102,8 +102,8 @@ class MlMain:
 		ValuesData = []
 		TargetData = []
 		
-		#for i in tqdm(range(0,len(filesNames))):
-		for i in tqdm(range(0,3000)):
+		for i in tqdm(range(0,len(filesNames))):
+		#for i in tqdm(range(0,3000)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
