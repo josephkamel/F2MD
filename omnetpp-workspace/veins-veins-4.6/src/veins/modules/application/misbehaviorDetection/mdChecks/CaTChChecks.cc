@@ -34,28 +34,25 @@ CaTChChecks::CaTChChecks(unsigned long myPseudonym, Coord myPosition,
     this->LinkC = LinkC;
 }
 
-double CaTChChecks::RangePlausibilityCheck(Coord receiverPosition,
-        Coord receiverPositionConfidence, Coord senderPosition,
-        Coord senderPositionConfidence) {
+double CaTChChecks::RangePlausibilityCheck(Coord * receiverPosition,
+        Coord * receiverPositionConfidence, Coord * senderPosition,
+        Coord * senderPositionConfidence) {
 
-    double distance = mdmLib.calculateDistance(senderPosition,
+    double distance = mdmLib.calculateDistancePtr(senderPosition,
             receiverPosition);
-    double senderR = senderPositionConfidence.x;
-    double receiverR = receiverPositionConfidence.x;
-    double factor = mdmLib.CircleCircleFactor(distance, senderR, receiverR,
-    MAX_PLAUSIBLE_RANGE);
+
+    double factor = mdmLib.CircleCircleFactor(distance,
+            senderPositionConfidence->x, receiverPositionConfidence->x,
+            MAX_PLAUSIBLE_RANGE);
 
     return factor;
 }
 
-double CaTChChecks::PositionConsistancyCheck(Coord curPosition,
-        Coord curPositionConfidence, Coord oldPosition,
-        Coord oldPositionConfidence, double time) {
-    double distance = mdmLib.calculateDistance(curPosition, oldPosition);
-    double curR = curPositionConfidence.x;
-    double oldR = oldPositionConfidence.x;
-
-    double factor = mdmLib.CircleCircleFactor(distance, curR, oldR,
+double CaTChChecks::PositionConsistancyCheck(Coord * curPosition,
+        Coord * curPositionConfidence, Coord * oldPosition,
+        Coord * oldPositionConfidence, double time) {
+    double distance = mdmLib.calculateDistancePtr(curPosition, oldPosition);
+    double factor = mdmLib.CircleCircleFactor(distance, curPositionConfidence->x, oldPositionConfidence->x,
     MAX_CONSISTANT_DISTANCE * time);
 
     return factor;
@@ -78,8 +75,8 @@ double CaTChChecks::SpeedConsistancyCheck(double curSpeed,
                 oldSpeedConfidence,
                 MAX_PLAUSIBLE_ACCEL * attFact);
     } else {
-        factor = mdmLib.SegmentSegmentFactor(fabs(speedDelta), curSpeedConfidence,
-                oldSpeedConfidence,
+        factor = mdmLib.SegmentSegmentFactor(fabs(speedDelta),
+                curSpeedConfidence, oldSpeedConfidence,
                 MAX_PLAUSIBLE_DECEL * attFact);
     }
     return factor;
@@ -99,13 +96,13 @@ double CaTChChecks::SpeedPlausibilityCheck(double speed,
     }
 }
 
+static double MGT_MAX = 0;
+static double MGT_MIN = 0;
 
-double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
-        Coord curPositionConfidence, Coord oldPosition,
-        Coord oldPositionConfidence, double curSpeed, double curSpeedConfidence,
+double CaTChChecks::PositionSpeedConsistancyCheck(Coord * curPosition,
+        Coord * curPositionConfidence, Coord * oldPosition,
+        Coord * oldPositionConfidence, double curSpeed, double curSpeedConfidence,
         double oldspeed, double oldSpeedConfidence, double time) {
-
-    MDMLib mdmLib;
 
     double attFact = mdmLib.gaussianSum(1, 1 / 3);
     if (time >= 1) {
@@ -114,20 +111,21 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
 
     if (time < MAX_TIME_DELTA) {
 
-        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+        double distance = mdmLib.calculateDistancePtr(curPosition, oldPosition);
         double theoreticalSpeed = distance / time;
         double maxspeed = std::max(curSpeed, oldspeed);
         double minspeed = std::min(curSpeed, oldspeed);
 
-        double curR = curPositionConfidence.x / time + curSpeedConfidence;
-        double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
+        double curR = curPositionConfidence->x / time + curSpeedConfidence;
+        double oldR = oldPositionConfidence->x / time + oldSpeedConfidence;
 
         double maxfactor = mdmLib.OneSidedCircleSegmentFactor(
-                maxspeed - theoreticalSpeed, curR, oldR, MAX_PLAUSIBLE_DECEL*time);
+                maxspeed - theoreticalSpeed, curR, oldR,
+                (MAX_PLAUSIBLE_DECEL+MAX_MGT_RNG) * time);
 
         double minfactor = mdmLib.OneSidedCircleSegmentFactor(
-                theoreticalSpeed - minspeed, curR, oldR, MAX_PLAUSIBLE_ACCEL*time);
-
+                theoreticalSpeed - minspeed, curR, oldR,
+                MAX_PLAUSIBLE_ACCEL * time);
 
         double factor = 1;
 
@@ -148,12 +146,13 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
 //        }
 
 
-
-        if (factor < 00) {
+        if (factor < 0) {
             std::cout << "=======================================" << '\n';
-            std::cout <<" time:" << time << " distance:" << distance << '\n';
-            std::cout << " maxspeed:" << maxspeed << " minspeed:" << minspeed << " theoreticalSpeed:" << theoreticalSpeed << '\n';
-        std::cout << " maxfactor:" << maxfactor << " minfactor:" << minfactor<<  '\n';
+            std::cout << " time:" << time << " distance:" << distance << '\n';
+            std::cout << " maxspeed:" << maxspeed << " minspeed:" << minspeed
+                    << " theoreticalSpeed:" << theoreticalSpeed << '\n';
+            std::cout << " curSpeed:" << curSpeed << '\n';
+            std::cout << " oldspeed:" << oldspeed << '\n';
         }
 
         return factor;
@@ -163,26 +162,23 @@ double CaTChChecks::PositionSpeedConsistancyCheck(Coord curPosition,
     }
 }
 
-double CaTChChecks::IntersectionCheck(Coord nodePosition1,
-        Coord nodePositionConfidence1, Coord nodePosition2,
-        Coord nodePositionConfidence2, Coord nodeHeading1, Coord nodeHeading2,
-        Coord nodeSize1, Coord nodeSize2) {
+double CaTChChecks::IntersectionCheck(Coord * nodePosition1,
+        Coord * nodePositionConfidence1, Coord * nodePosition2,
+        Coord * nodePositionConfidence2, Coord * nodeHeading1, Coord * nodeHeading2,
+        Coord * nodeSize1, Coord * nodeSize2) {
 
-//    double distance = mdmLib.calculateDistance(nodePosition1, nodePosition2);
+//    double distance = mdmLib.calculateDistancePtr(nodePosition1, nodePosition2);
 //    double intFactor = mdmLib.CircleIntersectionFactor(
 //            nodePositionConfidence1.x, nodePositionConfidence2.x, distance,
 //            MIN_INT_DIST);
 //    intFactor = 1 - intFactor;
 //    return intFactor;
 
-    double heading1 = mdmLib.calculateHeadingAngle(nodeHeading1);
-    double heading2 = mdmLib.calculateHeadingAngle(nodeHeading2);
+    double intFactor2 = mdmLib.EllipseEllipseIntersectionFactor(*nodePosition1,
+            *nodePositionConfidence1, *nodePosition2, *nodePositionConfidence2,
+            mdmLib.calculateHeadingAnglePtr(nodeHeading1), mdmLib.calculateHeadingAnglePtr(nodeHeading2), *nodeSize1, *nodeSize2);
 
-    double intFactor2 = mdmLib.EllipseEllipseIntersectionFactor(nodePosition1,
-            nodePositionConfidence1, nodePosition2, nodePositionConfidence2,
-            heading1, heading2, nodeSize1, nodeSize2);
-    intFactor2 = 1 - intFactor2;
-    double factor = intFactor2;
+    double factor = 1 - intFactor2;
 
     return factor;
 
@@ -208,8 +204,8 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
     double INTScore = 0;
     int INTNum = 0;
 
-    INTScore = IntersectionCheck(myPosition, myPositionConfidence, senderPos,
-            senderPosConfidence, myHeading, senderHeading, mySize, senderSize);
+    INTScore = IntersectionCheck(&myPosition, &myPositionConfidence, &senderPos,
+            &senderPosConfidence, &myHeading, &senderHeading, &mySize, &senderSize);
     if (INTScore < 1) {
         resultPseudo[INTNum] = myPseudonym;
         resultCheck[INTNum] = INTScore;
@@ -229,11 +225,11 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
                         varNode->getLatestBSMAddr()->getSenderLength());
 
                 INTScore = IntersectionCheck(
-                        varNode->getLatestBSMAddr()->getSenderPos(),
-                        varNode->getLatestBSMAddr()->getSenderPosConfidence(),
-                        senderPos, senderPosConfidence,
-                        varNode->getLatestBSMAddr()->getSenderHeading(),
-                        senderHeading, varSize, senderSize);
+                        &varNode->getLatestBSMAddr()->getSenderPos(),
+                        &varNode->getLatestBSMAddr()->getSenderPosConfidence(),
+                        &senderPos, &senderPosConfidence,
+                        &varNode->getLatestBSMAddr()->getSenderHeading(),
+                        &senderHeading, &varSize, &senderSize);
                 if (INTScore < 1) {
 
                     resultPseudo[INTNum] = detectedNodes->getNodePseudo(var);
@@ -254,35 +250,34 @@ InterTest CaTChChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
     return intertTest;
 }
 
-double CaTChChecks::SuddenAppearenceCheck(Coord receiverPosition,
-        Coord receiverPositionConfidence, Coord senderPosition,
-        Coord senderPositionConfidence) {
-    double distance = mdmLib.calculateDistance(senderPosition,
+double CaTChChecks::SuddenAppearenceCheck(Coord * receiverPosition,
+        Coord * receiverPositionConfidence, Coord * senderPosition,
+        Coord * senderPositionConfidence) {
+    double distance = mdmLib.calculateDistancePtr(senderPosition,
             receiverPosition);
-    double r1 = senderPositionConfidence.x;
-    double r2 = MAX_SA_RANGE + receiverPositionConfidence.x;
+
+    double r2 = MAX_SA_RANGE + receiverPositionConfidence->x;
 
     double factor = 0;
-    if (r1 <= 0) {
-        if (distance
-                < (MAX_SA_RANGE + receiverPositionConfidence.x)) {
+    if (senderPositionConfidence->x <= 0) {
+        if (distance < r2) {
             factor = 0;
         } else {
             factor = 1;
         }
     } else {
-        double area = mdmLib.calculateCircleCircleIntersection(r1, r2,
+        double area = mdmLib.calculateCircleCircleIntersection(senderPositionConfidence->x, r2,
                 distance);
 
-        factor = area / (PI * r1 * r1);
+        factor = area / (PI * senderPositionConfidence->x * senderPositionConfidence->x);
         factor = 1 - factor;
     }
 
     return factor;
 }
 
-double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
-        Coord senderPositionConfidence, double senderSpeed,
+double CaTChChecks::PositionPlausibilityCheck(Coord * senderPosition,
+        Coord * senderPositionConfidence, double senderSpeed,
         double senderSpeedConfidence) {
 
     double speedd = senderSpeed - senderSpeedConfidence;
@@ -294,7 +289,7 @@ double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
         return 1;
     }
 
-    double resolution = senderPositionConfidence.x / 10;
+    double resolution = senderPositionConfidence->x / 10;
     if (resolution < 1) {
         resolution = 1;
     }
@@ -303,80 +298,32 @@ double CaTChChecks::PositionPlausibilityCheck(Coord senderPosition,
     double failedCount = 0;
     double allCount = 1;
 
-    if (LinkC->calculateDistance(senderPosition, 50,
+    if (LinkC->calculateDistance(*senderPosition, 50,
             50) > MAX_DISTANCE_FROM_ROUTE) {
         failedCount++;
     }
 
-
     int resolutionTheta = 0;
 
-    for (double r = resolution; r < senderPositionConfidence.x;
+    for (double r = resolution; r < senderPositionConfidence->x;
             r = r + resolution) {
-        resolutionTheta = (int) (2 * PI * r / (resolution));
-        //std::cout << r<< "#" << resolution << "^" << resolutionTheta<<"-";
+        resolutionTheta = (int) (PI * r / (resolution));
+        //std::cout << r<< "#" << resolution << "^" << resolutionTheta<<"-"<<"\n";
         for (int t = 0; t < resolutionTheta; ++t) {
-            Coord p(senderPosition.x + r * cos(2 * PI * t / resolutionTheta),
-                    senderPosition.y + r * sin(2 * PI * t / resolutionTheta));
+            Coord p(senderPosition->x + r * cos(2 * PI * t / resolutionTheta),
+                    senderPosition->y + r * sin(2 * PI * t / resolutionTheta));
 
             if (LinkC->calculateDistance(p, 50, 50) > MAX_DISTANCE_FROM_ROUTE) {
                 failedCount++;
             }
+
             allCount++;
         }
         resolution = resolution + resolutionDelta;
     }
 
-
     return (1 - (failedCount / allCount));
 
-    /********************************************
-    double Intersection = 0;
-    int count = 5;
-
-    ObstacleControl* obstacles = ObstacleControlAccess().getIfExists();
-
-    Intersection = obstacles->calculateInsersion(senderPosition, resolution / 2,
-            resolution / 2);
-
-    for (double r = resolution; r < senderPositionConfidence.x;
-            r = r + resolution) {
-        int resolutionTheta = (int) (2 * PI * r / (resolution));
-        //std::cout << r<< "#" << resolution << "^" << resolutionTheta<<"-";
-        Coord pList[resolutionTheta];
-        for (int t = 0; t < resolutionTheta; ++t) {
-            Coord p(senderPosition.x + r * cos(2 * PI * t / resolutionTheta),
-                    senderPosition.y + r * sin(2 * PI * t / resolutionTheta));
-            pList[t] = p;
-            count++;
-        }
-
-        double IntersectionTemp = obstacles->calculateInsersionList(
-                senderPosition, r, r, pList, resolutionTheta);
-
-        Intersection = Intersection + IntersectionTemp;
-
-        resolution = resolution + resolutionDelta;
-    }
-    //return Intersection;
-
-//    if ((1 - (Intersection / count)) < 0.1) {
-//        std::cout
-//                << "*******************************************************************************"
-//                << '\n';
-//        std::cout
-//                << "*******************************************************************************Intersection: "
-//                << Intersection << " count:" << count << '\n';
-//        std::cout
-//                << "*******************************************************************************"
-//                << '\n';
-//    }
-
-    double factor = (1 - (Intersection / count));
-
-    return factor;
-
-    *************************************************************/
 }
 
 double CaTChChecks::BeaconFrequencyCheck(double timeNew, double timeOld) {
@@ -388,13 +335,13 @@ double CaTChChecks::BeaconFrequencyCheck(double timeNew, double timeOld) {
     }
 }
 
-double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
-        Coord curHeadingConfidence, Coord oldPosition,
-        Coord oldPositionConfidence, Coord curPosition,
-        Coord curPositionConfidence, double deltaTime, double curSpeed,
+double CaTChChecks::PositionHeadingConsistancyCheck(Coord * curHeading,
+        Coord * curHeadingConfidence, Coord * oldPosition,
+        Coord * oldPositionConfidence, Coord * curPosition,
+        Coord * curPositionConfidence, double deltaTime, double curSpeed,
         double curSpeedConfidence) {
     if (deltaTime < POS_HEADING_TIME) {
-        double distance = mdmLib.calculateDistance(curPosition, oldPosition);
+        double distance = mdmLib.calculateDistancePtr(curPosition, oldPosition);
         if (distance < 1) {
             return 1;
         }
@@ -403,22 +350,22 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
             return 1;
         }
 
-        double curHeadingAngle = mdmLib.calculateHeadingAngle(curHeading);
+        double curHeadingAngle = mdmLib.calculateHeadingAnglePtr(curHeading);
 
-        Coord relativePos = Coord(curPosition.x - oldPosition.x,
-                curPosition.y - oldPosition.y, curPosition.z - oldPosition.z);
-        double positionAngle = mdmLib.calculateHeadingAngle(relativePos);
+        Coord relativePos = Coord(curPosition->x - oldPosition->x,
+                curPosition->y - oldPosition->y, curPosition->z - oldPosition->z);
+        double positionAngle = mdmLib.calculateHeadingAnglePtr(&relativePos);
         double angleDelta = fabs(curHeadingAngle - positionAngle);
         if (angleDelta > 180) {
             angleDelta = 360 - angleDelta;
         }
 
-        double angleLow = angleDelta - curHeadingConfidence.x;
+        double angleLow = angleDelta - curHeadingConfidence->x;
         if (angleLow < 0) {
             angleLow = 0;
         }
 
-        double angleHigh = angleDelta + curHeadingConfidence.x;
+        double angleHigh = angleDelta + curHeadingConfidence->x;
         if (angleHigh > 180) {
             angleHigh = 180;
         }
@@ -426,7 +373,7 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
         double xLow = distance * cos(angleLow * PI / 180);
 
         double curFactorLow = 1;
-        if (curPositionConfidence.x == 0) {
+        if (curPositionConfidence->x == 0) {
             if (angleLow <= MAX_HEADING_CHANGE) {
                 curFactorLow = 1;
             } else {
@@ -434,12 +381,12 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
             }
         } else {
             curFactorLow = mdmLib.calculateCircleSegment(
-                    curPositionConfidence.x, curPositionConfidence.x + xLow)
-                    / (PI * curPositionConfidence.x * curPositionConfidence.x);
+                    curPositionConfidence->x, curPositionConfidence->x + xLow)
+                    / (PI * curPositionConfidence->x * curPositionConfidence->x);
         }
 
         double oldFactorLow = 1;
-        if (oldPositionConfidence.x == 0) {
+        if (oldPositionConfidence->x == 0) {
             if (angleLow <= MAX_HEADING_CHANGE) {
                 oldFactorLow = 1;
             } else {
@@ -447,15 +394,15 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
             }
         } else {
             oldFactorLow = 1
-                    - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
-                            oldPositionConfidence.x - xLow)
-                            / (PI * oldPositionConfidence.x
-                                    * oldPositionConfidence.x);
+                    - mdmLib.calculateCircleSegment(oldPositionConfidence->x,
+                            oldPositionConfidence->x - xLow)
+                            / (PI * oldPositionConfidence->x
+                                    * oldPositionConfidence->x);
         }
 
         double xHigh = distance * cos(angleHigh * PI / 180);
         double curFactorHigh = 1;
-        if (curPositionConfidence.x == 0) {
+        if (curPositionConfidence->x == 0) {
             if (angleHigh <= MAX_HEADING_CHANGE) {
                 curFactorHigh = 1;
             } else {
@@ -463,12 +410,12 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
             }
         } else {
             curFactorHigh = mdmLib.calculateCircleSegment(
-                    curPositionConfidence.x, curPositionConfidence.x + xHigh)
-                    / (PI * curPositionConfidence.x * curPositionConfidence.x);
+                    curPositionConfidence->x, curPositionConfidence->x + xHigh)
+                    / (PI * curPositionConfidence->x * curPositionConfidence->x);
         }
 
         double oldFactorHigh = 1;
-        if (oldPositionConfidence.x == 0) {
+        if (oldPositionConfidence->x == 0) {
             if (angleHigh <= MAX_HEADING_CHANGE) {
                 oldFactorHigh = 1;
             } else {
@@ -476,10 +423,10 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
             }
         } else {
             oldFactorHigh = 1
-                    - mdmLib.calculateCircleSegment(oldPositionConfidence.x,
-                            oldPositionConfidence.x - xHigh)
-                            / (PI * oldPositionConfidence.x
-                                    * oldPositionConfidence.x);
+                    - mdmLib.calculateCircleSegment(oldPositionConfidence->x,
+                            oldPositionConfidence->x - xHigh)
+                            / (PI * oldPositionConfidence->x
+                                    * oldPositionConfidence->x);
         }
 
         double factor = (curFactorLow + oldFactorLow + curFactorHigh
@@ -528,7 +475,6 @@ double CaTChChecks::PositionHeadingConsistancyCheck(Coord curHeading,
 
 BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage * bsm,
         NodeTable * detectedNodes) {
-
     BsmCheck bsmCheck = BsmCheck();
 
     unsigned long senderPseudonym = bsm->getSenderPseudonym();
@@ -539,51 +485,49 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage * bsm,
             senderPseudonym);
 
     bsmCheck.setRangePlausibility(
-            RangePlausibilityCheck(myPosition, myPositionConfidence, senderPos,
-                    senderPosConfidence));
+            RangePlausibilityCheck(&myPosition, &myPositionConfidence, &senderPos,
+                    &senderPosConfidence));
 
     bsmCheck.setSpeedPlausibility(
-            SpeedPlausibilityCheck(mdmLib.calculateSpeed(bsm->getSenderSpeed()),
-                    mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
+            SpeedPlausibilityCheck(mdmLib.calculateSpeedPtr(&bsm->getSenderSpeed()),
+                    mdmLib.calculateSpeedPtr(&bsm->getSenderSpeedConfidence())));
 
     bsmCheck.setIntersection(MultipleIntersectionCheck(detectedNodes, bsm));
 
-
-
     bsmCheck.setPositionPlausibility(
-            PositionPlausibilityCheck(senderPos, senderPosConfidence,
-                    mdmLib.calculateSpeed(bsm->getSenderSpeed()),
-                    mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence())));
+            PositionPlausibilityCheck(&senderPos, &senderPosConfidence,
+                    mdmLib.calculateSpeedPtr(&bsm->getSenderSpeed()),
+                    mdmLib.calculateSpeedPtr(&bsm->getSenderSpeedConfidence())));
 
     if (detectedNodes->getNodeHistoryAddr(senderPseudonym)->getBSMNum() > 0) {
         bsmCheck.setPositionConsistancy(
-                PositionConsistancyCheck(senderPos, senderPosConfidence,
-                        senderNode->getLatestBSMAddr()->getSenderPos(),
-                        senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
+                PositionConsistancyCheck(&senderPos, &senderPosConfidence,
+                        &senderNode->getLatestBSMAddr()->getSenderPos(),
+                        &senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
                         mdmLib.calculateDeltaTime(bsm,
                                 senderNode->getLatestBSMAddr())));
 
         bsmCheck.setSpeedConsistancy(
                 SpeedConsistancyCheck(
-                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
-                        mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence()),
-                        mdmLib.calculateSpeed(
-                                senderNode->getLatestBSMAddr()->getSenderSpeed()),
-                        mdmLib.calculateSpeed(
-                                senderNode->getLatestBSMAddr()->getSenderSpeedConfidence()),
+                        mdmLib.calculateSpeedPtr(&bsm->getSenderSpeed()),
+                        mdmLib.calculateSpeedPtr(&bsm->getSenderSpeedConfidence()),
+                        mdmLib.calculateSpeedPtr(
+                                &senderNode->getLatestBSMAddr()->getSenderSpeed()),
+                        mdmLib.calculateSpeedPtr(
+                                &senderNode->getLatestBSMAddr()->getSenderSpeedConfidence()),
                         mdmLib.calculateDeltaTime(bsm,
                                 senderNode->getLatestBSMAddr())));
 
         bsmCheck.setPositionSpeedConsistancy(
-                PositionSpeedConsistancyCheck(senderPos, senderPosConfidence,
-                        senderNode->getLatestBSMAddr()->getSenderPos(),
-                        senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
-                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
-                        mdmLib.calculateSpeed(bsm->getSenderSpeedConfidence()),
-                        mdmLib.calculateSpeed(
-                                senderNode->getLatestBSMAddr()->getSenderSpeed()),
-                        mdmLib.calculateSpeed(
-                                senderNode->getLatestBSMAddr()->getSenderSpeedConfidence()),
+                PositionSpeedConsistancyCheck(&senderPos, &senderPosConfidence,
+                        &senderNode->getLatestBSMAddr()->getSenderPos(),
+                        &senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
+                        mdmLib.calculateSpeedPtr(&bsm->getSenderSpeed()),
+                        mdmLib.calculateSpeedPtr(&bsm->getSenderSpeedConfidence()),
+                        mdmLib.calculateSpeedPtr(
+                                &senderNode->getLatestBSMAddr()->getSenderSpeed()),
+                        mdmLib.calculateSpeedPtr(
+                                &senderNode->getLatestBSMAddr()->getSenderSpeedConfidence()),
                         mdmLib.calculateDeltaTime(bsm,
                                 senderNode->getLatestBSMAddr())));
 
@@ -592,26 +536,24 @@ BsmCheck CaTChChecks::CheckBSM(BasicSafetyMessage * bsm,
                         senderNode->getLatestBSMAddr()->getArrivalTime().dbl()));
 
         bsmCheck.setPositionHeadingConsistancy(
-                PositionHeadingConsistancyCheck(bsm->getSenderHeading(),
-                        bsm->getSenderHeadingConfidence(),
-                        senderNode->getLatestBSMAddr()->getSenderPos(),
-                        senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
-                        bsm->getSenderPos(), bsm->getSenderPosConfidence(),
+                PositionHeadingConsistancyCheck(&bsm->getSenderHeading(),
+                        &bsm->getSenderHeadingConfidence(),
+                        &senderNode->getLatestBSMAddr()->getSenderPos(),
+                        &senderNode->getLatestBSMAddr()->getSenderPosConfidence(),
+                        &bsm->getSenderPos(), &bsm->getSenderPosConfidence(),
                         mdmLib.calculateDeltaTime(bsm,
                                 senderNode->getLatestBSMAddr()),
-                        mdmLib.calculateSpeed(bsm->getSenderSpeed()),
-                        mdmLib.calculateSpeed(
-                                bsm->getSenderSpeedConfidence())));
+                        mdmLib.calculateSpeedPtr(&bsm->getSenderSpeed()),
+                        mdmLib.calculateSpeedPtr(
+                                &bsm->getSenderSpeedConfidence())));
 
     } else {
         bsmCheck.setSuddenAppearence(
-                SuddenAppearenceCheck(senderPos, senderPosConfidence,
-                        myPosition, myPositionConfidence));
+                SuddenAppearenceCheck(&senderPos, &senderPosConfidence,
+                        &myPosition, &myPositionConfidence));
     }
 
-
-
-   // PrintBsmCheck(senderPseudonym, bsmCheck);
+    //PrintBsmCheck(senderPseudonym, bsmCheck);
 
     return bsmCheck;
 }
@@ -652,11 +594,11 @@ void CaTChChecks::PrintBsmCheck(unsigned long senderPseudonym,
                 << " B:" << senderPseudonym << '\n';
     }
 
-    if (bsmCheck.getSuddenAppearence() < 0.5) {
-        std::cout << "^^^^^^^^^^^V2 " << "SAW FAILED => "
-                << bsmCheck.getSuddenAppearence() << " A:" << myPseudonym
-                << " B:" << senderPseudonym << '\n';
-    }
+//    if (bsmCheck.getSuddenAppearence() < 0.5) {
+//        std::cout << "^^^^^^^^^^^V2 " << "SAW FAILED => "
+//                << bsmCheck.getSuddenAppearence() << " A:" << myPseudonym
+//                << " B:" << senderPseudonym << '\n';
+//    }
 
     if (bsmCheck.getPositionHeadingConsistancy() < 0.5) {
         std::cout << "^^^^^^^^^^^V2 " << "PHC FAILED => "

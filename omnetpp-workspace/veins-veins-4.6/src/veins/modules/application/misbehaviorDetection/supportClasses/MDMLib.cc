@@ -13,14 +13,59 @@
 
 using namespace std;
 
-double MDMLib::calculateDistance(Coord pos1, Coord pos2) {
+double MDMLib::calculateDistancePtr(Coord * pos1, Coord * pos2) {
+    return sqrt(pow(pos1->x - pos2->x, 2.0) + pow(pos1->y - pos2->y, 2.0));
+    //   + pow(pos1.z - pos2.z, 2.0));
+}
+
+double MDMLib::calculateSpeedPtr(Coord * Speed) {
+    return sqrt(pow(Speed->x, 2.0) + pow(Speed->y, 2.0) + pow(Speed->z, 2.0));
+}
+
+
+double MDMLib::calculateHeadingAnglePtr(Coord * heading) {
+    double x2 = 1;
+    double y2 = 0;
+
+    double dot = heading->x * x2 + heading->y * y2; // dot product between [x1, y1] and [x2, y2]
+    double det = heading->x * y2 - heading->y * x2;      // determinant
+    double angle = atan2(det, dot) * 180 / PI; // atan2(y, x) or atan2(sin, cos);
+
+    if (heading->x >= 0 && heading->y > 0) {
+        angle = 360 + angle;
+    } else if (heading->x < 0 && heading->y >= 0) {
+        angle = 360 + angle;
+    }
+    return angle;
+}
+
+double MDMLib::calculateDistance(Coord  pos1, Coord  pos2) {
     return sqrt(pow(pos1.x - pos2.x, 2.0) + pow(pos1.y - pos2.y, 2.0));
     //   + pow(pos1.z - pos2.z, 2.0));
 }
 
-double MDMLib::calculateSpeed(Coord Speed) {
+double MDMLib::calculateSpeed(Coord  Speed) {
     return sqrt(pow(Speed.x, 2.0) + pow(Speed.y, 2.0) + pow(Speed.z, 2.0));
 }
+
+
+double MDMLib::calculateHeadingAngle(Coord  heading) {
+    double x2 = 1;
+    double y2 = 0;
+
+    double dot = heading.x * x2 + heading.y * y2; // dot product between [x1, y1] and [x2, y2]
+    double det = heading.x * y2 - heading.y * x2;      // determinant
+    double angle = atan2(det, dot) * 180 / PI; // atan2(y, x) or atan2(sin, cos);
+
+    if (heading.x >= 0 && heading.y > 0) {
+        angle = 360 + angle;
+    } else if (heading.x < 0 && heading.y >= 0) {
+        angle = 360 + angle;
+    }
+
+    return angle;
+}
+
 
 double MDMLib::calculateDeltaTime(BasicSafetyMessage * bsm1,
         BasicSafetyMessage * bsm2) {
@@ -106,23 +151,6 @@ double MDMLib::calculateCircleCircleIntersection(double r0, double r1,
 // Return area of intersection
         return area1 + area2;
     }
-}
-
-double MDMLib::calculateHeadingAngle(Coord heading) {
-    double x2 = 1;
-    double y2 = 0;
-
-    double dot = heading.x * x2 + heading.y * y2; // dot product between [x1, y1] and [x2, y2]
-    double det = heading.x * y2 - heading.y * x2;      // determinant
-    double angle = atan2(det, dot) * 180 / PI; // atan2(y, x) or atan2(sin, cos);
-
-    if (heading.x >= 0 && heading.y > 0) {
-        angle = 360 + angle;
-    } else if (heading.x < 0 && heading.y >= 0) {
-        angle = 360 + angle;
-    }
-
-    return angle;
 }
 
 double MDMLib::CircleCircleFactor(double d, double r1, double r2,
@@ -678,12 +706,13 @@ double MDMLib::EllipseEllipseIntersectionFactor(Coord pos1, Coord posConf1,
         factor = factor2;
     }
 
-    double maxFactor = 1
-            - (((size1.x / 2) * (size1.y / 2) * PI)
-                    / ((dx1 / 2) * (dy1 / 2) * PI));
-    if (factor > maxFactor) {
-        factor = 1;
-    }
+//    double maxFactor = 1
+//            - (((size1.x / 2) * (size1.y / 2) * PI)
+//                    / ((dx1 / 2) * (dy1 / 2) * PI));
+//
+//    if (factor > maxFactor) {
+//        factor = 1;
+//    }
     return factor;
 }
 

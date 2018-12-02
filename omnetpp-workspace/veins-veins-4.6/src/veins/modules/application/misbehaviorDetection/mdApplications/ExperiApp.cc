@@ -32,7 +32,7 @@ ExperiApp::ExperiApp(int version, double deltaTrustTime,
 }
 
 bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
-        BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes) {
+        BasicSafetyMessage * bsm, BsmCheck * bsmCheck, NodeTable * detectedNodes) {
 
     bool checkFailed = false;
     MDReport mbReport;
@@ -72,7 +72,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getRangePlausibility();
     }
 
-    temp = AggregateFactorsListDouble(bsmCheck.getRangePlausibility(),
+    temp = AggregateFactorsListDouble(bsmCheck->getRangePlausibility(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -91,7 +91,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getPositionConsistancy();
     }
 
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionConsistancy(),
+    temp = AggregateFactorsListDouble(bsmCheck->getPositionConsistancy(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -109,7 +109,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionSpeedConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionSpeedConsistancy(),
+    temp = AggregateFactorsListDouble(bsmCheck->getPositionSpeedConsistancy(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -126,7 +126,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSpeedConsistancy(),
+    temp = AggregateFactorsListDouble(bsmCheck->getSpeedConsistancy(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -143,7 +143,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedPlausibility();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSpeedPlausibility(),
+    temp = AggregateFactorsListDouble(bsmCheck->getSpeedPlausibility(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -160,7 +160,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionPlausibility();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionPlausibility(),
+    temp = AggregateFactorsListDouble(bsmCheck->getPositionPlausibility(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -177,7 +177,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getBeaconFrequency();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getBeaconFrequency(), factorList,
+    temp = AggregateFactorsListDouble(bsmCheck->getBeaconFrequency(), factorList,
             bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -194,7 +194,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSuddenAppearence();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getSuddenAppearence(),
+    temp = AggregateFactorsListDouble(bsmCheck->getSuddenAppearence(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
 //        minFactor = temp;
@@ -210,7 +210,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionHeadingConsistancy();
     }
-    temp = AggregateFactorsListDouble(bsmCheck.getPositionHeadingConsistancy(),
+    temp = AggregateFactorsListDouble(bsmCheck->getPositionHeadingConsistancy(),
             factorList, bsmCheckListSize, zeroSum, zeroCount);
     if (temp < minFactor) {
         minFactor = temp;
@@ -227,7 +227,7 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         bsmCheckList[var].getIntersection();
     }
 
-    InterTest inter = bsmCheck.getIntersection();
+    InterTest inter = bsmCheck->getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
         double curInferFactor = inter.getInterValue(var);
 
@@ -260,13 +260,13 @@ bool ExperiApp::CheckNodeForReport(unsigned long myPseudonym,
         prntApp->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
 
-        bsmCheck.setReported(true);
+        bsmCheck->setReported(true);
     }
     return checkFailed;
 }
 
 std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage * bsm,
-        BsmCheck bsmCheck, NodeTable * detectedNodes) {
+        BsmCheck * bsmCheck, NodeTable * detectedNodes) {
 
     double zeroSum = 0;
     int zeroCount = 0;
@@ -291,39 +291,39 @@ std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage * bsm,
     }
 
     //std::cout<< "RangePlausibility" << '\n';
-    if (bsmCheck.getRangePlausibility() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getRangePlausibility();
+    if (bsmCheck->getRangePlausibility() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getRangePlausibility();
         zeroCount++;
     }
-    if (bsmCheck.getPositionConsistancy() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getPositionConsistancy();
+    if (bsmCheck->getPositionConsistancy() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getPositionConsistancy();
         zeroCount++;
     }
-    if (bsmCheck.getPositionSpeedConsistancy() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getPositionSpeedConsistancy();
+    if (bsmCheck->getPositionSpeedConsistancy() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getPositionSpeedConsistancy();
         zeroCount++;
     }
-    if (bsmCheck.getSpeedConsistancy() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getSpeedConsistancy();
+    if (bsmCheck->getSpeedConsistancy() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getSpeedConsistancy();
         zeroCount++;
     }
-    if (bsmCheck.getSpeedPlausibility() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getSpeedPlausibility();
+    if (bsmCheck->getSpeedPlausibility() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getSpeedPlausibility();
         zeroCount++;
     }
-    if (bsmCheck.getPositionPlausibility() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getPositionPlausibility();
+    if (bsmCheck->getPositionPlausibility() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getPositionPlausibility();
         zeroCount++;
     }
-    if (bsmCheck.getBeaconFrequency() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getBeaconFrequency();
+    if (bsmCheck->getBeaconFrequency() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getBeaconFrequency();
         zeroCount++;
     }
-//    if(bsmCheck.getSuddenAppearence()<=0){
+//    if(bsmCheck->getSuddenAppearence()<=0){
 //        zeroNumber++;
 //    }
-    if (bsmCheck.getPositionHeadingConsistancy() <= 0) {
-        zeroSum = zeroSum + bsmCheck.getPositionHeadingConsistancy();
+    if (bsmCheck->getPositionHeadingConsistancy() <= 0) {
+        zeroSum = zeroSum + bsmCheck->getPositionHeadingConsistancy();
         zeroCount++;
     }
 
@@ -366,7 +366,7 @@ std::tuple<double, int> ExperiApp::getZeroNumber(BasicSafetyMessage * bsm,
         }
     }
 
-    InterTest inter = bsmCheck.getIntersection();
+    InterTest inter = bsmCheck->getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
         double curInferFactor = inter.getInterValue(var);
 

@@ -18,7 +18,7 @@ Define_Module(JosephVeinsApp);
 #define savePath "../../../../../mdmSave/"
 
 #define randomConf false
-#define confPos 3.0
+#define confPos 3
 #define confSpd 0.5
 #define confHea 0
 
@@ -70,7 +70,7 @@ static mdChecksVersionTypes::ChecksVersion checksVersionV2 =
         mdChecksVersionTypes::CatchChecks;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::AggrigationApp;
 
 static bool writeSelfMsg = false;
 
@@ -102,11 +102,9 @@ void JosephVeinsApp::initialize(int stage) {
     }
 
     if (stage == 0) {
-
         //joseph
         //Initializing members and pointers of your application goes here
         EV << "Initializing " << par("appName").stringValue() << std::endl;
-
         setMDApp(appTypeV1, appTypeV2);
 
         Coord vehSize = genLib.TypeToSize(traciVehicle->getTypeId());
@@ -249,8 +247,8 @@ void JosephVeinsApp::initialize(int stage) {
             setDate = true;
         }
 
-    } else if (stage == 1) {
 
+    } else if (stage == 1) {
         //Initializing members that require initialized other modules goes here
     }
 }
@@ -337,8 +335,7 @@ mbTypes::Mbs JosephVeinsApp::induceMisbehavior(double localAttacker,
     }
 }
 
-BsmCheck bsmCheckV1;
-BsmCheck bsmCheckV2;
+
 void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
 
     unsigned long senderPseudonym = bsm->getSenderPseudonym();
@@ -346,11 +343,9 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
     if (EnableV1) {
         LocalMisbehaviorDetection(bsm, 1);
     }
-
     if (EnableV2) {
         LocalMisbehaviorDetection(bsm, 2);
     }
-
     if (!detectedNodes.includes(senderPseudonym)) {
         NodeHistory newNode(senderPseudonym);
         newNode.addBSM(*bsm);
@@ -377,13 +372,15 @@ void JosephVeinsApp::onBSM(BasicSafetyMessage* bsm) {
         //detectedNodes.put(senderPseudonym, existingNode, existingMDM);
     }
 
+
+
     if (EnablePC) {
         pcPolicy.checkPseudonymChange(myPcType);
     }
 
+
 //Your application has received a beacon message from another car or RSU
 //code for handling the message goes here
-
 }
 void JosephVeinsApp::treatAttackFlags() {
 
@@ -428,16 +425,8 @@ void JosephVeinsApp::treatAttackFlags() {
     }
 }
 
-static double deltaTV1 = 0;
-static double deltaTV2 = 0;
-static double deltaTVS1 = 0;
-static double deltaTVS2 = 0;
-
-static bool initV1 = false;
-static bool initV2 = false;
 void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         int version) {
-
     unsigned long senderPseudo = bsm->getSenderPseudonym();
 
     switch (version) {
@@ -464,16 +453,13 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
             break;
         }
-
-        clock_t begin = clock();
-
-        bool result = AppV1->CheckNodeForReport(myPseudonym, bsm, bsmCheckV1,
+        beginV1 = clock();
+        bool result = AppV1->CheckNodeForReport(myPseudonym, bsm, &bsmCheckV1,
                 &detectedNodes);
-
-        clock_t end = clock();
-        double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-
-        meanTimeV1 = (numTimeV1 * meanTimeV1 + elapsed_secs) / (numTimeV1 + 1);
+        endV1 = clock();
+        meanTimeV1 = ((double) numTimeV1 * meanTimeV1
+                + (double(endV1 - beginV1) / CLOCKS_PER_SEC))
+                / ((double) numTimeV1 + 1.0);
         numTimeV1 = numTimeV1 + 1;
 
         if (enableVarThreV1) {
@@ -524,7 +510,6 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
             if (sendReportsV1) {
                 sendReport(reportBase, mdv, bsmCheckV1, bsm);
             }
-
         }
 
         if (writeBsmsV1) {
@@ -597,22 +582,13 @@ void JosephVeinsApp::LocalMisbehaviorDetection(BasicSafetyMessage* bsm,
         }
             break;
         }
-
-//        CaTChChecks mdmV2(myPseudonym, curPosition, curPositionConfidence,
-//                curHeading, curHeadingConfidence, Coord(myWidth, myLength),
-//                &linkControl);
-//
-//       BsmCheck bsmCheckV2  = mdmV2.CheckBSM(bsm, &detectedNodes);
-
-        clock_t begin = clock();
-
-        bool result = AppV2->CheckNodeForReport(myPseudonym, bsm, bsmCheckV2,
+        beginV2 = clock();
+        bool result = AppV2->CheckNodeForReport(myPseudonym, bsm, &bsmCheckV2,
                 &detectedNodes);
-
-        clock_t end = clock();
-        double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-
-        meanTimeV2 = (numTimeV2 * meanTimeV2 + elapsed_secs) / (numTimeV2 + 1);
+        endV2 = clock();
+        meanTimeV2 = ((double) numTimeV2 * meanTimeV2
+                + (double(endV2 - beginV2) / CLOCKS_PER_SEC))
+                / ((double) numTimeV2 + 1.0);
         numTimeV2 = numTimeV2 + 1;
 
         if (enableVarThreV2) {

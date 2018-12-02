@@ -33,7 +33,7 @@ AggrigationApp::AggrigationApp(int version, double devValue, double deltaTrustTi
 }
 
 bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
-        BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes) {
+        BasicSafetyMessage * bsm, BsmCheck * bsmCheck, NodeTable * detectedNodes) {
 
     bool checkFailed = false;
     MDReport mbReport;
@@ -70,7 +70,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getRangePlausibility();
     }
 
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getRangePlausibility(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getRangePlausibility(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -88,7 +88,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionConsistancy();
     }
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getPositionConsistancy(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getPositionConsistancy(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -106,7 +106,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getPositionSpeedConsistancy();
     }
     tempFactor = AggregateFactorsListDouble(
-            bsmCheck.getPositionSpeedConsistancy(), factorList,
+            bsmCheck->getPositionSpeedConsistancy(), factorList,
             bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -123,7 +123,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedConsistancy();
     }
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getSpeedConsistancy(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getSpeedConsistancy(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -140,7 +140,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSpeedPlausibility();
     }
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getSpeedPlausibility(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getSpeedPlausibility(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -157,7 +157,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getPositionPlausibility();
     }
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getPositionPlausibility(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getPositionPlausibility(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -174,7 +174,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getBeaconFrequency();
     }
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getBeaconFrequency(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getBeaconFrequency(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -191,7 +191,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     for (int var = 0; var < bsmCheckListSize; ++var) {
         factorList[var] = bsmCheckList[var].getSuddenAppearence();
     }
-    tempFactor = AggregateFactorsListDouble(bsmCheck.getSuddenAppearence(),
+    tempFactor = AggregateFactorsListDouble(bsmCheck->getSuddenAppearence(),
             factorList, bsmCheckListSize);
     if (tempFactor < minFactor) {
         //     temp = minFactor;
@@ -208,7 +208,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
         factorList[var] = bsmCheckList[var].getPositionHeadingConsistancy();
     }
     tempFactor = AggregateFactorsListDouble(
-            bsmCheck.getPositionHeadingConsistancy(), factorList,
+            bsmCheck->getPositionHeadingConsistancy(), factorList,
             bsmCheckListSize);
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
@@ -221,7 +221,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
                 mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    InterTest inter = bsmCheck.getIntersection();
+    InterTest inter = bsmCheck->getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
         double curInferFactor = inter.getInterValue(var);
 
@@ -253,7 +253,7 @@ bool AggrigationApp::CheckNodeForReport(unsigned long myPseudonym,
     if (checkFailed) {
         prntApp->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
-        bsmCheck.setReported(true);
+        bsmCheck->setReported(true);
     }
     return checkFailed;
 }

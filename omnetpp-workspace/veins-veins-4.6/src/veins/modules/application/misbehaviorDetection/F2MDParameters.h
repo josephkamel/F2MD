@@ -17,6 +17,7 @@
 #include "enumTypes/MbTypes.h"
 #include "enumTypes/MdAppTypes.h"
 #include "enumTypes/MdChecksVersionTypes.h"
+
 #define NETWORK 0
 // 0 IRT Network
 // 1 LuST Network
@@ -25,7 +26,9 @@
 #if NETWORK == 0
     #define MAX_CONSISTANT_DISTANCE 25 // 25 for TB || 47.22 for LUST
     #define MAX_PLAUSIBLE_SPEED 25 // 25 for TB || 47.22 for LUST
-#else
+#endif
+
+#if NETWORK == 1
     #define MAX_CONSISTANT_DISTANCE 47.22 // 25 for TB || 47.22 for LUST
     #define MAX_PLAUSIBLE_SPEED 47.22 // 25 for TB || 47.22 for LUST
 #endif
@@ -40,6 +43,7 @@
 
 #define MAX_PLAUSIBLE_ACCEL 3.0 // 3.0
 #define MAX_PLAUSIBLE_DECEL 4.501 // 4.5
+#define MAX_MGT_RNG 1 // 1
 #define MAX_BEACON_FREQUENCY 0.99 //0.99998
 #define MAX_DISTANCE_FROM_ROUTE 2 //4.5
 #define MAX_NON_ROUTE_SPEED -1 //3

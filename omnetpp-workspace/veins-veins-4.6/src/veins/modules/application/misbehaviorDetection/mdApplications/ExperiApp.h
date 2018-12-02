@@ -36,7 +36,7 @@ public:
 
 
     bool CheckNodeForReport(unsigned long myPseudonym,
-            BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes);
+            BasicSafetyMessage * bsm, BsmCheck * bsmCheck, NodeTable * detectedNodes);
 
 
 //    bool AggregateFactorsList(double curFactor, double *factorList,
@@ -44,7 +44,7 @@ public:
     double AggregateFactorsListDouble(double curFactor, double *factorList,
             int factorListSize, double zeroSum, int zeroCount);
 
-    std::tuple<double, int> getZeroNumber(BasicSafetyMessage * bsm, BsmCheck bsmCheck,
+    std::tuple<double, int> getZeroNumber(BasicSafetyMessage * bsm, BsmCheck * bsmCheck,
             NodeTable * detectedNodes);
 
     double getMinFactor();

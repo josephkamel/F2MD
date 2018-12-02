@@ -56,7 +56,7 @@ public:
     MDApplication(int version);
 
     virtual bool CheckNodeForReport(unsigned long myPseudonym,
-            BasicSafetyMessage * bsm, BsmCheck bsmCheck,
+            BasicSafetyMessage * bsm, BsmCheck * bsmCheck,
             NodeTable * detectedNodes)= 0;
 
     virtual double getMinFactor()= 0;

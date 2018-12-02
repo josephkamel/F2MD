@@ -25,87 +25,87 @@ PyBridgeApp::PyBridgeApp(int version,int port, std::string host, int * myId):
 }
 
 bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
-        BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes) {
+        BasicSafetyMessage * bsm, BsmCheck * bsmCheck, NodeTable * detectedNodes) {
 
     minFactor = 1;
     int Threshold = 0.5;
     prntApp->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
     prntAppInst->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
 
-    if(bsmCheck.getRangePlausibility()<minFactor){
-        minFactor = bsmCheck.getRangePlausibility();
+    if(bsmCheck->getRangePlausibility()<minFactor){
+        minFactor = bsmCheck->getRangePlausibility();
     }
-    if (bsmCheck.getRangePlausibility() <= Threshold) {
+    if (bsmCheck->getRangePlausibility() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::RangePlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getRangePlausibility()<minFactor){
-        minFactor = bsmCheck.getRangePlausibility();
+    if(bsmCheck->getRangePlausibility()<minFactor){
+        minFactor = bsmCheck->getRangePlausibility();
     }
-    if (bsmCheck.getPositionConsistancy() <= Threshold) {
+    if (bsmCheck->getPositionConsistancy() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getPositionSpeedConsistancy()<minFactor){
-        minFactor = bsmCheck.getPositionSpeedConsistancy();
+    if(bsmCheck->getPositionSpeedConsistancy()<minFactor){
+        minFactor = bsmCheck->getPositionSpeedConsistancy();
     }
-    if (bsmCheck.getPositionSpeedConsistancy() <= Threshold) {
+    if (bsmCheck->getPositionSpeedConsistancy() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionSpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getSpeedConsistancy()<minFactor){
-        minFactor = bsmCheck.getSpeedConsistancy();
+    if(bsmCheck->getSpeedConsistancy()<minFactor){
+        minFactor = bsmCheck->getSpeedConsistancy();
     }
-    if (bsmCheck.getSpeedConsistancy() <= Threshold) {
+    if (bsmCheck->getSpeedConsistancy() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SpeedConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getSpeedPlausibility()<minFactor){
-        minFactor = bsmCheck.getSpeedPlausibility();
+    if(bsmCheck->getSpeedPlausibility()<minFactor){
+        minFactor = bsmCheck->getSpeedPlausibility();
     }
-    if (bsmCheck.getSpeedPlausibility() <= Threshold) {
+    if (bsmCheck->getSpeedPlausibility() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SpeedPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getPositionPlausibility()<minFactor){
-        minFactor = bsmCheck.getPositionPlausibility();
+    if(bsmCheck->getPositionPlausibility()<minFactor){
+        minFactor = bsmCheck->getPositionPlausibility();
     }
-    if (bsmCheck.getPositionPlausibility() <= Threshold) {
+    if (bsmCheck->getPositionPlausibility() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionPlausibility, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getBeaconFrequency()<minFactor){
-        minFactor = bsmCheck.getBeaconFrequency();
+    if(bsmCheck->getBeaconFrequency()<minFactor){
+        minFactor = bsmCheck->getBeaconFrequency();
     }
-    if (bsmCheck.getBeaconFrequency() <= Threshold) {
+    if (bsmCheck->getBeaconFrequency() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::BeaconFrequency, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if(bsmCheck.getSuddenAppearence()<minFactor){
-   //     minFactor = bsmCheck.getSuddenAppearence();
+    if(bsmCheck->getSuddenAppearence()<minFactor){
+   //     minFactor = bsmCheck->getSuddenAppearence();
     }
-    if (bsmCheck.getSuddenAppearence() <= Threshold) {
+    if (bsmCheck->getSuddenAppearence() <= Threshold) {
    //     checkFailed = true;
         prntApp->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::SuddenAppearence, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    if( bsmCheck.getPositionHeadingConsistancy()<minFactor){
-        minFactor = bsmCheck.getPositionHeadingConsistancy();
+    if( bsmCheck->getPositionHeadingConsistancy()<minFactor){
+        minFactor = bsmCheck->getPositionHeadingConsistancy();
     }
-    if (bsmCheck.getPositionHeadingConsistancy() <= Threshold) {
+    if (bsmCheck->getPositionHeadingConsistancy() <= Threshold) {
         prntApp->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
         prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    InterTest inter = bsmCheck.getIntersection();
+    InterTest inter = bsmCheck->getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
 
         double IT = inter.getInterValue(var);
@@ -118,7 +118,7 @@ bool PyBridgeApp::CheckNodeForReport(unsigned long myPseudonym,
     bsmPrint.setReceiverId(*myId);
     bsmPrint.setReceiverPseudo(myPseudonym);
     bsmPrint.setBsm(*bsm);
-    bsmPrint.setBsmCheck(bsmCheck);
+    bsmPrint.setBsmCheck(*bsmCheck);
 
     std::string s = bsmPrint.getBsmPrintableJson();
 

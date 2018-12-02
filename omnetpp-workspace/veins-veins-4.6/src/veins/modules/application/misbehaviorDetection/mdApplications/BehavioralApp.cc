@@ -30,7 +30,7 @@ BehavioralApp::BehavioralApp(int version,
 }
 
 bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
-        BasicSafetyMessage * bsm, BsmCheck bsmCheck, NodeTable * detectedNodes) {
+        BasicSafetyMessage * bsm, BsmCheck * bsmCheck, NodeTable * detectedNodes) {
 
     MDReport mbReport;
 
@@ -48,7 +48,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "RangePlausibility" << '\n';
 
-    tempFactor = bsmCheck.getRangePlausibility();
+    tempFactor = bsmCheck->getRangePlausibility();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -60,7 +60,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
 
     //std::cout<< "PositionConsistancy" << '\n';
-    tempFactor = bsmCheck.getPositionConsistancy();
+    tempFactor = bsmCheck->getPositionConsistancy();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -73,7 +73,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "PositionSpeedConsistancy" << '\n';
 
-    tempFactor = bsmCheck.getPositionSpeedConsistancy();
+    tempFactor = bsmCheck->getPositionSpeedConsistancy();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -86,7 +86,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "SpeedConsistancy" << '\n';
 
-    tempFactor = bsmCheck.getSpeedConsistancy();
+    tempFactor = bsmCheck->getSpeedConsistancy();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -99,7 +99,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "SpeedPlausibility" << '\n';
 
-    tempFactor = bsmCheck.getSpeedPlausibility();
+    tempFactor = bsmCheck->getSpeedPlausibility();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -112,7 +112,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "PositionPlausibility" << '\n';
 
-    tempFactor = bsmCheck.getPositionPlausibility();
+    tempFactor = bsmCheck->getPositionPlausibility();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -125,7 +125,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "BeaconFrequency" << '\n';
 
-    tempFactor = bsmCheck.getBeaconFrequency();
+    tempFactor = bsmCheck->getBeaconFrequency();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -137,7 +137,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
     }
 
     //std::cout<< "SuddenAppearence" << '\n';
-    tempFactor = bsmCheck.getSuddenAppearence();
+    tempFactor = bsmCheck->getSuddenAppearence();
     if (tempFactor < minFactor) {
         //std::cout<< "SuddenAppearence" << '\n';
         //     minFactor = tempFactor;
@@ -151,7 +151,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     //std::cout<< "PositionHeadingConsistancy" << '\n';
 
-    tempFactor = bsmCheck.getPositionHeadingConsistancy();
+    tempFactor = bsmCheck->getPositionHeadingConsistancy();
     if (tempFactor < minFactor) {
         minFactor = tempFactor;
     }
@@ -162,7 +162,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
                 mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    InterTest inter = bsmCheck.getIntersection();
+    InterTest inter = bsmCheck->getIntersection();
     for (int var = 0; var < inter.getInterNum(); ++var) {
         double curInferFactor = inter.getInterValue(var);
         //std::cout<< "Intersection" << '\n';
@@ -231,7 +231,7 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
         if (TimeOut[indexTMO] > 0) {
             prntApp->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
             prntAppInst->incCumulFlags(mbTypes::intMbs[bsm->getSenderMbType()]);
-            bsmCheck.setReported(true);
+            bsmCheck->setReported(true);
             checkFailed = true;
             TimeOut[indexTMO] = TimeOut[indexTMO] - 1;
         }

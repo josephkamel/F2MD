@@ -32,11 +32,16 @@ public:
     double gaussianSum(double x, double sig);
     double boundedGaussianSum(double x1, double x2, double sig);
 
-    double calculateDistance(Coord, Coord);
-    double calculateSpeed(Coord Speed);
+    double calculateDistancePtr(Coord * , Coord * );
+    double calculateSpeedPtr(Coord * Speed);
+    double calculateHeadingAnglePtr(Coord * heading);
+
+    double calculateDistance(Coord  , Coord );
+    double calculateSpeed(Coord  Speed);
+    double calculateHeadingAngle(Coord heading);
 
     double calculatePolynom(long double coof[],const int coofNum, double x);
-    double calculateHeadingAngle(Coord heading);
+
     double calculateDeltaTime(BasicSafetyMessage * bsm1, BasicSafetyMessage * bsm2);
     double calculateCircleSegment(double radius, double intDistance);
     double calculateCircleCircleIntersection(double r1, double r2, double d);

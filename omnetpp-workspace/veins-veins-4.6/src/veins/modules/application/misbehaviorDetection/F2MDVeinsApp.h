@@ -75,11 +75,14 @@ static LinkControl linkControl = LinkControl();
 static bool setDate = false;
 static std::string curDate;
 
-double meanTimeV1 = 0;
-long numTimeV1 = 0;
+BsmCheck bsmCheckV1,bsmCheckV2;
 
-double meanTimeV2 = 0;
-long numTimeV2 = 0;
+static double meanTimeV1,meanTimeV2 = 0;
+static unsigned long numTimeV1,numTimeV2 = 0;
+clock_t beginV1,endV1,beginV2,endV2;
+
+static double deltaTV1,deltaTV2,deltaTVS1,deltaTVS2 = 0;
+static bool initV1,initV2 = false;
 
 static MDStatistics mdStats = MDStatistics();
 static VarThrePrintable varThrePrintableV1 = VarThrePrintable("AppV1");
@@ -140,8 +143,8 @@ protected:
     ThresholdApp ThreV1 = ThresholdApp(1, 0.5);
     ThresholdApp ThreV2 = ThresholdApp(2, 0.5);
 
-    AggrigationApp AggrV1 = AggrigationApp(1,0.5, 10.0, 10);
-    AggrigationApp AggrV2 = AggrigationApp(2,0.5, 10.0, 10);
+    AggrigationApp AggrV1 = AggrigationApp(1,0.5, 10.0, 3);
+    AggrigationApp AggrV2 = AggrigationApp(2,0.5, 10.0, 3);
 
     BehavioralApp BehaV1 = BehavioralApp(1, 0.5);
     BehavioralApp BehaV2 = BehavioralApp(2, 0.5);

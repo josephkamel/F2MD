@@ -43,23 +43,26 @@ private:
 
     LinkControl* LinkC;
 
-    double RangePlausibilityCheck(Coord, Coord);
-    double PositionConsistancyCheck(Coord, Coord, double);
+    double RangePlausibilityCheck(Coord*, Coord*);
+    double PositionConsistancyCheck(Coord*, Coord*, double);
     double SpeedConsistancyCheck(double, double, double);
-    double PositionSpeedConsistancyCheck(Coord,
-            Coord , double , double , double );
+    double PositionSpeedConsistancyCheck(Coord*,
+            Coord *, double , double , double );
     double SpeedPlausibilityCheck(double);
     double IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
             Coord head1, Coord nodePosition2, Coord nodeSize2,
             Coord head2);
-    double SuddenAppearenceCheck(Coord, Coord);
+    double SuddenAppearenceCheck(Coord*, Coord*);
     double BeaconFrequencyCheck(double, double);
-    double PositionPlausibilityCheck(Coord, double);
-    double PositionHeadingConsistancyCheck(Coord curHeading,
-            Coord curPosition, Coord oldPosition, double deltaTime, double curSpeed);
+    double PositionPlausibilityCheck(Coord*, double);
+    double PositionHeadingConsistancyCheck(Coord* curHeading,
+            Coord *curPosition, Coord *oldPosition, double deltaTime, double curSpeed);
 
     InterTest MultipleIntersectionCheck(NodeTable * detectedNodes,
             BasicSafetyMessage * bsm);
+
+    void PrintBsmCheck(unsigned long senderPseudonym,
+            BsmCheck bsmCheck);
 
 public:
 

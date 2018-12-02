@@ -137,10 +137,10 @@ double ExperiChecks::PositionSpeedConsistancyCheck(Coord curPosition,
         double oldR = oldPositionConfidence.x / time + oldSpeedConfidence;
 
         double maxfactor = mdmLib.OneSidedCircleSegmentFactor(
-                maxspeed - theoreticalSpeed, curR, oldR, MAX_PLAUSIBLE_DECEL*time);
+                maxspeed - theoreticalSpeed, curR, oldR, (MAX_PLAUSIBLE_DECEL+MAX_MGT_RNG)*time);
 
         if(maxfactor<=0){
-            maxfactor = -AUG_FACTOR * (2*mdmLib.gaussianSum((maxspeed - theoreticalSpeed - curR - oldR),2*(MAX_PLAUSIBLE_DECEL*time)/3)-1);
+            maxfactor = -AUG_FACTOR * (2*mdmLib.gaussianSum((maxspeed - theoreticalSpeed - curR - oldR),2*((MAX_PLAUSIBLE_DECEL+MAX_MGT_RNG)*time)/3)-1);
         }
 
         double minfactor = mdmLib.OneSidedCircleSegmentFactor(

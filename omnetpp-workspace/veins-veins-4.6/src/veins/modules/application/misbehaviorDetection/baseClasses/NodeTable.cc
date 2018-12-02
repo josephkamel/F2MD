@@ -143,7 +143,7 @@ BasicSafetyMessage* NodeTable::getNextAttackedBsm(Coord myPosition, int bsmNode,
         int index = -1;
         MDMLib mdmLib = MDMLib();
         for (int var = 0; var < nodesNum; ++var) {
-            double distance = mdmLib.calculateDistance(myPosition,nodeHistoryList[var].getLatestBSMAddr()->getSenderPos());
+            double distance = mdmLib.calculateDistancePtr(&myPosition,&nodeHistoryList[var].getLatestBSMAddr()->getSenderPos());
             if(minDistance > distance){
                 minDistance = distance;
                 index = var;

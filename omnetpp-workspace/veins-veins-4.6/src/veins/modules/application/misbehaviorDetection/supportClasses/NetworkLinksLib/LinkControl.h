@@ -97,7 +97,7 @@ protected:
     };
 
     enum {
-        GRIDCELL_SIZE = 128
+        GRIDCELL_SIZE = 32
     };
 
     typedef std::list<Link*> LinkGridCell;

@@ -439,10 +439,10 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
                 double XOffset = -SquareX * (attackBsm.getSenderLength() + SybilDistanceX) + sybDistXrand;
                 double YOffset = -SquareY * (attackBsm.getSenderWidth() + SybilDistanceY) + sybDistYrand;
                 MDMLib mdmLib = MDMLib();
-                double curHeadingAngle = mdmLib.calculateHeadingAngle(attackBsm.getSenderHeading());
+                double curHeadingAngle = mdmLib.calculateHeadingAnglePtr(&attackBsm.getSenderHeading());
 
                 Coord relativePos = Coord(XOffset, YOffset, 0);
-                double DeltaAngle = mdmLib.calculateHeadingAngle(relativePos);
+                double DeltaAngle = mdmLib.calculateHeadingAnglePtr(&relativePos);
 
                 double newAngle = curHeadingAngle + DeltaAngle;
                 newAngle = std::fmod(newAngle, 360);
@@ -466,10 +466,10 @@ BasicSafetyMessage MDAttack::launchAttack(attackTypes::Attacks myAttackType) {
             double XOffset = -SquareX * (*myLength + SybilDistanceX)+ sybDistXrand;
             double YOffset = -SquareY * (*myWidth + SybilDistanceY) + sybDistYrand;
             MDMLib mdmLib = MDMLib();
-            double curHeadingAngle = mdmLib.calculateHeadingAngle(*curHeading);
+            double curHeadingAngle = mdmLib.calculateHeadingAnglePtr(curHeading);
 
             Coord relativePos = Coord(XOffset, YOffset, 0);
-            double DeltaAngle = mdmLib.calculateHeadingAngle(relativePos);
+            double DeltaAngle = mdmLib.calculateHeadingAnglePtr(&relativePos);
 
             double newAngle = curHeadingAngle + DeltaAngle;
             newAngle = std::fmod(newAngle, 360);
