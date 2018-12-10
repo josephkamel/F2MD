@@ -19,7 +19,7 @@ This project aims to recreate within a simulation all the elements that form the
 3. Setup the latest version of Veins ( Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/) )
 4. Add f2mdVeinsApp to >src/veins/modules/application
 
-***Alternatively you can clone [Veins-F2MD](https://github.com/josephkamel/Veins-F2MD) for an already integrated up tp date version***
+***Alternatively you can clone [Veins-F2MD](https://github.com/josephkamel/Veins-F2MD) for an already integrated and up to date version***
 
 ## Project Diagram
 
