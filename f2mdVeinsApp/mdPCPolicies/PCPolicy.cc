@@ -90,14 +90,14 @@ void PCPolicy::checkPseudonymChange(pseudoChangeTypes::PseudoChange myPcType) {
     }
 }
 
-double PCPolicy::periodicalPCP() {
+void PCPolicy::periodicalPCP() {
     if ((simTime().dbl() - lastChangeTime) > Period_Change_Time) {
         lastChangeTime = simTime().dbl();
         (*myPseudonym) = getNextPseudonym();
     }
 }
 
-double PCPolicy::disposablePCP() {
+void PCPolicy::disposablePCP() {
     if (messageToleranceBuffer > Tolerance_Buffer) {
         messageToleranceBuffer = 0;
         (*myPseudonym) = getNextPseudonym();
@@ -106,7 +106,7 @@ double PCPolicy::disposablePCP() {
     }
 }
 
-double PCPolicy::distanceBasedPCP() {
+void PCPolicy::distanceBasedPCP() {
     double stepDistance = mdmLib.calculateDistance(lastPos, (*curPosition));
     lastPos = (*curPosition);
 
@@ -117,7 +117,7 @@ double PCPolicy::distanceBasedPCP() {
     }
 }
 
-double PCPolicy::car2carPCP() {
+void PCPolicy::car2carPCP() {
     double stepDistance = mdmLib.calculateDistance(lastPos, (*curPosition));
     lastPos = (*curPosition);
     cumulativeDistance = cumulativeDistance + stepDistance;
@@ -147,7 +147,7 @@ double PCPolicy::car2carPCP() {
     }
 }
 
-double PCPolicy::randomPCP() {
+void PCPolicy::randomPCP() {
     double rnd = genLib.RandomDouble(0, 1);
     if (rnd < Random_Change_Chance) {
         (*myPseudonym) = getNextPseudonym();

@@ -12,7 +12,7 @@
 #include <veins/modules/application/f2mdVeinsApp/mdSupport/GaussianRandom.h>
 #define EPSILON_G 0.05
 
-GaussianRandom::GaussianRandom(double curPosConfidence, Coord curSpeedConfidence, Coord curHeadingConfidence) {
+GaussianRandom::GaussianRandom(Coord* curPosConfidence, Coord* curSpeedConfidence, Coord* curHeadingConfidence) {
     this->curPosConfidence = curPosConfidence;
     this->curSpeedConfidence = curSpeedConfidence;
     this->curHeadingConfidence = curHeadingConfidence;
@@ -31,7 +31,7 @@ double GaussianRandom::getGaussianRand(double mean, double stddev) {
 
 Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
-    double r =  getGaussianRand(0, curPosConfidence/3);
+    double r =  getGaussianRand(0, curPosConfidence->x/3);
 
     GeneralLib genLib = GeneralLib();
 
@@ -40,8 +40,8 @@ Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
     double theta = genLib.RandomDouble(0, 2 * PI);
 
-    while(r>=(curPosConfidence+EPSILON_G) || r<=-(curPosConfidence+EPSILON_G) ){
-        r =  getGaussianRand(0, curPosConfidence/3);
+    while(r>=(curPosConfidence->x+EPSILON_G) || r<=-(curPosConfidence->x+EPSILON_G) ){
+        r =  getGaussianRand(0, curPosConfidence->x/3);
     }
 
     double deltaX = r * cos(theta);
@@ -56,9 +56,9 @@ Coord GaussianRandom::OffsetPosition(Coord curPosition) {
 
 Coord GaussianRandom::OffsetSpeed(Coord curSpeed) {
 
-    double deltaVx =  getGaussianRand(0, curSpeedConfidence.x/3);
-    double deltaVy =  getGaussianRand(0, curSpeedConfidence.y/3);
-    double deltaVz =  getGaussianRand(0, curSpeedConfidence.z/3);
+    double deltaVx =  getGaussianRand(0, curSpeedConfidence->x/3);
+    double deltaVy =  getGaussianRand(0, curSpeedConfidence->y/3);
+//    double deltaVz =  getGaussianRand(0, curSpeedConfidence.z/3);
 
 //    if(deltaVx>curSpeedConfidence.x ){
 //        deltaVx = curSpeedConfidence.x;
@@ -79,7 +79,7 @@ Coord GaussianRandom::OffsetSpeed(Coord curSpeed) {
 //        deltaVz = -curSpeedConfidence.z;
 //    }
 
-    deltaVy = deltaVx;
+  //  deltaVy = deltaVx;
 
 //    std::cout << "========== speed: "<<curSpeed.x<<" "<< curSpeed.y << '\n';
 //    std::cout<< "deltaVx:" << deltaVx  << '\n';
@@ -95,13 +95,12 @@ Coord GaussianRandom::OffsetHeading(Coord curHeading) {
 
     double headingAngle = mdmLib.calculateHeadingAngle(curHeading);
 
-    double angle =  getGaussianRand(0, curHeadingConfidence.x/3);
+    double angle =  getGaussianRand(0, curHeadingConfidence->x/3);
 
     headingAngle = headingAngle + angle;
 
     double x = cos(headingAngle*PI/180);
     double y = sin(headingAngle*PI/180);
-
 
     return Coord(x,-y,curHeading.z);
 

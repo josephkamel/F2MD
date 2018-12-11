@@ -38,6 +38,7 @@
 #include <veins/modules/application/f2mdVeinsApp/mdEnumTypes/ReportTypes.h>
 #include <veins/modules/application/f2mdVeinsApp/mdMessages/BasicSafetyMessage_m.h>
 #include <veins/modules/application/f2mdVeinsApp/mdSupport/GaussianRandom.h>
+#include <veins/modules/application/f2mdVeinsApp/mdSupport/RelativeOffset.h>
 #include <veins/modules/application/f2mdVeinsApp/mdSupport/MDMLib.h>
 #define MYBSM_SIZE 10
 
@@ -205,6 +206,10 @@ protected:
     BasicSafetyMessage myBsm[MYBSM_SIZE];
     void addMyBsm(BasicSafetyMessage bsm);
     int myBsmNum = 0;
+    double deltaRPosition = 0;
+    double deltaThetaPosition = 0;
+    double deltaSpeed = 0;
+    double deltaHeading = 0;
 };
 
 } // namespace Veins

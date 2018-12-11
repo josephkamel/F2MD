@@ -76,32 +76,14 @@ int NodeTable::getOldestNode() {
     return oldestNodeIndex;
 }
 
-NodeHistory* NodeTable::getNodeHistoryAddr(int nodeId) {
+NodeHistory* NodeTable::getNodeHistoryAddr(unsigned long nodePseudo) {
     int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
     for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodePseudos[var]) {
+        if (nodePseudo == nodePseudos[var]) {
             return &nodeHistoryList[var];
         }
     }
     return &nullNode;
-}
-
-void NodeTable::setNodeHistory(int nodeId ,NodeHistory nodeHistory){
-    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
-    for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodePseudos[var]) {
-            nodeHistoryList[var] = nodeHistory;
-        }
-    }
-}
-
-void NodeTable::setMDMHistory(int nodeId ,MDMHistory mdmHistory){
-    int totalNodes = sizeof(nodePseudos) / sizeof(nodePseudos[0]);
-    for (int var = 0; var < totalNodes; ++var) {
-        if (nodeId == nodePseudos[var]) {
-            mdmHistoryList[var] = nodeId;
-        }
-    }
 }
 
 MDMHistory* NodeTable::getMDMHistoryAddr(unsigned long nodePseudonym) {

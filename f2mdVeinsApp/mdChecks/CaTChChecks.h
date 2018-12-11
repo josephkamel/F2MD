@@ -64,7 +64,7 @@ private:
     double IntersectionCheck(Coord *  nodePosition1,
             Coord *  nodePositionConfidence1, Coord *  nodePosition2,
             Coord*  nodePositionConfidence2, Coord * nodeHeading1, Coord * nodeHeading2,
-            Coord*  nodeSize1, Coord * nodeSize2);
+            Coord*  nodeSize1, Coord * nodeSize2, double deltaTime);
     InterTest MultipleIntersectionCheck(NodeTable * detectedNodes,
             BasicSafetyMessage * bsm);
 

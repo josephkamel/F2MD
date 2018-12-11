@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.4 from veins/modules/application/F2MD/mdMessages/BasicSafetyMessage.msg.
+// Generated file, do not edit! Created by nedtool 5.4 from veins/modules/application/f2mdVeinsApp/mdMessages/BasicSafetyMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -26,7 +26,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <veins/modules/application/f2mdVeinsApp/mdMessages/BasicSafetyMessage_m.h>
+#include "BasicSafetyMessage_m.h"
 
 namespace omnetpp {
 

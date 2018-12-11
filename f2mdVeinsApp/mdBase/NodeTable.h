@@ -37,11 +37,8 @@ public:
     NodeHistory* getNodeHistoryList();
     unsigned long getNodePseudo(int);
     void put(unsigned long, NodeHistory, MDMHistory);
-    NodeHistory* getNodeHistoryAddr(int);
+    NodeHistory* getNodeHistoryAddr(unsigned long nodePseudonym);
     MDMHistory* getMDMHistoryAddr(unsigned long nodePseudonym);
-
-    void setNodeHistory(int index,NodeHistory);
-    void setMDMHistory(int index,MDMHistory);
 
     bool includes(unsigned long nodePseudonym);
 

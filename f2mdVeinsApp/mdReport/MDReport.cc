@@ -199,9 +199,6 @@ bool MDReport::writeStrToFile(const std::string strFileCnst,
 bool MDReport::writeStrToFileList(const std::string strFileCnst,
         const std::string serial, const std::string version,
         const std::string outStr,const std::string curDate) {
-    int gentime = generationTime;
-    int gentime0000 = (generationTime - gentime) * 10000;
-
     std::string dirnameStr = strFileCnst + serial + "/MDReportsList_" + curDate;
     const char* dirnameConst = dirnameStr.c_str();
 

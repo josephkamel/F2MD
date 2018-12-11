@@ -45,8 +45,6 @@ double LegacyChecks::RangePlausibilityCheck(Coord *senderPosition,
     double distance = mdmLib.calculateDistancePtr(senderPosition,
             receiverPosition);
 
-
-
     if (distance < MAX_PLAUSIBLE_RANGE) {
         return 1;
     } else {
@@ -71,10 +69,10 @@ double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
 
     double speedDelta = curSpeed - oldspeed;
 
-    double attFact = mdmLib.gaussianSum(1, 1 / 3);
-    if (time >= 1) {
-        attFact = time;
-    }
+//    double attFact = mdmLib.gaussianSum(1, 1 / 3);
+//    if (time >= 1) {
+//        attFact = time;
+//    }
 
 //    std::cout<<"S_MaxAccel:"<<S_MaxAccel<<"\n";
 //    std::cout<<"S_MaxDecel:"<<S_MaxDecel<<"\n";
@@ -84,7 +82,7 @@ double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
             S_MaxAccel = speedDelta/time;
         }
 
-        if (speedDelta < MAX_PLAUSIBLE_ACCEL * attFact) {
+        if (speedDelta < MAX_PLAUSIBLE_ACCEL * time) {
             return 1;
         } else {
             return 0; //distance
@@ -96,7 +94,7 @@ double LegacyChecks::SpeedConsistancyCheck(double curSpeed, double oldspeed,
         }
 
 
-        if (fabs(speedDelta) < MAX_PLAUSIBLE_DECEL * attFact) {
+        if (fabs(speedDelta) < MAX_PLAUSIBLE_DECEL * time) {
             return 1;
         } else {
             return 0; //distance
@@ -117,12 +115,8 @@ double LegacyChecks::PositionSpeedConsistancyCheck(Coord *curPosition,
         double deltaMax = maxspeed - theoreticalSpeed;
         double deltaMin = theoreticalSpeed - minspeed ;
 
-//        std::cout<< "saveMax"<< saveMax <<"\n";
-//        std::cout<< "saveMin"<< saveMin <<"\n";
-
-
         if (deltaMax >  (MAX_PLAUSIBLE_DECEL+MAX_MGT_RNG)*time) {
-            return 0; // deltaMax - MIN_PSS
+               return 0; // deltaMax - MIN_PSS
         } else {
             if (deltaMin >  MAX_PLAUSIBLE_ACCEL*time) {
                 return 0; // deltaMin - MAX_PSS
@@ -145,7 +139,7 @@ double LegacyChecks::SpeedPlausibilityCheck(double speed) {
 }
 
 double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
-        Coord head1, Coord  nodePosition2, Coord nodeSize2, Coord  head2) {
+        Coord head1, Coord  nodePosition2, Coord nodeSize2, Coord  head2, double deltaTime) {
 
     double heading1 = mdmLib.calculateHeadingAnglePtr(&head1);
     double heading2 = mdmLib.calculateHeadingAnglePtr(&head2);
@@ -154,6 +148,7 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
 
     double inter = mdmLib.RectRectFactor(nodePosition1, nodePosition2, heading1,
             heading2, nodeSize1, nodeSize2);
+    inter = inter * ((MAX_DELTA_INTER-deltaTime)/MAX_DELTA_INTER);
 
 //    if (inter > 0.5){
 //        std::cout<<"nodePosition1:"<<nodePosition1<<"\n";
@@ -169,10 +164,23 @@ double LegacyChecks::IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
 //        std::cout<<"y:"<<nodePosition2.y-nodePosition1.y<<"\n";
 //        std::cout<<"h:"<<heading2-heading1<<"\n";
 //
+//        std::cout<<"deltaTime:"<<deltaTime<<"\n";
+//
+//        std::cout<<"((MAX_DELTA_INTER-deltaTime)/MAX_DELTA_INTER):"<<((MAX_DELTA_INTER-deltaTime)/MAX_DELTA_INTER)<<"\n";
+//
 //        std::cout<<"inter:"<<inter<<"\n";
+//
+//        Coord conf = Coord(0,0,0);
+//
+//        double intFactor2 = mdmLib.EllipseEllipseIntersectionFactor(nodePosition1,
+//                conf, nodePosition2, conf,
+//                heading1, heading2 , nodeSize1, nodeSize2);
+//        intFactor2 = intFactor2 *  ((MAX_DELTA_INTER - deltaTime) / MAX_DELTA_INTER);
+//        std::cout<<"intFactor2:"<<intFactor2<<"\n";
+//        exit(0);
 //    }
 
-    if (inter > 0.5) {
+    if (inter > 0.25) {
         return 0; //inter
     } else {
         return 1;
@@ -186,7 +194,6 @@ InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
 
     unsigned long senderPseudonym = bsm->getSenderPseudonym();
 
-    NodeHistory *senderNode = detectedNodes->getNodeHistoryAddr(senderPseudonym);
     NodeHistory *varNode;
 
     const  int maxInterNum = 100;
@@ -198,7 +205,7 @@ InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
 
     INTScore = IntersectionCheck(myPosition, mySize, myHeading, bsm->getSenderPos(),
             Coord(bsm->getSenderWidth(), bsm->getSenderLength()),
-            bsm->getSenderHeading());
+            bsm->getSenderHeading(),0.11);
 
 
     if (INTScore < 1 && INTNum<maxInterNum) {
@@ -211,15 +218,15 @@ InterTest LegacyChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
         if (detectedNodes->getNodePseudo(var) != senderPseudonym) {
             varNode = detectedNodes->getNodeHistoryAddr(
                     detectedNodes->getNodePseudo(var));
-
-            if (mdmLib.calculateDeltaTime(varNode->getLatestBSMAddr(),
-                    bsm) < MAX_DELTA_INTER) {
+            double deltaTime =mdmLib.calculateDeltaTime(varNode->getLatestBSMAddr(),
+                    bsm);
+            if (deltaTime < MAX_DELTA_INTER) {
 
                 INTScore = IntersectionCheck(varNode->getSenderPos(0),
                         varNode->getSenderSize(0), varNode->getSenderHeading(0),
                         bsm->getSenderPos(),
                         Coord(bsm->getSenderWidth(), bsm->getSenderLength()),
-                        bsm->getSenderHeading());
+                        bsm->getSenderHeading(), deltaTime);
 
                 if (INTScore < 1 && INTNum<maxInterNum) {
                     resultPseudo[INTNum] = detectedNodes->getNodePseudo(var);
@@ -331,8 +338,6 @@ BsmCheck LegacyChecks::CheckBSM(BasicSafetyMessage *bsm,
     bsmCheck.setPositionPlausibility(
             PositionPlausibilityCheck(&senderPos,
                     mdmLib.calculateSpeedPtr(&bsm->getSenderSpeed())));
-
-
 
     if (detectedNodes->getNodeHistoryAddr(senderPseudonym)->getBSMNum() > 0) {
 

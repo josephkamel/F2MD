@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.4 from veins/modules/application/F2MD/mdMessages/BasicSafetyMessage.msg.
+// Generated file, do not edit! Created by nedtool 5.4 from veins/modules/application/f2mdVeinsApp/mdMessages/BasicSafetyMessage.msg.
 //
 
 #if defined(__clang__)
@@ -26,7 +26,7 @@
 namespace Veins {
 
 /**
- * Class generated from <tt>veins/modules/application/F2MD/mdMessages/BasicSafetyMessage.msg:33</tt> by nedtool.
+ * Class generated from <tt>veins/modules/application/f2mdVeinsApp/mdMessages/BasicSafetyMessage.msg:33</tt> by nedtool.
  * <pre>
  * packet BasicSafetyMessage extends BaseFrame1609_4
  * {

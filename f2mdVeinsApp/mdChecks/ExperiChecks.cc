@@ -208,7 +208,6 @@ InterTest ExperiChecks::MultipleIntersectionCheck(NodeTable * detectedNodes,
 
     Coord senderSize = Coord(bsm->getSenderWidth(), bsm->getSenderLength());
 
-    NodeHistory * senderNode = detectedNodes->getNodeHistoryAddr(senderPseudonym);
     NodeHistory * varNode;
 
     std::map<std::string, unsigned long> resultPseudo;

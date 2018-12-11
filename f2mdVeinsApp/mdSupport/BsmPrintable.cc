@@ -259,9 +259,6 @@ bool BsmPrintable::writeStrToFileList(const std::string strFileCnst,
         const std::string serial, const std::string version,
         const std::string outStr, const std::string curDate) {
 
-    int gentime = bsm.getArrivalTime().dbl();
-    int gentime0000 = (bsm.getArrivalTime().dbl() - gentime) * 10000;
-
     std::string upperDirName = strFileCnst + serial;
     const char* upperDirNameConst = upperDirName.c_str();
     struct stat info;

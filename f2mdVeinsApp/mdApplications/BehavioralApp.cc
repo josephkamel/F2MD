@@ -42,10 +42,6 @@ bool BehavioralApp::CheckNodeForReport(unsigned long myPseudonym,
 
     unsigned long senderId = bsm->getSenderPseudonym();
 
-    int bsmCheckListSize = 0;
-
-    double factorList[bsmCheckListSize];
-
     //std::cout<< "RangePlausibility" << '\n';
 
     tempFactor = bsmCheck->getRangePlausibility();

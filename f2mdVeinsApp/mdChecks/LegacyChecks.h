@@ -54,7 +54,7 @@ private:
     double SpeedPlausibilityCheck(double);
     double IntersectionCheck(Coord nodePosition1, Coord nodeSize1,
             Coord head1, Coord nodePosition2, Coord nodeSize2,
-            Coord head2);
+            Coord head2, double deltaTime);
     double SuddenAppearenceCheck(Coord*, Coord*);
     double BeaconFrequencyCheck(double, double);
     double PositionPlausibilityCheck(Coord*, double);

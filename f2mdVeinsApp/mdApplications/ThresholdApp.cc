@@ -40,8 +40,6 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMess
     prntApp->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
     prntAppInst->incAll(mbTypes::intMbs[bsm->getSenderMbType()]);
 
-    unsigned long senderId = bsm->getSenderPseudonym();
-
     if(bsmCheck->getRangePlausibility()<minFactor){
         minFactor = bsmCheck->getRangePlausibility();
     }
@@ -124,7 +122,6 @@ bool ThresholdApp::CheckNodeForReport(unsigned long myPseudonym, BasicSafetyMess
         prntAppInst->incFlags(mdChecksTypes::PositionHeadingConsistancy, mbTypes::intMbs[bsm->getSenderMbType()]);
     }
 
-    bool maxInterFound = false;
     bool minInterFound = false;
 
     InterTest inter = bsmCheck->getIntersection();

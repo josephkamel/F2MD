@@ -449,8 +449,8 @@ void MDMLib::countCircles(double rc, double rl, double rs) {
     if (dist < 2 * rs)
         no = no - 1;
     for (int i = 0; i < no; i++) {
-        double x = rc * cos(i * 2 * PI / no);
-        double y = rc * sin(i * 2 * PI / no);
+//        double x = rc * cos(i * 2 * PI / no);
+//        double y = rc * sin(i * 2 * PI / no);
         noCircles = noCircles + 1;
     }
     double rcNext = rc - (2 * rs);
@@ -465,7 +465,7 @@ double MDMLib::calculateCircles(double dl, double ds) {
     noCircles = 0;
     double rl = dl / 2;
     double rs = ds / 2;
-    if (rl > 0 & rs > 0) {
+    if ((rl > 0) && (rs > 0)) {
         double rc = rl - rs;
         if (rs > rl) {
             //std::cout<<"Inside smaller diameters larger than outside diameter!"<<'\n';
@@ -596,8 +596,8 @@ double MDMLib::CircleIntersectionFactor(double conf1, double conf2, double d,
 
     double areaIntersection = calculateCircleCircleIntersection(r1, r2, d);
 
-    double areaFactor1 = areaIntersection / (PI * r1 * r1);
-    double areaFactor2 = areaIntersection / (PI * r2 * r2);
+//    double areaFactor1 = areaIntersection / (PI * r1 * r1);
+//    double areaFactor2 = areaIntersection / (PI * r2 * r2);
 
     double areaFactor = areaIntersection
             / ((PI * r1 * r1) + (PI * r2 * r2) - areaIntersection);
@@ -655,7 +655,11 @@ double MDMLib::EllipseEllipseIntersectionFactor(Coord pos1, Coord posConf1,
     double dx2 = size2.x + posConf2.x * 2;
     double dy2 = size2.y + posConf2.x * 2;
 
-    double intArea = eil.EllipseIntArea(pos1.x, pos1.y, dx1, dy1, heading1,
+    double scale = 0.01;
+    heading1 = (int)(heading1 / scale) * scale;
+    heading2 = (int)(heading1 / scale) * scale;
+
+    double intArea = eil.EllipseIntArea(pos1.x, pos1.y, dx1, dy1,heading2 ,
             pos2.x, pos2.y, dx2, dy2, heading2);
 
     double areaFactor = intArea

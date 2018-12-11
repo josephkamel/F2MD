@@ -22,8 +22,7 @@
 
 using namespace Veins;
 
-void BaseWaveApplLayer::initialize(int stage)
-{
+void BaseWaveApplLayer::initialize(int stage) {
     BaseApplLayer::initialize(stage);
 
     if (stage == 0) {
@@ -33,8 +32,7 @@ void BaseWaveApplLayer::initialize(int stage)
             mobility = TraCIMobilityAccess().get(getParentModule());
             traci = mobility->getCommandInterface();
             traciVehicle = mobility->getVehicleCommandInterface();
-        }
-        else {
+        } else {
             traci = nullptr;
             mobility = nullptr;
             traciVehicle = nullptr;
@@ -43,7 +41,8 @@ void BaseWaveApplLayer::initialize(int stage)
         annotations = AnnotationManagerAccess().getIfExists();
         ASSERT(annotations);
 
-        mac = FindModule<DemoBaseApplLayerToMac1609_4Interface*>::findSubModule(getParentModule());
+        mac = FindModule<DemoBaseApplLayerToMac1609_4Interface*>::findSubModule(
+                getParentModule());
         assert(mac);
 
         // read parameters
@@ -86,8 +85,7 @@ void BaseWaveApplLayer::initialize(int stage)
         myAttackType = attackTypes::Attacks::Genuine;
         //attackBsm.setSenderAddress(0);
         //nextAttackBsm.setSenderAddress(0);
-    }
-    else if (stage == 1) {
+    } else if (stage == 1) {
 
         // store MAC address for quick access
         myId = mac->getMACAddress();
@@ -96,7 +94,9 @@ void BaseWaveApplLayer::initialize(int stage)
 
         if (dataOnSch == true && !mac->isChannelSwitchingActive()) {
             dataOnSch = false;
-            EV_ERROR << "App wants to send data on SCH but MAC doesn't use any SCH. Sending all data on CCH" << std::endl;
+            EV_ERROR
+                            << "App wants to send data on SCH but MAC doesn't use any SCH. Sending all data on CCH"
+                            << std::endl;
         }
         simtime_t firstBeacon = simTime();
 
@@ -106,10 +106,16 @@ void BaseWaveApplLayer::initialize(int stage)
             firstBeacon = simTime() + randomOffset;
 
             if (mac->isChannelSwitchingActive() == true) {
-                if (beaconInterval.raw() % (mac->getSwitchingInterval().raw() * 2)) {
-                    EV_ERROR << "The beacon interval (" << beaconInterval << ") is smaller than or not a multiple of  one synchronization interval (" << 2 * mac->getSwitchingInterval() << "). This means that beacons are generated during SCH intervals" << std::endl;
+                if (beaconInterval.raw()
+                        % (mac->getSwitchingInterval().raw() * 2)) {
+                    EV_ERROR << "The beacon interval (" << beaconInterval
+                                    << ") is smaller than or not a multiple of  one synchronization interval ("
+                                    << 2 * mac->getSwitchingInterval()
+                                    << "). This means that beacons are generated during SCH intervals"
+                                    << std::endl;
                 }
-                firstBeacon = computeAsynchronousSendingTime(beaconInterval, type_CCH);
+                firstBeacon = computeAsynchronousSendingTime(beaconInterval,
+                        type_CCH);
             }
 
             if (sendBeacons) {
@@ -119,8 +125,8 @@ void BaseWaveApplLayer::initialize(int stage)
     }
 }
 
-simtime_t BaseWaveApplLayer::computeAsynchronousSendingTime(simtime_t interval, t_channel chan)
-{
+simtime_t BaseWaveApplLayer::computeAsynchronousSendingTime(simtime_t interval,
+        t_channel chan) {
 
     /*
      * avoid that periodic messages for one channel type are scheduled in the other channel interval
@@ -139,23 +145,28 @@ simtime_t BaseWaveApplLayer::computeAsynchronousSendingTime(simtime_t interval, 
      */
 
     if (mac->isCurrentChannelCCH()) {
-        nextCCH = simTime() - SimTime().setRaw(simTime().raw() % switchingInterval.raw()) + switchingInterval * 2;
-    }
-    else {
-        nextCCH = simTime() - SimTime().setRaw(simTime().raw() % switchingInterval.raw()) + switchingInterval;
+        nextCCH = simTime()
+                - SimTime().setRaw(simTime().raw() % switchingInterval.raw())
+                + switchingInterval * 2;
+    } else {
+        nextCCH = simTime()
+                - SimTime().setRaw(simTime().raw() % switchingInterval.raw())
+                + switchingInterval;
     }
 
     firstEvent = nextCCH + randomOffset;
 
     // check if firstEvent lies within the correct interval and, if not, move to previous interval
 
-    if (firstEvent.raw() % (2 * switchingInterval.raw()) > switchingInterval.raw()) {
+    if (firstEvent.raw() % (2 * switchingInterval.raw())
+            > switchingInterval.raw()) {
         // firstEvent is within a sch interval
-        if (chan == type_CCH) firstEvent -= switchingInterval;
-    }
-    else {
+        if (chan == type_CCH)
+            firstEvent -= switchingInterval;
+    } else {
         // firstEvent is within a cch interval, so adjust for SCH messages
-        if (chan == type_SCH) firstEvent += switchingInterval;
+        if (chan == type_SCH)
+            firstEvent += switchingInterval;
     }
 
     return firstEvent;
@@ -173,12 +184,12 @@ void BaseWaveApplLayer::addMyBsm(BasicSafetyMessage bsm) {
     myBsm[0] = bsm;
 }
 
-void BaseWaveApplLayer::populateWSM(BaseFrame1609_4* wsm, LAddress::L2Type rcvId, int serial)
-{
+void BaseWaveApplLayer::populateWSM(BaseFrame1609_4* wsm,
+        LAddress::L2Type rcvId, int serial) {
     wsm->setRecipientAddress(rcvId);
     wsm->setBitLength(headerLength);
 
-    if(BasicSafetyMessage* bsm = dynamic_cast<BasicSafetyMessage*>(wsm)){
+    if (BasicSafetyMessage* bsm = dynamic_cast<BasicSafetyMessage*>(wsm)) {
         //F2MD
         bsm->setSenderPseudonym(myPseudonym);
         bsm->setSenderMbType(myMdType);
@@ -187,8 +198,7 @@ void BaseWaveApplLayer::populateWSM(BaseFrame1609_4* wsm, LAddress::L2Type rcvId
         bsm->setSenderPos(curPosition);
         bsm->setSenderPosConfidence(curPositionConfidence);
 
-        std::pair<double, double> currLonLat = traci->getLonLat(
-                curPosition);
+        std::pair<double, double> currLonLat = traci->getLonLat(curPosition);
         bsm->setSenderGpsCoordinates(
                 Coord(currLonLat.first, currLonLat.second));
 
@@ -208,7 +218,7 @@ void BaseWaveApplLayer::populateWSM(BaseFrame1609_4* wsm, LAddress::L2Type rcvId
         addMyBsm(*bsm);
         // Genuine
 
-        if(myMdType == mbTypes::LocalAttacker){
+        if (myMdType == mbTypes::LocalAttacker) {
             if (attackBsm.getSenderPseudonym() != 0) {
                 bsm->setSenderPseudonym(attackBsm.getSenderPseudonym());
 
@@ -256,14 +266,13 @@ void BaseWaveApplLayer::populateWSM(BaseFrame1609_4* wsm, LAddress::L2Type rcvId
         bsm->setChannelNumber(Channels::CCH);
         bsm->addBitLength(beaconLengthBits);
         wsm->setUserPriority(beaconUserPriority);
-    }
-    else if (DemoServiceAdvertisment* wsa = dynamic_cast<DemoServiceAdvertisment*>(wsm)) {
+    } else if (DemoServiceAdvertisment* wsa =
+            dynamic_cast<DemoServiceAdvertisment*>(wsm)) {
         wsa->setChannelNumber(Channels::CCH);
         wsa->setTargetChannel(currentServiceChannel);
         wsa->setPsid(currentOfferedServiceId);
         wsa->setServiceDescription(currentServiceDescription.c_str());
-    }
-    else {
+    } else {
         if (dataOnSch)
             wsm->setChannelNumber(Channels::SCH1); // will be rewritten at Mac1609_4 to actual Service Channel. This is just so no controlInfo is needed
         else
@@ -273,8 +282,8 @@ void BaseWaveApplLayer::populateWSM(BaseFrame1609_4* wsm, LAddress::L2Type rcvId
     }
 }
 
-void BaseWaveApplLayer::receiveSignal(cComponent* source, simsignal_t signalID, cObject* obj, cObject* details)
-{
+void BaseWaveApplLayer::receiveSignal(cComponent* source, simsignal_t signalID,
+        cObject* obj, cObject* details) {
     Enter_Method_Silent();
     if (signalID == BaseMobility::mobilityStateChangedSignal) {
         handlePositionUpdate(obj);
@@ -284,25 +293,27 @@ void BaseWaveApplLayer::receiveSignal(cComponent* source, simsignal_t signalID, 
     }
 }
 
-void BaseWaveApplLayer::handlePositionUpdate(cObject* obj)
-{
-    ChannelMobilityPtrType const mobility = check_and_cast<ChannelMobilityPtrType>(obj);
+void BaseWaveApplLayer::handlePositionUpdate(cObject* obj) {
+    ChannelMobilityPtrType const mobility = check_and_cast<
+            ChannelMobilityPtrType>(obj);
 
-    GaussianRandom gaussian = GaussianRandom(curPositionConfidence.x,
-            curSpeedConfidence, curHeadingConfidence);
+    RelativeOffset relativeOffset = RelativeOffset(&curPositionConfidence,
+            &curSpeedConfidence, &curHeadingConfidence, &deltaRPosition,
+            &deltaThetaPosition, &deltaSpeed, &deltaHeading);
 
-    curPosition = gaussian.OffsetPosition(mobility->getCurrentPosition());
-    curSpeed = gaussian.OffsetSpeed(mobility->getCurrentSpeed());
-    curHeading = gaussian.OffsetHeading(mobility->getCurrentDirection());
+//    GaussianRandom relativeOffset = GaussianRandom(&curPositionConfidence,
+//            &curSpeedConfidence, &curHeadingConfidence);
+
+    curPosition = relativeOffset.OffsetPosition(mobility->getCurrentPosition());
+    curSpeed = relativeOffset.OffsetSpeed(mobility->getCurrentSpeed());
+    curHeading = relativeOffset.OffsetHeading(mobility->getCurrentDirection());
 }
 
-void BaseWaveApplLayer::handleParkingUpdate(cObject* obj)
-{
+void BaseWaveApplLayer::handleParkingUpdate(cObject* obj) {
     isParked = mobility->getParkingState();
 }
 
-void BaseWaveApplLayer::handleLowerMsg(cMessage* msg)
-{
+void BaseWaveApplLayer::handleLowerMsg(cMessage* msg) {
 
     BaseFrame1609_4* wsm = dynamic_cast<BaseFrame1609_4*>(msg);
     ASSERT(wsm);
@@ -310,12 +321,11 @@ void BaseWaveApplLayer::handleLowerMsg(cMessage* msg)
     if (BasicSafetyMessage* bsm = dynamic_cast<BasicSafetyMessage*>(wsm)) {
         receivedBSMs++;
         onBSM(bsm);
-    }
-    else if (DemoServiceAdvertisment* wsa = dynamic_cast<DemoServiceAdvertisment*>(wsm)) {
+    } else if (DemoServiceAdvertisment* wsa =
+            dynamic_cast<DemoServiceAdvertisment*>(wsm)) {
         receivedWSAs++;
         onWSA(wsa);
-    }
-    else {
+    } else {
         receivedWSMs++;
         onWSM(wsm);
     }
@@ -323,8 +333,7 @@ void BaseWaveApplLayer::handleLowerMsg(cMessage* msg)
     delete (msg);
 }
 
-void BaseWaveApplLayer::handleSelfMsg(cMessage* msg)
-{
+void BaseWaveApplLayer::handleSelfMsg(cMessage* msg) {
     switch (msg->getKind()) {
     case SEND_BEACON_EVT: {
         BasicSafetyMessage* bsm = new BasicSafetyMessage();
@@ -341,14 +350,15 @@ void BaseWaveApplLayer::handleSelfMsg(cMessage* msg)
         break;
     }
     default: {
-        if (msg) EV_WARN << "APP: Error: Got Self Message of unknown kind! Name: " << msg->getName() << endl;
+        if (msg)
+            EV_WARN << "APP: Error: Got Self Message of unknown kind! Name: "
+                           << msg->getName() << endl;
         break;
     }
     }
 }
 
-void BaseWaveApplLayer::finish()
-{
+void BaseWaveApplLayer::finish() {
     recordScalar("generatedWSMs", generatedWSMs);
     recordScalar("receivedWSMs", receivedWSMs);
 
@@ -359,15 +369,14 @@ void BaseWaveApplLayer::finish()
     recordScalar("receivedWSAs", receivedWSAs);
 }
 
-BaseWaveApplLayer::~BaseWaveApplLayer()
-{
+BaseWaveApplLayer::~BaseWaveApplLayer() {
     cancelAndDelete(sendBeaconEvt);
     cancelAndDelete(sendWSAEvt);
     findHost()->unsubscribe(BaseMobility::mobilityStateChangedSignal, this);
 }
 
-void BaseWaveApplLayer::startService(Channels::ChannelNumber channel, int serviceId, std::string serviceDescription)
-{
+void BaseWaveApplLayer::startService(Channels::ChannelNumber channel,
+        int serviceId, std::string serviceDescription) {
     if (sendWSAEvt->isScheduled()) {
         error("Starting service although another service was already started");
     }
@@ -381,35 +390,29 @@ void BaseWaveApplLayer::startService(Channels::ChannelNumber channel, int servic
     scheduleAt(wsaTime, sendWSAEvt);
 }
 
-void BaseWaveApplLayer::stopService()
-{
+void BaseWaveApplLayer::stopService() {
     cancelEvent(sendWSAEvt);
     currentOfferedServiceId = -1;
 }
 
-void BaseWaveApplLayer::sendDown(cMessage* msg)
-{
+void BaseWaveApplLayer::sendDown(cMessage* msg) {
     checkAndTrackPacket(msg);
     BaseApplLayer::sendDown(msg);
 }
 
-void BaseWaveApplLayer::sendDelayedDown(cMessage* msg, simtime_t delay)
-{
+void BaseWaveApplLayer::sendDelayedDown(cMessage* msg, simtime_t delay) {
     checkAndTrackPacket(msg);
     BaseApplLayer::sendDelayedDown(msg, delay);
 }
 
-void BaseWaveApplLayer::checkAndTrackPacket(cMessage* msg)
-{
+void BaseWaveApplLayer::checkAndTrackPacket(cMessage* msg) {
     if (dynamic_cast<BasicSafetyMessage*>(msg)) {
         EV_TRACE << "sending down a BSM" << std::endl;
         generatedBSMs++;
-    }
-    else if (dynamic_cast<DemoServiceAdvertisment*>(msg)) {
+    } else if (dynamic_cast<DemoServiceAdvertisment*>(msg)) {
         EV_TRACE << "sending down a WSA" << std::endl;
         generatedWSAs++;
-    }
-    else if (dynamic_cast<BaseFrame1609_4*>(msg)) {
+    } else if (dynamic_cast<BaseFrame1609_4*>(msg)) {
         EV_TRACE << "sending down a wsm" << std::endl;
         generatedWSMs++;
     }

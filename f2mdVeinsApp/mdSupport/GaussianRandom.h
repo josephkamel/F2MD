@@ -35,14 +35,14 @@ using namespace Veins;
 class GaussianRandom {
     private:
 
-    double curPosConfidence;
-    Coord curSpeedConfidence;
-    Coord curHeadingConfidence;
+    Coord *curPosConfidence;
+    Coord *curSpeedConfidence;
+    Coord *curHeadingConfidence;
 
     double getGaussianRand(double mean, double stddev);
 
     public:
-        GaussianRandom(double curPosConfidence, Coord curSpeedConfidence, Coord curHeadingConfidence);
+        GaussianRandom(Coord *curPosConfidence, Coord *curSpeedConfidence, Coord* curHeadingConfidence);
         Coord OffsetPosition(Coord curPosition);
         Coord OffsetSpeed(Coord curSpeed);
         Coord OffsetHeading(Coord curHeading);

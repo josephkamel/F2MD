@@ -18,8 +18,8 @@ Define_Module(JosephVeinsApp);
 #define savePath "../../../../mdmSave/"
 
 #define randomConf false
-#define confPos 0
-#define confSpd 0
+#define confPos 3.0
+#define confSpd 0.5
 #define confHea 0
 
 #define SAVE_PERIOD 1 //60 seconds
@@ -70,7 +70,7 @@ static mdChecksVersionTypes::ChecksVersion checksVersionV2 =
         mdChecksVersionTypes::CatchChecks;
 
 static mdAppTypes::App appTypeV1 = mdAppTypes::ThresholdApp;
-static mdAppTypes::App appTypeV2 = mdAppTypes::BehavioralApp;
+static mdAppTypes::App appTypeV2 = mdAppTypes::ThresholdApp;
 
 static bool writeSelfMsg = false;
 

@@ -59,8 +59,6 @@ public:
 
     virtual double getMinFactor()= 0;
 
-    void SendReport( MDStatistics* mdAuthority, MDReport mbReport);
-
     void saveLine( std::string path, std::string serial, double density,
             double deltaT, bool printOut);
     void resetInstFlags();

@@ -56,14 +56,14 @@ public:
     void checkPseudonymChange(pseudoChangeTypes::PseudoChange);
 
     double messageToleranceBuffer = 0;
-    double disposablePCP();
+    void disposablePCP();
 
     double lastChangeTime = 0;
-    double periodicalPCP();
+    void periodicalPCP();
 
     double cumulativeDistance = 0;
     Coord lastPos = Coord(0, 0, 0);
-    double distanceBasedPCP();
+    void distanceBasedPCP();
 
     bool firstChange = true;
     bool randDistanceSet = false;
@@ -71,10 +71,10 @@ public:
     bool randTimeSet = false;
     double randTime = 120;
     double changeTimerStart = 0;
-    double car2carPCP();
+    void car2carPCP();
 
 
-    double randomPCP();
+    void randomPCP();
 
     void setMbType(mbTypes::Mbs mbType);
     void setMdAuthority(MDStatistics* mdAuthority);

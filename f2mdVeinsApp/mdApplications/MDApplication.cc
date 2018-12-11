@@ -44,15 +44,6 @@ MDApplication::MDApplication(int version) {
 
 }
 
-void MDApplication::SendReport(MDStatistics* mdAuthority, MDReport mbReport) {
-    if(version = 1){
-        mdAuthority->getReport(AppV1Name, mbReport);
-    }else{
-        mdAuthority->getReport(AppV2Name, mbReport);
-    }
-
-}
-
 void MDApplication::saveLine(std::string path, std::string serial, double density,
         double deltaT, bool printOut){
 
