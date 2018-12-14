@@ -1,0 +1,3 @@
+[submodule "veins-f2md"]
+	path = veins-f2md
+	url = https://github.com/josephkamel/veins-f2md.git
