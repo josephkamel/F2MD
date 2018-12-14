@@ -16,10 +16,7 @@ This project aims to recreate within a simulation all the elements that form the
 ## Installation
 1. Install Sumo 1.0.1
 2. Install OMNeT++ 5.4.1
-3. Setup the latest version of Veins ( Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/) )
-4. Add f2mdVeinsApp to >src/veins/modules/application
-
-***Alternatively you can clone [Veins-F2MD](https://github.com/josephkamel/Veins-F2MD) for an already integrated and up to date version***
+3. Setup the *veins-f2md* version of Veins  ( Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/) )
 
 ## Project Diagram
 
