@@ -160,7 +160,7 @@ class MlArrayStorage:
 		index = self.id_index.index(id)
 		return array([self.id_array_x[index][-1],self.id_array_y[index][-1]])
 
-	def get_array_MLP_L1N15(self, id, batch_size):
+	def get_array_MLP(self, id, batch_size):
 		index = self.id_index.index(id)
 		list_X = self.id_array_x[index][-batch_size:]
 
@@ -170,21 +170,7 @@ class MlArrayStorage:
 		list_X = np.append(list_X,app_ary,axis=1)
 		
 		#ret_array = [sum(x) for x in zip(*list_X)]
-		ret_array = np.array(list_X[:,:10].sum(axis=0))
-		list_Y = self.id_array_y[index][-batch_size:]
-		return array([array(ret_array),list_Y[-1]])
-
-	def get_array_MLP_L3N25(self, id, batch_size):
-		index = self.id_index.index(id)
-		list_X = self.id_array_x[index][-batch_size:]
-
-		app_ary = array([[len(list_X)]])
-		for i in range(0,len(list_X)-1):
-			app_ary = np.append(app_ary.tolist(),[[len(list_X)]],axis=0)
-		list_X = np.append(list_X,app_ary,axis=1)
-		
-		#ret_array = [sum(x) for x in zip(*list_X)]
-		ret_array = np.append(list_X[:,:10].sum(axis=0),list_X[-1,11:])
+		ret_array = np.append(list_X[:,:11].sum(axis=0),list_X[-1,11:])
 		list_Y = self.id_array_y[index][-batch_size:]
 		return array([array(ret_array),list_Y[-1]])
 

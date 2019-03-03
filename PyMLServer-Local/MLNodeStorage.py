@@ -38,12 +38,9 @@ class MlNodeStorage:
 	def get_array(self,my_id, test_id):
 		index = self.id_index.index(my_id)
 		return self.id_storage[index].get_array(test_id)
-	def get_array_MLP_L1N15(self,my_id, test_id, batch_size):
+	def get_array_MLP(self,my_id, test_id, batch_size):
 		index = self.id_index.index(my_id)
-		return self.id_storage[index].get_array_MLP_L1N15(test_id, batch_size)
-	def get_array_MLP_L3N25(self,my_id, test_id, batch_size):
-		index = self.id_index.index(my_id)
-		return self.id_storage[index].get_array_MLP_L3N25(test_id, batch_size)
+		return self.id_storage[index].get_array_MLP(test_id, batch_size)
 	def get_array_lstm(self,my_id, test_id, batch_size):
 		index = self.id_index.index(my_id)
 		return self.id_storage[index].get_array_lstm(test_id, batch_size)

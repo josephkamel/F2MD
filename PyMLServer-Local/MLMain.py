@@ -27,9 +27,11 @@ from sklearn.externals import joblib
 
 import time
 
-RTtrain = False
-RTcollectData = False
-RTreadDataFromFile = False
+RTTrainDataFromFile = False
+
+RTtrain = True
+RTcollectData = True
+
 RTpredict = True
 
 class MlMain:
@@ -42,7 +44,7 @@ class MlMain:
 	arrayLength = 20
 
 	collectDur = 0
-	deltaCall = 1000
+	deltaCall = 100000
 
 	clf = None
 	savePath = './saveFile/saveFile_D20'
@@ -63,14 +65,15 @@ class MlMain:
 		self.Trainer.setAIType(AIType)
 
 		self.trainedModelExists(AIType)
-		if RTreadDataFromFile:
+		if RTTrainDataFromFile:
 			self.ReadDataFromFile(version, AIType)
+			self.TrainData(AIType)
+			os._exit(0)
 
 	def mlMain(self, version, bsmJsonString, AIType):
 		if not self.initiated:
 			self.init(version,AIType)
 			self.initiated = True
-
 
 		start_time = time.time()
 
@@ -92,7 +95,7 @@ class MlMain:
 					print self.Trainer.valuesCollection.shape
 					self.Trainer.train()
 					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
-					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/2
 					#self.deltaCall = 10000000
 				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
 		
@@ -170,21 +173,36 @@ class MlMain:
 		#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Finished!"
 
+	def TrainData(self, AIType):
+		print ("Training " + str(self.dataPath) + " Started ...")
+		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
+		self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+		self.Trainer.train()
+		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
+		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
+		print ("Training " + str(self.dataPath) + " Finished!")
+
 	def getNodeArray(self,bsmJsom,AIType):
 		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
-		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['pseudonym'] 
+		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['Pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
 		self.Storage.add_bsm(receiverId,pseudonym, time, bsmJsom)
-		if(AIType == 'SVM'):
+		if('SVM' in AIType):
 			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
-		if(AIType == 'MLP_L1N15'):
-			returnArray = self.Storage.get_array_MLP_L1N15(receiverId,pseudonym, self.arrayLength)
-		if(AIType == 'MLP_L3N25'):
-			returnArray = self.Storage.get_array_MLP_L3N25(receiverId,pseudonym, self.arrayLength)
-		if(AIType == 'LSTM'):
+		if('MLP' in AIType):
+			returnArray = self.Storage.get_array_MLP(receiverId,pseudonym, self.arrayLength)
+		if('LSTM' in AIType):
 			returnArray = self.Storage.get_array_lstm(receiverId,pseudonym, self.arrayLength)
 
 		#print "cur_array: " + str(cur_array)
 		#print "returnArray: " + str(returnArray)
 		return returnArray
 
+def main():
+	globalMlMain = MlMain()
+	version = "V2"
+	AIType = "MLP_L4NV25"
+	RTTrainDataFromFile = True
+	globalMlMain.mlMain(version,"",AIType)
+
+if __name__ == "__main__": main()

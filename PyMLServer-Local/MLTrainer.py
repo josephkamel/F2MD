@@ -72,6 +72,12 @@ class MlTrainer:
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(25,25,25,), random_state=1)
 			clf.fit(X, y)
 
+		if(self.AIType == 'MLP_L4NV25'):
+			X, y = self.valuesCollection, self.targetCollection
+			y = to_categorical(y)
+			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(20,25,22,16,), verbose=True,random_state=1)
+			clf.fit(X, y)
+
 		if(self.AIType == 'LSTM'):
 			print self.valuesCollection.shape
 			print self.targetCollection.shape

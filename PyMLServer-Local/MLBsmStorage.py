@@ -69,6 +69,7 @@ class MlBsmStorage:
 		pC = bsmNew['BsmPrint']['BsmCheck']['pC']
 		sC = bsmNew['BsmPrint']['BsmCheck']['sC']
 		psC = bsmNew['BsmPrint']['BsmCheck']['psC']
+		psmC = bsmNew['BsmPrint']['BsmCheck']['psmC']
 		phC = bsmNew['BsmPrint']['BsmCheck']['phC']
 		sA = bsmNew['BsmPrint']['BsmCheck']['sA']
 		#sA = 1
@@ -95,7 +96,7 @@ class MlBsmStorage:
 		else:
 			numLabel = 1.0
 
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT, DeltaPos, PosConfidence,Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
+		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-psmC,1-phC,1-sA,1-bF,1-inT, DeltaPos, PosConfidence,Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 
@@ -135,7 +136,7 @@ class MlBsmStorage:
 		ret_array = [sum(x) for x in zip(*list_X)]
 
 		#print "------------------------------------------------------------------"
-		ret_array_2 = np.append(list_X[:,:10].sum(axis=0),list_X[-1,11:])
+		ret_array_2 = np.append(list_X[:,:11].sum(axis=0),list_X[-1,12:])
 
 		#print ret_array
 		#print ret_array_2
@@ -164,9 +165,9 @@ class MlBsmStorage:
 			list_Y.append(xy_array[1])
 
 		if len(list_X)<batch_size:
-			list_X_Ret = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+			list_X_Ret = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 			for i in range(0,batch_size-len(list_X) - 1):
-				list_X_Ret = np.vstack((list_X_Ret,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
+				list_X_Ret = np.vstack((list_X_Ret,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
 			#print list_X_Ret
 			list_X_Ret = np.vstack((list_X_Ret,list_X))
 			list_X = list_X_Ret
