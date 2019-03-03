@@ -64,7 +64,7 @@ class MlTrainer:
 		if(self.AIType == 'MLP_L1N15'):
 			X, y = self.valuesCollection, self.targetCollection
 			y = to_categorical(y)
-			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(25,), random_state=1)
+			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
 			clf.fit(X, y)
 		if(self.AIType == 'MLP_L3N25'):
 			X, y = self.valuesCollection, self.targetCollection

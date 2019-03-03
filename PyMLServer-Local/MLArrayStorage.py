@@ -86,6 +86,7 @@ class MlArrayStorage:
 		pC = bsmNew['BsmPrint']['BsmCheck']['pC']
 		sC = bsmNew['BsmPrint']['BsmCheck']['sC']
 		psC = bsmNew['BsmPrint']['BsmCheck']['psC']
+		psmC = bsmNew['BsmPrint']['BsmCheck']['psmC']
 		phC = bsmNew['BsmPrint']['BsmCheck']['phC']
 		sA = bsmNew['BsmPrint']['BsmCheck']['sA']
 		#sA = 1
@@ -137,6 +138,8 @@ class MlArrayStorage:
 			zeros=zeros+1
 		if psC==0:
 			zeros=zeros+1
+		if psmC==0:
+			zeros=zeros+1
 		if phC==0:
 			zeros=zeros+1
 		if bF==0:
@@ -144,17 +147,13 @@ class MlArrayStorage:
 		if inT==0:
 			zeros=zeros+1
 
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT, zeros, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
-		#valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
-		#valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-phC,1-sA,1-bF,1-inT])
-		#valuesArray = array([0,0,0,0,0,0,0,0,0,0, DeltaPos, PosConfidence,Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
+		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-psmC,1-phC,1-sA,1-bF,1-inT, zeros, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 		#print valuesArray
 		#print "returnArray: " + str(returnArray)
 		#returnArray = returnArray.astype(np.float)
 		return returnArray
-
 
 	def get_array(self, id):
 		index = self.id_index.index(id)

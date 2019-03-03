@@ -67,8 +67,8 @@ class MlDataCollector:
 		if self.valuesCollection.shape[0] == 0:
 			self.valuesCollection = np.concatenate([row for row in New_Rows])
 		else:
-			addTargetCollection = np.concatenate([row for row in New_Rows])
-			self.valuesCollection  = np.concatenate([self.valuesCollection, addTargetCollection])
+			addValuesCollection = np.concatenate([row for row in New_Rows])
+			self.valuesCollection  = np.concatenate([self.valuesCollection, addValuesCollection])
 		
 
 	def initValuesData_old(self,New_Rows):
