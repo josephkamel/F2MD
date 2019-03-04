@@ -178,9 +178,9 @@ class MlArrayStorage:
 		list_X = self.id_array_x[index][-batch_size:]
 
 		if len(list_X)<batch_size:
-			list_X_Ret = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+			list_X_Ret = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 			for i in range(0,batch_size-len(list_X) - 1):
-				list_X_Ret = np.vstack((list_X_Ret,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
+				list_X_Ret = np.vstack((list_X_Ret,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
 			#print list_X_Ret
 			list_X_Ret = np.vstack((list_X_Ret,list_X))
 			list_X = list_X_Ret

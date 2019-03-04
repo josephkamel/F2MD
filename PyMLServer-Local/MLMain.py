@@ -27,7 +27,6 @@ from sklearn.externals import joblib
 
 import time
 
-RTTrainDataFromFile = False
 
 RTtrain = True
 RTcollectData = True
@@ -41,14 +40,15 @@ class MlMain:
 	DataCollector = MlDataCollector()
 	Trainer = MlTrainer()
 	Storage = MlNodeStorage()
-	arrayLength = 20
+	arrayLength = 40
 
 	collectDur = 0
 	deltaCall = 100000
 
 	clf = None
-	savePath = './saveFile/saveFile_D20'
-	dataPath = './MDBsms_Mix'
+	savePath = './saveFile/saveFile_D40'
+	dataPath = '/home/joseph/Projects/F2MD/mdmSave/Data-1.0/IRT-DATA-0.5/MDBsmsList_V2_2019-3-4_1:1:23'
+	RTTrainDataFromFile = False
 
 	meanRuntime = 0
 	numRuntime = 0
@@ -65,8 +65,8 @@ class MlMain:
 		self.Trainer.setAIType(AIType)
 
 		self.trainedModelExists(AIType)
-		if RTTrainDataFromFile:
-			self.ReadDataFromFile(version, AIType)
+		if self.RTTrainDataFromFile:
+			self.ReadDataFromFile(AIType)
 			self.TrainData(AIType)
 			os._exit(0)
 
@@ -149,21 +149,28 @@ class MlMain:
 				#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
 
-	def ReadDataFromFile(self, version, AIType):
-		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Started ..."
-		filesNames = [f for f in tqdm(listdir(self.dataPath+'_'+version)) if isfile(join(self.dataPath+'_'+version, f))]
+	def ReadDataFromFile(self, AIType):
+		print "DataSave And Training " + str(self.dataPath) + " Started ..."
+		filesNames = [f for f in tqdm(listdir(self.dataPath)) if isfile(join(self.dataPath, f))]
 		print "bsmDataExists?"
 
 		ValuesData = []
 		TargetData = []
 
 		for i in tqdm(range(0,len(filesNames))):
+		#for i in tqdm(range(0,1000)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
-				bsmJsonString = open(self.dataPath+'_'+version+'/' +s, 'r').read()
+				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
 				bsmJsom = json.loads(bsmJsonString)
 				curArray = self.getNodeArray(bsmJsom,AIType)
 				self.DataCollector.collectData(curArray)
+			if s.endswith(".lbsm"):
+				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
+				listBsmJsom = json.loads(bsmJsonString)
+				for bsmJsom in listBsmJsom:
+					curArray = self.getNodeArray(bsmJsom,AIType)
+					self.DataCollector.collectData(curArray)
 
 		self.DataCollector.saveData()
 		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
@@ -171,7 +178,7 @@ class MlMain:
 		self.Trainer.train()
 		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 		#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-		print "DataSave And Training " + str(self.dataPath+'_'+version) + " Finished!"
+		print "DataSave And Training " + str(self.dataPath) + " Finished!"
 
 	def TrainData(self, AIType):
 		print ("Training " + str(self.dataPath) + " Started ...")
@@ -202,7 +209,7 @@ def main():
 	globalMlMain = MlMain()
 	version = "V2"
 	AIType = "MLP_L4NV25"
-	RTTrainDataFromFile = True
+	globalMlMain.RTTrainDataFromFile = True
 	globalMlMain.mlMain(version,"",AIType)
 
 if __name__ == "__main__": main()
