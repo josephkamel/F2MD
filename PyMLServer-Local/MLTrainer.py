@@ -2,7 +2,7 @@
 /*******************************************************************************
  * @author  Joseph Kamel
  * @email   josephekamel@gmail.com
- * @date    28/11/2018
+ * @date	28/11/2018
  * @version 2.0
  *
  * SCA (Secure Cooperative Autonomous systems)
@@ -25,6 +25,9 @@ from keras.layers.recurrent import LSTM
 from keras.models import load_model
 
 from keras.utils import to_categorical
+from sklearn.utils.class_weight import compute_class_weight
+
+from MLDataCollector import MlDataCollector
 
 class MlTrainer:
 
@@ -34,9 +37,6 @@ class MlTrainer:
 	targetFileStr = 'notSet'
 	savePath = ''
 
-	valuesCollection = np.array([])
-	targetCollection = np.array([])
-
 	curDateStr = ''
 	def setCurDateSrt(self, datastr):
 		self.curDateStr = datastr
@@ -44,64 +44,71 @@ class MlTrainer:
 	def setSavePath(self, datastr):
 		self.savePath = datastr
 
-	def setValuesCollection(self, datacol):
-		self.valuesCollection = datacol
-
-	def setTargetCollection(self, datacol):
-		self.targetCollection = datacol
-
 	def setAIType(self, datastr):
 		self.AIType = datastr
 
-	def train(self):
+	def train(self, dataCollector):
 
 		if(self.AIType == 'SVM'):
-			X, y = self.valuesCollection, self.targetCollection
+			X, y = dataCollector.valuesCollection, dataCollector.targetCollection
 			y = to_categorical(y)
 			clf = SVC(gamma=0.001, C=100.)
 			clf.fit(X, y)
 
 		if(self.AIType == 'MLP_L1N15'):
-			X, y = self.valuesCollection, self.targetCollection
+			X, y = dataCollector.valuesCollection, dataCollector.targetCollection
 			y = to_categorical(y)
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(15,), random_state=1)
 			clf.fit(X, y)
 		if(self.AIType == 'MLP_L3N25'):
-			X, y = self.valuesCollection, self.targetCollection
+			X, y = dataCollector.valuesCollection, dataCollector.targetCollection
 			y = to_categorical(y)
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(25,25,25,), random_state=1)
 			clf.fit(X, y)
 
 		if(self.AIType == 'MLP_L4NV25'):
-			X, y = self.valuesCollection, self.targetCollection
+			X, y = dataCollector.valuesCollection, dataCollector.targetCollection
 			y = to_categorical(y)
 			clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(20,25,22,16,), verbose=True,random_state=1)
 			clf.fit(X, y)
 
 		if(self.AIType == 'LSTM'):
-			print self.valuesCollection.shape
-			print self.targetCollection.shape
-			X, y = self.valuesCollection, self.targetCollection
+
+			print('Values_LSTM: ' + str(dataCollector.valuesCollection.shape))
+			print('Targets_LSTM: ' + str(dataCollector.targetCollection.shape))
+			X, y = dataCollector.valuesCollection, dataCollector.targetCollection
+
+			y = np.reshape(y, (1,np.product(y.shape)))[0]
+
+			classes_ = [0.0,1.0]
+
+			le_classes_remove = []
+			for i in range(0,len(classes_)):
+				if classes_[i] not in y:
+					le_classes_remove.append(i)
+			le_classes_temp = np.delete(classes_, le_classes_remove)
+
+			w = compute_class_weight('balanced', list(le_classes_temp), y)
+			new_w = np.array([])
+			int_i = 0
+			for i in range(0,len(classes_)):
+				if classes_[i] not in le_classes_temp:
+					new_w = np.append(new_w,[1])
+				else:
+					new_w = np.append(new_w,w[int_i])
+					int_i = int_i + 1
+
+			d_weights = dict(enumerate(new_w))
+
+			print("d_weights" + str(d_weights))
+
 			y = to_categorical(y)
 			clf = Sequential()  
 			clf.add(LSTM(128, return_sequences=True, input_shape=(X.shape[1], X.shape[2])))
 			clf.add(LSTM(128, return_sequences=True))
 			clf.add(LSTM(128, return_sequences=False))
-			clf.add(Dense(y.shape[1],activation='softmax'))  
-			clf.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['accuracy'])
-			clf.fit(X, y,epochs=10, batch_size=64)  
+			clf.add(Dense(y.shape[1],activation='softmax'))
+			clf.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['accuracy'],weighted_metrics=['accuracy'])
+			clf.fit(X, y,epochs=20, batch_size=1024, class_weight=d_weights) 
 
 		joblib.dump(clf, self.savePath + '/clf_' + self.AIType + '_'+self.curDateStr+'.pkl')
-
-	def loadData(self):
-		self.valuesCollection = np.load(self.savePath + '/' +self.valuesFileStr)
-		self.targetCollection = np.load(self.savePath + '/' +self.targetFileStr)
-
-	def setFileNames(self):
-		filesNames = [f for f in listdir(self.savePath) if isfile(join(self.savePath, f))]
-		for s in filesNames:
-			if s.endswith(".npy"):
-				if s.startswith("valuesSave_") and self.valuesFileStr == 'notSet' :
-					self.targetFileStr = s
-				if s.startswith("targetSave_") and self.targetFileStr == 'notSet' :
-					self.targetFileStr = s

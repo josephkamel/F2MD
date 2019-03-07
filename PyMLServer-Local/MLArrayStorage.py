@@ -10,7 +10,7 @@
  * All rights reserved.
  *******************************************************************************/
 """
-
+import os
 import numpy as np
 from numpy import array
 import math
@@ -26,17 +26,16 @@ class MlArrayStorage:
 		self.id_array_x = []
 		self.id_array_y = []
 
-	def add_bsm(self, id, time, cur_bsm):
+	def add_bsm(self, id, time, cur_bsm, batch_size):
 		try:
 			index = self.id_index.index(id)
 			cur_array = self.get_bsm_array(cur_bsm,self.id_bsm[index])
 		except ValueError:
 			cur_array = self.get_bsm_array(cur_bsm,cur_bsm)
 
-		self.add_array(id,time,cur_array,cur_bsm)
+		self.add_array(id,time,cur_array,cur_bsm,batch_size)
 
-
-	def add_array(self, id, time, cur_array,cur_bsm):
+	def add_array(self, id, time, cur_array,cur_bsm, batch_size):
 		index = 0
 		try:
 			index = self.id_index.index(id)
@@ -44,7 +43,12 @@ class MlArrayStorage:
 			self.id_bsm[index] = cur_bsm
 			self.id_array_x[index].append(cur_array[0])
 			self.id_array_y[index].append(cur_array[1])
-			#self.bubblesort(index)
+
+			if len(self.id_time[index]) > batch_size:
+				self.id_time[index] = self.id_time[index][-batch_size:]
+				self.id_array_x[index] = self.id_array_x[index][-batch_size:]
+				self.id_array_y[index] = self.id_array_y[index][-batch_size:]
+			self.bubblesort(index)
 
 		except ValueError:
 			self.id_index.append(id)
@@ -63,7 +67,7 @@ class MlArrayStorage:
 		#print  'id_index: ' + str(id_index.shape)
 
 	def bubblesort(self, index):
-		for iter_num in range(len(self.id_time[index])-1,0,-1):
+		for iter_num in range(len(self.id_time[index])-2,-1,-1):
 			for idx in range(iter_num):
 				if self.id_time[index][idx]>self.id_time[index][idx+1]:
 					temp = self.id_time[index][idx]
@@ -77,6 +81,8 @@ class MlArrayStorage:
 					temp3 = self.id_array_y[index][idx]
 					self.id_array_y[index][idx] = self.id_array_y[index][idx+1]
 					self.id_array_y[index][idx+1] = temp3
+
+					os._exit(0)
 
 
 	def get_bsm_array(self,bsmNew,bsmOld):
@@ -107,15 +113,7 @@ class MlArrayStorage:
 
 
 		if DeltaTime<0:
-			print 'Error'
-			print 'Error'
-			print 'Error'
-			print 'Error'
-			print 'Error'
-			print 'Error'
-			print 'Error'
-			print 'Error'
-			print 'Error'
+			print('Error')
 
 		label = bsmNew['BsmPrint']['Metadata']['mbType']
 
@@ -176,12 +174,10 @@ class MlArrayStorage:
 	def get_array_lstm(self, id, batch_size):
 		index = self.id_index.index(id)
 		list_X = self.id_array_x[index][-batch_size:]
-
 		if len(list_X)<batch_size:
-			list_X_Ret = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+			list_X_Ret = np.zeros(len(list_X[-1]))
 			for i in range(0,batch_size-len(list_X) - 1):
-				list_X_Ret = np.vstack((list_X_Ret,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
-			#print list_X_Ret
+				list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]))))
 			list_X_Ret = np.vstack((list_X_Ret,list_X))
 			list_X = list_X_Ret
 

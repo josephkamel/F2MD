@@ -41,7 +41,7 @@ class MlBsmStorage:
 		#print  'id_index: ' + str(id_index.shape)
 
 	def bubblesort(self, index):
-		for iter_num in range(len(self.id_bsms[index])-1,0,-1):
+		for iter_num in range(len(self.id_bsms[index])-2,-1,-1):
 			for idx in range(iter_num):
 				if self.id_bsms[index][idx]['BsmPrint']['Metadata']['generationTime']>self.id_bsms[index][idx+1]['BsmPrint']['Metadata']['generationTime']:
 					temp = self.id_bsms[index][idx]

@@ -24,6 +24,11 @@ version = 'NOVER'
 
 class S(BaseHTTPRequestHandler):
 	globalMlMain = MlMain()
+
+	def setup(self):
+		BaseHTTPRequestHandler.setup(self)
+		self.request.settimeout(0.2)
+
 	def _set_headers(self):
 		self.send_response(200)
 		self.send_header('Content-type', 'text/html')
@@ -35,8 +40,6 @@ class S(BaseHTTPRequestHandler):
 	def do_HEAD(self):
 		self._set_headers()
 
-
-		
 	def do_POST(self):
 		'''
 		Handle POST requests.
@@ -45,7 +48,7 @@ class S(BaseHTTPRequestHandler):
 		#requestStr = urllib2.unquote((self.path));
 		#requestStr = unquote(self.path)
 
-		pred = self.globalMlMain.mlMain(version,self.path, 'MLP_L4NV25')
+		pred = self.globalMlMain.mlMain(version,self.path, 'LSTM')
 		
 	   	# the response
 		self.wfile.write(pred)

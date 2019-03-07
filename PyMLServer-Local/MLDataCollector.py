@@ -46,6 +46,9 @@ class MlDataCollector:
 		self.initValuesData(self.ValuesData)
 		self.initTargetData(self.TargetData)
 
+		del self.ValuesData[:]
+		del self.TargetData[:]
+
 		self.ValuesData = []
 		self.TargetData = []
 
@@ -67,26 +70,12 @@ class MlDataCollector:
 		if self.valuesCollection.shape[0] == 0:
 			self.valuesCollection = np.concatenate([row for row in New_Rows])
 		else:
-			addValuesCollection = np.concatenate([row for row in New_Rows])
-			self.valuesCollection  = np.concatenate([self.valuesCollection, addValuesCollection])
+			self.valuesCollection  = np.concatenate([self.valuesCollection, np.concatenate([row for row in New_Rows])])
 		
-
-	def initValuesData_old(self,New_Rows):
-		if self.valuesCollection.shape[0] == 0:
-			self.valuesCollection = np.vstack([row for row in New_Rows])
-		else:
-			self.valuesCollection = np.vstack([self.valuesCollection, [row for row in New_Rows]])
-
-	def initTargetData_old(self,New_Rows):
-		if self.targetCollection.shape[0] == 0:
-			self.targetCollection = np.vstack([row for row in New_Rows])
-		else:
-			self.targetCollection = np.vstack([self.targetCollection, [row for row in New_Rows]])
 
 	def initTargetData(self,New_Rows):
 		if self.targetCollection.shape[0] == 0:
 			self.targetCollection = np.concatenate([row for row in New_Rows])
 		else:
-			addTargetCollection = np.concatenate([row for row in New_Rows])
-			self.targetCollection  = np.concatenate([self.targetCollection, addTargetCollection])
+			self.targetCollection  = np.concatenate([self.targetCollection, np.concatenate([row for row in New_Rows])])
 		

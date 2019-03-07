@@ -23,16 +23,15 @@ class MlNodeStorage:
 		self.id_index = []
 		self.id_storage = []
 	
-	def add_bsm(self,my_id, test_id, time, cur_bsm):
+	def add_bsm(self,my_id, test_id, time, cur_bsm, batch_size):
 		index = 0
 		try:
 			index = self.id_index.index(my_id)
-			self.id_storage[index].add_bsm(test_id, time, cur_bsm)
-
+			self.id_storage[index].add_bsm(test_id, time, cur_bsm, batch_size)
 		except ValueError:
 			self.id_index.append(my_id)
 			Storage = MlArrayStorage()
-			Storage.add_bsm(test_id, time, cur_bsm)
+			Storage.add_bsm(test_id, time, cur_bsm, batch_size)
 			self.id_storage.append(Storage)
 
 	def get_array(self,my_id, test_id):

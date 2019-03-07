@@ -28,8 +28,8 @@ from sklearn.externals import joblib
 import time
 
 
-RTtrain = True
-RTcollectData = True
+RTtrain = False
+RTcollectData = False
 
 RTpredict = True
 
@@ -47,12 +47,13 @@ class MlMain:
 
 	clf = None
 	savePath = './saveFile/saveFile_D40'
-	dataPath = '/home/joseph/Projects/F2MD/mdmSave/Data-1.0/IRT-DATA-0.5/MDBsmsList_V2_2019-3-4_1:1:23'
+	dataPath = '/home/joseph/Projects/F2MD/mdmSave/Data-1.0/IRT-DATA-0.5-Th-Be-V2/MDBsmsList_V2_2019-3-5_15:28:52'
 	RTTrainDataFromFile = False
 
 	meanRuntime = 0
+	meanRuntime_p = 0
 	numRuntime = 0
-	printRuntime = 10000
+	printRuntime = 1000
 	printRuntimeCnt = 0
 
 	def init(self, version, AIType):
@@ -67,7 +68,7 @@ class MlMain:
 		self.trainedModelExists(AIType)
 		if self.RTTrainDataFromFile:
 			self.ReadDataFromFile(AIType)
-			self.TrainData(AIType)
+			#self.TrainData(AIType)
 			os._exit(0)
 
 	def mlMain(self, version, bsmJsonString, AIType):
@@ -85,19 +86,17 @@ class MlMain:
 				self.collectDur = self.collectDur + 1;
 				self.DataCollector.collectData(curArray)
 			else :
-				print "DataSave And Training " + str(self.deltaCall) + " Started ..."
+				print("DataSave And Training " + str(self.deltaCall) + " Started ...")
 				self.collectDur = 0
 				self.DataCollector.saveData()
 
 				if RTtrain:
-					self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
-					self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
-					print self.Trainer.valuesCollection.shape
-					self.Trainer.train()
+					print(self.Trainer.dataCollector.valuesCollection.shape)
+					self.Trainer.train(self.DataCollector)
 					self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 					self.deltaCall = self.DataCollector.valuesCollection.shape[0]/2
 					#self.deltaCall = 10000000
-				print "DataSave And Training " + str(self.deltaCall) +" Finished!"
+				print("DataSave And Training " + str(self.deltaCall) +" Finished!")
 		
 
 		return_value = False
@@ -106,7 +105,9 @@ class MlMain:
 			return_value = False
 		else:
 			if RTpredict:
+				start_time_p = time.time()
 				prediction = self.clf.predict(array([curArray[0]]))
+				end_time_p = time.time()
 				#print "======================================== " + str(prediction) + str(prediction[0][0]) + str(prediction[0][1])
 				if prediction[0][0]>prediction[0][1] :
 					return_value = False
@@ -118,10 +119,11 @@ class MlMain:
 
 		end_time = time.time()
 		self.meanRuntime = (self.numRuntime*self.meanRuntime + (end_time-start_time))/(self.numRuntime+1)
+		self.meanRuntime_p = (self.numRuntime*self.meanRuntime_p + (end_time_p-start_time_p))/(self.numRuntime+1)
 		self.numRuntime = self.numRuntime + 1
 		if self.printRuntimeCnt > self.printRuntime:
 			self.printRuntimeCnt = 0
-			print 'meanRuntime: ' + str(self.meanRuntime) + ' ' + str(self.numRuntime)
+			print('meanRuntime: ' + str(self.meanRuntime) + ' ' + str(self.numRuntime) + ' predict:' + str(self.meanRuntime_p))
 		else:
 			self.printRuntimeCnt = self.printRuntimeCnt + 1
 
@@ -132,33 +134,33 @@ class MlMain:
 
 	def trainedModelExists(self, AIType):
 		filesNames = [f for f in listdir(self.savePath) if isfile(join(self.savePath, f))]
-		print "trainedModelExists?"
+		print("trainedModelExists?")
 
 		for s in filesNames:
 			if s.startswith('clf_'+AIType) and s.endswith(".pkl"):
-				self.curDateStr = s[-23:-4]
-
-				print "Loading " +AIType + " "+ self.curDateStr+ " ..."
+				
+				print("Loading " +AIType + " "+ self.curDateStr+ " ...")
 				self.clf = joblib.load(self.savePath+'/'+s)
-				self.DataCollector.setCurDateSrt(self.curDateStr)
-				self.Trainer.setCurDateSrt(self.curDateStr)
-				self.DataCollector.loadData()
-				self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
-				self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
+				if RTcollectData:
+					self.curDateStr = s[-23:-4]
+					self.DataCollector.setCurDateSrt(self.curDateStr)
+					self.Trainer.setCurDateSrt(self.curDateStr)
+					self.DataCollector.loadData()
+				else:
+					self.DataCollector.setCurDateSrt(self.curDateStr)
+					self.Trainer.setCurDateSrt(self.curDateStr)
  
 				#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-				print "Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!"
+				print("Loading " + str(self.DataCollector.valuesCollection.shape) +  " Finished!")
 
 	def ReadDataFromFile(self, AIType):
-		print "DataSave And Training " + str(self.dataPath) + " Started ..."
+		print("DataSave And Training " + str(self.dataPath) + " Started ...")
 		filesNames = [f for f in tqdm(listdir(self.dataPath)) if isfile(join(self.dataPath, f))]
-		print "bsmDataExists?"
+		print("bsmDataExists?")
 
-		ValuesData = []
-		TargetData = []
 
-		for i in tqdm(range(0,len(filesNames))):
-		#for i in tqdm(range(0,1000)):
+		#for i in tqdm(range(0,len(filesNames))):
+		for i in tqdm(range(0,10)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()
@@ -173,18 +175,14 @@ class MlMain:
 					self.DataCollector.collectData(curArray)
 
 		self.DataCollector.saveData()
-		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
-		self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
-		self.Trainer.train()
+		self.Trainer.train(self.DataCollector)
 		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 		#self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
-		print "DataSave And Training " + str(self.dataPath) + " Finished!"
+		print("DataSave And Training " + str(self.dataPath) + " Finished!")
 
 	def TrainData(self, AIType):
 		print ("Training " + str(self.dataPath) + " Started ...")
-		self.Trainer.setValuesCollection(self.DataCollector.getValuesCollection())
-		self.Trainer.setTargetCollection(self.DataCollector.getTargetCollection())
-		self.Trainer.train()
+		self.Trainer.train(self.DataCollector)
 		self.clf = joblib.load(self.savePath+'/clf_'+AIType+'_'+self.curDateStr+'.pkl')
 		self.deltaCall = self.DataCollector.valuesCollection.shape[0]/5
 		print ("Training " + str(self.dataPath) + " Finished!")
@@ -193,7 +191,7 @@ class MlMain:
 		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
 		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['Pseudonym'] 
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
-		self.Storage.add_bsm(receiverId,pseudonym, time, bsmJsom)
+		self.Storage.add_bsm(receiverId,pseudonym, time, bsmJsom, self.arrayLength)
 		if('SVM' in AIType):
 			returnArray = self.Storage.get_array(receiverId,pseudonym, self.arrayLength)
 		if('MLP' in AIType):
@@ -201,14 +199,14 @@ class MlMain:
 		if('LSTM' in AIType):
 			returnArray = self.Storage.get_array_lstm(receiverId,pseudonym, self.arrayLength)
 
-		#print "cur_array: " + str(cur_array)
-		#print "returnArray: " + str(returnArray)
+		#print("cur_array: " + str(cur_array))
+		#print("returnArray: " + str(returnArray))
 		return returnArray
 
 def main():
 	globalMlMain = MlMain()
 	version = "V2"
-	AIType = "MLP_L4NV25"
+	AIType = "LSTM"
 	globalMlMain.RTTrainDataFromFile = True
 	globalMlMain.mlMain(version,"",AIType)
 
