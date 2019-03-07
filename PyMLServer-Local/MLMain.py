@@ -99,10 +99,10 @@ class MlMain:
 				print("DataSave And Training " + str(self.deltaCall) +" Finished!")
 		
 
-		return_value = False
+		return_value = "False"
 
 		if self.clf is None:
-			return_value = False
+			return_value = "False"
 		else:
 			if RTpredict:
 				start_time_p = time.time()
@@ -110,9 +110,9 @@ class MlMain:
 				end_time_p = time.time()
 				#print "======================================== " + str(prediction) + str(prediction[0][0]) + str(prediction[0][1])
 				if prediction[0][0]>prediction[0][1] :
-					return_value = False
+					return_value = "False"
 				else:
-					return_value = True
+					return_value = "True"
 			#print prediction
 			#print curArray[1]
 			#print "========================================"
@@ -126,8 +126,6 @@ class MlMain:
 			print('meanRuntime: ' + str(self.meanRuntime) + ' ' + str(self.numRuntime) + ' predict:' + str(self.meanRuntime_p))
 		else:
 			self.printRuntimeCnt = self.printRuntimeCnt + 1
-
-
 
 		return return_value
 
