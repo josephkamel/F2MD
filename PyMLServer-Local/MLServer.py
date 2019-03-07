@@ -21,7 +21,6 @@ except ImportError:
 from MLMain import MlMain
 from os import listdir
 from os.path import isfile, join
-from urllib import unquote
 
 version = 'NOVER'
 
@@ -74,4 +73,4 @@ if __name__ == "__main__":
 		version = str(argv[2])
 		run(port=int(argv[1]))
 	else:
-		print 'not enough argv'
+		print('not enough argv')
