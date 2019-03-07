@@ -12,9 +12,12 @@
  *******************************************************************************/
 """
 
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-import SocketServer
-import urllib2
+try:
+    import SocketServer as socketserver
+    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+except ImportError:
+    import socketserver
+    from http.server import HTTPServer, BaseHTTPRequestHandler
 from MLMain import MlMain
 from os import listdir
 from os.path import isfile, join
@@ -35,7 +38,7 @@ class S(BaseHTTPRequestHandler):
 		self.end_headers()
 
 	def do_GET(self):
-		self.wfile.write("Get Request")
+		self.wfile.write("Get Request".encode('utf-8'))
 
 	def do_HEAD(self):
 		self._set_headers()
@@ -51,15 +54,15 @@ class S(BaseHTTPRequestHandler):
 		pred = self.globalMlMain.mlMain(version,self.path, 'LSTM')
 		
 	   	# the response
-		self.wfile.write(pred)
+		self.wfile.write(pred.encode('utf-8'))
 
 
 
 def run(server_class=HTTPServer, handler_class=S, port=9998):
 	server_address = ('', port)
 	httpd = server_class(server_address, handler_class)
-	print 'Starting MLServer...'
-	print 'Listening on port ' + str(port)
+	print('Starting MLServer...')
+	print('Listening on port ' + str(port))
 	httpd.serve_forever()
 
 
