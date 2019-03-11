@@ -103,6 +103,8 @@ class MlMain:
 
 		if self.clf is None:
 			return_value = "False"
+			start_time_p = 0.0
+			end_time_p = 0.0
 		else:
 			if RTpredict:
 				start_time_p = time.time()
@@ -126,6 +128,8 @@ class MlMain:
 			print('meanRuntime: ' + str(self.meanRuntime) + ' ' + str(self.numRuntime) + ' predict:' + str(self.meanRuntime_p))
 		else:
 			self.printRuntimeCnt = self.printRuntimeCnt + 1
+
+
 
 		return return_value
 
@@ -158,7 +162,7 @@ class MlMain:
 
 
 		#for i in tqdm(range(0,len(filesNames))):
-		for i in tqdm(range(0,10)):
+		for i in tqdm(range(0,3000)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()

@@ -37,7 +37,7 @@ class MaStats:
 			self.falseDetection = self.falseDetection + 1
 		self.detectionRate = 100*self.trueDetection/(self.trueDetection+self.falseDetection)
 		#print (pred_str + '/' + real_str)
-		#print str(self.trueDetection) + '/' + str(self.falseDetection) +' '+ str(self.detectionRate) + '%'
+		#print(str(self.trueDetection) + '/' + str(self.falseDetection) +' '+ str(self.detectionRate) + '%')
 
 	def update_detection_agr(self,pred_str,real_str):
 		if  pred_str == real_str:
@@ -46,7 +46,7 @@ class MaStats:
 			self.falseDetectionAgr = self.falseDetectionAgr + 1
 		self.detectionRateAgr = 100*self.trueDetectionAgr/(self.trueDetectionAgr+self.falseDetectionAgr)
 		#print (pred_str + '/' + real_str)
-		#print str(self.trueDetectionAgr) + '/' + str(self.falseDetectionAgr) +' '+ str(self.detectionRateAgr) + '%'
+		#print (str(self.trueDetectionAgr) + '/' + str(self.falseDetectionAgr) +' '+ str(self.detectionRateAgr) + '%') 
 
 	def get_detectionRate(self):
 		return self.detectionRate

@@ -79,9 +79,9 @@ class MaMain:
 		if (curTime - self.updatehttp) > UPDATEINT:
 			self.updatehttp = curTime
 			self.set_httpstring()
-			print 'Attack : ' + str(self.storage.get_mean_num_attacks()) + ' ' + str(self.storage.get_sd_num_attacks())
-			print 'Genuine : ' +   str(self.storage.get_mean_num_genuine()) + ' ' + str(self.storage.get_sd_num_genuine())
-		return False
+			print('Attack : ' + str(self.storage.get_mean_num_attacks()) + ' ' + str(self.storage.get_sd_num_attacks()))
+			print('Genuine : ' +   str(self.storage.get_mean_num_genuine()) + ' ' + str(self.storage.get_sd_num_genuine()))
+		return "False"
 
 
 	def get_datasets(self):
@@ -130,7 +130,7 @@ class MaMain:
 		string = string.replace("#labels2#", str(self.reaction_names))
 		string = string.replace("#datasets2#", self.get_datasets())
 		self.httpstring = string
-		#print 'set_httpstring UPDATED'
+		#print('set_httpstring UPDATED')
 
 
 
