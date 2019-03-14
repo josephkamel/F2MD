@@ -126,7 +126,8 @@ class MaMain:
 		string = string.replace("#bgcolor1#", str(self.gui.get_bgcolor()))
 		string = string.replace("#bordercolor1#", str(self.gui.get_bordercolor()))
 		string = string.replace("#test#", "Cumulative Detection Rate: "+str(self.stats.get_detectionRate())+"%")
-		string = string.replace("#test2#", "("+str(self.stats.get_detectionRateAgr())+"%)")
+		#string = string.replace("#test2#", "("+str(self.stats.get_detectionRateAgr())+"%)")
+		string = string.replace("#test2#", "")
 		string = string.replace("#labels2#", str(self.reaction_names))
 		string = string.replace("#datasets2#", self.get_datasets())
 		self.httpstring = string

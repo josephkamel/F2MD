@@ -49,7 +49,7 @@ class MaStats:
 		#print (str(self.trueDetectionAgr) + '/' + str(self.falseDetectionAgr) +' '+ str(self.detectionRateAgr) + '%') 
 
 	def get_detectionRate(self):
-		return self.detectionRate
+		return int(self.detectionRate)
 
 	def get_detectionRateAgr(self):
 		return self.detectionRateAgr

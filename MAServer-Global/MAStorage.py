@@ -25,13 +25,13 @@ class MaStorage:
 
 	def set_rlevel(self,reports_num):	
 		reaction_level = 0
-		if reports_num > 5:
-			reaction_level = 1
 		if reports_num > 20:
+			reaction_level = 1
+		if reports_num > 50:
 			reaction_level = 2
-		if reports_num > 100:
+		if reports_num > 250:
 			reaction_level = 3
-		if reports_num > 300:
+		if reports_num > 1250:
 			reaction_level = 4
 		return reaction_level
 
