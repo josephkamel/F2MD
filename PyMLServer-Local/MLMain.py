@@ -47,7 +47,7 @@ class MlMain:
 
 	clf = None
 	savePath = './saveFile/saveFile_D40'
-	dataPath = '/home/joseph/Projects/F2MD/mdmSave/Data-1.0/IRT-DATA-0.5-Th-Be-V2/MDBsmsList_V2_2019-3-5_15:28:52'
+	dataPath = '/home/joseph/Projects/F2MD/mdmSave/Data-1.0/IRT-Data-0.5/MDBsmsList_V2_2019-4-2_12:17:32'
 	RTTrainDataFromFile = False
 
 	meanRuntime = 0
@@ -161,8 +161,8 @@ class MlMain:
 		print("bsmDataExists?")
 
 
-		#for i in tqdm(range(0,len(filesNames))):
-		for i in tqdm(range(0,3000)):
+		for i in tqdm(range(0,len(filesNames))):
+		#for i in tqdm(range(0,3000)):
 			s = filesNames[i]
 			if s.endswith(".bsm"):
 				bsmJsonString = open(self.dataPath+'/' +s, 'r').read()

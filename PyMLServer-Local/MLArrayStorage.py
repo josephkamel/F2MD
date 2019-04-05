@@ -95,8 +95,14 @@ class MlArrayStorage:
 		psmC = bsmNew['BsmPrint']['BsmCheck']['psmC']
 		phC = bsmNew['BsmPrint']['BsmCheck']['phC']
 		sA = bsmNew['BsmPrint']['BsmCheck']['sA']
-		#sA = 1
 		bF = bsmNew['BsmPrint']['BsmCheck']['bF']
+		kPACS = bsmNew['BsmPrint']['BsmCheck']['kPACS']
+		kPCS = bsmNew['BsmPrint']['BsmCheck']['kPCS']
+		kPSCP = bsmNew['BsmPrint']['BsmCheck']['kPSCP']
+		kPSCS = bsmNew['BsmPrint']['BsmCheck']['kPSCS']
+		kPSCSP = bsmNew['BsmPrint']['BsmCheck']['kPSCSP']
+		kPSCSS = bsmNew['BsmPrint']['BsmCheck']['kPSCSS']
+		kSCC = bsmNew['BsmPrint']['BsmCheck']['kSCC']
 		inT = 1
 		for x in bsmNew['BsmPrint']['BsmCheck']['inT']:
 			if inT>x['uVal']:
@@ -107,10 +113,12 @@ class MlArrayStorage:
 		Speed = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Speed'])
 		DeltaSpeed = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Speed']) - self.get_speed(bsmOld['BsmPrint']['BSMs'][0]['Speed'])
 		SpeedConfidence = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['SpeedConfidence'])
+		Accel = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Accel'])
+		DeltaAccel = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Accel']) - self.get_speed(bsmOld['BsmPrint']['BSMs'][0]['Accel'])
+		AccelConfidence = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['AccelConfidence'])
 		DeltaHeading = self.get_angle_delta(bsmNew['BsmPrint']['BSMs'][0]['Heading'], bsmOld['BsmPrint']['BSMs'][0]['Heading'])
 		HeadingConfidence = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['HeadingConfidence'])
 		DeltaTime = bsmNew['BsmPrint']['Metadata']['generationTime'] - bsmOld['BsmPrint']['Metadata']['generationTime']
-
 
 		if DeltaTime<0:
 			print('Error')
@@ -123,29 +131,11 @@ class MlArrayStorage:
 		else:
 			numLabel = 1.0
 
-		zeros = 0
-		if rP==0:
-			zeros=zeros+1
-		if pP==0:
-			zeros=zeros+1
-		if sP==0:
-			zeros=zeros+1
-		if pC==0:
-			zeros=zeros+1
-		if sC==0:
-			zeros=zeros+1
-		if psC==0:
-			zeros=zeros+1
-		if psmC==0:
-			zeros=zeros+1
-		if phC==0:
-			zeros=zeros+1
-		if bF==0:
-			zeros=zeros+1
-		if inT==0:
-			zeros=zeros+1
-
-		valuesArray = array([1-rP,1-pP,1-sP,1-pC,1-sC,1-psC,1-psmC,1-phC,1-sA,1-bF,1-inT, zeros, DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence, DeltaHeading, HeadingConfidence, DeltaTime])
+		velAry1 = array([1.0-rP,1.0-pP,1.0-sP,1.0-pC,1.0-sC,1.0-psC,1.0-psmC,1.0-phC,1.0-sA,1.0-bF,1.0-kPACS,1.0-kPCS,1.0-kPSCP,1.0-kPSCS,1.0-kPSCSP,1.0-kPSCSS,1.0-kSCC,1.0-inT])
+		zeros = np.count_nonzero(velAry1 == 1.0)
+		velAry2 = [zeros,DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence,Accel,DeltaAccel,AccelConfidence, DeltaHeading, HeadingConfidence, DeltaTime]
+		velAry = velAry1.tolist() + velAry2
+		valuesArray = np.asarray(velAry)
 		targetArray = array([numLabel])
 		returnArray = array([valuesArray,targetArray])
 		#print valuesArray
