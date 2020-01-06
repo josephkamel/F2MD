@@ -23,6 +23,8 @@ class MaStorage:
 
 	reaction_level = []
 
+	report_num = 0
+
 	def set_rlevel(self,reports_num):	
 		reaction_level = 0
 		if reports_num > 20:
@@ -44,6 +46,7 @@ class MaStorage:
 
 	def add_report(self, id, time, mbType):
 		index = 0
+		self.report_num = self.report_num + 1
 		try:
 			index = self.id_index.index(id)
 			self.id_time[index] = time

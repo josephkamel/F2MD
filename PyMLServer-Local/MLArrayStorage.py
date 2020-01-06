@@ -12,10 +12,13 @@
 """
 import os
 import numpy as np
-from numpy import array
 import math
 import itertools
 import operator
+from sys import getsizeof
+
+
+APPEND_ZEROS = False
 
 class MlArrayStorage:
 
@@ -26,14 +29,26 @@ class MlArrayStorage:
 		self.id_array_x = []
 		self.id_array_y = []
 
-	def add_bsm(self, id, time, cur_bsm, batch_size):
-		try:
+	def add_bsm(self, id, time, cur_bsm, batch_size,cur_label):
+		if id in self.id_index:
 			index = self.id_index.index(id)
-			cur_array = self.get_bsm_array(cur_bsm,self.id_bsm[index])
-		except ValueError:
-			cur_array = self.get_bsm_array(cur_bsm,cur_bsm)
-
+			cur_array = [self.get_bsm_array(cur_bsm,self.id_bsm[index]),cur_label]
+		else:
+			cur_array = [self.get_bsm_array(cur_bsm,cur_bsm),cur_label]
 		self.add_array(id,time,cur_array,cur_bsm,batch_size)
+
+	def filter_array(self, curtime ,deltatime):
+		for i in range(len(self.id_index)-1,-1,-1):
+			if (curtime - self.id_time[i][-1]) > deltatime:
+				del self.id_index[i]
+				del self.id_bsm[i]
+				for j in range(len(self.id_time[i])-1,-1,-1):
+					del self.id_time[i][j]
+					del self.id_array_x[i][j]
+					del self.id_array_y[i][j]
+				del self.id_time[i]
+				del self.id_array_x[i]
+				del self.id_array_y[i]
 
 	def add_array(self, id, time, cur_array,cur_bsm, batch_size):
 		index = 0
@@ -48,6 +63,7 @@ class MlArrayStorage:
 				self.id_time[index] = self.id_time[index][-batch_size:]
 				self.id_array_x[index] = self.id_array_x[index][-batch_size:]
 				self.id_array_y[index] = self.id_array_y[index][-batch_size:]
+
 			self.bubblesort(index)
 
 		except ValueError:
@@ -62,6 +78,7 @@ class MlArrayStorage:
 			append_array_y = []
 			append_array_y.append(cur_array[1])
 			self.id_array_y.append(append_array_y)
+
 
 		#print  'local: ' + str(index) + ' ' + str(id) + ' ' + str(len(self.id_index))
 		#print  'id_index: ' + str(id_index.shape)
@@ -111,6 +128,9 @@ class MlArrayStorage:
 		DeltaPos = self.get_distance(bsmNew['BsmPrint']['BSMs'][0]['Pos'], bsmOld['BsmPrint']['BSMs'][0]['Pos'])
 		PosConfidence = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['PosConfidence'])
 		Speed = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Speed'])
+		PosX = bsmNew['BsmPrint']['BSMs'][0]['Pos'][0]
+		PosY = bsmNew['BsmPrint']['BSMs'][0]['Pos'][1]
+		Heading = self.get_angle(bsmNew['BsmPrint']['BSMs'][0]['Heading'])
 		DeltaSpeed = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Speed']) - self.get_speed(bsmOld['BsmPrint']['BSMs'][0]['Speed'])
 		SpeedConfidence = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['SpeedConfidence'])
 		Accel = self.get_speed(bsmNew['BsmPrint']['BSMs'][0]['Accel'])
@@ -123,62 +143,178 @@ class MlArrayStorage:
 		if DeltaTime<0:
 			print('Error')
 
-		label = bsmNew['BsmPrint']['Metadata']['mbType']
+		velAry1 = np.array([1.0-rP,1.0-pP,1.0-sP,1.0-pC,1.0-sC,1.0-psC,1.0-psmC,1.0-phC,1.0-sA,1.0-bF,1.0-kPACS,1.0-kPCS,1.0-kPSCP,1.0-kPSCS,1.0-kPSCSP,1.0-kPSCSS,1.0-kSCC,1.0-inT],dtype=np.float32)
+		nzeros = np.count_nonzero(velAry1 == 1.0)
+		#velAry2 = [zeros,DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence,Accel,DeltaAccel,AccelConfidence, DeltaHeading, HeadingConfidence, DeltaTime]
+		
+		velAry2 = [nzeros,DeltaPos, DeltaSpeed, DeltaAccel, DeltaHeading, DeltaTime]#24
+		velAry3 = [PosX, PosY, Speed, Accel, Heading]#29
 
-		#label = 0
-		if(label == 'Genuine'):
-			numLabel = 0.0
-		else:
-			numLabel = 1.0
+		#velAry2 = [nzeros,DeltaPos, DeltaPos, DeltaSpeed, Accel, DeltaAccel, DeltaHeading, DeltaTime]#24
+		#velAry3 = []#29
 
-		velAry1 = array([1.0-rP,1.0-pP,1.0-sP,1.0-pC,1.0-sC,1.0-psC,1.0-psmC,1.0-phC,1.0-sA,1.0-bF,1.0-kPACS,1.0-kPCS,1.0-kPSCP,1.0-kPSCS,1.0-kPSCSP,1.0-kPSCSS,1.0-kSCC,1.0-inT])
-		zeros = np.count_nonzero(velAry1 == 1.0)
-		velAry2 = [zeros,DeltaPos, PosConfidence, Speed, DeltaSpeed, SpeedConfidence,Accel,DeltaAccel,AccelConfidence, DeltaHeading, HeadingConfidence, DeltaTime]
-		velAry = velAry1.tolist() + velAry2
-		valuesArray = np.asarray(velAry)
-		targetArray = array([numLabel])
-		returnArray = array([valuesArray,targetArray])
-		#print valuesArray
-		#print "returnArray: " + str(returnArray)
-		#returnArray = returnArray.astype(np.float)
-		return returnArray
+		velAry = velAry1.tolist() + velAry2 + velAry3
+		valuesArray = np.array(velAry,dtype=np.float32)
+
+		return valuesArray
 
 	def get_array(self, id):
 		index = self.id_index.index(id)
-		return array([self.id_array_x[index][-1],self.id_array_y[index][-1]])
+		return [self.id_array_x[index][-1][:24],self.id_array_y[index][-1]]
+    
+	def get_array_features(self, id):
+		index = self.id_index.index(id)
+		return [self.id_array_x[index][-1][:18],self.id_array_y[index][-1]]
+
+	def get_ave_array_features(self, array_x):
+		#npsum=np.sum(array_x[0:18], axis=0)
+		npmean=np.mean(array_x[0:18], axis=0)
+		#npstd=np.std(array_x[0:18], axis=0)
+		npmin=np.min(array_x[0:18], axis=0)
+		#npmax=np.max(array_x[0:18], axis=0)
+		newArray = []
+		for i in range(0,18):
+			#newArray.append(npsum[i])
+			newArray.append(npmin[i])
+			#newArray.append(npmax[i])
+			newArray.append(npmean[i])
+			#newArray.append(npstd[i])
+		return np.array(newArray,dtype=np.float32)
+
+	def get_array_MLP_features(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X = self.id_array_x[index][-batch_size:]
+		ret_array = self.get_ave_array_features(list_X)
+		return [ret_array,self.id_array_y[index][-1]]
+    
+	def get_ave_array(self, array_x):
+		#npsum=np.sum(array_x, axis=0)
+		npmean=np.mean(array_x, axis=0)
+		#npstd=np.std(array_x, axis=0)
+		npmin=np.min(array_x, axis=0)
+		#npmax=np.max(array_x, axis=0)
+		newArray = []
+		for i in range(0,18):
+			#newArray.append(npsum[i])
+			newArray.append(npmin[i])
+			#newArray.append(npmax[i])
+			newArray.append(npmean[i])
+			#newArray.append(npstd[i])
+		newArray.append(len(array_x))
+		newArray.extend(array_x[-1][18:24])
+		return np.array(newArray,dtype=np.float32)
 
 	def get_array_MLP(self, id, batch_size):
 		index = self.id_index.index(id)
 		list_X = self.id_array_x[index][-batch_size:]
-
-		app_ary = array([[len(list_X)]])
-		for i in range(0,len(list_X)-1):
-			app_ary = np.append(app_ary.tolist(),[[len(list_X)]],axis=0)
-		list_X = np.append(list_X,app_ary,axis=1)
-		
-		#ret_array = [sum(x) for x in zip(*list_X)]
-		ret_array = np.append(list_X[:,:11].sum(axis=0),list_X[-1,11:])
-		list_Y = self.id_array_y[index][-batch_size:]
-		return array([array(ret_array),list_Y[-1]])
+		ret_array = self.get_ave_array(list_X)
+		return [ret_array,self.id_array_y[index][-1]]
 
 	def get_array_lstm(self, id, batch_size):
 		index = self.id_index.index(id)
 		list_X = self.id_array_x[index][-batch_size:]
-		if len(list_X)<batch_size:
-			list_X_Ret = np.zeros(len(list_X[-1]))
-			for i in range(0,batch_size-len(list_X) - 1):
-				list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]))))
-			list_X_Ret = np.vstack((list_X_Ret,list_X))
-			list_X = list_X_Ret
-
+		list_X =np.array(list_X)[:,-5:]
+		if APPEND_ZEROS:
+			if len(list_X)<batch_size:
+				list_X_Ret = np.zeros(len(list_X[-1]),dtype=np.float32)
+				for i in range(0,batch_size-len(list_X) - 1):
+					list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]),dtype=np.float32)))
+				list_X_Ret = np.vstack((list_X_Ret,list_X))
+				list_X = list_X_Ret
 		#nx , ny = np.array(list_X).shape
 		#list_X = np.array(list_X).reshape((nx*ny))
-
 		list_Y = self.id_array_y[index][-batch_size:]
-		ret_array = array([list_X,list_Y[-1]])
+		ret_array = [list_X,list_Y[-1]]
+		#print ret_array
+		return ret_array
+    
+	def get_array_lstm_feat(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X = self.id_array_x[index][-batch_size:]
+		list_X =np.array(list_X)[:,:18]
+		if APPEND_ZEROS:
+			if len(list_X)<batch_size:
+				list_X_Ret = np.zeros(len(list_X[-1]),dtype=np.float32)
+				for i in range(0,batch_size-len(list_X) - 1):
+					list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]),dtype=np.float32)))
+				list_X_Ret = np.vstack((list_X_Ret,list_X))
+				list_X = list_X_Ret
+		#nx , ny = np.array(list_X).shape
+		#list_X = np.array(list_X).reshape((nx*ny))
+		list_Y = self.id_array_y[index][-batch_size:]
+		ret_array = [list_X,list_Y[-1]]
+		#print ret_array
+		return ret_array
+    
+	def get_array_lstm_sin(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X = self.id_array_x[index][-batch_size:]
+		list_X =np.array(list_X)[:,:24]
+		if APPEND_ZEROS:
+			if len(list_X)<batch_size:
+				list_X_Ret = np.zeros(len(list_X[-1]),dtype=np.float32)
+				for i in range(0,batch_size-len(list_X) - 1):
+					list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]),dtype=np.float32)))
+				list_X_Ret = np.vstack((list_X_Ret,list_X))
+				list_X = list_X_Ret
+		#nx , ny = np.array(list_X).shape
+		#list_X = np.array(list_X).reshape((nx*ny))
+		list_Y = self.id_array_y[index][-batch_size:]
+		ret_array = [list_X,list_Y[-1]]
+		#print ret_array
+		return ret_array
+    
+	def get_array_lstm_all(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X = self.id_array_x[index][-batch_size:]
+		if APPEND_ZEROS:
+			if len(list_X)<batch_size:
+				list_X_Ret = np.zeros(len(list_X[-1]),dtype=np.float32)
+				for i in range(0,batch_size-len(list_X) - 1):
+					list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]),dtype=np.float32)))
+				list_X_Ret = np.vstack((list_X_Ret,list_X))
+				list_X = list_X_Ret
+		#nx , ny = np.array(list_X).shape
+		#list_X = np.array(list_X).reshape((nx*ny))
+		list_Y = self.id_array_y[index][-batch_size:]
+		ret_array = [list_X,list_Y[-1]]
+		#print ret_array
+		return ret_array
+    
+    
+	def get_array_lstm_mix(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X = self.id_array_x[index][-batch_size:]
+		list_X =np.array(list_X)[:,-10:]
+		if APPEND_ZEROS:
+			if len(list_X)<batch_size:
+				list_X_Ret = np.zeros(len(list_X[-1]),dtype=np.float32)
+				for i in range(0,batch_size-len(list_X) - 1):
+					list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]),dtype=np.float32)))
+				list_X_Ret = np.vstack((list_X_Ret,list_X))
+				list_X = list_X_Ret
+		#nx , ny = np.array(list_X).shape
+		#list_X = np.array(list_X).reshape((nx*ny))
+		list_Y = self.id_array_y[index][-batch_size:]
+		ret_array = [list_X,list_Y[-1]]
 		#print ret_array
 		return ret_array
 
+	def get_array_combined(self, id, batch_size):
+		index = self.id_index.index(id)
+		list_X_Orig = self.id_array_x[index][-batch_size:]
+		list_Y = self.id_array_y[index][-batch_size:]
+		list_X =np.array(list_X_Orig)[:,-10:]
+		if APPEND_ZEROS:
+			if len(list_X)<batch_size:
+				list_X_Ret = np.zeros(len(list_X[-1]),dtype=np.float32)
+				for i in range(0,batch_size-len(list_X) - 1):
+					list_X_Ret = np.vstack((list_X_Ret,np.zeros(len(list_X[-1]),dtype=np.float32)))
+				list_X_Ret = np.vstack((list_X_Ret,list_X))
+				list_X = list_X_Ret
+		list_X_1 = self.get_ave_array_features(list_X_Orig)
+		return [[list_X,list_X_1],list_Y[-1]]
+    
 	def get_latest_array(self,id): 
 		try:
 			index = self.id_index.index(id)
@@ -199,7 +335,14 @@ class MlArrayStorage:
 	def get_speed(self,spd):
 		speed = math.sqrt((spd[0]**2) + (spd[1]**2))
 		return speed
-
+    
+	def get_angle(self,angl2):
+		deltaX = angl2[0] - 1;
+		deltaY = angl2[1];
+		rad = math.atan2(deltaY, deltaX);
+		deg = rad * (180 / math.pi)
+		return deg
+    
 	def get_angle_delta(self,angl1,angl2):
 		deltaX = angl2[0] - angl1[0];
 		deltaY = angl2[1] - angl1[1];

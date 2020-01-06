@@ -23,11 +23,14 @@ from os.path import isfile, join
 
 from datetime import datetime
 
+from threading import Timer
+import time
+
 version = 'NOVER'
 
 class S(BaseHTTPRequestHandler):
 	globalMaMain = MaMain()
-	
+
 	def setup(self):
 		BaseHTTPRequestHandler.setup(self)
 		self.request.settimeout(0.2)
@@ -38,10 +41,10 @@ class S(BaseHTTPRequestHandler):
 		self.end_headers()
 
 	def do_GET(self):
-			self._set_headers()
-			#self.globalMaMain.set_httpstring()
-			self.wfile.write(self.globalMaMain.get_httpstring().encode('utf-8'))
-
+		self._set_headers()
+		#self.globalMaMain.set_httpstring()
+		self.globalMaMain.pingma()
+		self.wfile.write(self.globalMaMain.get_httpstring().encode('utf-8'))			
 
 	def do_HEAD(self):
 		self._set_headers()
@@ -50,17 +53,16 @@ class S(BaseHTTPRequestHandler):
 		'''
 		Handle POST requests.
 		'''
-		#print('The Request: %s' % (self.path))
 		#requestStr = urllib2.unquote((self.path));
-		pred = self.globalMaMain.maMain(version, self.path)
+		if not self.path.startswith('curTime:'):
+			pred = self.globalMaMain.maMain(version, self.path)
+			self.wfile.write(pred.encode('utf-8'))
 
-	   	# the response
-		self.wfile.write(pred.encode('utf-8'))
+		# the response
 
 	def load_binary(self,file):
 		with open(file, 'rb') as file:
 			return file.read()
-
 
 def run(server_class=HTTPServer, handler_class=S, port=9998):
 	server_address = ('', port)
@@ -68,6 +70,8 @@ def run(server_class=HTTPServer, handler_class=S, port=9998):
 	print('Starting MAServer...')
 	print('Listening on port ' + str(port))
 	httpd.serve_forever()
+
+# duration is in seconds
 
 if __name__ == "__main__":
 	from sys import argv
@@ -77,3 +81,4 @@ if __name__ == "__main__":
 		run(port=int(argv[1]))
 	else:
 		print('not enough argv')
+

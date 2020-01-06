@@ -50,7 +50,7 @@ class S(BaseHTTPRequestHandler):
 		#requestStr = urllib2.unquote((self.path));
 		#requestStr = unquote(self.path)
 
-		pred = self.globalMlMain.mlMain(version,self.path, 'LSTM')
+		pred = self.globalMlMain.mlMain(version,self.path, 'COMBINED_LSTM10_DENSE36_DENSE24')
 		
 	   	# the response
 		self.wfile.write(pred.encode('utf-8'))

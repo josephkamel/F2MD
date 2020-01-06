@@ -7,11 +7,13 @@
   <body>
 
 <center>
+<!--<h1 style="color: #FFFFFF;">#NewReport#</h1>
+<h1>Cumulative Reports Number: #RepNum#</h1>-->
     <table style="position: relative; width:98vw" cellspacing="0" cellpadding="0">
         <tr>
             <td colspan="2">
                 <div class="chart-container-0">
-                    <canvas id="chart-0"  style="position: relative; height:25vw; width:98vw"></canvas>
+                    <canvas id="chart-0"  style="position: relative; height:49vw; width:98vw"></canvas>
                 </div>       
             </td>
         <tr>
@@ -59,8 +61,9 @@ var config = {
     options: {
         title: {
             display: true,
-            text: '#test# #test2#',
-            fontSize: 30
+            text: ['#Line1#', '#Line2#', '#line3#'],
+            fontColor: '#LineColor#',
+            fontSize: 65
         },
         scales: {
             yAxes: [{

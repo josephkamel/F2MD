@@ -23,7 +23,7 @@ from MAStats import MaStats
 from WebGUIBuilder import WebGuiBuilder
 import time
 
-UPDATEINT = 1000
+UPDATEINT = 1
 
 class MaMain:
 
@@ -44,10 +44,20 @@ class MaMain:
 
 	gui = WebGuiBuilder()
 
-	def maMain(self,version, reportJsonString):
+	newreport = False
 
-		#print reportJsonString
+	def pingma(self):
+		self.set_httpstring()
+		if self.newreport:
+			self.newreport = False
+		print('Attack : ' + str(self.storage.get_mean_num_attacks()) + ' ' + str(self.storage.get_sd_num_attacks()))
+		print('Genuine : ' +   str(self.storage.get_mean_num_genuine()) + ' ' + str(self.storage.get_sd_num_genuine()))
+
+	def maMain(self,version,reportJsonString):
+		self.newreport = True
+
 		reportJsom = json.loads(reportJsonString)
+
 		reportedId = reportJsom['Report']['Metadata']['reportedId']
 		generation_time = reportJsom['Report']['Metadata']['generationTime']
 		realAttack = reportJsom['Report']['Metadata']['mbType']
@@ -74,13 +84,14 @@ class MaMain:
 		self.stats.update_detection_agr(predicted_agr,realAttack)
 
 		curTime = self.gui.millis()
-		curTime = generation_time * 1000
-
+		#curTime = generation_time * 1000
+		'''
 		if (curTime - self.updatehttp) > UPDATEINT:
 			self.updatehttp = curTime
 			self.set_httpstring()
 			print('Attack : ' + str(self.storage.get_mean_num_attacks()) + ' ' + str(self.storage.get_sd_num_attacks()))
 			print('Genuine : ' +   str(self.storage.get_mean_num_genuine()) + ' ' + str(self.storage.get_sd_num_genuine()))
+		'''
 		return "False"
 
 
@@ -108,10 +119,25 @@ class MaMain:
 		#self.set_httpstring()
 		return self.httpstring
 
-	def set_httpstring(self):
+
+	def set_httpstring(self,):
 		string = open("WebGUI/index.html", "r").read()
 		string = string.replace("#labelsTime#", str(self.get_time_labels()))
 		_info_inst = self.get_time_info()
+
+		if self.newreport:
+			string = string.replace("#NewReport#", str("New Report Received!"))
+			string = string.replace("#LineColor#", str('rgba(255, 99, 132,0.8)'))
+			string = string.replace("#Line1#", str("New Report Received!"))
+			string = string.replace("#FFFFFF", str("#ff0000"))
+		else:
+			string = string.replace("#NewReport#", str("Waiting For Reports..."))
+			string = string.replace("#LineColor#", str('rgba(70,70,70,0.8)'))
+			string = string.replace("#Line1#", str("Waiting For Reports..."))
+			string = string.replace("#FFFFFF", str("#0000ff"))
+
+		string = string.replace("#Line2#", "Cumulative Reports Number: " + str(self.storage.report_num))
+		string = string.replace("#RepNum#", str(self.storage.report_num))
 		string = string.replace("#data_acc#", str(_info_inst[0]))
 		string = string.replace("#data_nacc#", str(_info_inst[1]))
 		string = string.replace("#data_rate#", str(_info_inst[2]))
@@ -125,7 +151,8 @@ class MaMain:
 		string = string.replace("#data1#", str(self.get_reports_data()))
 		string = string.replace("#bgcolor1#", str(self.gui.get_bgcolor()))
 		string = string.replace("#bordercolor1#", str(self.gui.get_bordercolor()))
-		string = string.replace("#test#", "Cumulative Detection Rate: "+str(self.stats.get_detectionRate())+"%")
+
+		string = string.replace("#line3#", "Cumulative Detection Rate: "+str(self.stats.get_detectionRate())+"%")
 		#string = string.replace("#test2#", "("+str(self.stats.get_detectionRateAgr())+"%)")
 		string = string.replace("#test2#", "")
 		string = string.replace("#labels2#", str(self.reaction_names))
