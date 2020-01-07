@@ -18,7 +18,7 @@ This project aims to recreate within a simulation all the elements that form the
 2. Install OMNeT++ 5.4.1
 3. Setup the *veins-f2md* version of Veins  ( Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/) )
 
-Alternatively, contact the author for a preinstalled ** Instant F2MD ** virtual machine.
+Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine.
 
 ## Project Diagram
 
