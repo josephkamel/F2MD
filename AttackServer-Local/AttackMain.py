@@ -35,7 +35,7 @@ class AttackMain:
 
 	attack_list = []
 	inst_list = []
-	instanttk = False
+	instanttk = True
 
 	def setup(self):
 		if not self.initiated:
