@@ -3,6 +3,10 @@
 
 This project aims to recreate within a simulation all the elements that form the chain of misbehavior detection.
 
+## Wireless network technologies:
+* ITS-G5 (IEEE 802.11p)
+* C-V2X (3GPP PC5 Mode 4)
+
 ## Features
 * Basic Plausibility Checks on Received Beacons (mdChecks)
 * Node Level Plausibility Investigation (mdApplications)
@@ -14,9 +18,10 @@ This project aims to recreate within a simulation all the elements that form the
 * Some Local and Global Misbehavior Attacks Implementation (mdAttacks)
 
 ## Installation
-1. Install Sumo 1.0.1
-2. Install OMNeT++ 5.4.1
+1. Install Sumo 1.5.0
+2. Install OMNeT++ 5.6.1
 3. Setup the *veins-f2md* version of Veins  ( Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/) )
+3. Setup the *simulte-f2md* version of simulte  ( Follow the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html) )
 
 Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine.
 
