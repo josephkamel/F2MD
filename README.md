@@ -3,7 +3,7 @@
 
 This project aims to recreate within a simulation all the elements that form the chain of misbehavior detection.
 
-## Wireless network technologies:
+## Supported network technologies:
 * ITS-G5 (IEEE 802.11p)
 * C-V2X (3GPP PC5 Mode 4)
 
