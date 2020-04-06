@@ -3,6 +3,15 @@
 
 This project aims to recreate within a simulation all the elements that form the chain of misbehavior detection.
 
+If you find this code useful in your research, please consider citing:
+
+    @ARTICLE{9056489,
+        author={J. {Kamel} and M. R. {Ansari} and J. {Petit} and A. {Kaiser} and I. {Ben Jemaa} and P. {Urien}},
+        title={Simulation Framework for Misbehavior Detection in Vehicular Networks},
+        journal={IEEE Transactions on Vehicular Technology},
+        year={2020}
+    }
+
 ## Supported network technologies:
 * ITS-G5 (IEEE 802.11p)
 * C-V2X (3GPP PC5 Mode 4)
