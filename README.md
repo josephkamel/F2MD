@@ -1,9 +1,9 @@
 
 # Framework For Misbehavior Detection (F2MD)
 
-This project aims to recreate within a simulation all the elements that form the chain of misbehavior detection.
+This project aims to recreate within a simulation all the elements that form the chain of misbehavior detection. 
 
-If you find this code useful in your research, please consider citing:
+The scientific publication is available on [ResearchGate](https://www.researchgate.net/publication/340350056_Simulation_Framework_for_Misbehavior_Detection_in_Vehicular_Networks). If you find this code useful in your research, please consider citing :
 
     @ARTICLE{9056489,
         author={J. {Kamel} and M. R. {Ansari} and J. {Petit} and A. {Kaiser} and I. {Ben Jemaa} and P. {Urien}},
@@ -11,7 +11,7 @@ If you find this code useful in your research, please consider citing:
         journal={IEEE Transactions on Vehicular Technology},
         year={2020}
     }
-
+    
 ## Supported network technologies:
 * ITS-G5 (IEEE 802.11p)
 * C-V2X (3GPP PC5 Mode 4)
@@ -29,8 +29,8 @@ If you find this code useful in your research, please consider citing:
 ## Installation
 1. Install Sumo 1.5.0
 2. Install OMNeT++ 5.6.1
-3. Setup the *veins-f2md* version of Veins  ( Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/) )
-3. Setup the *simulte-f2md* version of simulte  ( Follow the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html) )
+3. Setup the *veins-f2md* version of Veins  (Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/))
+3. Setup the *simulte-f2md* version of simulte  (Follow the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html))
 
 Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine.
 
