@@ -19,13 +19,13 @@ The scientific publication is available on [ResearchGate](https://www.researchga
 ## Features
 * Basic Plausibility Checks on Received Beacons (mdChecks)
 * Node Level Plausibility Investigation (mdApplications)
-* Real Time Machine Learning for Plausibility Investigation (HTTP to the Python Server: machine-learning-server)
+* Real Time Machine Learning for Plausibility Investigation (HTTP to the Python Server: [machine-learning-server](https://github.com/josephkamel/F2MD/tree/master/machine-learning-server))
 * Real Time Detection Status Output (mdStats, see README in f2md-results)
 * Support for Multiple Reporting Mechanisms (mdReport)
-* Support for Global Reports Collection and Investigation (HTTP to the Python Server: misbehavior-authority-server)
+* Support for Global Reports Collection and Investigation (HTTP to the Python Server: [misbehavior-authority-server](https://github.com/josephkamel/F2MD/tree/master/misbehavior-authority-server))
 * Basic Psudonym Change Policies (mdPCPolicies)
 * Local and Global Misbehavior Attacks Implementation (mdAttacks)
-* Launch Attacks in Real Time (HTTP to the Python server: attack-server)
+* Launch Attacks in Real Time (HTTP to the Python Server: [attack-server](https://github.com/josephkamel/F2MD/tree/master/attack-server))
 
 ## Installation
 1. Install Sumo 1.5.0
