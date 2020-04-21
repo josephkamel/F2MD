@@ -31,20 +31,21 @@ The scientific publication is available on [ResearchGate](https://www.researchga
 1. Install Sumo 1.5.0
 2. Install OMNeT++ 5.6.1
 3. Clone this repository along with all the submodules to your local machine
-
-    $ git clone --recurse-submodules https://github.com/josephkamel/F2MD.git
-
+```
+$ git clone --recurse-submodules https://github.com/josephkamel/F2MD.git
+```
 4. Build all f2md modules (inet, veins, veins_inet3 and simulte)
-
-    $ ./buildF2MD.sh
-
+```
+$ ./buildF2MD.sh
+```
 5. Launch the SUMO TraCI daemon
-
-    $ ./launchSumoTraciDaemon.sh
-
+```
+$ ./launchSumoTraciDaemon.sh
+```
 6. Run a simulation scenario
-
-    $ ./runScenario.sh 
+```
+$ ./runScenario.sh 
+```
 
 For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial/) or the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html)).
 
