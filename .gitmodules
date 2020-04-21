@@ -1,9 +1,9 @@
 [submodule "veins-f2md"]
 	path = veins-f2md
 	url = https://github.com/josephkamel/veins-f2md.git
-[submodule "simulte-f2md"]
-	path = simulte-f2md
-	url = https://github.com/josephkamel/simulte-f2md.git
 [submodule "inet"]
 	path = inet
 	url = https://github.com/inet-framework/inet.git
+[submodule "simulte-f2md"]
+	path = simulte-f2md
+	url = https://github.com/josephkamel/simulte-f2md.git
