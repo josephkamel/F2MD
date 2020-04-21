@@ -21,6 +21,3 @@ set label sprintf("V1 = %3.10g-%3.10gmsg \nV2 = %3.10g-%3.10gmsg",lastV1, FNV1, 
 
 plot "AppV2.dat" using (funcT($2)):(func3($4,$5)) title 'V2 False Positive' with linespoints linestyle 2 lw 2 pi 30 ps 0.75 lc rgb "#4dbeee", \
 "AppV1.dat" using (funcT($2)):(func3($4,$5)) title 'V1 False Positive' with lines lw 2 lc rgb "magenta", \
-
-#"AppV1.dat" using (funcT($2)):($4) title 'SOTA Num' with linespoints lw 0.1 ps 0.1 lt rgb "magenta" axis x1y2, \
-#"AppV2.dat" using (funcT($2)):($4) title 'SCA lib Num' with linespoints lw 0.1 ps 0.1 lt rgb "#4dbeee" axis x1y2, \

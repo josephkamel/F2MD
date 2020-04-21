@@ -8,9 +8,6 @@ except ImportError:
 from AttackMain import AttackMain
 from os import listdir
 from os.path import isfile, join
-import numpy as np
-from numpy import array
-
 from datetime import datetime
 
 version = 'NOVER'

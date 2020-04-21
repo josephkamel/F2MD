@@ -19,18 +19,34 @@ The scientific publication is available on [ResearchGate](https://www.researchga
 ## Features
 * Basic Plausibility Checks on Received Beacons (mdChecks)
 * Node Level Plausibility Investigation (mdApplications)
-* Real Time Machine Learning for Plausibility Investigation (HTTP to a Python Server: PyMLServer-Local)
-* Real Time Detection Status Output (mdStats)
+* Real Time Machine Learning for Plausibility Investigation (HTTP to the Python Server: machine-learning-server)
+* Real Time Detection Status Output (mdStats, see README in f2md-results)
 * Support for Multiple Reporting Mechanisms (mdReport)
-* Support for Global Reports Collection and Investigation (HTTP to a Python Server: MAServer-Global)
-* Some Basic Psudonym Change Policies (mdPCPolicies)
-* Some Local and Global Misbehavior Attacks Implementation (mdAttacks)
+* Support for Global Reports Collection and Investigation (HTTP to the Python Server: misbehavior-authority-server)
+* Basic Psudonym Change Policies (mdPCPolicies)
+* Local and Global Misbehavior Attacks Implementation (mdAttacks)
+* Launch Attacks in Real Time (HTTP to the Python server: attack-server)
 
 ## Installation
 1. Install Sumo 1.5.0
 2. Install OMNeT++ 5.6.1
-3. Setup the *veins-f2md* version of Veins  (Follow the [Veins Tutorial](https://veins.car2x.org/tutorial/))
-3. Setup the *simulte-f2md* version of simulte  (Follow the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html))
+3. Clone this repository along with all the submodules to your local machine
+
+    $ git clone --recurse-submodules https://github.com/josephkamel/F2MD.git
+
+4. Build all f2md modules (inet, veins, veins_inet3 and simulte)
+
+    $ ./buildF2MD.sh
+
+5. Launch the SUMO TraCI daemon
+
+    $ ./launchSumoTraciDaemon.sh
+
+6. Run a simulation scenario
+
+    $ ./runScenario.sh 
+
+For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial/) or the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html)).
 
 Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine.
 

@@ -79,6 +79,9 @@ if __name__ == "__main__":
 	if len(argv) == 3:
 		version = str(argv[2])
 		run(port=int(argv[1]))
+	elif len(argv) == 2:
+		version = "V1"
+		run(port=int(argv[1]))
 	else:
 		print('not enough argv')
 

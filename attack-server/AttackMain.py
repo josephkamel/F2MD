@@ -2,21 +2,12 @@ import os
 import sys
 from os import listdir
 from os.path import isfile, join
-import json
-import numpy as np
-from numpy import array
 import datetime
-import h5py
 import warnings
 from tqdm import tqdm
-
 import time, threading
-
-import time
-
 import tkinter as tk
 from tkinter import *
-
 from functools import partial
 from math import sqrt
 

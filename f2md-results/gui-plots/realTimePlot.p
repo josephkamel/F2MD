@@ -13,6 +13,6 @@ set grid lc rgb '#00bb00'
 
 
 while (1) {
-    load 'plots/multiPlot.p'
+    load 'gui-plots/multiPlot.p'
     pause 2
 }
