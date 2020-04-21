@@ -47,7 +47,7 @@ $ ./launchSumoTraciDaemon.sh
 $ ./runScenario.sh 
 ```
 
-For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial/) or the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html)).
+For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial/) or the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html).
 
 Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine.
 
