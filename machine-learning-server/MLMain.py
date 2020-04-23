@@ -41,7 +41,7 @@ RTtrain = False
 RTcollectData = False
 RTpredict = True
 
-Positive_Threshold = 0.999
+Positive_Threshold = 0.5
 
 RTFilterTime = 100
 RTFilterKeepTime = 600
@@ -87,7 +87,7 @@ class MlMain:
 	stats = MlStats()
 	varthrelite = MlVarThresholdLite()
 
-	RTmultipredict= False	
+	RTmultipredict= False
 	multi_predict_num = 524288
 	multi_predict_count = 0
 	multi_predict_array = []
@@ -106,7 +106,7 @@ class MlMain:
 			else:
 				self.savePath = self.savePath + '_Legacy_'+ str(version)
 			self.version_added = True
-            
+
 
 		self.DataCollector.setCurDateSrt(self.curDateStr)
 		self.DataCollector.setSavePath(self.savePath)
@@ -149,7 +149,7 @@ class MlMain:
 					self.deltaCall = len(self.Trainer.dataCollector.ValuesData)/2
 					#self.deltaCall = 10000000
 				print("DataSave And Training " + str(self.deltaCall) +" Finished!")
-		
+
 		return_value = "False"
 		#return return_value
 
@@ -193,7 +193,7 @@ class MlMain:
 								pred_array_list.append(self.clf.predict([lstm_arrays,mlp_arrays]))
 								self.multi_predict_label.append(self.multi_predict_label_combined[cur_shape_0])
 						else:
-							pred_array_list.append(self.clf.predict(array(self.multi_predict_array)))
+							pred_array_list.append(self.clf.predict(np.array(self.multi_predict_array)))
 							self.multi_predict_label = [self.multi_predict_label]
 
 						for pred_array_index in range(0,len(pred_array_list)):
@@ -231,7 +231,7 @@ class MlMain:
 						prediction = pred_array[0]
 					else:
 						prediction = pred_array[0][1-gen_index]
-					
+
 					label_index = self.le.transform([bsmJsom['BsmPrint']['Metadata']['mbType']])[0]
 					self.varthrelite.update_stats(prediction,label_index)
 					if prediction>Positive_Threshold:
@@ -286,7 +286,7 @@ class MlMain:
 
 		filesNames = [f for f in tqdm(listdir(self.dataPath)) if isfile(join(self.dataPath, f))]
 		numberOfIters = 1
-		numberOfThreads = 64
+		numberOfThreads = 8
 		multi_processing = True
 
 		if not RTuseexistingdata:
@@ -328,7 +328,7 @@ class MlMain:
 								tempDataCollector = queue_list[i_q][1][0]
 								print("Getting Results .... " + str(i_q) + " ... " + str(len(tempDataCollector.TargetData)))
 								for i in range(len(tempDataCollector.TargetData)-1,-1,-1):
-                                    
+
 									self.DataCollector.collectData([[tempDataCollector.ValuesData[0][i], tempDataCollector.ValuesData[1][i]],tempDataCollector.TargetData[i]])
 									del tempDataCollector.TargetData[i]
 									del tempDataCollector.ValuesData[0][i]
@@ -367,7 +367,7 @@ class MlMain:
 
 	def getNodeArray(self,bsmJsom,AIType):
 		receiverId = bsmJsom['BsmPrint']['Metadata']['receiverId']
-		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['Pseudonym'] 
+		pseudonym = bsmJsom['BsmPrint']['BSMs'][0]['Pseudonym']
 		time = bsmJsom['BsmPrint']['Metadata']['generationTime']
 
 		if RTDetectAttackTypes:
@@ -405,7 +405,7 @@ class MlMain:
 			returnArray = self.Storage.get_array_lstm_all(receiverId,pseudonym, self.arrayLength)
 		if('COMBINED' in AIType):
 			returnArray = self.Storage.get_array_combined(receiverId,pseudonym, self.arrayLength)
-            
+
 
 		#print("cur_array: " + str(cur_array))
 		#print("returnArray: " + str(returnArray))
@@ -430,20 +430,20 @@ def local_process(local_input_list, thread, q):
 			for bsmJsom in listBsmJsom:
 				bsm_list.append(bsmJsom)
 
-	#print(bsm_list[0]['BsmPrint']['Metadata']['generationTime'])    
+	#print(bsm_list[0]['BsmPrint']['Metadata']['generationTime'])
 	#print(bsm_list[-1]['BsmPrint']['Metadata']['generationTime'])
 	bsm_list.sort(key=localMaMain.extract_time, reverse=True)
-	#print(bsm_list[0]['BsmPrint']['Metadata']['generationTime'])    
+	#print(bsm_list[0]['BsmPrint']['Metadata']['generationTime'])
 	#print(bsm_list[-1]['BsmPrint']['Metadata']['generationTime'])
 
-	for i in tqdm(range(len(bsm_list)-1,-1,-1)):  
+	for i in tqdm(range(len(bsm_list)-1,-1,-1)):
 		curArray = localMaMain.getNodeArray(bsm_list[i],AIType)
 		localDataCollector.collectData(curArray)
 		del bsm_list[i]
 
 	if thread:
 		q[1] = [localDataCollector]
-	else:  
+	else:
 		return localDataCollector
 
 def main():

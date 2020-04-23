@@ -13,8 +13,8 @@
 
 from MLMain import MlMain
 from tqdm import tqdm
-from os import listdir
-from os.path import isfile, join
+from os import listdir, mkdir
+from os.path import isfile, join, exists
 import json
 from MLVarThresholdLite import MlVarThresholdLite
 from multiprocessing import Pool, Process, Queue
@@ -92,7 +92,11 @@ for it_i in range(0,numberOfIters):
 
 	print("Iteration " +str(it_i)+ " End!")
 
+if not exists(globalMlMain.savePath+'/results'):
+		mkdir(globalMlMain.savePath+'/results')
 
-f = open(globalMlMain.savePath+'/results/res_'+AIType+'_'+globalMlMain.curDateStr+'.txt', "a")
+f = open(globalMlMain.savePath+'/results/res_'+AIType+'_'+version+'_'+globalMlMain.curDateStr+'.txt', "a")
+
+
 f.write(globalMlMain.varthrelite.get_stats())
 f.close()

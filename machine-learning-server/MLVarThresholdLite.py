@@ -30,6 +30,11 @@ class MlVarThresholdLite:
 		self.step_MCC = []
 		self.step_K = []
 
+		if PredVal>1.0:
+			PredVal = 1.0
+		if PredVal<0.0:
+			PredVal = 0.0
+
 		floatList = self.frange(start_thre,end_thre, step_thre)
 		for i in floatList:
 			self.step.append(float(i))
