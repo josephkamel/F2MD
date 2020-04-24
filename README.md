@@ -28,6 +28,15 @@ The scientific publication is available on [ResearchGate](https://www.researchga
 * Launch Attacks in Real Time (HTTP to the Python Server: [attack-server](https://github.com/josephkamel/F2MD/tree/master/attack-server))
 
 ## Installation
+### The easy way
+
+1. If you're running a Debian-based Linux distribution, use the [automatic install script](https://raw.githubusercontent.com/josephkamel/F2MD/master/installF2MD) (tested on Debian 9 and Ubuntu 18.04)
+```
+$ ./installF2MD
+```
+
+### The hard way
+
 1. Install Sumo 1.5.0
 2. Install OMNeT++ 5.6.1
 3. Clone this repository along with all the submodules to your local machine
@@ -36,20 +45,28 @@ $ git clone --recurse-submodules https://github.com/josephkamel/F2MD.git
 ```
 4. Build all f2md modules (inet, veins, veins_inet3 and simulte)
 ```
-$ ./buildF2MD.sh
-```
-5. Launch the SUMO TraCI daemon
-```
-$ ./launchSumoTraciDaemon.sh
-```
-6. Run a simulation scenario
-```
-$ ./runScenario.sh 
+$ ./buildF2MD
 ```
 
 For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial/) or the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html).
 
-Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine.
+### The easiest way
+
+Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine or docker image.
+
+## Running a simulation
+1. Launch the SUMO TraCI daemon
+```
+$ ./launchSumoTraciDaemon
+```
+2. Run a simulation scenario
+```
+$ ./runScenario
+```
+3. Visualise the output
+```
+$ cd f2md-results && ./plotScenario
+```
 
 ## Project Diagram
 

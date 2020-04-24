@@ -2,7 +2,7 @@
 ## How to use the Attack Server
 Run launchAttackServer.sh:
 
-    $ ./launchAttackServer.sh
+    $ ./launchAttackServer
 
 :warning: Note: This server is called in the simuation if you set the following variable in omnetpp.ini:
 

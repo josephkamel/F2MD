@@ -1,0 +1,293 @@
+#!/bin/bash
+
+package="installF2MD"
+HELP="\n$HELP $package - used to automatically install F2MD\n"
+HELP="$HELP \n"
+HELP="$HELP $package [options]\n"
+HELP="$HELP \n"
+HELP="$HELP options:\n"
+HELP="$HELP -h,  --help                              show brief help\n"
+HELP="$HELP -i,  --install-dir DIR                   specify the install directory\n"
+HELP="$HELP -is, --install-sumo                      set this flag to automatically install sumo\n"
+HELP="$HELP -sv, --sumo-version SUMO_VERSION         specify the version of sumo to install\n"
+HELP="$HELP -io, --install-omnetpp                   set this flag to automatically install omnetpp\n"
+HELP="$HELP -ov, --omnetpp-version OMNETPP_VERSION   specify the version of omnetpp to install\n"
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case $key in
+    -h|--help)
+    printf "$HELP"
+    exit 0
+    shift # past argument
+    shift # past value
+    ;;
+    -i|--install-dir)
+    INSTALL_DIR="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    -sv|--sumo-version)
+    SUMO_VERSION="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    -ov|--omnetpp-version)
+    OMNETPP_VERSION="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    -is|--install-sumo)
+    INSTALL_SUMO=YES
+    shift # past argument
+    ;;
+    -io|--install-omnetpp)
+    INSTALL_OMNETPP=YES
+    shift # past argument
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+### Check if a directory does not exist ###
+
+if [[ $INSTALL_DIR != "" ]]
+then
+    if [ ! -d "${INSTALL_DIR}" ] 
+    then
+        read -r -p "Directory ${INSTALL_DIR} does not exist, do you want to create it? [y/N] " response
+        if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+        then
+            mkdir ${INSTALL_DIR}
+        else
+            echo "\nPlease select another directory."
+            exit 1
+        fi
+    fi
+else
+    CUR_DIR=$(pwd)
+    read -r -p "Flag -i|--install-path not specified, do you want to install in the current directory ($CUR_DIR) ? [y/N] " response
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+    then
+        INSTALL_DIR=${CUR_DIR}
+    else
+        echo "\nPlease specify the flag -i|--install-path."
+        exit 1
+    fi
+fi
+
+if [[ $INSTALL_SUMO == "YES" ]]
+then
+    if [[ $PATH == *"sumo"* ]]
+    then
+        echo "SUMO appears to be already installed, you set the flag -is|--install-sumo which would install sumo again."
+        read -r -p "Are you sure you want to continue? [y/N] " response
+        if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+        then
+            echo "Please remove the flag -is|--install-sumo and restart the installation."
+            exit 1
+        fi
+    fi    
+    PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "wget"|grep "install ok installed")
+    if [ "" == "$PKG_OK" ]; then
+      sudo apt install -y wget
+    fi
+    SUMO_VERSION_LIST=$(wget -qO- https://sumo.dlr.de/releases | grep -Eoi '<a [^>]+>' | grep -Eo "[0-9\.]*")
+    if [[ $SUMO_VERSION != "" ]]
+    then 
+        if [[ ! $SUMO_VERSION_LIST =~ (^|[[:space:]])"$SUMO_VERSION"($|[[:space:]]) ]] ; then
+            echo "Your SUMO version \"$SUMO_VERSION\" does not exist in https://sumo.dlr.de/releases."
+            printf "\nPlease chose a sumo version from :\n$SUMO_VERSION_LIST\n"
+            exit 1
+        fi
+    else
+        printf "\nPlease select a SUMO version:\n"
+        select SUMO_VERSION in $SUMO_VERSION_LIST; do test -n "$SUMO_VERSION" && break; echo ">>> Invalid Selection"; done
+    fi
+else
+    if [[ ! $PATH == *"sumo"* ]]
+    then
+        echo "SUMO does not appear to be already installed, you can install SUMO automatically by setting the flag -is|--install-sumo."
+        read -r -p "Are you sure you want to continue? [y/N] " response
+        if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+        then
+            echo "\nPlease add the flag -is|--install-sumo and restart the installation."
+            exit 1
+        fi
+    fi
+fi
+
+if [[ $INSTALL_OMNETPP == "YES" ]]
+then
+    if [[ $PATH == *"omnetpp"* ]]
+    then
+        echo "OMNETPP appears to be already installed, you set the flag -io|--install-omnetpp which would install omnetpp again."
+        read -r -p "Are you sure you want to continue? [y/N] " response
+        if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+        then
+            echo "\nPlease remove the flag -io|--install-omnetpp and restart the installation."
+            exit 1
+        fi
+    fi
+    PKG_OK=$(dpkg-query -W --showformat='${Status}\n' "wget"|grep "install ok installed")
+    if [ "" == "$PKG_OK" ]; then
+      sudo apt install -y wget
+    fi
+    OMNETPP_VERSION_LIST=$(GET https://api.github.com/repos/omnetpp/omnetpp/releases | grep -Po '"tag_name": *"omnetpp-\K[^"]*(?=\"?)')
+    if [[ $OMNETPP_VERSION != "" ]]
+    then
+        if [[ ! $OMNETPP_VERSION_LIST =~ (^|[[:space:]])"$OMNETPP_VERSION"($|[[:space:]]) ]] ; then
+            echo "Your OMNETPP version \"$OMNETPP_VERSION\" does not exist in https://omnetpp.dlr.de/releases."
+            printf "Please chose a omnetpp version from :\n$OMNETPP_VERSION_LIST\n"
+            exit 1
+        fi
+    else
+        printf "\nPlease select a OMNETPP version:\n"
+        select OMNETPP_VERSION in $OMNETPP_VERSION_LIST; do test -n "$OMNETPP_VERSION" && break; echo ">>> Invalid Selection"; done
+    fi
+else
+    if [[ ! $PATH == *"omnetpp"* ]]
+    then
+        echo "OMNETPP does not appear to be already installed, you can install OMNETPP automatically by setting the flag -io|--install-omnetpp."
+        read -r -p "Are you sure you want to continue? [y/N] " response
+        if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+        then
+            printf "\nPlease add the flag -is|--install-omnetpp and restart the installation."
+            exit 1
+        fi
+    fi
+fi
+
+ECHO_VAR="Installing F2MD in ${INSTALL_DIR}"
+if [[ $INSTALL_SUMO == "YES" ]];then
+    ECHO_VAR="$ECHO_VAR with SUMO version ${SUMO_VERSION}"
+fi
+if [[ $INSTALL_OMNETPP == "YES" ]];then
+    ECHO_VAR="$ECHO_VAR with OMNET++ version ${OMNETPP_VERSION}"
+fi
+printf "\n$ECHO_VAR.\n\n"
+
+
+## Install f2md dependencies
+export DEBIAN_FRONTEND=noninteractive 
+sudo apt-get update
+sudo apt-get install -y git rapidjson-dev net-tools gnuplot python3 python3-dev python3-tk
+
+if [[ $INSTALL_SUMO == "YES" ]]
+then
+    # Install sumo dependencies
+    sudo apt-get install -y wget unzip
+    sudo apt-get install -y git cmake python g++ libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev libgl2ps-dev swig 
+    sudo apt-get install -y apt-utils python-setuptools python3-setuptools libeigen3-dev default-jre
+    
+    mkdir ${INSTALL_DIR}/Programs
+    # Install sumo
+    cd ${INSTALL_DIR}/Programs
+    wget https://sumo.dlr.de/releases/${SUMO_VERSION}/sumo-src-${SUMO_VERSION}.zip && unzip -q sumo-src-${SUMO_VERSION}.zip && rm sumo-src-${SUMO_VERSION}.zip
+    cd ${INSTALL_DIR}/Programs/sumo-${SUMO_VERSION}
+    
+    if ! grep -Fq 'SUMO_HOME' $HOME/.bashrc
+    then
+        echo ' ' >> $HOME/.bashrc
+        echo '# set SUMO_HOME variable' >> $HOME/.bashrc
+        echo "if [ -d \"$INSTALL_DIR/Programs/sumo-${SUMO_VERSION}\" ] ; then" >> $HOME/.bashrc
+        echo "    export SUMO_HOME=\"$INSTALL_DIR/Programs/sumo-${SUMO_VERSION}\"" >> $HOME/.bashrc
+        echo 'fi' >> $HOME/.bashrc
+    fi
+    
+    if ! grep -Fq '/sumo' $HOME/.bashrc
+    then
+        echo ' ' >> $HOME/.bashrc
+        echo '# set PATH so it includes SUMO' >> $HOME/.bashrc
+        echo "if [ -d \"$INSTALL_DIR/Programs/sumo-${SUMO_VERSION}/bin\" ] ; then" >> $HOME/.bashrc
+        echo "    PATH=\"$INSTALL_DIR/Programs/sumo-${SUMO_VERSION}/bin:\$PATH\"" >> $HOME/.bashrc
+        echo 'fi' >> $HOME/.bashrc
+    fi
+    export SUMO_HOME=${INSTALL_DIR}/Programs/sumo-${SUMO_VERSION}
+    export PATH="${INSTALL_DIR}/Programs/sumo-${SUMO_VERSION}/bin:${PATH}"
+    mkdir ${SUMO_HOME}/build/cmake-build
+    cd ${INSTALL_DIR}/Programs/sumo-${SUMO_VERSION}/build/cmake-build
+    cmake ../.. && make -j$(nproc)
+fi
+
+if [[ $INSTALL_OMNETPP == "YES" ]]
+then
+    # Install omnetpp dependencies
+    sudo apt-get install -y wget unzip
+    sudo apt-get install -y build-essential gcc g++ bison flex perl
+    sudo apt-get install -y python python3 qt5-default libqt5opengl5-dev tcl-dev tk-dev
+    sudo apt-get install -y libxml2-dev zlib1g-dev default-jdk doxygen graphviz libwebkitgtk-3.0-0
+    sudo apt-get install -y openscenegraph-plugin-osgearth libosgearth-dev
+    sudo apt-get install -y openmpi-bin libopenmpi-dev libpcap-dev gnome-color-chooser nemiver
+    
+    # Install omnetpp
+    cd ${INSTALL_DIR}/Programs
+    wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && tar zxf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
+    cd ${INSTALL_DIR}/Programs/omnetpp-${OMNETPP_VERSION}
+    if ! grep -Fq '/omnetpp' $HOME/.bashrc
+    then
+        echo ' ' >> $HOME/.bashrc
+        echo '# set PATH so it includes Omnet++' >> $HOME/.bashrc
+        echo "if [ -d \"$INSTALL_DIR/Programs/omnetpp-${OMNETPP_VERSION}/bin\" ] ; then" >> $HOME/.bashrc
+        echo "    PATH=\"$INSTALL_DIR/Programs/omnetpp-${OMNETPP_VERSION}/bin:\$PATH\"" >> $HOME/.bashrc
+        echo 'fi' >> $HOME/.bashrc
+    fi
+    export PATH="${INSTALL_DIR}/Programs/omnetpp-${OMNETPP_VERSION}/bin:${PATH}"
+    ./configure WITH_OSGEARTH=no WITH_OSG=no && make -j$(nproc)
+fi
+
+# Install F2MD
+cd ${INSTALL_DIR}/
+git clone --recurse-submodules https://github.com/josephkamel/F2MD.git
+# Build inet
+cd ${INSTALL_DIR}/F2MD/inet
+export INET_ROOT=${INSTALL_DIR}/F2MD/inet
+
+if ! grep -Fq 'INET_ROOT' $HOME/.bashrc
+then
+    echo ' ' >> $HOME/.bashrc
+    echo '# set INET variables' >> $HOME/.bashrc
+    echo "if [ -d \"$INSTALL_DIR/F2MD/inet\" ] ; then" >> $HOME/.bashrc
+    echo "    export INET_ROOT=\"$INSTALL_DIR/F2MD/inet\"" >> $HOME/.bashrc
+    echo "    export INET_NED_PATH=\"\$INET_ROOT/src:\$INET_ROOT/tutorials:\$INET_ROOT/showcases:\$INET_ROOT/examples\"" >> $HOME/.bashrc
+    echo "    export INET_OMNETPP_OPTIONS=\"-n \$INET_NED_PATH --image-path=\$INET_ROOT/images\"" >> $HOME/.bashrc
+    echo "    export INET_GDB_OPTIONS=\"-quiet -ex run --args\"" >> $HOME/.bashrc
+    echo "    export INET_VALGRIND_OPTIONS=\"-v --tool=memcheck --leak-check=yes --show-reachable=no --leak-resolution=high --num-callers=40 --freelist-vol=4000000\"" >> $HOME/.bashrc
+    echo 'fi' >> $HOME/.bashrc
+fi
+
+if ! grep -Fq '/inet' $HOME/.bashrc
+then
+    echo ' ' >> $HOME/.bashrc
+    echo '# set PATH so it includes inet' >> $HOME/.bashrc
+    echo "if [ -d \"$INSTALL_DIR/$INET_ROOT/bin\" ] ; then" >> $HOME/.bashrc
+    echo "    PATH=\"$INSTALL_DIR/$INET_ROOT/bin:\$PATH\"" >> $HOME/.bashrc
+    echo 'fi' >> $HOME/.bashrc
+fi
+
+export PATH="${INET_ROOT}/bin:${PATH}"
+export INET_NED_PATH="${INET_ROOT}/src:${INET_ROOT}/tutorials:${INET_ROOT}/showcases:${INET_ROOT}/examples"
+export INET_OMNETPP_OPTIONS="-n ${INET_NED_PATH} --image-path=${INET_ROOT}/images"
+export INET_GDB_OPTIONS="-quiet -ex run --args"
+export INET_VALGRIND_OPTIONS="-v --tool=memcheck --leak-check=yes --show-reachable=no --leak-resolution=high --num-callers=40 --freelist-vol=4000000"
+make makefiles && make -j$(nproc) WITH_OSGEARTH=no MODE=debug && make -j$(nproc) MODE=release all
+
+# Build veins
+cd ${INSTALL_DIR}/F2MD/veins-f2md
+./configure && make -j$(nproc) MODE=release all
+
+# Build veins_inet3
+cd ${INSTALL_DIR}/F2MD/veins-f2md/subprojects/veins_inet3
+./configure && make -j$(nproc) MODE=release all
+
+# Build simulte
+cd ${INSTALL_DIR}/F2MD/simulte-f2md
+make makefiles && make -j$(nproc) MODE=release all
+
+printf "\nThe installation is complete, you can now run a scenario using the ./F2MD/runScenario.sh\n"

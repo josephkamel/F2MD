@@ -2,7 +2,7 @@
 ## How to use the Misbehavior Authority Server
 Run launchMAServer.sh *version* , for instance:
 
-    $ ./launchMAServer.sh V1
+    $ ./launchMAServer V1
 
 :warning: Note: This server is called in the simuation if you set the following variable in omnetpp.ini:
 
