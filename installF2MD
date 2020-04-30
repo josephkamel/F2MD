@@ -201,7 +201,7 @@ then
         echo 'fi' >> $HOME/.bashrc
     fi
     
-    if ! grep -Fq '/sumo' $HOME/.bashrc
+    if ! grep -Fq '/sumo' $PATH
     then
         echo ' ' >> $HOME/.bashrc
         echo '# set PATH so it includes SUMO' >> $HOME/.bashrc
@@ -230,7 +230,7 @@ then
     cd ${INSTALL_DIR}/Programs
     wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && tar zxf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
     cd ${INSTALL_DIR}/Programs/omnetpp-${OMNETPP_VERSION}
-    if ! grep -Fq '/omnetpp' $HOME/.bashrc
+    if ! grep -Fq '/omnetpp' $PATH
     then
         echo ' ' >> $HOME/.bashrc
         echo '# set PATH so it includes Omnet++' >> $HOME/.bashrc
@@ -262,7 +262,7 @@ then
     echo 'fi' >> $HOME/.bashrc
 fi
 
-if ! grep -Fq '/inet' $HOME/.bashrc
+if ! grep -Fq '/inet' $PATH
 then
     echo ' ' >> $HOME/.bashrc
     echo '# set PATH so it includes inet' >> $HOME/.bashrc
