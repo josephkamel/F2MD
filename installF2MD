@@ -266,8 +266,8 @@ if ! grep -Fq '/inet' $PATH
 then
     echo ' ' >> $HOME/.bashrc
     echo '# set PATH so it includes inet' >> $HOME/.bashrc
-    echo "if [ -d \"$INSTALL_DIR/$INET_ROOT/bin\" ] ; then" >> $HOME/.bashrc
-    echo "    PATH=\"$INSTALL_DIR/$INET_ROOT/bin:\$PATH\"" >> $HOME/.bashrc
+    echo "if [ -d \"$INET_ROOT/bin\" ] ; then" >> $HOME/.bashrc
+    echo "    PATH=\"$INET_ROOT/bin:\$PATH\"" >> $HOME/.bashrc
     echo 'fi' >> $HOME/.bashrc
 fi
 
