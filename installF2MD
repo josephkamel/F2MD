@@ -262,16 +262,6 @@ then
     echo 'fi' >> $HOME/.bashrc
 fi
 
-if ! grep -Fq '/inet' $PATH
-then
-    echo ' ' >> $HOME/.bashrc
-    echo '# set PATH so it includes inet' >> $HOME/.bashrc
-    echo "if [ -d \"$INET_ROOT/bin\" ] ; then" >> $HOME/.bashrc
-    echo "    PATH=\"$INET_ROOT/bin:\$PATH\"" >> $HOME/.bashrc
-    echo 'fi' >> $HOME/.bashrc
-fi
-
-export PATH="${INET_ROOT}/bin:${PATH}"
 export INET_NED_PATH="${INET_ROOT}/src:${INET_ROOT}/tutorials:${INET_ROOT}/showcases:${INET_ROOT}/examples"
 export INET_OMNETPP_OPTIONS="-n ${INET_NED_PATH} --image-path=${INET_ROOT}/images"
 export INET_GDB_OPTIONS="-quiet -ex run --args"
