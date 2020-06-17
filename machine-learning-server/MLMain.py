@@ -60,7 +60,7 @@ class MlMain:
 
 	clf = None
 	savePath = './saveFile/saveFile_D60'
-	dataPath = './MDBsmsList_V2_2019-8-27_17:35:33'
+	dataPath = './MDBsmsList_V1_2020-6-16_15:49:0'
 	RTTrainDataFromFile = False
 
 	meanRuntime = 0
@@ -418,7 +418,7 @@ def local_process(local_input_list, thread, q):
 	localMaMain = MlMain()
 	localDataCollector = MlDataCollector()
 	bsm_list = []
-	for i in tqdm(range(0,int(len(filesNames)*1.0))):
+	for i in tqdm(range(0,int(len(filesNames)*0.2))):
 		s = filesNames[i]
 		if s.endswith(".bsm"):
 			bsmJsonString = open(dataPath+'/' +s, 'r').read()

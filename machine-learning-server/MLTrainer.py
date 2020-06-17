@@ -146,7 +146,7 @@ class MlTrainer:
 
 			steps_per_epoch_calc = int(self.train_split*len(self.NewValuesData))
 			steps_per_epoch_val = len(self.NewValuesData) - steps_per_epoch_calc
-			clf.fit_generator(self.train_generator_0(), steps_per_epoch=steps_per_epoch_calc, epochs=100,class_weight=d_weights,verbose=1,callbacks=[reduce_lr], validation_data=self.train_generator_0(),validation_steps= steps_per_epoch_val)
+			clf.fit_generator(self.train_generator_0(), steps_per_epoch=steps_per_epoch_calc, epochs=10,class_weight=d_weights,verbose=1,callbacks=[reduce_lr], validation_data=self.train_generator_0(),validation_steps= steps_per_epoch_val)
 		joblib.dump(clf, self.savePath + '/clf_'+self.AIType + '_'+self.curDateStr+'.pkl')
         
 		print("Saved " + self.savePath + '/clf_'+self.AIType + '_'+self.curDateStr+'.pkl')
