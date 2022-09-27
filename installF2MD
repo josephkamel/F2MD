@@ -222,13 +222,23 @@ then
     sudo apt-get install -y wget unzip
     sudo apt-get install -y build-essential gcc g++ bison flex perl
     sudo apt-get install -y python python3 qt5-default libqt5opengl5-dev tcl-dev tk-dev
+    sudo apt-get install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
     sudo apt-get install -y libxml2-dev zlib1g-dev default-jdk doxygen graphviz libwebkitgtk-3.0-0
     sudo apt-get install -y openscenegraph-plugin-osgearth libosgearth-dev
     sudo apt-get install -y openmpi-bin libopenmpi-dev libpcap-dev gnome-color-chooser nemiver
+    sudo apt-get install -y python3-pip
+    sudo pip3 install numpy scipy pandas matplotlib posix_ipc
     
     # Install omnetpp
     cd ${INSTALL_DIR}/Programs
-    wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && tar zxf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
+    
+    if wget -q --method=HEAD https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-linux-x86_64.tgz;
+     then
+      wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-linux-x86_64.tgz && tar zxf omnetpp-${OMNETPP_VERSION}-linux-x86_64.tgz && rm omnetpp-${OMNETPP_VERSION}-linux-x86_64.tgz 
+     else
+      wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && tar zxf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
+    fi
+    
     cd ${INSTALL_DIR}/Programs/omnetpp-${OMNETPP_VERSION}
     if ! grep -Fq '/omnetpp' $PATH
     then
@@ -239,6 +249,8 @@ then
         echo 'fi' >> $HOME/.bashrc
     fi
     export PATH="${INSTALL_DIR}/Programs/omnetpp-${OMNETPP_VERSION}/bin:${PATH}"
+    #source setenv
+    . setenv
     ./configure WITH_OSGEARTH=no WITH_OSG=no && make -j$(nproc)
 fi
 
