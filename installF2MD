@@ -254,8 +254,8 @@ then
         echo 'fi' >> $HOME/.bashrc
     fi
     export PATH="${INSTALL_DIR}/Programs/omnetpp-${OMNETPP_VERSION}/bin:${PATH}"
-    #source setenv
-    . setenv
+    bashrc -c ". setenv"
+    bashrc -c "source setenv"
     ./configure WITH_OSGEARTH=no WITH_OSG=no && make -j$(nproc)
 fi
 
