@@ -186,8 +186,8 @@ if [[ $INSTALL_SUMO == "YES" ]]
 then
     # Install sumo dependencies
     sudo apt-get install -y wget unzip
-    sudo apt-get install -y git cmake python g++ libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev libgl2ps-dev swig 
-    sudo apt-get install -y apt-utils python-setuptools python3-setuptools libeigen3-dev default-jre
+    sudo apt-get install -y git cmake python2 g++ libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev libgl2ps-dev swig 
+    sudo apt-get install -y apt-utils python2-setuptools python3-setuptools libeigen3-dev default-jre
     
     mkdir ${INSTALL_DIR}/Programs
     # Install sumo
@@ -224,7 +224,7 @@ then
     # Install omnetpp dependencies
     sudo apt-get install -y wget unzip
     sudo apt-get install -y build-essential gcc g++ bison flex perl
-    sudo apt-get install -y python python3 qt5-default libqt5opengl5-dev tcl-dev tk-dev
+    sudo apt-get install -y python2 python3 qt5-default libqt5opengl5-dev tcl-dev tk-dev
     sudo apt-get install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
     sudo apt-get install -y libxml2-dev zlib1g-dev default-jdk doxygen graphviz libwebkitgtk-3.0-0
     sudo apt-get install -y openscenegraph-plugin-osgearth libosgearth-dev
