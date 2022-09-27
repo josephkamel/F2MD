@@ -55,6 +55,9 @@ esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
+RED='\033[0;31m'
+NC='\033[0m' 
+
 ### Check if a directory does not exist ###
 
 if [[ $INSTALL_DIR != "" ]]
@@ -99,6 +102,7 @@ then
       sudo apt install -y wget
     fi
     SUMO_VERSION_LIST=$(wget -qO- https://sumo.dlr.de/releases | grep -Eoi '<a [^>]+>' | grep -Eo "[0-9\.]*")
+    echo -e "\n${RED}/!\ Warning /!\${NC} F2MD is tested and working with SUMO version 1.2.1$"
     if [[ $SUMO_VERSION != "" ]]
     then 
         if [[ ! $SUMO_VERSION_LIST =~ (^|[[:space:]])"$SUMO_VERSION"($|[[:space:]]) ]] ; then
@@ -140,8 +144,6 @@ then
       sudo apt install -y wget
     fi
     OMNETPP_VERSION_LIST=$(GET https://api.github.com/repos/omnetpp/omnetpp/releases | grep -Po '"tag_name": *"omnetpp-\K[^"]*(?=\"?)')
-    RED='\033[0;31m'
-    NC='\033[0m' 
     echo -e "\n${RED}/!\ Warning /!\${NC} F2MD is tested and working with OMNETPP version 5.6.2$"
     if [[ $OMNETPP_VERSION != "" ]]
     then
