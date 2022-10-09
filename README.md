@@ -52,7 +52,10 @@ For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial
 
 ### The easiest way
 
-Alternatively, contact the author for a preinstalled **Instant F2MD** virtual machine or docker image.
+Alternatively, you can download a preinstalled **Instant F2MD** virtual machine here:
+
+[Instant-F2MD Download Link](https://bit.ly/3yoRYba "Instant-F2MD")
+
 
 ## Running a simulation
 1. Launch the SUMO TraCI daemon
