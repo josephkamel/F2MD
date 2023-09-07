@@ -58,7 +58,7 @@ Alternatively, you can download a preinstalled **Instant F2MD** virtual machine 
 
 Or access the **Docker Image** here:
 
-[Docker Repository Link](https://hub.docker.com/repository/docker/josephkamel/f2md) 
+[F2MD Docker Repository](https://hub.docker.com/repository/docker/josephkamel/f2md)
 
 ## Running a simulation
 1. Launch the SUMO TraCI daemon
