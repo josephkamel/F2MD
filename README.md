@@ -56,6 +56,9 @@ Alternatively, you can download a preinstalled **Instant F2MD** virtual machine 
 
 [Instant-F2MD Download Link](https://bit.ly/3yoRYba "Instant-F2MD")
 
+Or access the **Docker Image** here:
+
+[Docker Repository Link](https://hub.docker.com/repository/docker/josephkamel/f2md) 
 
 ## Running a simulation
 1. Launch the SUMO TraCI daemon
@@ -74,5 +77,6 @@ $ cd f2md-results && ./plotScenario
 ## Project Diagram
 
  ![alt text](https://github.com/josephkamel/F2MD/blob/master/F2MD-Diagram-V2.jpg)
+
 
 
