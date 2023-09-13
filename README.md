@@ -28,6 +28,17 @@ The scientific publication is available on [ResearchGate](https://www.researchga
 * Launch Attacks in Real Time (HTTP to the Python Server: [attack-server](https://github.com/josephkamel/F2MD/tree/master/attack-server))
 
 ## Installation
+
+### The easiest way
+
+Alternatively, you can download a preinstalled **Instant F2MD** virtual machine here:
+
+[Instant-F2MD Download Link](https://bit.ly/3yoRYba "Instant-F2MD")
+
+Or access the **Docker Image** here:
+
+[F2MD Docker Repository](https://hub.docker.com/repository/docker/josephkamel/f2md)
+
 ### The easy way
 
 1. If you're running a Debian-based Linux distribution, use the [automatic install script](https://raw.githubusercontent.com/josephkamel/F2MD/master/installF2MD) (tested on Debian 9 and Ubuntu 18.04)
@@ -49,16 +60,6 @@ $ ./buildF2MD
 ```
 
 For more information check the [Veins Tutorial](https://veins.car2x.org/tutorial/) or the [OpenCV2X Tutorial](http://www.cs.ucc.ie/cv2x/pages/documentation/documentation.html).
-
-### The easiest way
-
-Alternatively, you can download a preinstalled **Instant F2MD** virtual machine here:
-
-[Instant-F2MD Download Link](https://bit.ly/3yoRYba "Instant-F2MD")
-
-Or access the **Docker Image** here:
-
-[F2MD Docker Repository](https://hub.docker.com/repository/docker/josephkamel/f2md)
 
 ## Running a simulation
 1. Launch the SUMO TraCI daemon
